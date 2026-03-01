@@ -747,6 +747,7 @@ local function initcommandssection()
 		pinIcon.Size = UDim2.new(0, 14, 0, 15)
 		pinIcon.Position = UDim2.new(0, 16, 0.5, -8)
 		pinIcon.BackgroundTransparency = 1
+    pinIcon.ZIndex = 60
 		pinIcon.Image = cmdpinned(item.title) and "rbxassetid://84270520426892" or "rbxassetid://133442819545161"
 		pinIcon.Parent = cmdFrame
 
