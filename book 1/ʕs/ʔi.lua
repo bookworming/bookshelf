@@ -62,8 +62,12 @@ env.essentials.toggles, env.essentials.buttons, env.essentials.elements = {}, {}
 
 env.scriptinfo, env.filemanager = {}, {}
 
-local function yield(tilcomp) 
-	repeat t() until (tilcomp and env.setupcomplete or env.essentialsloaded) 
+local function yield(tilcomp)
+	if tilcomp then
+		repeat t() until env.setupcomplete
+	else
+		repeat t() until env.essentialsloaded
+	end
 end
 
 spwn(function()
