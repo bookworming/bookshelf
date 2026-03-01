@@ -67,7 +67,7 @@ local function yield(tilcomp)
 end
 
 spwn(function()
-	repeat t() until function() return env.funcs.recursivels end
+	yield()
 	env.essentials.library = env.funcs.recursivels("book%201/%CA%95u/%CA%94l.lua", true) 
 	env.funcs.box("UI library loaded successfully (version " .. env.essentials.library.version .. ")")
 	
@@ -704,7 +704,7 @@ do
 					env.funcs.box("monitoring current room")
 
 					task.delay(0.1, function()
-						repeat t() until function() return env.funcs.reverifesp end
+						repeat t() until env.stuf.visualssectionloaded
 						env.funcs.reverifesp(true)
 					end)
 				end)
