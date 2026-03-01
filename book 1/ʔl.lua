@@ -43,7 +43,7 @@ getgenv.BSGUI = {}
 local env = getgenv.BSGUI
 local setupsucc, setuperr = pcall(function() loadstring(game:HttpGet("https://raw.githubusercontent.com/bookworming/bookshelf/refs/heads/main/book%201/%CA%95s/%CA%94i.lua"))() end)
 
-repeat t() until env.setupcomplete
+repeat t() until env.setupcomplete and env.essentialsloaded
 env.funcs.box("intro ready")
 
 -------------------------------------------------------------------------------------------------------------------------------
