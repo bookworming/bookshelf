@@ -43,7 +43,7 @@ getgenv.BSGUI = {}
 local env = getgenv.BSGUI
 
 env.ready = false
-local setupsucc, setuperr = pcall(function() loadstring(game:HttpGet("https://gist.githubusercontent.com/ineptpractices/744421c5be691db70a54d364059637be/raw/6fb8c8a3a75efd3a01c5a93ba78b4cc751a51b19/BSGUI_setup_init.luau"))() end)
+local setupsucc, setuperr = pcall(function() loadstring(game:HttpGet("https://raw.githubusercontent.com/bookworming/bookshelf/refs/heads/main/book%201/%CA%95s/%CA%94i.lua"))() end)
 
 repeat t() until env.ready
 env.funcs.box("intro ready")
@@ -60,7 +60,7 @@ local function intro(container)
 	local display = Instance.new("ImageLabel")
 	display.Size, display.BackgroundTransparency, display.ImageTransparency = UDim2.fromScale(1, 1), 1, 1
 	display.Parent = container
-	
+
 	t(1)
 
 	task.delay(0.15, function() tween(display, {0.8}, {ImageTransparency = 0}) end)
@@ -115,7 +115,7 @@ local function loadintro(buttononly)
 			tween = ts:Create(scale, info, {Scale = v})
 			tween:Play()
 		end
-		
+
 		env.stuf.togglebutton = togglebutton
 		env.stuf.togglebuttondrag = env.essentials.library.makedraggable(togglebutton)
 
@@ -279,7 +279,7 @@ local function loadintro(buttononly)
 	else
 		nametag.Text = nametag.Text .. "\n  <font size='8' color='rgb(247, 250, 92)'>Something went wrong.</font>"
 	end
-	
+
 	t()
 
 	if env.essentials.data then
@@ -287,17 +287,17 @@ local function loadintro(buttononly)
 	else
 		nametag.Text = nametag.Text .. "\n  <font size='8' color='rgb(247, 250, 92)'>Something went wrong.</font>"
 	end
-	
+
 	t()
 
-	local buildsucc = env.funcs.recursivels("https://pastefy.app/Fa9EzTj4/raw")
-	
+	local buildsucc = env.funcs.recursivels("book%201/%CA%95s/%CA%94b.lua", true)
+
 	if buildsucc then
 		nametag.Text = nametag.Text .. "\n  <font size='8' color='rgb(133, 133, 133)'>Applied script functionalities to UI.</font>"
 	else
 		nametag.Text = nametag.Text .. "\n  <font size='8' color='rgb(247, 250, 92)'>Something went wrong.</font>"
 	end
-	
+
 	t()
 
 	nametag.Text = nametag.Text .. "\n  <font size='8' color='rgb(84, 255, 101)'>Success: Scripts loaded\n</font>"
@@ -306,18 +306,18 @@ local function loadintro(buttononly)
 	t() changepb(99, 1.5)
 
 	env.filemanager.persistload()
-	
+
 	t()
 
 	spwn(function()
 		if not env.funcs.exists() then env.funcs.pop("Waiting for character to load in before auto-loading configs...") repeat t() until env.funcs.exists() env.funcs.box("character loaded") t(1) end
 		env.filemanager:autoload() env.funcs.box("auto-loaded configs (if they exist)")
 	end)
-	
+
 	t()
 
 	nametag.Text = nametag.Text .. "\n  <font size='8' color='rgb(84, 255, 101)'>Success: Script successfully loaded\n</font>"
-	
+
 	t()
 
 	nametag.Text = nametag.Text .. getservertime() .. ": Done!"
