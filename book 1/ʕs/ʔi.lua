@@ -67,7 +67,7 @@ local function yield(tilcomp)
 end
 
 spwn(function()
-	repeat t() until env.funcs.recursivels
+	repeat t() until function() return env.funcs.recursivels end
 	env.essentials.library = env.funcs.recursivels("book%201/%CA%95u/%CA%94l.lua", true) 
 	env.funcs.box("UI library loaded successfully (version " .. env.essentials.library.version .. ")")
 	
@@ -814,10 +814,11 @@ do
 	function env.funcs.recursivels(link, frompath) -- replaces loadstring, tries to load the link 3 times if unsuccessful
 		local atts = 1
 		local start = os.clock()
-		env.funcs.box("attempting to load" .. link)
 
 		local success, result = pcall(function()
-			local source = game:HttpGet((frompath and "https://raw.githubusercontent.com/bookworming/bookshelf/refs/heads/main/" or "") .. link)
+			local truelink = link
+			if frompath then truelink = "https://raw.githubusercontent.com/bookworming/bookshelf/refs/heads/main/" .. link end
+			local source = game:HttpGet(truelink)
 			return loadstring(source)()
 		end)
 
