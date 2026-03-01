@@ -43,6 +43,21 @@ local load = env.funcs.recursivels
 
 -------------------------------------------------------------------------------------------------------------------------------
 
+-- load
+local maincat = env.funcs.recursivels("book%201/%CA%95s/%EF%BD%A1s/%CA%94m.lua", true)
+local navigcat = env.funcs.recursivels("book%201/%CA%95s/%EF%BD%A1s/%CA%94n.lua", true)
+local viscat = env.funcs.recursivels("book%201/%CA%95s/%EF%BD%A1s/%CA%94v.lua", true)
+local lpcat = env.funcs.recursivels("book%201/%CA%95s/%EF%BD%A1s/%CA%94lp.lua", true)
+local autocat = env.funcs.recursivels("book%201/%CA%95s/%EF%BD%A1s/%CA%94au.lua", true)
+local animcat = env.funcs.recursivels("book%201/%CA%95s/%EF%BD%A1s/%CA%94an.lua", true)
+local funcat = env.funcs.recursivels("book%201/%CA%95s/%EF%BD%A1s/%CA%94f.lua", true)
+local donorcat = env.funcs.recursivels("book%201/%CA%95s/%EF%BD%A1s/%CA%94d.lua", true)
+
+local scriptinfocats = env.funcs.recursivels("book%201/%CA%95s/%EF%BD%A1s/%CA%94si%26f.lua", true)
+local cfcat = env.funcs.recursivels("book%201/%CA%95s/%EF%BD%A1s/%CA%94cl.lua", true)
+
+-------------------------------------------------------------------------------------------------------------------------------
+
 -- category integration
 typingseshids = {}
 sendinchat = false
@@ -400,15 +415,6 @@ end
 
 -------------------------------------------------------------------------------------------------------------------------------
 
-local maincat = env.funcs.recursivels("https://gist.githubusercontent.com/ineptpractices/744421c5be691db70a54d364059637be/raw/bf0d34ef1a7f08404ca7fc741c09573805af132c/BSGUI_setup_sections_main.luau")
-local navigcat = env.funcs.recursivels("https://gist.githubusercontent.com/ineptpractices/744421c5be691db70a54d364059637be/raw/bf0d34ef1a7f08404ca7fc741c09573805af132c/BSGUI_setup_sections_navigation.luau")
-local viscat = env.funcs.recursivels("https://gist.githubusercontent.com/ineptpractices/744421c5be691db70a54d364059637be/raw/bf0d34ef1a7f08404ca7fc741c09573805af132c/BSGUI_setup_sections_visuals.luau")
-local lpcat = env.funcs.recursivels("https://gist.githubusercontent.com/ineptpractices/744421c5be691db70a54d364059637be/raw/bf0d34ef1a7f08404ca7fc741c09573805af132c/BSGUI_setup_sections_local%2520player.luau")
-local autocat = env.funcs.recursivels("https://gist.githubusercontent.com/ineptpractices/744421c5be691db70a54d364059637be/raw/bf0d34ef1a7f08404ca7fc741c09573805af132c/BSGUI_setup_sections_automation.luau")
-local animcat = env.funcs.recursivels("https://gist.githubusercontent.com/ineptpractices/744421c5be691db70a54d364059637be/raw/bf0d34ef1a7f08404ca7fc741c09573805af132c/BSGUI_setup_sections_animations.luau")
-local funcat = env.funcs.recursivels("https://gist.githubusercontent.com/ineptpractices/744421c5be691db70a54d364059637be/raw/bf0d34ef1a7f08404ca7fc741c09573805af132c/BSGUI_setup_sections_fun.luau")
-local donorcat = env.funcs.recursivels("https://gist.githubusercontent.com/ineptpractices/744421c5be691db70a54d364059637be/raw/bf0d34ef1a7f08404ca7fc741c09573805af132c/BSGUI_setup_sections_donor.luau")
-
 local function initmainsection()
 	local cats = {
 		Main = maincat,
@@ -470,8 +476,6 @@ end
 
 -------------------------------------------------------------------------------------------------------------------------------
 
-local scriptinfocats = env.funcs.recursivels("https://gist.githubusercontent.com/ineptpractices/744421c5be691db70a54d364059637be/raw/bf0d34ef1a7f08404ca7fc741c09573805af132c/BSGUI_setup_sections_script%2520info%2520&%2520changelogs.luau")
-
 local function initsettingssection()
 	local cats = {
 		["Script Settings"] = scriptinfocats["1"],
@@ -503,8 +507,6 @@ Supported executors:
 end
 
 -------------------------------------------------------------------------------------------------------------------------------
-
-local cfcat = env.funcs.recursivels("https://gist.githubusercontent.com/ineptpractices/744421c5be691db70a54d364059637be/raw/bf0d34ef1a7f08404ca7fc741c09573805af132c/BSGUI_setup_sections_config%2520loading.luau")
 
 local function initconfigssection()
 	local cats = {
