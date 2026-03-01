@@ -54,7 +54,7 @@ local env = getgenv.BSGUI
 -------------------------------------------------------------------------------------------------------------------------------
 
 -- env & debugger setup
-env.ready, env.ready2 = nil
+env.essentialsloaded, env.setupcomplete = nil
 env.funcs, env.stuf, env.gear, env.essentials = {}, {}, {}, {}
 
 env.essentials.library, env.essentials.data, env.essentials.sgui = nil
@@ -62,16 +62,19 @@ env.essentials.toggles, env.essentials.buttons, env.essentials.elements = {}, {}
 
 env.scriptinfo, env.filemanager = {}, {}
 
-local function hold(sec)
-	repeat t() until (sec and env.ready2 or env.ready)
+local function yield(tilcomp) 
+	repeat t() until (tilcomp and env.setupcomplete or env.essentialsloaded) 
 end
 
 spwn(function()
 	repeat t() until env.funcs.recursivels
-	env.essentials.library = env.funcs.recursivels("https://gist.githubusercontent.com/ineptpractices/744421c5be691db70a54d364059637be/raw/9201ff697bffe66cd0f1c6f319a35beaee0fe40f/BSGUI_setup_ui_library.luau") env.funcs.box("UI library loaded successfully (version " .. env.essentials.library.version .. ")")
-	env.essentials.data = env.funcs.recursivels("https://gist.githubusercontent.com/ineptpractices/744421c5be691db70a54d364059637be/raw/bf0d34ef1a7f08404ca7fc741c09573805af132c/BSGUI_setup_data.luau") env.funcs.box("script data loaded successfully")
+	env.essentials.library = env.funcs.recursivels("book%201/%CA%95u/%CA%94l.lua", true) 
+	env.funcs.box("UI library loaded successfully (version " .. env.essentials.library.version .. ")")
+	
+	env.essentials.data = env.funcs.recursivels("book%201/%CA%95u/%CA%94d.lua", true) 
+	env.funcs.box("script data loaded successfully")
 
-	env.ready = true
+	env.essentialsloaded = true
 end)
 
 --[[
@@ -102,7 +105,7 @@ end)
 
 -- script info & file manager
 spwn(function()
-	hold()
+	yield()
 	env.scriptinfo.script = {
 		version = env.essentials.data.cl.current.version,
 		subversion = env.essentials.data.cl.current.subversion,
@@ -117,7 +120,7 @@ spwn(function()
 end)
 
 spwn(function()
-	hold()
+	yield()
 	env.filemanager.autoloadfile = folder .. "/Auto-loads.json"
 	env.filemanager.configfolder = folder .. "/Configs"
 	env.filemanager.persistfile = folder .. "/Persistent.json"
@@ -390,7 +393,7 @@ spwn(function()
 						spwn(function() element.setValue(savedState.value) end)
 					end
 				end
-				
+
 				if savedState.elementType == "dropdown" or element.type == "dropdown" then
 					if savedState.value ~= nil then
 						spwn(function() element.setValue(savedState.value) end)
@@ -462,7 +465,7 @@ do
 		twistedauditloghitblacklist = {},
 		twistedauditlogkilledblacklist = {},
 		twistedauditlogusingabilityblacklist = {},
-		
+
 		-- ui settings
 		mainframescale = 1,
 		buttonscale = 1,
@@ -575,7 +578,7 @@ do
 		"rbxassetid://81142282647660",
 		"rbxassetid://112327541806219",
 	}
-	
+
 	local temp = Instance.new("ScreenGui", hiddenui)
 	env.stuf.introholder = Instance.new("Frame")
 	env.stuf.introholder.Size, env.stuf.introholder.BackgroundTransparency = UDim2.fromOffset(1, 1), 1
@@ -671,13 +674,13 @@ do
 	env.stuf.gameinfo, env.stuf.currentroom, env.stuf.freearea, env.stuf.twisteds, env.stuf.items, env.stuf.machines, env.stuf.fakeelevator = nil
 	if env.stuf.inrun then
 		spwn(function()
-			hold(true)
+			yield(true)
 			env.stuf.elevator = ws:WaitForChild("Elevators"):WaitForChild("Elevator") env.funcs.box("found \"Elevator\" model")
 			env.stuf.roomfolder = ws:WaitForChild("CurrentRoom") env.funcs.box("found \"CurrentRoom\" folder")
 
 			local function updrefs()
 				env.funcs.box("updating references")
-				
+
 				task.delay(0.1, function()
 					env.stuf.gameinfo = ws:FindFirstChild("Info")
 					env.stuf.currentroom = env.funcs.getroom() 
@@ -699,7 +702,7 @@ do
 					env.stuf.refconn = env.stuf.currentroom.ChildAdded:Connect(updrefs)
 					env.stuf.refconn2 = env.stuf.currentroom.ChildRemoved:Connect(updrefs)
 					env.funcs.box("monitoring current room")
-					
+
 					task.delay(0.1, function()
 						repeat t() until function() return env.funcs.reverifesp end
 						env.funcs.reverifesp(true)
@@ -728,7 +731,7 @@ do
 	env.stuf.mainframescale = Instance.new("UIScale") 
 	env.stuf.mainframescale.Parent = env.stuf.mainframe 
 	env.stuf.mainframescale.Scale = env.gear.general.mainframescale
-	
+
 	env.stuf.buttonscale = Instance.new("UIScale") 
 	env.stuf.buttonscale.Parent = env.stuf.togglebutton 
 	env.stuf.buttonscale.Scale = env.gear.general.buttonscale
@@ -789,31 +792,32 @@ do
 	function env.funcs.box(s, force) -- boxten said...
 		if env.gear.general.debugmode or force then
 			-- print('<font color="rgb(197, 61, 224)">[Boxten]:</font> <font color="rgb(255,255,255)">' .. tostring(s) .. '</font>')
-			print(tostring(s))
+			print("[Boxten]:" .. tostring(s))
 		end
 	end
 
 	function env.funcs.pop(s, force) -- poppy said...
 		if env.gear.general.debugmode or force then
 			-- print('<font color="rgb(112, 234, 255)">[Poppy]:</font> <font color="rgb(255,255,255)">' .. tostring(s) .. '</font>')
-			warn(tostring(s))
+			warn("[Poppy]:" .. tostring(s))
 		end
 	end
 
 	function env.funcs.shr(s, force) -- shrimpo said...
 		if env.gear.general.debugmode or force then
 			-- print('<font color="rgb(247, 109, 40)">[Shrimpo]:</font> <font color="rgb(255,255,255)">' .. tostring(s) .. '</font>')
-			error(tostring(s))
+			error("[Shrimpo]:" .. tostring(s))
 		end
 	end
 
 	-- utility
-	function env.funcs.recursivels(link, atts) -- replaces loadstring, tries to load the link 3 times if unsuccessful
-		atts = atts or 1
+	function env.funcs.recursivels(link, frompath) -- replaces loadstring, tries to load the link 3 times if unsuccessful
+		local atts = 1
 		local start = os.clock()
+		env.funcs.box("attempting to load" .. link)
 
 		local success, result = pcall(function()
-			local source = game:HttpGet(link)
+			local source = game:HttpGet((frompath and "https://raw.githubusercontent.com/bookworming/bookshelf/refs/heads/main/" or "") .. link)
 			return loadstring(source)()
 		end)
 
@@ -857,13 +861,13 @@ do
 			end
 		end
 	end
-	
+
 	function env.funcs.copytoclipboard(txt) -- copies a string to the player's clipboard
 		if clipboard then 
 			clipboard(tostring(txt))
 		end 
 	end
-	
+
 	function env.funcs.setcore(core, state) -- alternative to setcoreguienabled
 		if core == "bag" then
 			srgui:SetCoreGuiEnabled(Enum.CoreGuiType.Backpack, state)
@@ -872,7 +876,7 @@ do
 			srgui:SetCore("DevConsoleVisible", state)
 		end
 	end
-	
+
 	function env.funcs.resolvetargets(i) -- resolves targets
 		local t = {}
 		if not i or (type(i) == "string" and i:match("^%s*$")) then return {env.stuf.plr} end
@@ -967,7 +971,7 @@ do
 
 		return t
 	end
-	
+
 	function env.funcs.playsound(id, vol, pitch, timepos, parent) -- plays the target sound
 		local s
 		task.spawn(function()
@@ -1514,7 +1518,7 @@ end
 
 -------------------------------------------------------------------------------------------------------------------------------
 
-env.ready2 = true
+env.setupcomplete = true
 env.funcs.box("hello") -- hi!
 
 -------------------------------------------------------------------------------------------------------------------------------
