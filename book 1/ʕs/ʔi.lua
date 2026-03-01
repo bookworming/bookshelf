@@ -71,7 +71,7 @@ local function yield(tilcomp)
 end
 
 spwn(function()
-	yield() env.funcs.pop("Hi!")
+	yield(true) env.funcs.pop("Hi!")
 	env.essentials.library = env.funcs.recursivels("book%201/%CA%95u/%CA%94l.lua", true) 
 	env.funcs.box("UI library loaded successfully (version " .. env.essentials.library.version .. ")")
 	
