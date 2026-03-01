@@ -111,8 +111,7 @@ local dB = {
 • Added more messages to Poppy.
 • Added an expand button to Poppy.
 • Added more messages to Boxten.
-• Fixed an issue where Boxten is unable to properly display or the time spent on a floor.
-]]
+• Fixed an issue where Boxten is unable to properly display or the time spent on a floor. ]]
 		},
 		older = {
 			["1.2.9"] = {
