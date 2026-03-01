@@ -109,7 +109,7 @@ end)
 
 -- script info & file manager
 spwn(function()
-	yield()
+	yield() t(0.1)
 	env.scriptinfo.script = {
 		version = env.essentials.data.cl.current.version,
 		subversion = env.essentials.data.cl.current.subversion,
@@ -124,7 +124,7 @@ spwn(function()
 end)
 
 spwn(function()
-	yield()
+	yield() t(0.1)
 	env.filemanager.autoloadfile = folder .. "/Auto-loads.json"
 	env.filemanager.configfolder = folder .. "/Configs"
 	env.filemanager.persistfile = folder .. "/Persistent.json"
