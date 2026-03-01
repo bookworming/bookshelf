@@ -75,7 +75,7 @@ spwn(function()
 	env.essentials.library = env.funcs.recursivels("book%201/%CA%95u/%CA%94l.lua", true) 
 	env.funcs.box("UI library loaded successfully (version " .. env.essentials.library.version .. ")")
 	
-	env.essentials.data = env.funcs.recursivels("book%201/%CA%95u/%CA%94d.lua", true) 
+	env.essentials.data = env.funcs.recursivels("book%201/%CA%95s/%CA%94d.lua", true) 
 	env.funcs.box("script data loaded successfully")
 
 	env.essentialsloaded = true
@@ -109,7 +109,7 @@ end)
 
 -- script info & file manager
 spwn(function()
-	yield() t(0.1)
+	yield()
 	env.scriptinfo.script = {
 		version = env.essentials.data.cl.current.version,
 		subversion = env.essentials.data.cl.current.subversion,
@@ -124,7 +124,7 @@ spwn(function()
 end)
 
 spwn(function()
-	yield() t(0.1)
+	yield()
 	env.filemanager.autoloadfile = folder .. "/Auto-loads.json"
 	env.filemanager.configfolder = folder .. "/Configs"
 	env.filemanager.persistfile = folder .. "/Persistent.json"
