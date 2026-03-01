@@ -71,7 +71,7 @@ local function yield(tilcomp)
 end
 
 spwn(function()
-	yield()
+	yield() env.funcs.pop("Hi!")
 	env.essentials.library = env.funcs.recursivels("book%201/%CA%95u/%CA%94l.lua", true) 
 	env.funcs.box("UI library loaded successfully (version " .. env.essentials.library.version .. ")")
 	
@@ -796,21 +796,21 @@ do
 	function env.funcs.box(s, force) -- boxten said...
 		if env.gear.general.debugmode or force then
 			-- print('<font color="rgb(197, 61, 224)">[Boxten]:</font> <font color="rgb(255,255,255)">' .. tostring(s) .. '</font>')
-			print("[Boxten]:" .. tostring(s))
+			print("[Boxten]: " .. tostring(s))
 		end
 	end
 
 	function env.funcs.pop(s, force) -- poppy said...
 		if env.gear.general.debugmode or force then
 			-- print('<font color="rgb(112, 234, 255)">[Poppy]:</font> <font color="rgb(255,255,255)">' .. tostring(s) .. '</font>')
-			warn("[Poppy]:" .. tostring(s))
+			warn("[Poppy]: " .. tostring(s))
 		end
 	end
 
 	function env.funcs.shr(s, force) -- shrimpo said...
 		if env.gear.general.debugmode or force then
 			-- print('<font color="rgb(247, 109, 40)">[Shrimpo]:</font> <font color="rgb(255,255,255)">' .. tostring(s) .. '</font>')
-			error("[Shrimpo]:" .. tostring(s))
+			error("[Shrimpo]: " .. tostring(s))
 		end
 	end
 
