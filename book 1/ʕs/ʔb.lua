@@ -44,17 +44,28 @@ local load = env.funcs.recursivels
 -------------------------------------------------------------------------------------------------------------------------------
 
 -- load
-local maincat = env.funcs.recursivels("book%201/%CA%95s/%EF%BD%A1s/%CA%94m.lua", true)
-local navigcat = env.funcs.recursivels("book%201/%CA%95s/%EF%BD%A1s/%CA%94n.lua", true)
-local viscat = env.funcs.recursivels("book%201/%CA%95s/%EF%BD%A1s/%CA%94v.lua", true)
-local lpcat = env.funcs.recursivels("book%201/%CA%95s/%EF%BD%A1s/%CA%94lp.lua", true)
-local autocat = env.funcs.recursivels("book%201/%CA%95s/%EF%BD%A1s/%CA%94au.lua", true)
-local animcat = env.funcs.recursivels("book%201/%CA%95s/%EF%BD%A1s/%CA%94an.lua", true)
-local funcat = env.funcs.recursivels("book%201/%CA%95s/%EF%BD%A1s/%CA%94f.lua", true)
-local donorcat = env.funcs.recursivels("book%201/%CA%95s/%EF%BD%A1s/%CA%94d.lua", true)
+env.stuf.mainsectionloaded = false
+env.stuf.navigationssectionloaded = false
+env.stuf.visualssectionloaded = false
+env.stuf.localplayersectionloaded = false
+env.stuf.automationsectionloaded = false
+env.stuf.animationssectionloaded = false
+env.stuf.funsectionloaded = false
+env.stuf.donorsectionloaded = false
+env.stuf.scriptsectionloaded = false
+env.stuf.configsectionloaded = false
 
-local scriptinfocats = env.funcs.recursivels("book%201/%CA%95s/%EF%BD%A1s/%CA%94si%26f.lua", true)
-local cfcat = env.funcs.recursivels("book%201/%CA%95s/%EF%BD%A1s/%CA%94cl.lua", true)
+local maincat = env.funcs.recursivels("book%201/%CA%95s/%EF%BD%A1s/%CA%94m.lua", true) env.stuf.mainsectionloaded = true
+local navigcat = env.funcs.recursivels("book%201/%CA%95s/%EF%BD%A1s/%CA%94n.lua", true) env.stuf.navigationssectionloaded = true
+local viscat = env.funcs.recursivels("book%201/%CA%95s/%EF%BD%A1s/%CA%94v.lua", true) env.stuf.visualssectionloaded = true
+local lpcat = env.funcs.recursivels("book%201/%CA%95s/%EF%BD%A1s/%CA%94lp.lua", true) env.stuf.localplayersectionloaded = true
+local autocat = env.funcs.recursivels("book%201/%CA%95s/%EF%BD%A1s/%CA%94au.lua", true) env.stuf.automationsectionloaded = true
+local animcat = env.funcs.recursivels("book%201/%CA%95s/%EF%BD%A1s/%CA%94an.lua", true) env.stuf.animationssectionloaded = true
+local funcat = env.funcs.recursivels("book%201/%CA%95s/%EF%BD%A1s/%CA%94f.lua", true) env.stuf.funsectionloaded = true
+local donorcat = env.funcs.recursivels("book%201/%CA%95s/%EF%BD%A1s/%CA%94d.lua", true) env.stuf.donorsectionloaded = true
+
+local scriptinfocats = env.funcs.recursivels("book%201/%CA%95s/%EF%BD%A1s/%CA%94si%26f.lua", true) env.stuf.scriptsectionloaded = true
+local cfcat = env.funcs.recursivels("book%201/%CA%95s/%EF%BD%A1s/%CA%94cl.lua", true) env.stuf.configsectionloaded = true
 
 -------------------------------------------------------------------------------------------------------------------------------
 
