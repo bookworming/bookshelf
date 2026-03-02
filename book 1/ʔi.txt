@@ -4,11 +4,8 @@ boxten sex gui update checklist
 version 1.3.0
 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 
 ✓ │ Re-designed the UI.
-──┼────────────────────
-
 ✓ │ Fully re-factored and optimized the script and hopefully made it more performant.
 ✓ │ Renamed a few elements and updated their descriptions.
 X │ Renamed the "Teleports" category to "Navigation". (Boxten's Section)
