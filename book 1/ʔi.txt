@@ -1,2 +1,47 @@
 version 1.3.0:
 
+✓ │ Re-designed the UI.
+✓ │ Fully re-factored and optimized the script and hopefully made it more performant.
+✓ │ Renamed a few elements and updated their descriptions.
+X │ Renamed the "Teleports" category to "Navigation". (Boxten's Section)
+✓ │ Removed the "Donor" section from Boxten's Section/Fun and gave it its own category. (Boxten's Section)
+✓ │ Gave the script changelogs its own category. (Settings)
+
+✓ │ Added an "Hide machine ESP if completed" toggle. (Boxten's Section/Environment/ESPs)
+✓ │ Added an "Hover ESP" toggle. (Boxten's Section/Environment/ESPs)
+✓ │ Added an "Toggle barriers" toggle. (Boxten's Section/Environment/Utility)
+✓ │ Added an "Orbit target player" toggle. (Boxten's Section/Fun/Actions)
+✓ │ Added an "Orbit target" input. (Boxten's Section/Fun/Actions)
+✓ │ Added an "Adjust orbit radius" slider. (Boxten's Section/Fun/Actions)
+✓ │ Added an "Adjust orbit speed" slider. (Boxten's Section/Fun/Actions)
+✓ │ Added an "Prioritize health" toggle. (Boxten's Section/Automation/Autofarm settings)
+✓ │ Added an "Prioritize extraction speed" toggle. (Boxten's Section/Automation/Autofarm settings)
+✓ │ Added an "Prioritize Research" toggle. (Boxten's Section/Automation/Autofarm settings)
+✓ │ Added an "Item capacity limit" slider. (Boxten's Section/Automation/Autofarm settings)
+✓ │ Added a "Toon ability replication" section. (Boxten's Section/Local Player) (+3 functions)
+✓ │ Added an "Access" section. (Boxten's Section/Donor) (+6 Functions)
+✓ │ Added an "Actions" section. (Boxten's Section/Donor) (+9 Functions)
+✓ │ Added a "Tools" section. (Boxten's Section/Donor) (+2 Functions)
+✓ │ Added a "Teleports" section. (Boxten's Section/Navigation) (+7 Functions)
+✓ │ Added a "Tweens" section. (Boxten's Section/Navigation) (+6 Functions)
+✓ │ Added a "Pathfinding" section. (Boxten's Section/Navigation) (+5 Functions)
+
+✓ │ Removed the "Roleplay" section from Boxten's Section/Fun due to all of its functions being patched.
+✓ │ Removed the "Twisteds" section from Boxten's Section/Local Player due to most of the functions being patched.
+✓ │ Removed the "Buy event sticker" button due to it requiring event currency in order for it to work.
+✓ │ Removed the "Buy event skin" button due to it requiring event currency in order for it to work.
+
+X │ Updated the list of available animations and made it so the animation target list only shows Toons that have animations that can only be applied on your current Toon.
+✓ │ Moved the "Animatons" section to Boxten's Section.
+✓ │ Moved the "Autofarm" section to Boxten's Section.
+X │ Made it so the "Encounter all Twisteds" button only encounters Twisteds that haven't spotted you yet.
+X │ Made it so the "Auto boost player extraction speed" now targets appropriate players.
+
+✓ │ Attempted to fix an issue regarding DNS lookup, and hopefully reduced the chances of a DNSResolve error blocking the script from executing.
+✓ │ Attempted to fix the script not being able to load properly on some occasions.
+
+✓ │ Introduced Shrimpo.
+✓ │ Added more messages to Poppy.
+✓ │ Added an expand button to Poppy.
+✓ │ Added more messages to Boxten.
+X │ Fixed an issue where Boxten is unable to properly display or the time spent on a floor.
