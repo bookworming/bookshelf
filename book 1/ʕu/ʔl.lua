@@ -10,7 +10,7 @@
 ---------------------------------------------------------------------------------------------------------------------------]]--
 
 local lib = {}
-lib.version = "11"
+lib.version = "10"
 
 -------------------------------------------------------------------------------------------------------------------------------
 
@@ -1438,9 +1438,6 @@ function lib.addtoggle(parent, title, description, callback, bindable, default, 
 		local buttonFrame, drag = lib.makecoolframe(UDim2.new(0, buttonWidth, 0, 64), env.essentials.sgui, false, true, startPos, nil, nil, true, 90000 + zplus)
 		ts:Create(buttonFrame, TweenInfo.new(1, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Position = targetPos}):Play()
 
-    local buttontgtscale = Instance.new("UIScale")
-    buttontgtscale.Scale = 0.5
-
 		local toggleWidth, leftPadding = 46, 24
 		local miniToggle = lib.makecoolframe(UDim2.new(0, toggleWidth, 0, 24), buttonFrame, false, false, UDim2.new(1, -35, 0.5, 0), true, true, true, 90001 + zplus)
 
@@ -1782,9 +1779,6 @@ function lib.addbutton(parent, title, description, callback, bindable, locked, l
 
 		local buttonFrame, drag = lib.makecoolframe(UDim2.new(0, buttonWidth, 0, 64), env.essentials.sgui, false, true, startPos, nil, nil, true, 90000 + zplus)
 		ts:Create(buttonFrame, TweenInfo.new(1, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Position = targetPos}):Play()
-
-    local buttontgtscale = Instance.new("UIScale")
-    buttontgtscale.Scale = 0.5
 
 		local textAreaWidth = buttonWidth - 48
 		local titleText = lib.makecooltext(buttonFrame, UDim2.new(0, textAreaWidth, 0, textHeight), title, 14, nil, 2, UDim2.new(0.5, 0, 0.5, 0), Enum.TextXAlignment.Center, nil, nil, 90001 + zplus)
