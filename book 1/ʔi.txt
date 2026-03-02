@@ -1,14 +1,17 @@
-version 1.3.0:
+boxten sex gui update checklist
+version 1.3.0
+
+────────────────────────────────────────────────────────────────────────────────────────────────
 
 ✓ │ Re-designed the UI.
 ✓ │ Fully re-factored and optimized the script and hopefully made it more performant.
 ✓ │ Renamed a few elements and updated their descriptions.
 X │ Renamed the "Teleports" category to "Navigation". (Boxten's Section)
 ✓ │ Removed the "Donor" section from Boxten's Section/Fun and gave it its own category. (Boxten's Section)
-✓ │ Gave the script changelogs its own category. (Settings)
+✓ │ Gave the script changelogs its own category. (Settings section)
 
-✓ │ Added an "Hide machine ESP if completed" toggle. (Boxten's Section/Environment/ESPs)
-✓ │ Added an "Hover ESP" toggle. (Boxten's Section/Environment/ESPs)
+✓ │ Added an "Hide machine ESP conditions" dropdown. (Boxten's Section/Visuals/ESP Settings)
+✓ │ Added an "Hover ESP" toggle. (Boxten's Section/Visuals/ESP Settings)
 ✓ │ Added an "Toggle barriers" toggle. (Boxten's Section/Environment/Utility)
 ✓ │ Added an "Orbit target player" toggle. (Boxten's Section/Fun/Actions)
 ✓ │ Added an "Orbit target" input. (Boxten's Section/Fun/Actions)
