@@ -12,8 +12,10 @@ X │ Renamed the "Teleports" category to "Navigation". (Boxten's Section)
 ✓ │ Removed the "Donor" section from Boxten's Section/Fun and gave it its own category. (Boxten's Section)
 ✓ │ Gave the script changelogs its own category. (Settings section)
 
+X │ Added a "Stickers" section. (Boxten's Section/Automation)
 ✓ │ Added an "Hide machine ESP conditions" dropdown. (Boxten's Section/Visuals/ESP Settings)
 ✓ │ Added an "Hover ESP" toggle. (Boxten's Section/Visuals/ESP Settings)
+✓ │ Added an "Player ESP Blacklist" dropdown. (Boxten's Section/Visuals/ESP Settings)
 ✓ │ Added an "Toggle barriers" toggle. (Boxten's Section/Environment/Utility)
 ✓ │ Added an "Orbit target player" toggle. (Boxten's Section/Fun/Actions)
 ✓ │ Added an "Orbit target" input. (Boxten's Section/Fun/Actions)
@@ -36,6 +38,7 @@ X │ Renamed the "Teleports" category to "Navigation". (Boxten's Section)
 ✓ │ Removed the "Buy event sticker" button due to it requiring event currency in order for it to work.
 ✓ │ Removed the "Buy event skin" button due to it requiring event currency in order for it to work.
 
+✓ │ Split the ESP options into different toggles, and merged the Sprout's tendril ESP and the Blot's hand ESP together. (Boxten's Section/Visuals/ESPs)
 X │ Updated the list of available animations and made it so the animation target list only shows Toons that have animations that can only be applied on your current Toon.
 ✓ │ Moved the "Animatons" section to Boxten's Section.
 ✓ │ Moved the "Autofarm" section to Boxten's Section.
