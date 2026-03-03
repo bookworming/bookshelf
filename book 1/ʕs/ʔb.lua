@@ -31,6 +31,7 @@ local Destroy = getins(game, "Destroy")
 local IsA = getins(game, "IsA")
 
 local getgenv = getgenv() or _G
+local writefile = (syn and syn.writefile) or writefile
 local readfile = (syn and syn.readfile) or readfile
 local isfile = (syn and syn.isfile) or isfile
 local delfile = (syn and syn.delfile) or delfile
@@ -630,6 +631,26 @@ end
 
 local pinnedcommands = {}
 function cmdpinned(cmd) return table.find(pinnedcommands, cmd) ~= nil end
+local pinnedfile = folder .. "/Pinned Commands.json"
+
+local function savepinned()
+	if writefile then
+		writefile(pinnedfile, https:JSONEncode(pinnedcommands))
+	end
+end
+
+local function loadpinned()
+	if readfile and isfile and isfile(pinnedfile) then
+		local ok, data = pcall(function()
+			return https:JSONDecode(readfile(pinnedfile))
+		end)
+		if ok and typeof(data) == "table" then
+			pinnedcommands = data
+		end
+	end
+end
+
+loadpinned()
 
 local function initcommandssection()
 	local buttonlist_right = env.essentials.library.makecoolscrollingframe(UDim2.new(0, 264, 0, 217), commandssection, UDim2.new(1, -140, 0.5, -16))
@@ -739,7 +760,7 @@ local function initcommandssection()
 
 	function env.funcs.createCommandUI(parent, item)
 		local cmdFrame = Instance.new("Frame")
-		cmdFrame.Size = UDim2.new(1, -12, 0, 3)
+		cmdFrame.Size = UDim2.new(1, -15, 0, 3)
 		cmdFrame.BackgroundTransparency = 1
 		cmdFrame.Parent = parent
 
@@ -774,6 +795,7 @@ local function initcommandssection()
 				table.insert(pinnedcommands, item.title)
 				pinIcon.Image = "rbxassetid://84270520426892"
 			end
+			savepinned()
 			if currentcat == "Pinned" or currentcat == "All Commands" then
 				buildCategory(buttonlist_right, currentcat)
 			end
