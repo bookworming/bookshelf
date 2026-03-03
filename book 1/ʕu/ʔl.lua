@@ -421,7 +421,7 @@ function lib.makecoolbutton(text, size, parent, pos, type, textsize, padding, Z,
 			inline = {{209,230,255},{22,22,22}},
 		},
 		orang = {
-			bg = {{255,181,93},{246,165,76},{246,165,76}},
+			bg = {{255,181,93},{242,157,65},{242,157,65}},
 			stroke = {255,217,170},
 			inline = {{255,217,170},{22,22,22}},
 		},
@@ -1423,7 +1423,7 @@ function lib.addtoggle(parent, title, description, callback, bindable, default, 
 			state.buttonFrame = nil
 			return nil
 		end
-		
+
 		lib.seperatebuttonzindexoff += 4
 		local zplus = lib.seperatebuttonzindexoff
 
@@ -1757,7 +1757,7 @@ function lib.addbutton(parent, title, description, callback, bindable, locked, l
 
 	local function makeseperatebutton(destination)
 		env.essentials.buttons[buttonId].dirty = true
-		
+
 		if state.currentButtonData then
 			state.currentButtonData.frame:Destroy()
 			state.createdButtons = {}
@@ -1765,7 +1765,7 @@ function lib.addbutton(parent, title, description, callback, bindable, locked, l
 			state.currentButtonData = nil
 			return nil
 		end
-		
+
 		lib.seperatebuttonzindexoff += 1
 		local zplus = lib.seperatebuttonzindexoff
 
@@ -2511,7 +2511,7 @@ function lib.addinputandtoggle(parent, title, description, defaulttext, placehol
 	local function onToggleActivated()
 		if frame:GetAttribute("locked") then return end
 		env.essentials.toggles[toggleId].dirty = true
-		
+
 		lib.clik()
 		state.enabled = not state.enabled
 		updtoggles()
@@ -2527,7 +2527,7 @@ function lib.addinputandtoggle(parent, title, description, defaulttext, placehol
 
 	inputbox.FocusLost:Connect(function(enterPressed)
 		env.essentials.elements[inputId].dirty = true
-		
+
 		if state.enabled and callback then
 			callback(inputbox.Text, state.enabled)
 		end
@@ -2739,7 +2739,7 @@ function lib.addslider(parent, title, description, min, max, default, step, call
 
 	box.FocusLost:Connect(function()
 		env.essentials.elements[title].dirty = true
-		
+
 		local num = tonumber(box.Text)
 		if num then
 			value = snap(num)
