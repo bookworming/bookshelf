@@ -760,8 +760,7 @@ local function initcommandssection()
 
 	function env.funcs.createCommandUI(parent, item)
 		local cmdFrame = Instance.new("Frame")
-		cmdFrame.Size = UDim2.new(1, -60, 0, 3)
-		cmdFrame.Position = UDim2.new(0, -5, 0, 0)
+		cmdFrame.Size = UDim2.new(1, -10, 0, 3)
 		cmdFrame.BackgroundTransparency = 1
 		cmdFrame.Parent = parent
 
