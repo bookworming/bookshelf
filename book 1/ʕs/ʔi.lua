@@ -1513,7 +1513,7 @@ do
 				track.Priority = Enum.AnimationPriority.Action
 				track:Play()
 				track:AdjustWeight(0.0001)
-				task.delay(0.1, function()
+				task.delay(0.2, function()
 					track:Stop()
 					env.funcs.box("sent handshake request")
 				end)
