@@ -283,7 +283,7 @@ spwn(function()
 					local target = element.instance or element.elementtitle
 					data[title] = target and target.Text or ""
 				elseif element.type == "slider" then
-					data[title] = element.instance and element.instance.Text or "0"
+					data[title] = tonumber(element.instance and element.instance.Text) or 0
 				end
 			end
 		end
@@ -298,7 +298,7 @@ spwn(function()
 		for title, value in pairs(data) do
 			local element = env.essentials.elements[title] or env.essentials.toggles[title] or env.essentials.buttons[title]
 			if element and element.setValue then
-				element.setValue(value)
+				element.setValue(element.type == "slider" and tonumber(value) or value)
 			elseif element and element.updtoggles then
 				element.enabled = value
 				element.updtoggles()
