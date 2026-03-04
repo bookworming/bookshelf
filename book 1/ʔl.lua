@@ -45,6 +45,8 @@ local env = getgenv.BSGUI
 local setupsucc, setuperr = pcall(function() loadstring(game:HttpGet("https://raw.githubusercontent.com/bookworming/bookshelf/refs/heads/main/book%201/%CA%95s/%CA%94i.lua"))() end)
 
 repeat t() until env.setupcomplete and env.essentialsloaded
+env.funcs.box("setup complete")
+
 env.expectedcompiledscriptversions = {
 	library = 1,
 	data = 1,
@@ -61,7 +63,6 @@ env.expectedcompiledscriptversions = {
 	scriptinformationandchangelogssections = 1,
 	configloadingsection = 1
 }
-env.funcs.box("setup complete")
 
 -------------------------------------------------------------------------------------------------------------------------------
 
@@ -80,16 +81,16 @@ local function intro(container)
 
 	task.delay(0.15, function() tween(display, {0.8, Enum.EasingStyle.Quad, Enum.EasingDirection.Out}, {ImageTransparency = 0}) end)
 
-	local currentFrame, nextFrameTime = 1, 0
-	local connection
-	connection = rs.RenderStepped:Connect(function()
+	local curframe, next = 1, 0
+	local conn
+	conn = rs.RenderStepped:Connect(function()
 		local now = os.clock()
-		if now >= nextFrameTime then
-			display.Image = env.stuf.introframes[currentFrame]
-			currentFrame = currentFrame + 1
-			nextFrameTime = now + (1 / 70)
-			if currentFrame > #env.stuf.introframes then
-				connection:Disconnect()
+		if now >= next then
+			display.Image = env.stuf.introframes[curframe]
+			curframe = curframe + 1
+			next = now + (1 / 70)
+			if curframe > #env.stuf.introframes then
+				conn:Disconnect()
 				env.stuf.introholder:Destroy()
 			end
 		end
@@ -103,6 +104,7 @@ local mainframe, togglebutton = env.stuf.mainframe, nil
 
 local function loadintro()
 	local function typein(label, text)
+		local text = text or label.Text
 		label.Text = ""
 		for i = 1, #text do
 			label.Text = text:sub(1, i)
@@ -111,7 +113,7 @@ local function loadintro()
 	end
 
 	local function backspace(label)
-		local text = label.Text
+		local text = label.Text or ""
 		for i = #text, 0, -1 do
 			label.Text = text:sub(1, i)
 			rs.RenderStepped:Wait()
