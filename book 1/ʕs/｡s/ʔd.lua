@@ -9,6 +9,10 @@
    
 ---------------------------------------------------------------------------------------------------------------------------]]--
 
+local version = 1
+
+-------------------------------------------------------------------------------------------------------------------------------
+
 -- services & instances
 local t, spwn = task.wait, task.spawn
 local getmmfromerr = function(userdata, f, test) local ret = nil xpcall(f, function() ret = debug.info(2, "f") end, userdata, nil, 0) if (type(ret) ~= "function") or not test(ret) then return f end return ret end
@@ -1170,6 +1174,8 @@ end)
 -------------------------------------------------------------------------------------------------------------------------------
 
 local section = {
+	version = version,
+
 	{ type = "separator", title = "Access" },
 	{ type = "button", title = "Open Donor Perks Key System", desc = "Opens a GUI that prompts you to walk through ad checkpoints in order to recieve 5 hours of Donor access and perks.", callback = function() keysyshandler:popup() end },
 	{ type = "button", title = "Donation (500)", desc = "Copies a link to our 500 Robux gamepass. This gamepass will grant you Donor perks in Fun/Donor.",
