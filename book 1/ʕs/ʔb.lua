@@ -57,16 +57,34 @@ env.stuf.scriptsectionloaded = false
 env.stuf.configsectionloaded = false
 
 local maincat = env.funcs.recursivels("book%201/%CA%95s/%EF%BD%A1s/%CA%94m.lua", true) env.stuf.mainsectionloaded = true
+env.funcs.introconsolelog("  <font size='8' color='rgb(133, 133, 133)'>Main section loaded.</font>")
+
 local navigcat = env.funcs.recursivels("book%201/%CA%95s/%EF%BD%A1s/%CA%94n.lua", true) env.stuf.navigationssectionloaded = true
+env.funcs.introconsolelog("  <font size='8' color='rgb(133, 133, 133)'>Navigation section loaded.</font>")
+
 local viscat = env.funcs.recursivels("book%201/%CA%95s/%EF%BD%A1s/%CA%94v.lua", true) env.stuf.visualssectionloaded = true
+env.funcs.introconsolelog("  <font size='8' color='rgb(133, 133, 133)'>Visuals section loaded.</font>")
+
 local lpcat = env.funcs.recursivels("book%201/%CA%95s/%EF%BD%A1s/%CA%94lp.lua", true) env.stuf.localplayersectionloaded = true
+env.funcs.introconsolelog("  <font size='8' color='rgb(133, 133, 133)'>Local Player section loaded.</font>")
+
 local autocat = env.funcs.recursivels("book%201/%CA%95s/%EF%BD%A1s/%CA%94au.lua", true) env.stuf.automationsectionloaded = true
+env.funcs.introconsolelog("  <font size='8' color='rgb(133, 133, 133)'>Automation section loaded.</font>")
+
 local animcat = env.funcs.recursivels("book%201/%CA%95s/%EF%BD%A1s/%CA%94an.lua", true) env.stuf.animationssectionloaded = true
+env.funcs.introconsolelog("  <font size='8' color='rgb(133, 133, 133)'>Animations section loaded.</font>")
+
 local funcat = env.funcs.recursivels("book%201/%CA%95s/%EF%BD%A1s/%CA%94f.lua", true) env.stuf.funsectionloaded = true
+env.funcs.introconsolelog("  <font size='8' color='rgb(133, 133, 133)'>Fun section loaded.</font>")
+
 local donorcat = env.funcs.recursivels("book%201/%CA%95s/%EF%BD%A1s/%CA%94d.lua", true) env.stuf.donorsectionloaded = true
+env.funcs.introconsolelog("  <font size='8' color='rgb(133, 133, 133)'>Donor section loaded.</font>")
 
 local scriptinfocats = env.funcs.recursivels("book%201/%CA%95s/%EF%BD%A1s/%CA%94si%26f.lua", true) env.stuf.scriptsectionloaded = true
+env.funcs.introconsolelog("  <font size='8' color='rgb(133, 133, 133)'>Script Info section loaded.</font>")
+
 local cfcat = env.funcs.recursivels("book%201/%CA%95s/%EF%BD%A1s/%CA%94cl.lua", true) env.stuf.configsectionloaded = true
+env.funcs.introconsolelog("  <font size='8' color='rgb(133, 133, 133)'>Config Loading section loaded.</font>")
 
 -------------------------------------------------------------------------------------------------------------------------------
 
