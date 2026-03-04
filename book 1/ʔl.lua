@@ -45,8 +45,23 @@ local env = getgenv.BSGUI
 local setupsucc, setuperr = pcall(function() loadstring(game:HttpGet("https://raw.githubusercontent.com/bookworming/bookshelf/refs/heads/main/book%201/%CA%95s/%CA%94i.lua"))() end)
 
 repeat t() until env.setupcomplete and env.essentialsloaded
-env.expectedcompiledscriptversion = 1 
-env.funcs.box("setup complete, expected CSV: " .. env.expectedcompiledscriptversion)
+env.expectedcompiledscriptversions = {
+	library = 1,
+	data = 1,
+	
+	mainsection = 1,
+	navigationsection = 1,
+	visualssection = 1,
+	localplayersection = 1,
+	automationsection = 1,
+	animationssection = 1,
+	funsection = 1,
+	donorsection = 1,
+	
+	scriptinformationandchangelogssections = 1,
+	configloadingsection = 1
+}
+env.funcs.box("setup complete")
 
 -------------------------------------------------------------------------------------------------------------------------------
 
@@ -338,7 +353,6 @@ local function loadintro()
 				-- env.funcs.introconsolelog("Downloading " .. filename .. " (background)...")
 				spwn(function()
 					writefile(path, game:HttpGet(url))
-					env.funcs.introconsolelog("Success: " .. filename .. " downloaded", "succ")
 				end)
 			end
 		end
@@ -362,6 +376,9 @@ local function loadintro()
 
 	if env.essentials.library then
 		env.funcs.introconsolelog("UI library successfully loaded.")
+		if env.essentials.library.version ~= env.expectedcompiledscriptversions.library then
+			env.funcs.introconsolelog("The UI library script is out of date.", "warn")
+		end
 	else
 		env.funcs.introconsolelog("Something went wrong. (LibFail)", "warn")
 	end
@@ -370,6 +387,9 @@ local function loadintro()
 
 	if env.essentials.data then
 		env.funcs.introconsolelog("Script data successfully loaded.")
+		if env.essentials.library.version ~= env.expectedcompiledscriptversions.data then
+			env.funcs.introconsolelog("The script data is out of date.", "warn")
+		end
 	else
 		env.funcs.introconsolelog("Something went wrong. (DataFail)", "warn")
 	end
