@@ -731,7 +731,7 @@ do
 	end
 
 	-- ui
-	env.stuf.mainframe, env.stuf.mainframesections = nil
+	env.stuf.mainframe, env.stuf.mainframesections = Instance.new("UIScale"), Instance.new("UIScale")
 	env.stuf.togglebutton, env.stuf.togglebuttondrag = nil
 	env.stuf.popup = nil
 
