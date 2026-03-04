@@ -103,21 +103,32 @@ local function loadintro(buttononly)
 	end
 
 	local function alive()
-    local scale = togglebutton:FindFirstChildOfClass("UIScale") or Instance.new("UIScale", togglebutton)
-		local baseScale = env.gear.general.buttonscale or 1
-		scale.Scale = baseScale
-		env.stuf.buttonscale = scale
+    -- base scale instance - exposed for slider, never tweened for hover/press
+    local baseScaleObj = togglebutton:FindFirstChildOfClass("UIScale") or Instance.new("UIScale", togglebutton)
+    baseScaleObj.Scale = env.gear.general.buttonscale or 1
+    env.stuf.buttonscale = baseScaleObj
 
-	env.stuf.setbuttonscale = function(v)
-    baseScale = v
-    ts:Create(scale, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), { Scale = v }):Play()
-    -- notify separate buttons
-    if env.stuf.buttonscalelisteners then
-        for _, listener in pairs(env.stuf.buttonscalelisteners) do
-            listener(v)
+    -- separate hover/press UIScale, not exposed anywhere
+    local hoverScaleObj = Instance.new("UIScale", togglebutton)
+    hoverScaleObj.Scale = 1
+
+    local hover = TweenInfo.new(0.12, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+    local press = TweenInfo.new(0.08, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+    local currenttween
+    local function scaleTo(v, info)
+        if currenttween then currenttween:Cancel() end
+        currenttween = ts:Create(hoverScaleObj, info, { Scale = v })
+        currenttween:Play()
+    end
+
+    env.stuf.setbuttonscale = function(v)
+        ts:Create(baseScaleObj, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), { Scale = v }):Play()
+        if env.stuf.buttonscalelisteners then
+            for _, listener in pairs(env.stuf.buttonscalelisteners) do
+                listener(v)
+            end
         end
     end
-end
 
     local hover = TweenInfo.new(0.12, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
     local press = TweenInfo.new(0.08, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
