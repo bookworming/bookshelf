@@ -712,21 +712,21 @@ function lib.makecoolscrollingframe(size, parent, pos, layoutpadding, Z)
 		local canvas = scroll.CanvasSize.Y.Offset
 		local barBackgroundHeight = ogscrollbarheight
 
-		if canvas <= view then
-			bar.Visible = false
-			return
-		end
-		bar.Visible = true
+    if canvas <= view then
+      bar.Visible = false
+      return
+    end
+    bar.Visible = true
 
-		local ratio = view / canvas
-		local actualHeight = math.clamp(ratio * barBackgroundHeight, 10, barBackgroundHeight - 4)
-		bar.Size = UDim2.new(0, 6, 0, actualHeight - 4)
+    local ratio = view / canvas
+    local actualHeight = math.clamp(ratio * barBackgroundHeight, 10, barBackgroundHeight - 4)
+    bar.Size = UDim2.new(0, 6, 0, actualHeight - 4)
 
-		local maxScrollPos = canvas - view
-		local maxBarTravel = barBackgroundHeight - actualHeight
-		local scrollPercent = math.clamp(scroll.CanvasPosition.Y / maxScrollPos, 0, 1)
-		local barY = math.clamp(scrollPercent * maxBarTravel + 2, 2, barBackgroundHeight - actualHeight + 2)
-		bar.Position = UDim2.new(1, -2, 0, barY)
+    local maxScrollPos = canvas - view
+    local maxBarTravel = barBackgroundHeight - actualHeight
+    local scrollPercent = math.clamp(scroll.CanvasPosition.Y / maxScrollPos, 0, 1)
+    local barY = math.clamp(scrollPercent * maxBarTravel + 2, 2, barBackgroundHeight - actualHeight + 2)
+    bar.Position = UDim2.new(1, -2, 0, barY)
 	end
 
 	scroll:GetPropertyChangedSignal("CanvasPosition"):Connect(updateBar)
