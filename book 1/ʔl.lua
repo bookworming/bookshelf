@@ -103,49 +103,48 @@ local function loadintro(buttononly)
 	end
 
 	local function alive()
-    local wrapper = Instance.new("Frame")
-    wrapper.Size = togglebutton.Size
-    wrapper.AnchorPoint = Vector2.new(0.5, 0.5)  -- center anchor on wrapper
-    wrapper.Position = UDim2.new(0.5, 0, 0, 100) -- explicit center position
-    wrapper.BackgroundTransparency = 1
-    wrapper.ZIndex = togglebutton.ZIndex
-    wrapper.Parent = togglebutton.Parent
+    local existing = togglebutton:FindFirstChildOfClass("UIScale")
+    if existing then existing:Destroy() end
 
-    togglebutton.Position = UDim2.fromScale(0.5, 0.5)
+    local scale = Instance.new("UIScale", togglebutton)
+    local baseScale = env.gear.general.buttonscale or 1
+    scale.Scale = baseScale  -- set initial scale here, replaces the old buttonscale tween
+
+    local hover = TweenInfo.new(0.12, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+    local press = TweenInfo.new(0.08, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+    local currenttween
+
+    -- scaleTo is defined here, after baseScale is known
+    local function scaleTo(v, info)
+        if currenttween then currenttween:Cancel() end
+        currenttween = ts:Create(scale, info, { Scale = baseScale * v })
+        currenttween:Play()
+    end
+
     togglebutton.AnchorPoint = Vector2.new(0.5, 0.5)
-    togglebutton.Parent = wrapper
+    togglebutton.Position = UDim2.new(0.5, 0, 0, 100)
 
-		local scale = Instance.new("UIScale", wrapper)
-		local hover = TweenInfo.new(0.12, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
-		local press = TweenInfo.new(0.08, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
-		local currenttween
-		local function scaleTo(v, info)
-			if currenttween then currenttween:Cancel() end
-			currenttween = ts:Create(scale, info, { Scale = v })
-			currenttween:Play()
-		end
+    env.stuf.togglebutton = togglebutton
+    env.stuf.togglebuttondrag = env.essentials.library.makedraggable(togglebutton)
 
-		env.stuf.togglebutton = togglebutton
-		env.stuf.togglebuttonwrapper = wrapper
-		env.stuf.togglebuttondrag = env.essentials.library.makedraggable(wrapper)
+    -- scaleTo is called inside these connect callbacks
+    togglebutton.MouseEnter:Connect(function() env.essentials.library.hov() scaleTo(1.02, hover) end)
+    togglebutton.MouseLeave:Connect(function() scaleTo(1, hover) end)
+    togglebutton.MouseButton1Up:Connect(function() scaleTo(1.02, hover) end)
+    togglebutton.MouseButton1Down:Connect(function() scaleTo(0.98, press) end)
+    togglebutton.Activated:Connect(function()
+        if env.stuf.togglebuttondrag.dragged then return end
+        env.essentials.library.clik()
+        mainframe.Visible = not mainframe.Visible
+    end)
 
-		togglebutton.MouseEnter:Connect(function() env.essentials.library.hov() scaleTo(1.02, hover) end)
-		togglebutton.MouseLeave:Connect(function() scaleTo(1, hover) end)
-		togglebutton.MouseButton1Up:Connect(function() scaleTo(1.02, hover) end)
-		togglebutton.MouseButton1Down:Connect(function() scaleTo(0.98, press) end)
-		togglebutton.Activated:Connect(function()
-			if env.stuf.togglebuttondrag.dragged then return end
-			env.essentials.library.clik()
-			mainframe.Visible = not mainframe.Visible
-		end)
-
-		uis.InputBegan:Connect(function(input, processed)
-			if not processed and input.KeyCode == env.gear.general.defaultkeybind then
-				mainframe.Visible = not mainframe.Visible
-				env.essentials.library.clik()
-			end
-		end)
-	end
+    uis.InputBegan:Connect(function(input, processed)
+        if not processed and input.KeyCode == env.gear.general.defaultkeybind then
+            mainframe.Visible = not mainframe.Visible
+            env.essentials.library.clik()
+        end
+    end)
+end
 
 	local js
 	if not buttononly then
@@ -372,9 +371,6 @@ local function loadintro(buttononly)
 		Size = UDim2.new(1, -28, 0, 1),
 		Position = UDim2.new(0.5, 0, 0, 66)
 	})
-
-	env.stuf.buttonscale = Instance.new("UIScale")
-	env.stuf.buttonscale.Parent = hi
 
 	tween(hi, {0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut}, {Size = UDim2.fromOffset(230, 64)})
 	tween(env.stuf.buttonscale, {1, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut}, {Scale = env.gear.general.buttonscale})
