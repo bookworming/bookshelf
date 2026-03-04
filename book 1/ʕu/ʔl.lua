@@ -10,7 +10,7 @@
 ---------------------------------------------------------------------------------------------------------------------------]]--
 
 local lib = {}
-lib.version = 3
+lib.version = 4
 
 -------------------------------------------------------------------------------------------------------------------------------
 
@@ -2592,7 +2592,7 @@ function lib.addinputandtoggle(parent, title, description, defaulttext, placehol
 		local zplus = lib.seperatebuttonzindexoff
 
 		local _, textHeight = lib.gettextbounds(title, Enum.Font.FredokaOne, 14, Vector2.new(100, math.huge))
-		local baseWidth = 150
+		local baseWidth = 220
 		local isTooHigh = textHeight > 30
 		local buttonWidth = isTooHigh and (baseWidth + 40) or baseWidth
 
@@ -2605,10 +2605,30 @@ function lib.addinputandtoggle(parent, title, description, defaulttext, placehol
 		local toggleWidth, leftPadding = 46, 24
 		local miniToggle = lib.makecoolframe(UDim2.new(0, toggleWidth, 0, 24), buttonFrame, false, false, UDim2.new(1, -35, 0.5, 0), true, true, true, 90001 + zplus)
 
-		local textAreaWidth = (buttonWidth - toggleWidth) - (leftPadding * 2)
-		local textPosX = leftPadding + (textAreaWidth / 2) - 4
+		local inputWidth = 80
+		local miniInput = lib.makecooltextbox(UDim2.new(0, inputWidth, 0, 24), buttonFrame, inputbox.Text, 14, placeholdertext, nil, UDim2.new(0, leftPadding, 0.5, 0), nil, 90001 + zplus)
+
+		local textAreaWidth = buttonWidth - toggleWidth - inputWidth - (leftPadding * 2) - 6
+		local textPosX = leftPadding + inputWidth + 4 + textAreaWidth / 2
 		local titleText = lib.makecooltext(buttonFrame, UDim2.new(0, textAreaWidth, 0, textHeight), title, 14, nil, 2, UDim2.new(0, textPosX, 0.5, 0), Enum.TextXAlignment.Center, nil, nil, 90001 + zplus)
 		titleText.TextWrapped = true
+
+		miniInput:GetPropertyChangedSignal("Text"):Connect(function()
+			inputbox.Text = miniInput.Text
+		end)
+		inputbox:GetPropertyChangedSignal("Text"):Connect(function()
+			if miniInput.Text ~= inputbox.Text then
+				miniInput.Text = inputbox.Text
+			end
+		end)
+
+		miniInput.FocusLost:Connect(function()
+			env.essentials.elements[inputId].dirty = true
+			if state.enabled and callback then
+				callback(miniInput.Text, state.enabled)
+			end
+			if table.find(env.filemanager.persist, title) then env.filemanager.persistsave() end
+		end)
 
 		local miniKnob = Instance.new("Frame")
 		miniKnob.Size, miniKnob.AnchorPoint, miniKnob.BackgroundColor3, miniKnob.Parent, miniKnob.ZIndex = UDim2.new(0, 20, 0, 20), Vector2.new(0, 0.5), Color3.new(1, 1, 1), miniToggle, miniToggle.ZIndex + 1
