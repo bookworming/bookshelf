@@ -2625,7 +2625,10 @@ function lib.addinputandbutton(parent, title, description, defaulttext, placehol
 
 	inputbox.Focused:Connect(function() lib.clik() end)
 	inputbox.MouseEnter:Connect(function() lib.hov() end)
-	inputbox.FocusLost:Connect(function() env.essentials.elements[title .. "/input"].dirty = true end)
+	inputbox.FocusLost:Connect(function() 
+		env.essentials.elements[title .. "/input"].dirty = true 
+		if table.find(env.filemanager.persist, title) then env.filemanager.persistsave() end
+	end)
 
 	env.essentials.elements[title .. "/input"] = {
 		type = "input",
@@ -2714,6 +2717,7 @@ function lib.addslider(parent, title, description, min, max, default, step, call
 		env.essentials.elements[title].value = value
 		env.essentials.elements[title].dirty = true
 		if callback then callback(value) end
+		if table.find(env.filemanager.persist, title) then env.filemanager.persistsave() end
 	end
 
 	env.essentials.elements[title] = {
