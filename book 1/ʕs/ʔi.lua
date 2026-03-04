@@ -73,7 +73,7 @@ end
 spwn(function()
 	yield(true) env.funcs.pop("Hi!")
 	env.essentials.library = env.funcs.recursivels("book%201/%CA%95u/%CA%94l.lua", true) 
-	env.funcs.box("UI library loaded successfully (version " .. env.essentials.library.version .. ")")
+	env.funcs.box("UI library loaded successfully")
 	
 	env.essentials.data = env.funcs.recursivels("book%201/%CA%95s/%CA%94d.lua", true) 
 	env.funcs.box("script data loaded successfully")
