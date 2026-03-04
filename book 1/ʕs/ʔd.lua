@@ -22,38 +22,27 @@ local req = (syn and syn.request) or (http and http.request) or request
 
 -------------------------------------------------------------------------------------------------------------------------------
 
+local function bywiki(template)
+    local encoded = "https://dandys-world-robloxhorror.fandom.com/api.php?action=parse&page=Template%3A" .. template .. "&prop=wikitext&format=json"
+    local ok, response = pcall(req, {Url = encoded, Method = "GET"})
+    if not ok or not response or not response.Body then return nil end
+    local ok2, data = pcall(https.JSONDecode, https, response.Body)
+    if not ok2 or not data or not data.parse then return nil end
+    return data.parse.wikitext["*"]
+end
+
 local ToTD, toonamount, twistedamount = "???", "???", "???"
 spwn(function()
-	local response = req({
-		Url = "https://dandys-world-robloxhorror.fandom.com/api.php?action=parse&page=Template:TOTDName&prop=wikitext&format=json",
-		Method = "GET"
-	})
+    local twistedoftheday = bywiki("TOTDName")
+    if twistedoftheday then ToTD = twistedoftheday:match("^%s*(.-)%s*$") end
+    t(0.5)
 
-	local data = https:JSONDecode(response.Body)
-	local name = data.parse.wikitext["*"]:gsub("^%s+", ""):gsub("%s+$", "")
-	if name then ToTD = name end
+    local toons = bywiki("ToonAmount")
+    if toons then toonamount = toons:match("|(%d+)%}%}") end
+    t(0.5)
 
-	t(0.5)
-
-	local response = req({
-		Url = "https://dandys-world-robloxhorror.fandom.com/api.php?action=parse&page=Template:ToonAmount&prop=wikitext&format=json",
-		Method = "GET"
-	})
-
-	local data = https:JSONDecode(response.Body)
-	local text = data.parse.wikitext["*"]
-	toonamount = text:match("|(%d+)%}%}")
-
-	t(0.5)
-
-	local response = req({
-		Url = "https://dandys-world-robloxhorror.fandom.com/api.php?action=parse&page=Template:TwistedAmount&prop=wikitext&format=json",
-		Method = "GET"
-	})
-
-	local data = https:JSONDecode(response.Body)
-	local text = data.parse.wikitext["*"]
-	twistedamount = text:match("|(%d+)%}%}")
+    local twisteds = bywiki("TwistedAmount")
+    if twisteds then twistedamount = twisteds:match("|(%d+)%}%}") end
 end)
 
 -------------------------------------------------------------------------------------------------------------------------------
