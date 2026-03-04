@@ -31,28 +31,105 @@ local getgenv = (syn and syn.getgenv) or getgenv() or _G
 
 local folder = "Bоxten Sеx GUI"
 local env = getgenv.BSGUI
+local sgui = env.essentials.sgui
 
 -------------------------------------------------------------------------------------------------------------------------------
 
+-- skidjolt was here kyehehehe
 local dialogue = env.funcs.recursivels("book%201/%CA%95u/%CA%94d.lua", true)
-local sgui = env.essentials.sgui
+local dh = {}
 
+-- THEYRE ALL SPEAKING!!! IHRE MÄULEN SIND ALLE OFFEN!!! (some of them have their teeth shown too)
 local expressions = {
+	-- BSGUI boxten
 	boxten = {
+		neutral = "placeholder", -- / uninterested / resting
+		ticked = "placeholder", -- / disgusted / shocked (disgusted)
+		annoyed = "rbxassetid://87876871905320", -- / pissed
+		disgusted = "placeholder", -- / holding back
+		proud = "placeholder", -- / overconfident / somewhat ragebaitish / sarcastic?
+		nervous = "placeholder", -- / unreadable / apathetic / somewhat uninterested
+		sad = "placeholder", -- / sarcastic, a bit of a "boo hoo" type thing
+		happy = "placeholder", -- / unreadable / slightly happy. the smile is still there.
+		shoutingmad = "placeholder", -- / rage / mega mega fucking fuming
+		shoutinghappy = "placeholder", -- / laughing / call or insult
 	},
+
+	-- SC-004 boxten
 	altboxten = {
+		neutral = "placeholder", -- / sad / nervous looking / resting
+		ticked = "placeholder", -- / shocked (disgusted) / bit of the "SSSHHHH... OOOHH..." you say while trying to suppress the pain of your toe after stubbing it 
+		annoyed = "placeholder", -- / uninterested / sad
+		disgusted = "placeholder", -- / holding back / still sad lol
+		proud = "placeholder", -- / happy / ^_^ type thing
+		nervous = "placeholder", -- / come on. do i need to explain?
+		sad = "placeholder", -- / looking down (emotionally and literally)
+		happy = "placeholder", -- / happy (nervosity)
+		shoutingmad = "placeholder", -- / tense
+		shoutinghappy = "placeholder", -- / ^ᗜ^
 	},
+
+	-- SC-003 poppy
 	poppy = {
+		neutral = "placeholder", -- / very generic smile
+		ticked = "placeholder", -- / shocked (worried) / kind of like a "ouch, you okay there?" type thing
+		annoyed = "placeholder", -- / i think this is only gonna be used in convos between her and shrimpo lol
+		disgusted = "placeholder", -- / holding baaaaack
+		proud = "placeholder", -- / ecstatic / overconfident
+		nervous = "placeholder", -- / worried
+		sad = "placeholder", -- / kinda like worried but more sadder?? idk
+		happy = "rbxassetid://104725304950571", -- / fucking overjoyed
+		shoutingmad = "placeholder", -- / tense like SC-004 boxten
+		shoutinghappy = "placeholder", -- / decibel battle
 	},
+
+	-- SC-001 shrimpo
 	shrimpo = {
+		neutral = "placeholder", -- / pouting
+		ticked = "rbxassetid://71382889666653", -- / shocked (annoyed)
+		annoyed = "placeholder", -- / do your best "UGHHH" look and then envision it
+		disgusted = "placeholder", -- / "EEEWWWW!!!"
+		proud = "placeholder", -- / overproud / overconfident
+		nervous = "placeholder", -- / probably gonna get used when BSGUI boxten tells him to kiss him out of nowhere
+		sad = "placeholder", -- / sarcastic obviously this bitch is always angry
+		happy = "placeholder", -- / overconfident and crossing their arms
+		shoutingmad = "placeholder", -- / drunk dad yelling at their son
+		shoutinghappy = "placeholder", -- / when the ragebait is successful
 	}
 }
 
 -------------------------------------------------------------------------------------------------------------------------------
 
+local padding, textsize = 2, 16
+local notifications = {}
+
 local function dialoguenoise()
   env.funcs.playsound("rbxassetid://4841731967")
 end
+
+local function tweeny(obj, newY)
+	ts:Create(obj, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+		Position = UDim2.new(0.5, 0, 1, newY)
+	}):Play()
+end
+
+local function recalcy()
+	local currentOffset = 0
+	for _, label in ipairs(notifications) do
+		local height = label.AbsoluteSize.Y
+		tweeny(label, -currentOffset)
+		currentOffset += height + padding
+	end
+end
+
+local tagcolors = {
+	box = Color3.fromRGB(197, 61, 224),
+	altbox = Color3.fromRGB(197, 61, 224),
+	pop = Color3.fromRGB(112, 234, 255),
+	shr = Color3.fromRGB(247, 109, 40),
+}
+
+-------------------------------------------------------------------------------------------------------------------------------
 
 local container = Instance.new("Frame")
 container.AnchorPoint = Vector2.new(0.5, 1)
@@ -61,54 +138,18 @@ container.Size = UDim2.new(0, 400, 0, 300)
 container.BackgroundTransparency = 1
 container.Parent = screengui
 
-local PADDING = 2
-local DISPLAY_TIME = 5
-local TWEEN_TIME = 0.5
-local TEXT_SIZE = 16
-
-local notifications = {}
-
-local function tweeny(obj, newY)
-	ts:Create(obj, TweenInfo.new(TWEEN_TIME, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-		Position = UDim2.new(0.5, 0, 1, newY)
-	}):Play()
-end
-
-local function RecalculatePositions()
-	local currentOffset = 0
-	for _, label in ipairs(notifications) do
-		local height = label.AbsoluteSize.Y
-		tweeny(label, -currentOffset)
-		currentOffset += height + PADDING
-	end
-end
-
-local ICONS = {
-	box = "rbxassetid://87876871905320",
-  altbox = "rbxassetid://109975147142863",
-	pop = "rbxassetid://104725304950571",
-	shr = "rbxassetid://71382889666653",
-}
-
-local NAME_COLORS = {
-	box = Color3.fromRGB(197, 61, 224),
-	altbox = Color3.fromRGB(197, 61, 224),
-	pop = Color3.fromRGB(112, 234, 255),
-	shr = Color3.fromRGB(247, 109, 40),
-}
-
-local function CreateNotification(text, whosaidit)
+local function newdialogue(text, whosaidit, expression)
 	local nameText = ""
 	local nameColor = Color3.new(1, 1, 1)
 
-	if whosaidit and NAME_COLORS[whosaidit] then
-		local displayName =
+	if whosaidit and tagcolors[whosaidit] then
+		local name =
 			(whosaidit == "box" or whosaidit == "altbox") and "Boxten" or
 			whosaidit == "pop" and "Poppy" or
 			whosaidit == "shr" and "Shrimpo"
 
-		nameText = "[" .. displayName .. "]: "
-		nameColor = NAME_COLORS[whosaidit]
+		nameText = "[" .. name .. "]: "
+		nameColor = tagcolors[whosaidit]
     
     dialoguenoise()
 	end
@@ -125,31 +166,36 @@ local function CreateNotification(text, whosaidit)
 	local letters = {}
 	local cursorX = 0
 
-	if whosaidit and ICONS[whosaidit] then
-		local ICON_SIZE = 25
+	if whosaidit and expression then
+		local iconsize = 25
+
 		local icon = Instance.new("ImageLabel")
 		icon.BackgroundTransparency = 1
-		icon.Size = UDim2.new(0, ICON_SIZE, 0, ICON_SIZE)
-		icon.Position = UDim2.new(0, cursorX, 0.5, -ICON_SIZE / 2)
-		icon.Image = ICONS[whosaidit]
+		icon.Size = UDim2.new(0, iconsize, 0, iconsize)
+		icon.Position = UDim2.new(0, cursorX, 0.5, -iconsize / 2)
+		icon.Image = expressions[whosaidit][expression]
 		icon.ImageTransparency = 1
 		icon.Parent = holder
-		cursorX += ICON_SIZE + 4
+		cursorX += iconsize + 4
 
-    spwn(function() ts:Create(icon, TweenInfo.new(1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Rotation = 10}):Play() t(1) ts:Create(icon, TweenInfo.new(1, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {Rotation = 5}):Play() end)
+    spwn(function()
+			ts:Create(icon, TweenInfo.new(1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Rotation = 10}):Play()
+			t(1) 
+			ts:Create(icon, TweenInfo.new(1, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {Rotation = 5}):Play()
+		end)
 
 		table.insert(allFadeable, { label = icon, stroke = nil, baseX = icon.Position.X.Offset, isIcon = true })
 	end
 
 	if nameText ~= "" then
-		local nameWidth = env.essentials.library.gettextbounds(nameText, Enum.Font.FredokaOne, TEXT_SIZE)
+		local nameWidth = env.essentials.library.gettextbounds(nameText, Enum.Font.FredokaOne, textsize)
 
 		local nameLabel = Instance.new("TextLabel")
 		nameLabel.BackgroundTransparency = 1
 		nameLabel.Text = nameText
 		nameLabel.TextColor3 = nameColor
 		nameLabel.Font = Enum.Font.FredokaOne
-		nameLabel.TextSize = TEXT_SIZE
+		nameLabel.TextSize = textsize
 		nameLabel.Size = UDim2.new(0, nameWidth, 1, 0)
 		nameLabel.Position = UDim2.new(0, cursorX, 0, 0)
 		nameLabel.TextTransparency = 1
@@ -171,8 +217,8 @@ local function CreateNotification(text, whosaidit)
   for i = 1, #text do
     local char = text:sub(i, i)
 
-    local widthUpToHere = env.essentials.library.gettextbounds(text:sub(1, i), Enum.Font.FredokaOne, TEXT_SIZE)
-    local widthUpToPrev = i > 1 and env.essentials.library.gettextbounds(text:sub(1, i - 1), Enum.Font.FredokaOne, TEXT_SIZE) or 0
+    local widthUpToHere = env.essentials.library.gettextbounds(text:sub(1, i), Enum.Font.FredokaOne, textsize)
+    local widthUpToPrev = i > 1 and env.essentials.library.gettextbounds(text:sub(1, i - 1), Enum.Font.FredokaOne, textsize) or 0
     local charWidth = widthUpToHere - widthUpToPrev
     local xPos = textStartX + widthUpToPrev
 
@@ -181,7 +227,7 @@ local function CreateNotification(text, whosaidit)
 		letter.Text = char
 		letter.TextColor3 = Color3.new(1, 1, 1)
 		letter.Font = Enum.Font.FredokaOne
-		letter.TextSize = TEXT_SIZE
+		letter.TextSize = textsize
 		letter.Size = UDim2.new(0, charWidth, 1, 0)
     letter.Position = UDim2.new(0, xPos, 0, -2)
 		letter.TextTransparency = 1
@@ -198,10 +244,10 @@ local function CreateNotification(text, whosaidit)
     table.insert(letters, entry)
 	end
 
-	cursorX = textStartX + env.essentials.library.gettextbounds(text, Enum.Font.FredokaOne, TEXT_SIZE)
+	cursorX = textStartX + env.essentials.library.gettextbounds(text, Enum.Font.FredokaOne, textsize)
   holder.Size = UDim2.new(0, cursorX, 0, 16)
 
-	local newHeight = holder.AbsoluteSize.Y + PADDING
+	local newHeight = holder.AbsoluteSize.Y + padding
 	for _, existing in ipairs(notifications) do
 		local currentY = existing.Position.Y.Offset
 		tweeny(existing, currentY - newHeight)
@@ -209,7 +255,7 @@ local function CreateNotification(text, whosaidit)
 
 	table.insert(notifications, 1, holder)
 
-	local fadeInInfo = TweenInfo.new(TWEEN_TIME)
+	local fadeInInfo = TweenInfo.new(0.5)
 	ts:Create(holder, fadeInInfo, {
 		Position = UDim2.new(0.5, 0, 1, 0)
 	}):Play()
@@ -226,7 +272,7 @@ local function CreateNotification(text, whosaidit)
 	end
 
 	spwn(function()
-		local popInfo = TweenInfo.new(TWEEN_TIME, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+		local popInfo = TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
 		for _, entry in ipairs(letters) do
 			ts:Create(entry.label, popInfo, {
 				TextTransparency = 0,
@@ -270,17 +316,12 @@ local function CreateNotification(text, whosaidit)
 		end
 
 		holder:Destroy()
-		RecalculatePositions()
+		recalcy()
 	end)
 end
 
-wait(1)
-CreateNotification("hello, im boxten. i was the first here.", "box")
-wait(2)
-CreateNotification("I'm (the other) Boxten. My current behavior can be toggled...", "altbox")
-wait(2)
-CreateNotification("Hi! I'm Poppy! I hold the Commands Section for Boxten Sex GUI!", "pop")
-wait(2)
-CreateNotification("I'M SHRIMPO AND I HATE BEING IN AN EXPLOIT SCRIPT!!!", "shr")
+-------------------------------------------------------------------------------------------------------------------------------
+
+return dh
 
 -------------------------------------------------------------------------------------------------------------------------------
