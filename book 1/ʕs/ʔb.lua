@@ -49,7 +49,7 @@ env.stuf.sectionsloaded = false
 
 local maincat = env.funcs.recursivels("book%201/%CA%95s/%EF%BD%A1s/%CA%94m.lua", true)
 env.funcs.introconsolelog("\"Main\" section loaded.")
-if maincat.version ~= env.expectedcompiledscriptversion then
+if maincat.version ~= env.expectedcompiledscriptversions.mainsection then
 	env.funcs.introconsolelog("The \"Main\" section is out of date.", "warn")
 end
 
@@ -57,7 +57,7 @@ env.funcs.introprogress(63)
 
 local navigcat = env.funcs.recursivels("book%201/%CA%95s/%EF%BD%A1s/%CA%94n.lua", true)
 env.funcs.introconsolelog("\"Navigation\" section loaded.")
-if navigcat.version ~= env.expectedcompiledscriptversion then
+if navigcat.version ~= env.expectedcompiledscriptversions.navigationsection then
 	env.funcs.introconsolelog("The \"Navigation\" section is out of date.", "warn")
 end
 
@@ -66,7 +66,7 @@ env.funcs.introprogress(66)
 env.stuf.visualssectionloaded = false
 local viscat = env.funcs.recursivels("book%201/%CA%95s/%EF%BD%A1s/%CA%94v.lua", true)
 env.funcs.introconsolelog("\"Visuals\" section loaded.")
-if viscat.version ~= env.expectedcompiledscriptversion then
+if viscat.version ~= env.expectedcompiledscriptversions.visualssection then
 	env.funcs.introconsolelog("The \"Visuals\" section is out of date.", "warn")
 end
 env.stuf.visualssectionloaded = true
@@ -75,7 +75,7 @@ env.funcs.introprogress(69)
 
 local lpcat = env.funcs.recursivels("book%201/%CA%95s/%EF%BD%A1s/%CA%94lp.lua", true)
 env.funcs.introconsolelog("\"Local Player\" section loaded.")
-if lpcat.version ~= env.expectedcompiledscriptversion then
+if lpcat.version ~= env.expectedcompiledscriptversions.localplayersection then
 	env.funcs.introconsolelog("The \"Local Player\" section is out of date.", "warn")
 end
 
@@ -83,7 +83,7 @@ env.funcs.introprogress(71)
 
 local autocat = env.funcs.recursivels("book%201/%CA%95s/%EF%BD%A1s/%CA%94au.lua", true)
 env.funcs.introconsolelog("\"Automation\" section loaded.")
-if autocat.version ~= env.expectedcompiledscriptversion then
+if autocat.version ~= env.expectedcompiledscriptversions.automationsection then
 	env.funcs.introconsolelog("The \"Automation\" section is out of date.", "warn")
 end
 
@@ -91,7 +91,7 @@ env.funcs.introprogress(74)
 
 local animcat = env.funcs.recursivels("book%201/%CA%95s/%EF%BD%A1s/%CA%94an.lua", true)
 env.funcs.introconsolelog("\"Animations\" section loaded.")
-if animcat.version ~= env.expectedcompiledscriptversion then
+if animcat.version ~= env.expectedcompiledscriptversions.animationssection then
 	env.funcs.introconsolelog("The \"Animations\" section is out of date.", "warn")
 end
 
@@ -99,7 +99,7 @@ env.funcs.introprogress(77)
 
 local funcat = env.funcs.recursivels("book%201/%CA%95s/%EF%BD%A1s/%CA%94f.lua", true)
 env.funcs.introconsolelog("\"Fun\" section loaded.")
-if funcat.version ~= env.expectedcompiledscriptversion then
+if funcat.version ~= env.expectedcompiledscriptversions.funsection then
 	env.funcs.introconsolelog("The \"Fun\" section is out of date.", "warn")
 end
 
@@ -107,7 +107,7 @@ env.funcs.introprogress(80)
 
 local donorcat = env.funcs.recursivels("book%201/%CA%95s/%EF%BD%A1s/%CA%94d.lua", true) 
 env.funcs.introconsolelog("\"Donor\" section loaded.")
-if donorcat.version ~= env.expectedcompiledscriptversion then
+if donorcat.version ~= env.expectedcompiledscriptversions.donorsection then
 	env.funcs.introconsolelog("The \"Donor\" section is out of date.", "warn")
 end
 
@@ -115,7 +115,7 @@ env.funcs.introprogress(83)
 
 local scriptinfocats = env.funcs.recursivels("book%201/%CA%95s/%EF%BD%A1s/%CA%94si%26f.lua", true)
 env.funcs.introconsolelog("\"Script Info\" section loaded.")
-if scriptinfocats.version ~= env.expectedcompiledscriptversion then
+if scriptinfocats.version ~= env.expectedcompiledscriptversions.scriptinformationandchangelogssections then
 	env.funcs.introconsolelog("The \"Script Info\" section is out of date.", "warn")
 end
 
@@ -123,7 +123,7 @@ env.funcs.introprogress(86)
 
 local clcat = env.funcs.recursivels("book%201/%CA%95s/%EF%BD%A1s/%CA%94cl.lua", true)
 env.funcs.introconsolelog("\"Config Loading\" section loaded.")
-if clcat.version ~= env.expectedcompiledscriptversion then
+if clcat.version ~= env.expectedcompiledscriptversions.configloadingsection then
 	env.funcs.introconsolelog("The \"Config Loading\" section is out of date.", "warn")
 end
 
