@@ -146,8 +146,10 @@ local sections = {
 		},
 		{ type = "slider", title = "Button UI scale", desc = "Adjusts the UI scale of the buttons.", min = 0.5, max = 2, default = 1, step = 0.1,
 			callback = function(value)
-				env.gear.general.buttonscale = value
-				env.stuf.buttonscale.Scale = env.gear.general.buttonscale
+    		env.gear.general.buttonscale = value
+    		if env.stuf.setbuttonscale then
+        	env.stuf.setbuttonscale(value)
+    		end
 			end
 		},
 
