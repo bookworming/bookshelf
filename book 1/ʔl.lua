@@ -103,12 +103,10 @@ local function loadintro(buttononly)
 	end
 
 	local function alive()
-    -- base scale instance - exposed for slider, never tweened for hover/press
     local baseScaleObj = togglebutton:FindFirstChildOfClass("UIScale") or Instance.new("UIScale", togglebutton)
     baseScaleObj.Scale = env.gear.general.buttonscale or 1
     env.stuf.buttonscale = baseScaleObj
 
-    -- separate hover/press UIScale, not exposed anywhere
     local hoverScaleObj = Instance.new("UIScale", togglebutton)
     hoverScaleObj.Scale = 1
 
