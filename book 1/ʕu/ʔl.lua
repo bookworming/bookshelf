@@ -700,16 +700,9 @@ function lib.makecoolscrollingframe(size, parent, pos, layoutpadding, Z)
 	bar.Parent = scrollbar
 	Instance.new("UICorner", bar).CornerRadius = UDim.new(1, 0)
 
-	local function getAncestorScale()
-    local obj = bg
-    local scale = 1
-    while obj do
-      local us = obj:FindFirstChildOfClass("UIScale")
-      if us then scale = scale * us.Scale end
-      obj = obj.Parent
-    end
-    return scale
-	end
+local function getAncestorScale()
+    return env.stuf.mainframescale and env.stuf.mainframescale.Scale or 1
+end
 
 	local function updateBar()
     local scale = getAncestorScale()
@@ -817,8 +810,8 @@ function lib.makecoolscrollingframe(size, parent, pos, layoutpadding, Z)
 	spwn(function()
 		repeat t() until env.stuf.mainframescale
 		env.stuf.mainframescale:GetPropertyChangedSignal("Scale"):Connect(function()
-			updateBar()
 			updateCanvas()
+			updateBar()
 		end)
 	end)
 
@@ -2742,15 +2735,6 @@ function lib.addslider(parent, title, description, min, max, default, step, call
 
 	local dragging = false
 	track.InputBegan:Connect(function(i)
-		if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then
-			dragging = true
-			lib.clik()
-			setFromX(i.Position.X - track.AbsolutePosition.X)
-			candrag = false
-		end
-	end)
-
-	knob.InputBegan:Connect(function(i)
 		if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then
 			dragging = true
 			lib.clik()
