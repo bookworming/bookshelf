@@ -207,11 +207,11 @@ local function loadintro(buttononly)
 
 	t(0.2)
 
-	local logLines = {}
-	local nametag = nil
+	local introconsolelogs = {}
+	local introconsole = nil
 
 	function env.funcs.introconsolelog(line, outputtype)
-		outputtype = outputtype or reg
+		outputtype = outputtype or "reg"
 
 		if outputtype == "reg" then
 			line = "  <font size='8' color='rgb(133, 133, 133)'>" .. line .. "</font>"
@@ -225,18 +225,18 @@ local function loadintro(buttononly)
 			line = "  <font size='8' color='rgb(252, 80, 80)'>" .. line .. "</font>"
 		end
 
-		table.insert(logLines, line)
-    if #logLines > 16 then
-      table.remove(logLines, 1)
+		table.insert(introconsolelogs, line)
+    if #introconsolelogs > 16 then
+      table.remove(introconsolelogs, 1)
     end
 
-    nametag.Text = table.concat(logLines, "\n")
+    introconsole.Text = table.concat(introconsolelogs, "\n")
 		if outputtype == "warn" or outputtype == "err" then
 			t(1)
 		end
 	end
 
-	nametag = env.essentials.library.makecooltext(yo, UDim2.new(0, 188, 0, 20), "", 10, nil, 2, UDim2.new(0.5, 2, 0, 16), Enum.TextXAlignment.Left, Enum.TextYAlignment.Top)
+	introconsole = env.essentials.library.makecooltext(yo, UDim2.new(0, 188, 0, 20), "", 10, nil, 2, UDim2.new(0.5, 2, 0, 16), Enum.TextXAlignment.Left, Enum.TextYAlignment.Top)
 	env.funcs.introconsolelog("Initializing...", "state")
 
 	local currentPercent = Instance.new("NumberValue")
