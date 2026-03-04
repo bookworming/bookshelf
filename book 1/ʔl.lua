@@ -107,13 +107,10 @@ local function loadintro(buttononly)
 		local baseScale = env.gear.general.buttonscale or 1
 		scale.Scale = baseScale
 		env.stuf.buttonscale = scale
-		env.stuf.buttonscalelisteners = env.stuf.buttonscalelisteners or {}
 
 		env.stuf.setbuttonscale = function(v)
     	baseScale = v
-    	env.stuf.buttonbaseScale = v
     	ts:Create(scale, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), { Scale = v }):Play()
-    	for _, fn in ipairs(env.stuf.buttonscalelisteners) do fn(v) end
 		end
 
     local hover = TweenInfo.new(0.12, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
