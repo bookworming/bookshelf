@@ -90,7 +90,7 @@ local function loadintro(buttononly)
 		label.Text = ""
 		for i = 1, #text do
 			label.Text = string.sub(text, 1, i)
-			t()
+			rs.RenderStepped:Wait()
 		end
 	end
 
@@ -98,7 +98,7 @@ local function loadintro(buttononly)
 		local text = label.Text
 		for i = #text, 0, -1 do
 			label.Text = string.sub(text, 1, i)
-			t()
+			rs.RenderStepped:Wait()
 		end
 	end
 
@@ -225,8 +225,7 @@ local function loadintro(buttononly)
 	currentPercent.Value = 0
 
 	local function changepb(target, duration, status)
-		local ti = TweenInfo.new(duration or 0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
-		local tween = ts:Create(currentPercent, ti, {Value = target})
+		local tween = ts:Create(currentPercent, TweenInfo.new(duration or 0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Value = target})
 
 		local connection = currentPercent.Changed:Connect(function(val)
 			subtitle.Text = string.format("Version 1.3.0 | %s (%d%%)", status or "Loading...", math.floor(val))
@@ -236,8 +235,7 @@ local function loadintro(buttononly)
 		return tween, connection
 	end
 
-	t(0.8)
-	changepb(0, 0.1)
+	t(0.8) changepb(0, 0.1)
 
 	if env.stuf.inlobby or env.stuf.inrun or env.stuf.inrp then
 		env.funcs.introconsolelog("  <font size='8' color='rgb(133, 133, 133)'>Experience ID recognized (" .. game.PlaceId .. ").</font>")
@@ -245,7 +243,7 @@ local function loadintro(buttononly)
 		env.funcs.introconsolelog("  <font size='8' color='rgb(247, 250, 92)'>Experience ID unrecognized (" .. game.PlaceId .. ").</font>")
 	end
 
-	t() changepb(15, 0.6)
+	t(0.2) changepb(15, 0.6)
 
 	if env.funcs.exists() then
 		env.funcs.introconsolelog("  <font size='8' color='rgb(133, 133, 133)'>Character model exists.</font>")
@@ -253,12 +251,10 @@ local function loadintro(buttononly)
 		env.funcs.introconsolelog("  <font size='8' color='rgb(247, 250, 92)'>Character doesn't exist yet.</font>")
 	end
 
-	t() changepb(30, 0.4)
-
+	t(0.1) changepb(30, 0.4)
 	env.funcs.introconsolelog("  <font size='8' color='rgb(84, 255, 101)'>Success: Environment check success</font>")
-
 	env.funcs.introconsolelog(getservertime() .. ": Downloading assets...")
-	t() changepb(45, 0.7)
+	t(0.1) changepb(45, 0.7)
 
 	if not isfolder(folder) then makefolder(folder) end
 
@@ -280,47 +276,46 @@ local function loadintro(buttononly)
 		env.funcs.introconsolelog("  <font size='8' color='rgb(84, 255, 101)'>Success: Assets downloaded</font>")
 	end
 
+	t(0.1)
 	env.funcs.introconsolelog("  <font size='8' color='rgb(133, 133, 133)'>Preloading assets...</font>")
-	t()
+	t(0.1)
 	env.funcs.introconsolelog("  <font size='8' color='rgb(84, 255, 101)'>Success: Preloaded images</font>")
+	t(0.1)
 
-	t() changepb(65, 0.5)
-
+	t(0.1) changepb(65, 0.5)
 	env.funcs.introconsolelog(getservertime() .. ": Constructing script..")
-	t() changepb(90, 0.4)
+	t(0.1) changepb(90, 0.4)
 
 	if env.essentials.library then
 		env.funcs.introconsolelog("  <font size='8' color='rgb(133, 133, 133)'>UI library successfully loaded.</font>")
 	else
-		env.funcs.introconsolelog("  <font size='8' color='rgb(247, 250, 92)'>Something went wrong while trying to load the UI library.</font>")
+		env.funcs.introconsolelog("  <font size='8' color='rgb(247, 250, 92)'>Something went wrong. (LibFail)</font>")
 	end
 
-	t()
+	t(0.1)
 
 	if env.essentials.data then
 		env.funcs.introconsolelog("  <font size='8' color='rgb(133, 133, 133)'>Script data successfully loaded.</font>")
 	else
-		env.funcs.introconsolelog("  <font size='8' color='rgb(247, 250, 92)'>Something went wrong while trying to fetch script data.</font>")
+		env.funcs.introconsolelog("  <font size='8' color='rgb(247, 250, 92)'>Something went wrong. (DataFail)</font>")
 	end
 
-	t()
+	t(0.1)
 
 	local buildsucc = env.funcs.recursivels("book%201/%CA%95s/%CA%94b.lua", true)
 
 	if not buildsucc or not env.stuf.sectionsloaded then
-		env.funcs.introconsolelog("  <font size='8' color='rgb(247, 250, 92)'>Something went wrong while trying to load the script sections.</font>")
+		env.funcs.introconsolelog("  <font size='8' color='rgb(247, 250, 92)'>Something went wrong. (BuildFail)</font>")
 	end
 
-	t()
-
+	t(0.1)
 	env.funcs.introconsolelog("  <font size='8' color='rgb(84, 255, 101)'>Success: Scripts loaded</font>")
-
 	env.funcs.introconsolelog(getservertime() .. ": Finalizing...")
-	t() changepb(99, 1.5)
+	t(0.1) changepb(99, 1.5)
 
 	env.filemanager.persistload()
-
-	t()
+	env.funcs.introconsolelog("  <font size='8' color='rgb(133, 133, 133)'>Loaded persistent elements.</font>")
+	t(0.1)
 
 	spwn(function()
 		if not env.funcs.exists() then 
@@ -332,15 +327,11 @@ local function loadintro(buttononly)
 		env.filemanager:autoload() env.funcs.box("auto-loaded configs (if they exist)")
 	end)
 
-	t()
-
+	t(0.1)
 	env.funcs.introconsolelog("  <font size='8' color='rgb(84, 255, 101)'>Success: Script successfully loaded</font>")
-
-	t()
-
+	t(0.1)
 	env.funcs.introconsolelog(getservertime() .. ": Done!")
-	t() changepb(100, 0.2, "Done!")
-
+	t(0.1) changepb(100, 0.2, "Done!")
 	t(0.5)
 
 	local tween2 = tween(yo, {0.43, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut}, {
