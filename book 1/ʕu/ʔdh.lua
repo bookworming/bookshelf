@@ -38,7 +38,15 @@ local env = getgenv.BSGUI
 
 -------------------------------------------------------------------------------------------------------------------------------
 
-local TextService = game:GetService("TextService")
+local function dialoguenoise(pitch)
+  local s = Instance.new("Sound")
+  s.SoundId = "rbxassetid://4841731967"
+  s.Volume = 0.6
+  s.Parent = gethui()
+  s:Play()
+  s.PlaybackSpeed = pitch or 1
+  s.Ended:Connect(function() s:Destroy() end)
+end
 
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "NotificationGui"
@@ -75,8 +83,6 @@ local function RecalculatePositions()
 	end
 end
 
-local RunService = game:GetService("RunService")
-
 local ICONS = {
 	box = "rbxassetid://87876871905320",
   altbox = "rbxassetid://109975147142863",
@@ -108,6 +114,8 @@ local function CreateNotification(text, whosaidit)
 
 		nameText = "[" .. displayName .. "]: "
 		nameColor = NAME_COLORS[whosaidit]
+    
+    dialoguenoise()
 	end
 
 	local holder = Instance.new("Frame")
@@ -123,7 +131,7 @@ local function CreateNotification(text, whosaidit)
 	local cursorX = 0
 
 	if whosaidit and ICONS[whosaidit] then
-		local ICON_SIZE = 22
+		local ICON_SIZE = 25
 		local icon = Instance.new("ImageLabel")
 		icon.BackgroundTransparency = 1
 		icon.Size = UDim2.new(0, ICON_SIZE, 0, ICON_SIZE)
@@ -236,7 +244,7 @@ local function CreateNotification(text, whosaidit)
 			if entry.stroke then
 				ts:Create(entry.stroke, popInfo, { Transparency = 0 }):Play()
 			end
-			RunService.RenderStepped:Wait()
+			rs.RenderStepped:Wait()
 		end
 	end)
 
