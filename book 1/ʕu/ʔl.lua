@@ -1541,16 +1541,7 @@ local function playScale(v, info)
     currenttween:Play()
 end
 
--- Keep in sync if buttonscale changes after the button is created
-if env.stuf.buttonscale then
-    env.stuf.buttonscale:GetPropertyChangedSignal("Scale"):Connect(function()
-        if buttonFrame.Parent == nil then return end
-        baseScale = env.stuf.buttonscale.Scale
-        scale.Scale = baseScale
-    end)
-end
-
--- Register this button to receive scale updates
+-- listener for slider scale changes only, NOT connected to buttonscale signal
 local id = tostring(buttonFrame)
 env.stuf.buttonscalelisteners = env.stuf.buttonscalelisteners or {}
 env.stuf.buttonscalelisteners[id] = function(newScale)
@@ -1867,16 +1858,7 @@ local function playScale(v, info)
     currenttween:Play()
 end
 
--- Keep in sync if buttonscale changes after the button is created
-if env.stuf.buttonscale then
-    env.stuf.buttonscale:GetPropertyChangedSignal("Scale"):Connect(function()
-        if buttonFrame.Parent == nil then return end
-        baseScale = env.stuf.buttonscale.Scale
-        scale.Scale = baseScale
-    end)
-end
-
--- Register this button to receive scale updates
+-- listener for slider scale changes only, NOT connected to buttonscale signal
 local id = tostring(buttonFrame)
 env.stuf.buttonscalelisteners = env.stuf.buttonscalelisteners or {}
 env.stuf.buttonscalelisteners[id] = function(newScale)
