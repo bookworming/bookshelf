@@ -340,11 +340,11 @@ local function loadintro(buttononly)
 	t(0.1)
 	env.funcs.introconsolelog("Success: Script sections loaded", "succ")
 	env.funcs.introconsolelog("Finalizing...", "state")
-	t(0.1) env.funcs.introprogress(99)
+	t(0.1) env.funcs.introprogress(95)
 
 	env.filemanager.persistload()
 	env.funcs.introconsolelog("Loaded persistent elements.")
-	t(0.1)
+	t(0.1) env.funcs.introprogress(98)
 
 	spwn(function()
 		if not env.funcs.exists() then 
