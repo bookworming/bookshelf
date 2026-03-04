@@ -108,10 +108,16 @@ local function loadintro(buttononly)
 		scale.Scale = baseScale
 		env.stuf.buttonscale = scale
 
-		env.stuf.setbuttonscale = function(v)
-    	baseScale = v
-    	ts:Create(scale, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), { Scale = v }):Play()
-		end
+	env.stuf.setbuttonscale = function(v)
+    baseScale = v
+    ts:Create(scale, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), { Scale = v }):Play()
+    -- notify separate buttons
+    if env.stuf.buttonscalelisteners then
+        for _, listener in pairs(env.stuf.buttonscalelisteners) do
+            listener(v)
+        end
+    end
+end
 
     local hover = TweenInfo.new(0.12, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
     local press = TweenInfo.new(0.08, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
