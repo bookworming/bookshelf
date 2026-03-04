@@ -389,7 +389,7 @@ local function loadintro()
 
 	if env.essentials.data then
 		env.funcs.introconsolelog("Script data successfully loaded.")
-		if env.essentials.library.version ~= env.expectedcompiledscriptversions.data then
+		if env.essentials.data.version ~= env.expectedcompiledscriptversions.data then
 			env.funcs.introconsolelog("The script data is out of date.", "warn")
 		end
 	else
