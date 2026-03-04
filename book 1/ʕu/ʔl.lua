@@ -1307,55 +1307,25 @@ function lib.addtoggle(parent, title, description, callback, bindable, default, 
 
 	local elementdesc = lib.makecooltext(frame, UDim2.new(0, textwidth, 0, dh), description, 10, Color3.fromRGB(170,170,170), 1, UDim2.new(0, leftpadding + textwidth / 2, 0, leftpadding + th + tetxgap + dh / 2 + 5), Enum.TextXAlignment.Left)
 	elementdesc.ZIndex = 61
-	
-	local function recalculateSize()
-		local actualWidth = frame.AbsoluteSize.X
-		local scaledTextWidth = actualWidth - rightpadding - 20
-
-		local _, newTh = lib.gettextbounds(title, elementtitle.Font, elementtitle.TextSize, Vector2.new(scaledTextWidth, math.huge))
-		local _, newDh = lib.gettextbounds(description, elementdesc.Font, elementdesc.TextSize, Vector2.new(scaledTextWidth, math.huge))
-
-		local newTotalHeight = newTh + newDh + leftpadding * 2 + tetxgap + 1
-
-		elementtitle.Size = UDim2.new(0, scaledTextWidth, 0, newTh)
-		elementtitle.Position = UDim2.new(0, leftpadding + scaledTextWidth / 2, 0, leftpadding + newTh / 2 - 5)
-
-		elementdesc.Size = UDim2.new(0, scaledTextWidth, 0, newDh)
-		elementdesc.Position = UDim2.new(0, leftpadding + scaledTextWidth / 2, 0, leftpadding + newTh + tetxgap + newDh / 2 + 5)
-
-		if toggle then
-			toggle.Position = UDim2.new(1, -38, 0.5, 0)
-		end
-
-		frame.Size = UDim2.new(0, width, 0, newTotalHeight)
-	end
-
-	frame:GetPropertyChangedSignal("AbsoluteSize"):Connect(recalculateSize)
 
 	local function updateFrameSize()
 		local function stripRichText(str)
-			return str:gsub("<[^>]->", "")
+			return str:gsub("<[^>]-" .. ">", "")
 		end
-
-		local actualWidth = frame.AbsoluteSize.X
-		local scaledTextWidth = actualWidth - rightpadding - 20
 
 		local cleanTitleText = stripRichText(elementtitle.Text)
 
-		local _, newTh = lib.gettextbounds(cleanTitleText, elementtitle.Font, elementtitle.TextSize, Vector2.new(scaledTextWidth, math.huge))
-		local _, currDh = lib.gettextbounds(description, elementdesc.Font, elementdesc.TextSize, Vector2.new(scaledTextWidth, math.huge))
+		local _, newTh = lib.gettextbounds(cleanTitleText, elementtitle.Font, elementtitle.TextSize, Vector2.new(textwidth, math.huge))
+		local _, currDh = lib.gettextbounds(description, elementdesc.Font, elementdesc.TextSize, Vector2.new(textwidth, math.huge))
 
 		local newDescY = leftpadding + newTh + tetxgap
 		local newTotalHeight = newTh + currDh + leftpadding * 2 + tetxgap + 1
 
-		elementtitle.Size = UDim2.new(0, scaledTextWidth, 0, newTh)
-		elementtitle.Position = UDim2.new(0, leftpadding + scaledTextWidth / 2, 0, leftpadding + newTh / 2 - 5)
-
-		elementdesc.Size = UDim2.new(0, scaledTextWidth, 0, currDh)
-		elementdesc.Position = UDim2.new(0, leftpadding + scaledTextWidth / 2, 0, newDescY + currDh / 2 + 5)
+		elementtitle.Position = UDim2.new(0, leftpadding + textwidth / 2, 0, leftpadding + newTh / 2 - 5)
+		elementdesc.Position = UDim2.new(0, leftpadding + textwidth / 2, 0, newDescY + currDh / 2 + 5)
 
 		if toggle then
-			toggle.Position = UDim2.new(1, -38, 0.5, 0)
+			toggle.Position = UDim2.new(1, -38, 0.5, 0) 
 		end
 
 		frame.Size = UDim2.new(0, width, 0, newTotalHeight)
@@ -1808,30 +1778,22 @@ function lib.addbutton(parent, title, description, callback, bindable, locked, l
 
 	local function updateFrameSize()
 		local function stripRichText(str)
-			return str:gsub("<[^>]->", "")
+			return str:gsub("<[^>]-" .. ">", "")
 		end
-
-		local actualWidth = frame.AbsoluteSize.X
-		local scaledTextWidth = actualWidth - rightpadding - 20
 
 		local cleanTitleText = stripRichText(elementtitle.Text)
 
-		local _, newTh = lib.gettextbounds(cleanTitleText, elementtitle.Font, elementtitle.TextSize, Vector2.new(scaledTextWidth, math.huge))
-		local _, currDh = lib.gettextbounds(description, elementdesc.Font, elementdesc.TextSize, Vector2.new(scaledTextWidth, math.huge))
+		local _, newTh = lib.gettextbounds(cleanTitleText, elementtitle.Font, elementtitle.TextSize, Vector2.new(textwidth, math.huge))
+		local _, currDh = lib.gettextbounds(description, elementdesc.Font, elementdesc.TextSize, Vector2.new(textwidth, math.huge))
 
 		local newDescY = leftpadding + newTh + tetxgap
 		local newTotalHeight = newTh + currDh + leftpadding * 2 + tetxgap + 1
 
-		elementtitle.Size = UDim2.new(0, scaledTextWidth, 0, newTh)
-		elementtitle.Position = UDim2.new(0, leftpadding + scaledTextWidth / 2, 0, leftpadding + newTh / 2 - 5)
-
-		elementdesc.Size = UDim2.new(0, scaledTextWidth, 0, currDh)
-		elementdesc.Position = UDim2.new(0, leftpadding + scaledTextWidth / 2, 0, newDescY + currDh / 2 + 5)
+		elementtitle.Position = UDim2.new(0, leftpadding + textwidth / 2, 0, leftpadding + newTh / 2 - 5)
+		elementdesc.Position = UDim2.new(0, leftpadding + textwidth / 2, 0, newDescY + currDh / 2 + 5)
 
 		frame.Size = UDim2.new(0, width, 0, newTotalHeight)
 	end
-
-	frame:GetPropertyChangedSignal("AbsoluteSize"):Connect(updateFrameSize)
 
 	state.elementtitle = elementtitle
 	state.updateSize = updateFrameSize
@@ -2499,22 +2461,16 @@ function lib.addinputandtoggle(parent, title, description, defaulttext, placehol
 			return str:gsub("<[^>]->", "")
 		end
 
-		local actualWidth = frame.AbsoluteSize.X
-		local scaledTextWidth = actualWidth - rightpadding - 20
-
 		local cleanTitleText = stripRichText(elementtitle.Text)
 
-		local _, newTh = lib.gettextbounds(cleanTitleText, elementtitle.Font, elementtitle.TextSize, Vector2.new(scaledTextWidth, math.huge))
-		local _, currDh = lib.gettextbounds(description, elementdesc.Font, elementdesc.TextSize, Vector2.new(scaledTextWidth, math.huge))
+		local _, newTh = lib.gettextbounds(cleanTitleText, elementtitle.Font, elementtitle.TextSize, Vector2.new(textwidth, math.huge))
+		local _, currDh = lib.gettextbounds(description, elementdesc.Font, elementdesc.TextSize, Vector2.new(textwidth, math.huge))
 
 		local newDescY = leftpadding + newTh + tetxgap
 		local newTotalHeight = newTh + currDh + leftpadding * 2 + tetxgap + 45
 
-		elementtitle.Size = UDim2.new(0, scaledTextWidth, 0, newTh)
-		elementtitle.Position = UDim2.new(0, leftpadding + scaledTextWidth / 2, 0, leftpadding + newTh / 2 - 5)
-
-		elementdesc.Size = UDim2.new(0, scaledTextWidth, 0, currDh)
-		elementdesc.Position = UDim2.new(0, leftpadding + scaledTextWidth / 2, 0, newDescY + currDh / 2 + 5)
+		elementtitle.Position = UDim2.new(0, leftpadding + textwidth / 2, 0, leftpadding + newTh / 2 - 5)
+		elementdesc.Position = UDim2.new(0, leftpadding + textwidth / 2, 0, newDescY + currDh / 2 + 5)
 
 		if toggle then
 			toggle.Position = UDim2.new(1, -38, 1, -25)
@@ -2526,8 +2482,6 @@ function lib.addinputandtoggle(parent, title, description, defaulttext, placehol
 
 		frame.Size = UDim2.new(0, width, 0, newTotalHeight)
 	end
-
-	frame:GetPropertyChangedSignal("AbsoluteSize"):Connect(updateFrameSize)
 
 	state.elementtitle = elementtitle
 	state.updateSize = updateFrameSize
@@ -2967,13 +2921,9 @@ function lib.addlabel(parent, title, description, text)
 		setValue = function(newText)
 			labeltext.Text = tostring(newText)
 
-			local actualWidth = frame.AbsoluteSize.X
-			local scaledTextWidth = actualWidth - (leftpadding + rightpadding)
-			local scaledInnerWidth = scaledTextWidth - (textwidth - innerWidth)
-
-			local _, currTh = lib.gettextbounds(titleText.Text, titleText.Font, titleText.TextSize, Vector2.new(scaledTextWidth, math.huge))
-			local _, currDh = lib.gettextbounds(description, descText.Font, descText.TextSize, Vector2.new(scaledTextWidth, math.huge))
-			local _, newLh = lib.gettextbounds(labeltext.Text, labeltext.Font, labeltext.TextSize, Vector2.new(scaledInnerWidth, math.huge))
+			local _, currTh = lib.gettextbounds(titleText.Text, titleText.Font, titleText.TextSize, Vector2.new(textwidth, math.huge))
+			local _, currDh = lib.gettextbounds(description, descText.Font, descText.TextSize, Vector2.new(textwidth, math.huge))
+			local _, newLh = lib.gettextbounds(labeltext.Text, labeltext.Font, labeltext.TextSize, Vector2.new(innerWidth, math.huge))
 
 			local newBoxHeight = newLh + 10
 			local newTotalHeight = (leftpadding * 2) + currTh + tetxgap + currDh + labelGap + newBoxHeight
@@ -2981,23 +2931,16 @@ function lib.addlabel(parent, title, description, text)
 			local newDescY = leftpadding + currTh + tetxgap
 			local newLabelY = newDescY + currDh + labelGap
 
-			titleText.Size = UDim2.new(0, scaledTextWidth, 0, currTh)
-			titleText.Position = UDim2.new(0, leftpadding + scaledTextWidth / 2, 0, leftpadding + currTh / 2 - 5)
+			titleText.Position = UDim2.new(0, leftpadding + textwidth / 2, 0, leftpadding + currTh / 2 - 5)
+			descText.Position = UDim2.new(0, leftpadding + textwidth / 2, 0, newDescY + currDh / 2)
 
-			descText.Size = UDim2.new(0, scaledTextWidth, 0, currDh)
-			descText.Position = UDim2.new(0, leftpadding + scaledTextWidth / 2, 0, newDescY + currDh / 2)
-
-			labelContainer.Position = UDim2.new(0.5, 0, 0, newLabelY + newBoxHeight / 2)
+			labelContainer.Position = UDim2.new(0.5, 0, 0, newLabelY + newBoxHeight/2)
 			labelContainer.Size = UDim2.new(0, 208, 0, newBoxHeight + 2)
 
-			labeltext.Size = UDim2.new(0, scaledInnerWidth, 0, newLh)
+			labeltext.Size = UDim2.new(0, innerWidth, 0, newLh)
 			frame.Size = UDim2.new(0, width, 0, newTotalHeight)
 		end
 	}
-
-	frame:GetPropertyChangedSignal("AbsoluteSize"):Connect(function()
-		env.essentials.elements[title].setValue(labeltext.Text)
-	end)
 
 	return frame
 end
