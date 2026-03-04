@@ -21,6 +21,8 @@ local randstring = function() local s = "" for i = 1, math.random(8, 15) do if m
 local getins = getmmfromerr(game, function(a,b) return a[b] end, function(f) local a = Instance.new("Folder") local b = randstring() a.Name = b return f(a, "Name") == b end)
 local FindFirstChildOfClass = getins(game, "FindFirstChildOfClass") 
 
+local ts = FindFirstChildOfClass(game, "TweenService")
+
 local getgenv = getgenv() or _G
 local queueotp = (syn and syn.queue_on_teleport) or queue_on_teleport or (fluxus and fluxus.queue_on_teleport)
 
