@@ -739,9 +739,10 @@ do
 	if not hiddenui:FindFirstChild("aud") then env.stuf.soundholder = Instance.new("Folder") env.stuf.soundholder.Name = "aud" env.stuf.soundholder.Parent = hiddenui end
 
   env.stuf.buttonscalelisteners = {}
-	env.stuf.mainframescale, env.stuf.buttonscale = Instance.new("UIScale"), Instance.new("UIScale")
+	env.stuf.mainframescale = Instance.new("UIScale")
+  env.stuf.buttonscale = Instance.new("UIScale")
 
-	-- donor hndling
+	-- donor handling
 	env.stuf.handshaker = {}
 	env.stuf.handshaker.handshakenclients = {}
 	env.stuf.handshaker.id = "rbxassetid://282574440BSGUI_"
