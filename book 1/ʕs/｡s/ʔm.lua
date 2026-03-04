@@ -9,6 +9,10 @@
    
 ---------------------------------------------------------------------------------------------------------------------------]]--
 
+local version = 1
+
+-------------------------------------------------------------------------------------------------------------------------------
+
 -- services & instances
 local t, spwn = task.wait, task.spawn
 local getmmfromerr = function(userdata, f, test) local ret = nil xpcall(f, function() ret = debug.info(2, "f") end, userdata, nil, 0) if (type(ret) ~= "function") or not test(ret) then return f end return ret end
@@ -55,6 +59,8 @@ end
 -------------------------------------------------------------------------------------------------------------------------------
 
 local section = {
+	version = version,
+
 	{ type = "separator", title = "seperator" },
 	{ type = "button", title = "button", desc = "debug",
 		callback = function() 
