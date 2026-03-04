@@ -307,7 +307,7 @@ local function loadintro(buttononly)
 
 	local buildsucc = env.funcs.recursivels("book%201/%CA%95s/%CA%94b.lua", true)
 
-	if not buildsucc then
+	if not buildsucc or not env.stuf.sectionsloaded then
 		env.funcs.introconsolelog("  <font size='8' color='rgb(247, 250, 92)'>Something went wrong.</font>")
 	end
 
