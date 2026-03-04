@@ -11,6 +11,10 @@
 
 -- cringe warning lmfao
 local dialogue = {}
+dialogue.version = 1
+
+-------------------------------------------------------------------------------------------------------------------------------
+
 dialogue.boxten, dialogue.altboxten = {}
 dialogue.poppy = {}
 dialogue.shrimpo = {}
