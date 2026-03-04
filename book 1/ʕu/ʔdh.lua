@@ -37,6 +37,17 @@ local env = getgenv.BSGUI
 local dialogue = env.funcs.recursivels("book%201/%CA%95u/%CA%94d.lua", true)
 local sgui = env.essentials.sgui
 
+local expressions = {
+	boxten = {
+	},
+	altboxten = {
+	},
+	poppy = {
+	},
+	shrimpo = {
+	}
+}
+
 -------------------------------------------------------------------------------------------------------------------------------
 
 local function dialoguenoise()
