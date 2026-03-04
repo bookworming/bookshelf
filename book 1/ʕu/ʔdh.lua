@@ -37,6 +37,8 @@ local env = getgenv.BSGUI
 
 -------------------------------------------------------------------------------------------------------------------------------
 
+local TextService = game:GetService("TextService")
+
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "NotificationGui"
 screenGui.ResetOnSpawn = false
@@ -49,9 +51,11 @@ container.Size = UDim2.new(0, 400, 0, 300)
 container.BackgroundTransparency = 1
 container.Parent = screenGui
 
-local PADDING = 2
+local PADDING = -5
 local DISPLAY_TIME = 5
 local TWEEN_TIME = 0.5
+local TEXT_SIZE = 16
+local FONT = Enum.Font.FredokaOne
 
 local notifications = {}
 
@@ -63,93 +67,215 @@ end
 
 local function RecalculatePositions()
 	local currentOffset = 0
-
-	for i, label in ipairs(notifications) do
+	for _, label in ipairs(notifications) do
 		local height = label.AbsoluteSize.Y
 		TweenPosition(label, -currentOffset)
 		currentOffset += height + PADDING
 	end
 end
 
-local function CreateNotification(text, whosaidit, shoutintensity)
-  if whosaidit then
-    if whosaidit == "box" then
-      text = "[Boxten]: " .. text
-    elseif whosaidit == "pop" then
-      text = "[Poppy]: " .. text
-    elseif whosaidit == "shr" then
-      text = "[Shrimpo]: " .. text
-    end
-  end
-	local label = Instance.new("TextLabel")
-	label.BackgroundTransparency = 1
-	label.Size = UDim2.new(1, 0, 0, 24)
-	label.TextWrapped = true
-	label.Text = text
-	label.TextColor3 = Color3.new(1, 1, 1)
-	label.TextTransparency = 1
-	label.Font = Enum.Font.FredokaOne
-	label.TextSize = 16
-	label.AnchorPoint = Vector2.new(0.5, 1)
-	label.Position = UDim2.new(0.5, 0, 1, 5)
-	label.Parent = container
-  label.RichText = true
+local RunService = game:GetService("RunService")
 
-  local border = Instance.new("UIStroke")
-  border.Parent = label
-  border.Color = Color3.fromRGB(0, 0, 0)
-  border.Thickness = 1
-  border.Transparency = 1
+local ICONS = {
+	box = "rbxassetid://87876871905320",
+  altbox = "rbxassetid://109975147142863",
+	pop = "rbxassetid://104725304950571",
+	shr = "rbxassetid://71382889666653",
+}
 
-	task.wait()
-	label.Size = UDim2.new(1, 0, 0, label.TextBounds.Y)
+local NAME_COLORS = {
+	box = Color3.fromRGB(197, 61, 224),
+	altbox = Color3.fromRGB(197, 61, 224),
+	pop = Color3.fromRGB(112, 234, 255),
+	shr = Color3.fromRGB(247, 109, 40),
+}
 
-	local newHeight = label.AbsoluteSize.Y + PADDING
+local function MeasureText(str, font, size)
+	local bounds = TextService:GetTextSize(str, size, font, Vector2.new(math.huge, math.huge))
+	return bounds.X
+end
+
+local function CreateNotification(text, whosaidit)
+	local nameText = ""
+	local nameColor = Color3.new(1, 1, 1)
+
+	if whosaidit and NAME_COLORS[whosaidit] then
+		local displayName =
+			(whosaidit == "box" or whosaidit == "altbox") and "Boxten" or
+			whosaidit == "pop" and "Poppy" or
+			whosaidit == "shr" and "Shrimpo"
+
+		nameText = "[" .. displayName .. "]: "
+		nameColor = NAME_COLORS[whosaidit]
+	end
+
+	local holder = Instance.new("Frame")
+	holder.BackgroundTransparency = 1
+	holder.Size = UDim2.new(0, 0, 0, 28)
+	holder.AnchorPoint = Vector2.new(0.5, 1)
+	holder.Position = UDim2.new(0.5, 0, 1, 5)
+	holder.ClipsDescendants = false
+	holder.Parent = container
+
+	local allFadeable = {}
+	local letters = {}
+
+	local cursorX = 0
+
+	if whosaidit and ICONS[whosaidit] then
+		local ICON_SIZE = 22
+		local icon = Instance.new("ImageLabel")
+		icon.BackgroundTransparency = 1
+		icon.Size = UDim2.new(0, ICON_SIZE, 0, ICON_SIZE)
+		icon.Position = UDim2.new(0, cursorX, 0.5, -ICON_SIZE / 2)
+		icon.Image = ICONS[whosaidit]
+		icon.ImageTransparency = 1
+		icon.Parent = holder
+		cursorX += ICON_SIZE + 4
+
+		table.insert(allFadeable, { label = icon, stroke = nil, baseX = icon.Position.X.Offset, isIcon = true })
+	end
+
+	if nameText ~= "" then
+		local nameWidth = MeasureText(nameText, FONT, TEXT_SIZE)
+
+		local nameLabel = Instance.new("TextLabel")
+		nameLabel.BackgroundTransparency = 1
+		nameLabel.Text = nameText
+		nameLabel.TextColor3 = nameColor
+		nameLabel.Font = FONT
+		nameLabel.TextSize = TEXT_SIZE
+		nameLabel.Size = UDim2.new(0, nameWidth, 1, 0)
+		nameLabel.Position = UDim2.new(0, cursorX, 0, 0)
+		nameLabel.TextTransparency = 1
+		nameLabel.TextXAlignment = Enum.TextXAlignment.Left
+		nameLabel.Parent = holder
+
+		local border = Instance.new("UIStroke")
+		border.Parent = nameLabel
+		border.Thickness = 1
+		border.Color = Color3.fromRGB(0, 0, 0)
+		border.Transparency = 1
+
+		table.insert(allFadeable, { label = nameLabel, stroke = border, baseX = cursorX })
+		cursorX += nameWidth
+	end
+
+	for i = 1, #text do
+		local char = text:sub(i, i)
+		local charWidth = MeasureText(char, FONT, TEXT_SIZE)
+		if charWidth < 1 then charWidth = TEXT_SIZE * 0.3 end
+
+		local letter = Instance.new("TextLabel")
+		letter.BackgroundTransparency = 1
+		letter.Text = char
+		letter.TextColor3 = Color3.new(1, 1, 1)
+		letter.Font = FONT
+		letter.TextSize = TEXT_SIZE
+		letter.Size = UDim2.new(0, charWidth, 1, 0)
+		letter.Position = UDim2.new(0, cursorX, 0, -5)
+		letter.TextTransparency = 1
+		letter.TextXAlignment = Enum.TextXAlignment.Left
+		letter.Parent = holder
+
+		local border = Instance.new("UIStroke")
+		border.Parent = letter
+		border.Thickness = 1
+		border.Color = Color3.fromRGB(0, 0, 0)
+		border.Transparency = 1
+
+		local entry = { label = letter, stroke = border, baseX = cursorX }
+		table.insert(letters, entry)
+		cursorX += charWidth
+	end
+
+	holder.Size = UDim2.new(0, cursorX, 0, 28)
+
+	-- Push existing notifications up
+	local newHeight = holder.AbsoluteSize.Y + PADDING
 	for _, existing in ipairs(notifications) do
 		local currentY = existing.Position.Y.Offset
 		TweenPosition(existing, currentY - newHeight)
 	end
 
-	table.insert(notifications, 1, label)
+	table.insert(notifications, 1, holder)
 
-	ts:Create(label, TweenInfo.new(TWEEN_TIME, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-		TextTransparency = 0,
+	-- Slide holder into view + fade in icon/name immediately
+	local fadeInInfo = TweenInfo.new(TWEEN_TIME)
+	ts:Create(holder, fadeInInfo, {
 		Position = UDim2.new(0.5, 0, 1, 0)
 	}):Play()
 
-	ts:Create(border, TweenInfo.new(TWEEN_TIME, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-		Transparency = 0,
-	}):Play()
+	for _, entry in ipairs(allFadeable) do
+		if entry.isIcon then
+			ts:Create(entry.label, fadeInInfo, { ImageTransparency = 0 }):Play()
+		else
+			ts:Create(entry.label, fadeInInfo, { TextTransparency = 0 }):Play()
+			if entry.stroke then
+				ts:Create(entry.stroke, fadeInInfo, { Transparency = 0 }):Play()
+			end
+		end
+	end
 
+	-- Staggered per-letter pop-in: one letter per frame
+	-- Each letter slides from Y=-2 to Y=0 and fades in simultaneously
+	task.spawn(function()
+		local popInfo = TweenInfo.new(TWEEN_TIME, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+		for _, entry in ipairs(letters) do
+			ts:Create(entry.label, popInfo, {
+				TextTransparency = 0,
+				Position = UDim2.new(0, entry.baseX, 0, 0),
+			}):Play()
+			if entry.stroke then
+				ts:Create(entry.stroke, popInfo, { Transparency = 0 }):Play()
+			end
+			RunService.RenderStepped:Wait()
+		end
+	end)
+
+	-- Fade everything out after DISPLAY_TIME
 	task.delay(DISPLAY_TIME, function()
-		local fade = ts:Create(label, TweenInfo.new(TWEEN_TIME, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
-			TextTransparency = 1
-		})
+		local fadeOutInfo = TweenInfo.new(1)
 
-		local fade2 = ts:Create(border, TweenInfo.new(TWEEN_TIME, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
-			Transparency = 1
-		})
+		for _, entry in ipairs(allFadeable) do
+			if entry.isIcon then
+				ts:Create(entry.label, fadeOutInfo, { ImageTransparency = 1 }):Play()
+			else
+				ts:Create(entry.label, fadeOutInfo, { TextTransparency = 1 }):Play()
+				if entry.stroke then
+					ts:Create(entry.stroke, fadeOutInfo, { Transparency = 1 }):Play()
+				end
+			end
+		end
 
-		fade:Play() fade2:Play()
-		fade.Completed:Wait()
+		for _, entry in ipairs(letters) do
+			ts:Create(entry.label, fadeOutInfo, { TextTransparency = 1 }):Play()
+			if entry.stroke then
+				ts:Create(entry.stroke, fadeOutInfo, { Transparency = 1 }):Play()
+			end
+		end
+
+		task.wait(1)
 
 		for i, v in ipairs(notifications) do
-			if v == label then
+			if v == holder then
 				table.remove(notifications, i)
 				break
 			end
 		end
 
-		label:Destroy()
-
+		holder:Destroy()
 		RecalculatePositions()
 	end)
 end
 
-CreateNotification("First notification")
 wait(1)
-CreateNotification("Second notification")
+CreateNotification("hello, im boxten. i was the first here.", "box")
 wait(1)
-CreateNotification("Third notification")
+CreateNotification("I'm (the other) Boxten. My current behavior can be toggled...", "altbox")
+wait(1)
+CreateNotification("Hi! I'm Poppy! I hold the Commands Section for Boxten Sex GUI!", "pop")
+wait(1)
+CreateNotification("I'M SHRIMPO AND I HATE BEING IN AN EXPLOIT SCRIPT!!!", "shr")
 
 -------------------------------------------------------------------------------------------------------------------------------
