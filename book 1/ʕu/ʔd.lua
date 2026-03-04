@@ -13,7 +13,31 @@
 local dialogue = {}
 dialogue.version = 1
 
--------------------------------------------------------------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------------------------------------------------------
+
+   the & is used to determine whether the word behind it should use "'s" or "s", or transforms "a" to an "an" depending on the word in front of it
+
+   {player} = indicates the player, will appear as their selected Toon's name
+   {twisted} = indicates the Twisted, will appear as "Twisted [name]"
+   {item} = indicates the item
+   {direction} = indicates the direction of an object, will show up as "to the [direction]" or "further [direction]"
+   {machinesleft} = indicates the amount of machines left to complete
+   {health} = indicates the user's current health
+   {heal} = like {item}, but just indicates a bandage or a health kit on the floor or in the user's inventory
+   {time} = indicates the time it took for the last floor to end, will appear in the "00m00s" format
+   {randitem} = picks out a random item from one of the three slots for sale in Dandy's Shop
+   {item1, 2, 3} = indicates the target slot of the item being sold in Dandy's Shop
+
+   {prefix} = indicates the command prefix
+   {command} = indicates the command
+   {commanddesc} = indicates the command's description
+   {randalias} = picks a random alias of the command if it has one
+   {input} = indicates the command bar's current input
+
+   {configname} = indicates the inputted text in the config name field
+   {totalconfigs} = indicates the total number of configs saved
+
+---------------------------------------------------------------------------------------------------------------------------]]--
 
 dialogue.boxten, dialogue.altboxten = {}
 dialogue.poppy = {}
