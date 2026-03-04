@@ -1738,7 +1738,7 @@ function lib.addtoggle(parent, title, description, callback, bindable, default, 
 	end)
 
 	if locked then
-		lib.lock(frame, true, lockreason)
+		lib.lock(title, true, lockreason)
 	end
 
 	return frame
@@ -2052,7 +2052,7 @@ function lib.addbutton(parent, title, description, callback, bindable, locked, l
 	}
 
 	if locked then
-		lib.lock(frame, true, lockreason)
+		lib.lock(title, true, lockreason)
 	end
 
 	return frame
@@ -2325,7 +2325,7 @@ function lib.addinputandtoggle(parent, title, description, defaulttext, placehol
 	frame.LayoutOrder = #parent:GetChildren()
 
 	if locked then
-		lib.lock(frame, true, lockreason)
+		lib.lock(title, true, lockreason)
 	end
 
 	local toggleId = title
