@@ -362,7 +362,11 @@ local function loadintro(buttononly)
 		Position = UDim2.new(0.5, 0, 0, 66)
 	})
 
-	tween(hi, {0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut}, {Size = UDim2.fromOffset(230, 64)})
+	env.stuf.buttonscale = Instance.new("UIScale")
+	env.stuf.buttonscale.Parent = hi
+
+	tween(hi, {0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut}, { Size = UDim2.fromOffset(230, 64) })
+	tween(env.stuf.buttonscale, {1, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut}, { Scale = env.gear.general.buttonscale })
 
 	tween2.Completed:Wait()
 	yo:Destroy()
