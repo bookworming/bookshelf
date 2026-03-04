@@ -1541,7 +1541,9 @@ local function playScale(v, info)
     currenttween:Play()
 end
 
-local id = tostring(buttonFrame)
+env.stuf.buttonscalelistenercount += 1
+local id = env.stuf.buttonscalelistenercount
+
 env.stuf.buttonscalelisteners[id] = function(newScale)
     if buttonFrame.Parent == nil then
         env.stuf.buttonscalelisteners[id] = nil
@@ -1552,9 +1554,7 @@ env.stuf.buttonscalelisteners[id] = function(newScale)
 end
 
 buttonFrame.Destroying:Connect(function()
-    if env.stuf.buttonscalelisteners then
-        env.stuf.buttonscalelisteners[id] = nil
-    end
+    env.stuf.buttonscalelisteners[id] = nil
 end)
 
 buttonFrame.MouseEnter:Connect(function() lib.hov() playScale(1.02, hover) end)
@@ -1856,7 +1856,9 @@ local function playScale(v, info)
     currenttween:Play()
 end
 
-local id = tostring(buttonFrame)
+env.stuf.buttonscalelistenercount += 1
+local id = env.stuf.buttonscalelistenercount
+
 env.stuf.buttonscalelisteners[id] = function(newScale)
     if buttonFrame.Parent == nil then
         env.stuf.buttonscalelisteners[id] = nil
@@ -1867,9 +1869,7 @@ env.stuf.buttonscalelisteners[id] = function(newScale)
 end
 
 buttonFrame.Destroying:Connect(function()
-    if env.stuf.buttonscalelisteners then
-        env.stuf.buttonscalelisteners[id] = nil
-    end
+    env.stuf.buttonscalelisteners[id] = nil
 end)
 
 buttonFrame.MouseEnter:Connect(function() lib.hov() playScale(1.02, hover) end)
