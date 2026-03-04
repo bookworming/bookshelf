@@ -10,14 +10,15 @@
 ---------------------------------------------------------------------------------------------------------------------------]]--
 
 -- cringe warning lmfao
-local boxten, altboxten
-local poppy
-local shrimpo
-local conversations
+local dialogue = {}
+dialogue.boxten, dialogue.altboxten = {}
+dialogue.poppy = {}
+dialogue.shrimpo = {}
+dialogue.conversations = {}
 
 -------------------------------------------------------------------------------------------------------------------------------
 
--- BSGUI boxten: sullen, sarcastic, satirical, passive-aggressive, but nice sometimes
+-- BSGUI boxten: sullen, sarcastic, satirical, passive-aggressive, but nice sometimes ig idk
 boxten = {
 	mainsection = {
 		randomlobbymessages = {
@@ -2511,35 +2512,25 @@ conversations = {
 
 	someoneusedabilityonyou = {
 		healedontwohearts = {
-
+			"thequickbrownfoxjumpsoverthelazydog"
 		},
 
 		helpfulbutnotthanking = {
-
+			"thequickbrownfoxjumpsoverthelazydog"
 		},
 
 		regular = {
-
+			"thequickbrownfoxjumpsoverthelazydog"
 		}
 	},
 
 	random = {
-		"%E_t_ad% [Boxten] youre pissing me off. could you maybe quiet down a little?",
-		"%E_s_re% [Shrimpo] DO YOU EVEN KNOW WHO YOU’RE TALKING TO!?",
-		"%E_t_pd% [Boxten] listen, dude, i can get to know.",
-		"%E_s_re% [Shrimpo] YOU COULD PROBABLY-.. FUCKIN’ TRY THAT OUT!!!",
-		"%E_t_ge% [Boxten] maybe i will.",
-		"%E_s_re% [Shrimpo] ..MAYBE YOU WON’T!!!",
-		"%E_t_pd% [Boxten] maybe i WILL.",
-		"%E_s_re% [Shrimpo] MAYBE YOU WON’T, THOUGH!!!",
-		"%E_t_dd% [Boxten] how do you know?",
-		"%E_s_re% [Shrimpo] HOW DO YOU KNOW!?",
-		"%E_t_pd% [Boxten] kiss me.",
-		"%E_t_sd% [Shrimpo] ..Huh-",
-		"%E_g_lh% [Poppy] Pft-",
-		"%E_s_re% [Shrimpo] ..WHAT DID YOU JUST!-",
-		"%E_t_ad% [Boxten] nevermind.",
+		"thequickbrownfoxjumpsoverthelazydog"
 	},
 }
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+return dialogue
 
 -------------------------------------------------------------------------------------------------------------------------------
