@@ -9,7 +9,7 @@
    
 ---------------------------------------------------------------------------------------------------------------------------]]--
 
-if not game:IsLoaded() then game.Loaded:Wait() end
+local dh = {}
 
 -------------------------------------------------------------------------------------------------------------------------------
 
@@ -37,7 +37,6 @@ local sgui = env.essentials.sgui
 
 -- skidjolt was here kyehehehe
 local dialogue = env.funcs.recursivels("book%201/%CA%95u/%CA%94d.lua", true)
-local dh = {}
 
 -- THEYRE ALL SPEAKING!!! IHRE MÄULEN SIND ALLE OFFEN!!! (some of them have their teeth shown too)
 local expressions = {
