@@ -9,6 +9,11 @@
    
 ---------------------------------------------------------------------------------------------------------------------------]]--
 
+local dB = {}
+dB.version = 1
+
+-------------------------------------------------------------------------------------------------------------------------------
+
 local t, spwn = task.wait, task.spawn
 local getmmfromerr = function(userdata, f, test) local ret = nil xpcall(f, function() ret = debug.info(2, "f") end, userdata, nil, 0) if (type(ret) ~= "function") or not test(ret) then return f end return ret end
 local randstring = function() local s = "" for i = 1, math.random(8, 15) do if math.random(2) == 2 then s = s .. string.char(math.random(65, 90)) else s = s .. string.char(math.random(97, 122)) end end return s end
@@ -23,31 +28,31 @@ local req = (syn and syn.request) or (http and http.request) or request
 -------------------------------------------------------------------------------------------------------------------------------
 
 local function bywiki(template)
-    local encoded = "https://dandys-world-robloxhorror.fandom.com/api.php?action=parse&page=Template%3A" .. template .. "&prop=wikitext&format=json"
-    local ok, response = pcall(req, {Url = encoded, Method = "GET"})
-    if not ok or not response or not response.Body then return nil end
-    local ok2, data = pcall(https.JSONDecode, https, response.Body)
-    if not ok2 or not data or not data.parse then return nil end
-    return data.parse.wikitext["*"]
+	local encoded = "https://dandys-world-robloxhorror.fandom.com/api.php?action=parse&page=Template%3A" .. template .. "&prop=wikitext&format=json"
+	local ok, response = pcall(req, {Url = encoded, Method = "GET"})
+	if not ok or not response or not response.Body then return nil end
+	local ok2, data = pcall(https.JSONDecode, https, response.Body)
+	if not ok2 or not data or not data.parse then return nil end
+	return data.parse.wikitext["*"]
 end
 
 local ToTD, toonamount, twistedamount = "???", "???", "???"
 spwn(function()
-    local twistedoftheday = bywiki("TOTDName")
-    if twistedoftheday then ToTD = twistedoftheday:match("^%s*(.-)%s*$") end
-    t(0.5)
+	local twistedoftheday = bywiki("TOTDName")
+	if twistedoftheday then ToTD = twistedoftheday:match("^%s*(.-)%s*$") end
+	t(0.5)
 
-    local toons = bywiki("ToonAmount")
-    if toons then toonamount = toons:match("|(%d+)%}%}") end
-    t(0.5)
+	local toons = bywiki("ToonAmount")
+	if toons then toonamount = toons:match("|(%d+)%}%}") end
+	t(0.5)
 
-    local twisteds = bywiki("TwistedAmount")
-    if twisteds then twistedamount = twisteds:match("|(%d+)%}%}") end
+	local twisteds = bywiki("TwistedAmount")
+	if twisteds then twistedamount = twisteds:match("|(%d+)%}%}") end
 end)
 
 -------------------------------------------------------------------------------------------------------------------------------
 
-local dB = {
+dB = {
 	-- changelogs
 	cl = {
 		current = {
