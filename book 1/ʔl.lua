@@ -42,7 +42,7 @@ local debugmode = true
 getgenv.BSGUI = {} 
 local env = getgenv.BSGUI
 local setupsucc, setuperr = pcall(function() loadstring(game:HttpGet("https://raw.githubusercontent.com/bookworming/bookshelf/refs/heads/main/book%201/%CA%95s/%CA%94i.lua"))() end)
-
+print("hi")
 repeat t() until env.setupcomplete and env.essentialsloaded
 env.expectedcompiledscriptversions = 1 
 env.funcs.box("setup complete, expected CSV: " .. env.expectedcompiledscriptversions)
@@ -208,8 +208,9 @@ local function loadintro(buttononly)
 	t(0.2)
 
 	local logLines = {}
+	local nametag = nil
 
-	local function addLine(line)
+	function env.funcs.introconsolelog(line)
 		table.insert(logLines, line)
     if #logLines > 18 then
       table.remove(logLines, 1)
@@ -217,7 +218,8 @@ local function loadintro(buttononly)
     nametag.Text = table.concat(logLines, "\n")
 	end
 
-	local nametag = env.essentials.library.makecooltext(yo, UDim2.new(0, 188, 0, 20), "", 10, nil, 2, UDim2.new(0.5, 2, 0, 16), Enum.TextXAlignment.Left, Enum.TextYAlignment.Top)
+	nametag = env.essentials.library.makecooltext(yo, UDim2.new(0, 188, 0, 20), "", 10, nil, 2, UDim2.new(0.5, 2, 0, 16), Enum.TextXAlignment.Left, Enum.TextYAlignment.Top)
+	env.funcs.introconsolelog(getservertime() .. ": Initializing...")
 
 	local currentPercent = Instance.new("NumberValue")
 	currentPercent.Value = 0
@@ -238,24 +240,24 @@ local function loadintro(buttononly)
 	changepb(0, 0.1)
 
 	if env.stuf.inlobby or env.stuf.inrun or env.stuf.inrp then
-		addLine("  <font size='8' color='rgb(133, 133, 133)'>Experience ID recognized (" .. game.PlaceId .. ").</font>")
+		env.funcs.introconsolelog("  <font size='8' color='rgb(133, 133, 133)'>Experience ID recognized (" .. game.PlaceId .. ").</font>")
 	else
-		addLine("  <font size='8' color='rgb(247, 250, 92)'>Experience ID unrecognized (" .. game.PlaceId .. ").</font>")
+		env.funcs.introconsolelog("  <font size='8' color='rgb(247, 250, 92)'>Experience ID unrecognized (" .. game.PlaceId .. ").</font>")
 	end
 
 	t() changepb(15, 0.6)
 
 	if env.funcs.exists() then
-		addLine("  <font size='8' color='rgb(133, 133, 133)'>Character model exists.</font>")
+		env.funcs.introconsolelog("  <font size='8' color='rgb(133, 133, 133)'>Character model exists.</font>")
 	else
-		addLine("  <font size='8' color='rgb(247, 250, 92)'>Character doesn't exist yet.</font>")
+		env.funcs.introconsolelog("  <font size='8' color='rgb(247, 250, 92)'>Character doesn't exist yet.</font>")
 	end
 
 	t() changepb(30, 0.4)
 
-	addLine("  <font size='8' color='rgb(84, 255, 101)'>Success: Environment check success</font>")
+	env.funcs.introconsolelog("  <font size='8' color='rgb(84, 255, 101)'>Success: Environment check success</font>")
 
-	addLine(getservertime() .. ": Downloading assets...")
+	env.funcs.introconsolelog(getservertime() .. ": Downloading assets...")
 	t() changepb(45, 0.7)
 
 	if not isfolder(folder) then makefolder(folder) end
@@ -265,53 +267,55 @@ local function loadintro(buttononly)
 	local soundsfolder = folder .. "/Sounds"
 
 	if isfolder(imagesfolder) and isfolder(videosfolder) and isfolder(soundsfolder) then
-		addLine("  <font size='8' color='rgb(133, 133, 133)'>Fetching assets...</font>")
+		env.funcs.introconsolelog("  <font size='8' color='rgb(133, 133, 133)'>Fetching assets...</font>")
 		t()
-		addLine("  <font size='8' color='rgb(84, 255, 101)'>Success: Assets already downloaded</font>")
+		env.funcs.introconsolelog("  <font size='8' color='rgb(84, 255, 101)'>Success: Assets already downloaded</font>")
 	else
-		addLine("  <font size='8' color='rgb(133, 133, 133)'>Downloading and preloading...</font>")
+		env.funcs.introconsolelog("  <font size='8' color='rgb(133, 133, 133)'>Downloading assets...</font>")
 
 		if not isfolder(imagesfolder) then makefolder(imagesfolder) end
 		if not isfolder(videosfolder) then makefolder(videosfolder) end
 		if not isfolder(soundsfolder) then makefolder(soundsfolder) end
 
-		addLine("  <font size='8' color='rgb(84, 255, 101)'>Success: Assets downloaded</font>")
+		env.funcs.introconsolelog("  <font size='8' color='rgb(84, 255, 101)'>Success: Assets downloaded</font>")
 	end
+
+	env.funcs.introconsolelog("  <font size='8' color='rgb(133, 133, 133)'>Preloading assets...</font>")
+	t()
+	env.funcs.introconsolelog("  <font size='8' color='rgb(84, 255, 101)'>Success: Preloaded images</font>")
 
 	t() changepb(65, 0.5)
 
-	addLine(getservertime() .. ": Constructing script..")
+	env.funcs.introconsolelog(getservertime() .. ": Constructing script..")
 	t() changepb(90, 0.4)
 
 	if env.essentials.library then
-		addLine("  <font size='8' color='rgb(133, 133, 133)'>UI library successfully loaded.</font>")
+		env.funcs.introconsolelog("  <font size='8' color='rgb(133, 133, 133)'>UI library successfully loaded.</font>")
 	else
-		addLine("  <font size='8' color='rgb(247, 250, 92)'>Something went wrong.</font>")
+		env.funcs.introconsolelog("  <font size='8' color='rgb(247, 250, 92)'>Something went wrong.</font>")
 	end
 
 	t()
 
 	if env.essentials.data then
-		addLine("  <font size='8' color='rgb(133, 133, 133)'>Script data successfully loaded.</font>")
+		env.funcs.introconsolelog("  <font size='8' color='rgb(133, 133, 133)'>Script data successfully loaded.</font>")
 	else
-		addLine("  <font size='8' color='rgb(247, 250, 92)'>Something went wrong.</font>")
+		env.funcs.introconsolelog("  <font size='8' color='rgb(247, 250, 92)'>Something went wrong.</font>")
 	end
 
 	t()
 
 	local buildsucc = env.funcs.recursivels("book%201/%CA%95s/%CA%94b.lua", true)
 
-	if buildsucc then
-		addLine("  <font size='8' color='rgb(133, 133, 133)'>Applied script functionalities to UI.</font>")
-	else
-		addLine("  <font size='8' color='rgb(247, 250, 92)'>Something went wrong.</font>")
+	if not buildsucc then
+		env.funcs.introconsolelog("  <font size='8' color='rgb(247, 250, 92)'>Something went wrong.</font>")
 	end
 
 	t()
 
-	addLine("  <font size='8' color='rgb(84, 255, 101)'>Success: Scripts loaded</font>")
+	env.funcs.introconsolelog("  <font size='8' color='rgb(84, 255, 101)'>Success: Scripts loaded</font>")
 
-	addLine(getservertime() .. ": Finalizing...")
+	env.funcs.introconsolelog(getservertime() .. ": Finalizing...")
 	t() changepb(99, 1.5)
 
 	env.filemanager.persistload()
@@ -319,17 +323,22 @@ local function loadintro(buttononly)
 	t()
 
 	spwn(function()
-		if not env.funcs.exists() then env.funcs.pop("Waiting for character to load in before auto-loading configs...") repeat t() until env.funcs.exists() env.funcs.box("character loaded") t(1) end
+		if not env.funcs.exists() then 
+			env.funcs.pop("Waiting for character to load in before auto-loading configs...") 
+			repeat t() until env.funcs.exists() env.funcs.box("character loaded") t(1) 
+		else
+			env.funcs.introconsolelog("  <font size='8' color='rgb(133, 133, 133)'>Auto-loaded configs.</font>")
+		end
 		env.filemanager:autoload() env.funcs.box("auto-loaded configs (if they exist)")
 	end)
 
 	t()
 
-	addLine("  <font size='8' color='rgb(84, 255, 101)'>Success: Script successfully loaded</font>")
+	env.funcs.introconsolelog("  <font size='8' color='rgb(84, 255, 101)'>Success: Script successfully loaded</font>")
 
 	t()
 
-	addLine(getservertime() .. ": Done!")
+	env.funcs.introconsolelog(getservertime() .. ": Done!")
 	t() changepb(100, 0.2, "Done!")
 
 	t(0.5)
