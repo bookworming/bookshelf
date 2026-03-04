@@ -738,13 +738,8 @@ do
 	env.stuf.soundholder = hiddenui:FindFirstChild("aud")
 	if not hiddenui:FindFirstChild("aud") then env.stuf.soundholder = Instance.new("Folder") env.stuf.soundholder.Name = "aud" env.stuf.soundholder.Parent = hiddenui end
 
-	env.stuf.mainframescale = Instance.new("UIScale") 
-	env.stuf.mainframescale.Parent = env.stuf.mainframe 
-	env.stuf.mainframescale.Scale = env.gear.general.mainframescale
-
-	env.stuf.buttonscale = Instance.new("UIScale") 
-	env.stuf.buttonscale.Parent = env.stuf.togglebutton 
-	env.stuf.buttonscale.Scale = env.gear.general.buttonscale
+  env.stuf.buttonscalelisteners = {}
+	env.stuf.mainframescale, env.stuf.buttonscale = nil
 
 	-- donor hndling
 	env.stuf.handshaker = {}
