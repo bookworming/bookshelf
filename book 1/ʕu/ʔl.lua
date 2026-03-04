@@ -700,26 +700,26 @@ function lib.makecoolscrollingframe(size, parent, pos, layoutpadding, Z)
 	bar.Parent = scrollbar
 	Instance.new("UICorner", bar).CornerRadius = UDim.new(1, 0)
 
-local function getAncestorScale()
+	local function getAncestorScale()
     local obj = bg
     local scale = 1
     while obj do
-        local us = obj:FindFirstChildOfClass("UIScale")
-        if us then scale = scale * us.Scale end
-        obj = obj.Parent
+      local us = obj:FindFirstChildOfClass("UIScale")
+      if us then scale = scale * us.Scale end
+      obj = obj.Parent
     end
     return scale
-end
+	end
 
-local function updateBar()
+	local function updateBar()
     local scale = getAncestorScale()
     local view = scroll.AbsoluteWindowSize.Y / scale
     local canvas = scroll.CanvasSize.Y.Offset
     local barBackgroundHeight = scrollbar.AbsoluteSize.Y / scale
 
     if canvas <= view then
-        bar.Visible = false
-        return
+      bar.Visible = false
+      return
     end
     bar.Visible = true
 
@@ -732,7 +732,7 @@ local function updateBar()
     local scrollPercent = math.clamp(scroll.CanvasPosition.Y / maxScrollPos, 0, 1)
     local barY = math.clamp(scrollPercent * maxBarTravel + 2, 2, barBackgroundHeight - actualHeight + 2)
     bar.Position = UDim2.new(1, -2, 0, barY)
-end
+	end
 
 	scroll:GetPropertyChangedSignal("CanvasPosition"):Connect(updateBar)
 	scroll:GetPropertyChangedSignal("CanvasSize"):Connect(updateBar)
@@ -752,24 +752,24 @@ end
 		end
 	end)
 
-uis.InputChanged:Connect(function(input)
+	uis.InputChanged:Connect(function(input)
     if not dragging then return end
     if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
-        local scale = getAncestorScale()
-        local view = scroll.AbsoluteWindowSize.Y / scale
-        local canvas = scroll.CanvasSize.Y.Offset
-        if canvas <= view then return end
+      local scale = getAncestorScale()
+      local view = scroll.AbsoluteWindowSize.Y / scale
+      local canvas = scroll.CanvasSize.Y.Offset
+      if canvas <= view then return end
 
-        local barBackgroundHeight = scrollbar.AbsoluteSize.Y / scale
-        local actualHeight = math.clamp((view / canvas) * barBackgroundHeight, 10, barBackgroundHeight - 4)
-        local maxBarTravel = barBackgroundHeight - actualHeight
-        local maxScrollPos = canvas - view
+      local barBackgroundHeight = scrollbar.AbsoluteSize.Y / scale
+      local actualHeight = math.clamp((view / canvas) * barBackgroundHeight, 10, barBackgroundHeight - 4)
+      local maxBarTravel = barBackgroundHeight - actualHeight
+      local maxScrollPos = canvas - view
 
-        local delta = input.Position.Y - dragStartY
-        local scrollDelta = (delta / scale / maxBarTravel) * maxScrollPos
-        scroll.CanvasPosition = Vector2.new(scroll.CanvasPosition.X, math.clamp(dragStartCanvasY + scrollDelta, 0, maxScrollPos))
+      local delta = input.Position.Y - dragStartY
+      local scrollDelta = (delta / scale / maxBarTravel) * maxScrollPos
+      scroll.CanvasPosition = Vector2.new(scroll.CanvasPosition.X, math.clamp(dragStartCanvasY + scrollDelta, 0, maxScrollPos))
     end
-end)
+	end)
 
 	uis.InputEnded:Connect(function(input)
 		if input.UserInputType == Enum.UserInputType.MouseButton1
@@ -809,10 +809,11 @@ end)
 	layout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(updateCanvas)
 	updateCanvas()
 
-local uiscale = bg:FindFirstAncestorOfClass("UIScale")
-if uiscale then
-    uiscale:GetPropertyChangedSignal("Scale"):Connect(updateBar)
-end
+	spwn(function()
+		repeat t() until env.stuf.mainframescale
+		env.stuf.mainframescale:GetPropertyChangedSignal("Scale"):Connect(updateBar)
+	end)
+
 	return scroll, bg
 end
 
