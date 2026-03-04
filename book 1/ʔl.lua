@@ -428,13 +428,9 @@ local function loadintro()
 	end)
 
 	env.funcs.introconsolelog("Success: Script successfully loaded", "succ")
-	env.funcs.introconsolelog("Done!", "state") env.funcs.introprogress(100, "Done!")
-	t(1)
+	env.funcs.introconsolelog("Done!", "state") env.funcs.introprogress(100, "Done!") t(1)
 
-	local tween2 = tween(yo, {0.43, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut}, {
-		Size = UDim2.new(1, -28, 0, 1),
-		Position = UDim2.new(0.5, 0, 0, 66)
-	})
+	local tween2 = tween(yo, {0.43, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut}, {Size = UDim2.new(1, -28, 0, 1), Position = UDim2.new(0.5, 0, 0, 66)})
 
 	tween(hi, {0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut}, {Size = UDim2.fromOffset(230, 64)})
 	tween(env.stuf.buttonscale, {1, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut}, {Scale = env.gear.general.buttonscale})
@@ -448,12 +444,7 @@ local function loadintro()
 	env.stuf.buttonscale = Instance.new("UIScale", hi)
 	tween(env.stuf.buttonscale, {1, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut}, {Scale = env.gear.general.buttonscale})
 
-	task.delay(0.6, function()
-		title:Destroy()
-		subtitle:Destroy()
-	end)
-
-	t(0.2)
+	task.delay(0.6, function() title:Destroy() subtitle:Destroy() end) t(0.2)
 
 	tween(hi, {1.2, Enum.EasingStyle.Back, Enum.EasingDirection.InOut}, {Position = UDim2.new(0.5, 0, 0, 100)})
 	tween(hi, {1.2, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut}, {Size = UDim2.fromOffset(64, 64)})
