@@ -1542,7 +1542,6 @@ local function playScale(v, info)
 end
 
 local id = tostring(buttonFrame)
-env.stuf.buttonscalelisteners = env.stuf.buttonscalelisteners or {}
 env.stuf.buttonscalelisteners[id] = function(newScale)
     if buttonFrame.Parent == nil then
         env.stuf.buttonscalelisteners[id] = nil
@@ -1858,7 +1857,6 @@ local function playScale(v, info)
 end
 
 local id = tostring(buttonFrame)
-env.stuf.buttonscalelisteners = env.stuf.buttonscalelisteners or {}
 env.stuf.buttonscalelisteners[id] = function(newScale)
     if buttonFrame.Parent == nil then
         env.stuf.buttonscalelisteners[id] = nil
