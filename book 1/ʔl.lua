@@ -242,8 +242,8 @@ local function loadintro(buttononly)
 	local currentPercent = Instance.new("NumberValue")
 	currentPercent.Value = 0
 
-	local function changepb(target, duration, status)
-		local tween = ts:Create(currentPercent, TweenInfo.new(duration or 0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Value = target})
+	function env.funcs.introprogress(target, status)
+		local tween = ts:Create(currentPercent, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Value = target})
 
 		local connection = currentPercent.Changed:Connect(function(val)
 			subtitle.Text = string.format("Version 1.3.0 | %s (%d%%)", status or "Loading...", math.floor(val))
@@ -253,7 +253,7 @@ local function loadintro(buttononly)
 		return tween, connection
 	end
 
-	t(0.8) changepb(0, 0.1)
+	t(0.8) env.funcs.introprogress(0)
 
 	if env.stuf.inlobby or env.stuf.inrun or env.stuf.inrp then
 		env.funcs.introconsolelog("Experience ID recognized (" .. game.PlaceId .. ").")
@@ -261,7 +261,7 @@ local function loadintro(buttononly)
 		env.funcs.introconsolelog("Experience ID unrecognized (" .. game.PlaceId .. ").", "warn")
 	end
 
-	t(0.2) changepb(15, 0.6)
+	env.funcs.introprogress(5) t(0.2)
 
 	if env.funcs.exists() then
 		env.funcs.introconsolelog("Character model exists.")
@@ -269,10 +269,10 @@ local function loadintro(buttononly)
 		env.funcs.introconsolelog("Character doesn't exist yet.", "warn")
 	end
 
-	t(0.1) changepb(30, 0.4)
+	env.funcs.introprogress(10) t(0.1)
 	env.funcs.introconsolelog("Success: Environment check success", "succ")
 	env.funcs.introconsolelog("Downloading assets...", "state")
-	t(0.1) changepb(45, 0.7)
+	t(0.1)
 
 	if not isfolder(folder) then makefolder(folder) end
 
@@ -288,22 +288,29 @@ local function loadintro(buttononly)
 		env.funcs.introconsolelog("Downloading assets...")
 
 		if not isfolder(imagesfolder) then makefolder(imagesfolder) end
+		env.funcs.introprogress(15)
+
 		if not isfolder(videosfolder) then makefolder(videosfolder) end
+		env.funcs.introprogress(20)
+
 		if not isfolder(soundsfolder) then makefolder(soundsfolder) end
+		env.funcs.introprogress(25)
 
 		env.funcs.introconsolelog("Success: Assets downloaded", "succ")
 	end
 
-	t(0.1)
+	env.funcs.introprogress(30) t(0.1)
 	env.funcs.introconsolelog("Preloading assets...", "state")
 	env.funcs.introconsolelog("Fetching images...")
 	t(0.1)
+
+	env.funcs.introprogress(35)
 	env.funcs.introconsolelog("Success: Preloaded images", "succ")
 	t(0.1)
 
-	t(0.1) changepb(55, 0.5)
+	t(0.1) env.funcs.introprogress(40)
 	env.funcs.introconsolelog("Loading UI...", "state")
-	t(0.1) changepb(60, 0.4)
+	t(0.1) env.funcs.introprogress(45)
 
 	if env.essentials.library then
 		env.funcs.introconsolelog("UI library successfully loaded.")
@@ -311,7 +318,7 @@ local function loadintro(buttononly)
 		env.funcs.introconsolelog("Something went wrong. (LibFail)", "warn")
 	end
 
-	t(0.1) changepb(70, 0.4)
+	t(0.1) env.funcs.introprogress(50)
 
 	if env.essentials.data then
 		env.funcs.introconsolelog("Script data successfully loaded.")
@@ -319,10 +326,10 @@ local function loadintro(buttononly)
 		env.funcs.introconsolelog("Something went wrong. (DataFail)", "warn")
 	end
 
-	t(0.1) changepb(80, 0.4)
+	t(0.1) env.funcs.introprogress(55)
 	env.funcs.introconsolelog("Success: Script essentials loaded", "succ")
 	env.funcs.introconsolelog("Constructing UI...", "state")	
-	t(0.1) changepb(90, 0.2)
+	t(0.1) env.funcs.introprogress(60)
 
 	local buildsucc = env.funcs.recursivels("book%201/%CA%95s/%CA%94b.lua", true)
 
@@ -333,7 +340,7 @@ local function loadintro(buttononly)
 	t(0.1)
 	env.funcs.introconsolelog("Success: Script sections loaded", "succ")
 	env.funcs.introconsolelog("Finalizing...", "state")
-	t(0.1) changepb(99, 0.6)
+	t(0.1) env.funcs.introprogress(99)
 
 	env.filemanager.persistload()
 	env.funcs.introconsolelog("Loaded persistent elements.")
@@ -351,7 +358,7 @@ local function loadintro(buttononly)
 
 	env.funcs.introconsolelog("Success: Script successfully loaded", "succ")
 	env.funcs.introconsolelog("Done!", "state")
-	t(0.1) changepb(100, 0.2, "Done!")
+	t(0.1) env.funcs.introprogress(100, "Done!")
 	t(0.5)
 
 	local tween2 = tween(yo, {0.43, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut}, {
