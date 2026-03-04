@@ -1530,7 +1530,7 @@ function lib.addtoggle(parent, title, description, callback, bindable, default, 
 		miniToggle.Activated:Connect(onToggle)
 
 local scale = Instance.new("UIScale", buttonFrame)
-local baseScale = env.stuf.buttonbaseScale or 1
+local baseScale = env.stuf.buttonscale and env.stuf.buttonscale.Scale or 1
 scale.Scale = baseScale
 
 local hover, press = TweenInfo.new(0.12, Enum.EasingStyle.Quad), TweenInfo.new(0.08, Enum.EasingStyle.Quad)
@@ -1541,20 +1541,7 @@ local function playScale(v, info)
     currenttween:Play()
 end
 
-local listenerIndex = #env.stuf.buttonscalelisteners + 1
-env.stuf.buttonscalelisteners[listenerIndex] = function(v)
-    if buttonFrame.Parent == nil then
-        env.stuf.buttonscalelisteners[listenerIndex] = nil
-        return
-    end
-    baseScale = v
-    scale.Scale = v
-end
-
-buttonFrame.Destroying:Connect(function()
-    env.stuf.buttonscalelisteners[listenerIndex] = nil
-end)
-
+-- Keep in sync if buttonscale changes after the button is created
 if env.stuf.buttonscale then
     env.stuf.buttonscale:GetPropertyChangedSignal("Scale"):Connect(function()
         if buttonFrame.Parent == nil then return end
@@ -1562,6 +1549,24 @@ if env.stuf.buttonscale then
         scale.Scale = baseScale
     end)
 end
+
+-- Register this button to receive scale updates
+local id = tostring(buttonFrame)
+env.stuf.buttonscalelisteners = env.stuf.buttonscalelisteners or {}
+env.stuf.buttonscalelisteners[id] = function(newScale)
+    if buttonFrame.Parent == nil then
+        env.stuf.buttonscalelisteners[id] = nil
+        return
+    end
+    baseScale = newScale
+    scale.Scale = newScale
+end
+
+buttonFrame.Destroying:Connect(function()
+    if env.stuf.buttonscalelisteners then
+        env.stuf.buttonscalelisteners[id] = nil
+    end
+end)
 
 buttonFrame.MouseEnter:Connect(function() lib.hov() playScale(1.02, hover) end)
 buttonFrame.MouseLeave:Connect(function() playScale(1, hover) end)
@@ -1851,7 +1856,7 @@ function lib.addbutton(parent, title, description, callback, bindable, locked, l
 		end)
 
 local scale = Instance.new("UIScale", buttonFrame)
-local baseScale = env.stuf.buttonbaseScale or 1
+local baseScale = env.stuf.buttonscale and env.stuf.buttonscale.Scale or 1
 scale.Scale = baseScale
 
 local hover, press = TweenInfo.new(0.12, Enum.EasingStyle.Quad), TweenInfo.new(0.08, Enum.EasingStyle.Quad)
@@ -1862,20 +1867,7 @@ local function playScale(v, info)
     currenttween:Play()
 end
 
-local listenerIndex = #env.stuf.buttonscalelisteners + 1
-env.stuf.buttonscalelisteners[listenerIndex] = function(v)
-    if buttonFrame.Parent == nil then
-        env.stuf.buttonscalelisteners[listenerIndex] = nil
-        return
-    end
-    baseScale = v
-    scale.Scale = v
-end
-
-buttonFrame.Destroying:Connect(function()
-    env.stuf.buttonscalelisteners[listenerIndex] = nil
-end)
-
+-- Keep in sync if buttonscale changes after the button is created
 if env.stuf.buttonscale then
     env.stuf.buttonscale:GetPropertyChangedSignal("Scale"):Connect(function()
         if buttonFrame.Parent == nil then return end
@@ -1883,6 +1875,24 @@ if env.stuf.buttonscale then
         scale.Scale = baseScale
     end)
 end
+
+-- Register this button to receive scale updates
+local id = tostring(buttonFrame)
+env.stuf.buttonscalelisteners = env.stuf.buttonscalelisteners or {}
+env.stuf.buttonscalelisteners[id] = function(newScale)
+    if buttonFrame.Parent == nil then
+        env.stuf.buttonscalelisteners[id] = nil
+        return
+    end
+    baseScale = newScale
+    scale.Scale = newScale
+end
+
+buttonFrame.Destroying:Connect(function()
+    if env.stuf.buttonscalelisteners then
+        env.stuf.buttonscalelisteners[id] = nil
+    end
+end)
 
 buttonFrame.MouseEnter:Connect(function() lib.hov() playScale(1.02, hover) end)
 buttonFrame.MouseLeave:Connect(function() playScale(1, hover) end)
