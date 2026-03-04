@@ -701,30 +701,30 @@ function lib.makecoolscrollingframe(size, parent, pos, layoutpadding, Z)
 	Instance.new("UICorner", bar).CornerRadius = UDim.new(1, 0)
 
 	local function getAncestorScale()
-    return env.stuf.mainframescale and env.stuf.mainframescale.Scale or 1
+		return env.stuf.mainframescale and env.stuf.mainframescale.Scale or 1
 	end
 
 	local function updateBar()
-    local scale = getAncestorScale()
-    local view = scroll.AbsoluteWindowSize.Y / scale
-    local canvas = scroll.CanvasSize.Y.Offset
-    local barBackgroundHeight = scrollbar.AbsoluteSize.Y / scale
+		local scale = getAncestorScale()
+		local view = scroll.AbsoluteWindowSize.Y / scale
+		local canvas = scroll.CanvasSize.Y.Offset
+		local barBackgroundHeight = scrollbar.AbsoluteSize.Y / scale
 
-    if canvas <= view then
-      bar.Visible = false
-      return
-    end
-    bar.Visible = true
+		if canvas <= view then
+			bar.Visible = false
+			return
+		end
+		bar.Visible = true
 
-    local ratio = view / canvas
-    local actualHeight = math.clamp(ratio * barBackgroundHeight, 10, barBackgroundHeight - 4)
-    bar.Size = UDim2.new(0, 6, 0, actualHeight - 4)
+		local ratio = view / canvas
+		local actualHeight = math.clamp(ratio * barBackgroundHeight, 10, barBackgroundHeight - 4)
+		bar.Size = UDim2.new(0, 6, 0, actualHeight - 4)
 
-    local maxScrollPos = canvas - view
-    local maxBarTravel = barBackgroundHeight - actualHeight
-    local scrollPercent = math.clamp(scroll.CanvasPosition.Y / maxScrollPos, 0, 1)
-    local barY = math.clamp(scrollPercent * maxBarTravel + 2, 2, barBackgroundHeight - actualHeight + 2)
-    bar.Position = UDim2.new(1, -2, 0, barY)
+		local maxScrollPos = canvas - view
+		local maxBarTravel = barBackgroundHeight - actualHeight
+		local scrollPercent = math.clamp(scroll.CanvasPosition.Y / maxScrollPos, 0, 1)
+		local barY = math.clamp(scrollPercent * maxBarTravel + 2, 2, barBackgroundHeight - actualHeight + 2)
+		bar.Position = UDim2.new(1, -2, 0, barY)
 	end
 
 	scroll:GetPropertyChangedSignal("CanvasPosition"):Connect(updateBar)
@@ -746,22 +746,22 @@ function lib.makecoolscrollingframe(size, parent, pos, layoutpadding, Z)
 	end)
 
 	uis.InputChanged:Connect(function(input)
-    if not dragging then return end
-    if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
-      local scale = getAncestorScale()
-      local view = scroll.AbsoluteWindowSize.Y / scale
-      local canvas = scroll.CanvasSize.Y.Offset
-      if canvas <= view then return end
+		if not dragging then return end
+		if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+			local scale = getAncestorScale()
+			local view = scroll.AbsoluteWindowSize.Y / scale
+			local canvas = scroll.CanvasSize.Y.Offset
+			if canvas <= view then return end
 
-      local barBackgroundHeight = scrollbar.AbsoluteSize.Y / scale
-      local actualHeight = math.clamp((view / canvas) * barBackgroundHeight, 10, barBackgroundHeight - 4)
-      local maxBarTravel = barBackgroundHeight - actualHeight
-      local maxScrollPos = canvas - view
+			local barBackgroundHeight = scrollbar.AbsoluteSize.Y / scale
+			local actualHeight = math.clamp((view / canvas) * barBackgroundHeight, 10, barBackgroundHeight - 4)
+			local maxBarTravel = barBackgroundHeight - actualHeight
+			local maxScrollPos = canvas - view
 
-      local delta = input.Position.Y - dragStartY
-      local scrollDelta = (delta / scale / maxBarTravel) * maxScrollPos
-      scroll.CanvasPosition = Vector2.new(scroll.CanvasPosition.X, math.clamp(dragStartCanvasY + scrollDelta, 0, maxScrollPos))
-    end
+			local delta = input.Position.Y - dragStartY
+			local scrollDelta = (delta / scale / maxBarTravel) * maxScrollPos
+			scroll.CanvasPosition = Vector2.new(scroll.CanvasPosition.X, math.clamp(dragStartCanvasY + scrollDelta, 0, maxScrollPos))
+		end
 	end)
 
 	uis.InputEnded:Connect(function(input)
@@ -793,18 +793,18 @@ function lib.makecoolscrollingframe(size, parent, pos, layoutpadding, Z)
 	shadow.Thickness = 2
 	shadow.Color = Color3.fromRGB(0, 0, 0)
 	shadow.Parent = scrollbar
+
 	local layout = Instance.new("UIListLayout")
 	layout.Padding = UDim.new(0, layoutpadding or 12)
 	layout.HorizontalAlignment = Enum.HorizontalAlignment.Center
 	layout.SortOrder = Enum.SortOrder.LayoutOrder
 	layout.Parent = scroll
-	local function updateCanvas() scroll.CanvasSize = UDim2.new(0, 0, 0, layout.AbsoluteContentSize.Y + 6) end
-	layout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(updateCanvas)
-	updateCanvas()
 
 	local function updateCanvas()
-    scroll.CanvasSize = UDim2.new(0, 0, 0, layout.AbsoluteContentSize.Y + 6)
+		scroll.CanvasSize = UDim2.new(0, 0, 0, layout.AbsoluteContentSize.Y + 6)
 	end
+	layout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(updateCanvas)
+	updateCanvas()
 
 	spwn(function()
 		repeat t() until env.stuf.mainframescale
