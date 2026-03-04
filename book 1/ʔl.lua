@@ -48,7 +48,7 @@ repeat t() until env.setupcomplete and env.essentialsloaded
 env.funcs.box("setup complete")
 
 env.expectedcompiledscriptversions = {
-	library = 1,
+	library = 2,
 	data = 1,
 	
 	mainsection = 1,
@@ -204,7 +204,7 @@ local function loadintro()
 	tween(hi, {0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut}, {Size = UDim2.fromOffset(230, 64)})
 
 	local lib = env.essentials.library
-	local title    = lib.makecooltext(hi, UDim2.fromOffset(200, 20), "", 16, nil, 2, UDim2.fromOffset(163, 22), Enum.TextXAlignment.Left, Enum.TextYAlignment.Center, nil, 100001)
+	local title = lib.makecooltext(hi, UDim2.fromOffset(200, 20), "", 16, nil, 2, UDim2.fromOffset(163, 22), Enum.TextXAlignment.Left, Enum.TextYAlignment.Center, nil, 100001)
 	local subtitle = lib.makecooltext(hi, UDim2.fromOffset(200, 20), "", 12, Color3.fromRGB(187, 187, 187), 2, UDim2.fromOffset(163, 42), Enum.TextXAlignment.Left, Enum.TextYAlignment.Center, nil, 100001)
 
 	task.delay(0.1, function()
