@@ -142,7 +142,7 @@ spwn(function()
 		"Ignore full Research Twisteds",
 
 		"Mainframe UI scale",
-		"Button UI scale"
+		"Button UI scale",
 
 		"Alternate Boxten personality",
 		"Live Poppy reaction",
@@ -163,7 +163,7 @@ spwn(function()
 		"Ignore full Research Twisteds",
 
 		"Mainframe UI scale",
-		"Button UI scale"
+		"Button UI scale",
 
 		"Alternate Boxten personality",
 		"Live Poppy reaction",
