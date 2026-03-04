@@ -107,12 +107,12 @@ local function loadintro(buttononly)
 
 		local hover = TweenInfo.new(0.12, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
 		local press = TweenInfo.new(0.08, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
-		local tween
+		local currenttween
 
 		local function tween(v, info)
-			if tween then tween:Cancel() end
-			tween = ts:Create(scale, info, {Scale = v})
-			tween:Play()
+			if currenttween then tween:Cancel() end
+			currenttween = ts:Create(scale, info, {Scale = v})
+			currenttween:Play()
 		end
 
 		env.stuf.togglebutton = togglebutton
