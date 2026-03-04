@@ -396,7 +396,7 @@ local function loadintro(buttononly)
 	togglebutton.ZIndex = 100000
 	togglebutton.Rotation = 0
 
-	task.delay(1, alive)
+	task.delay(2, alive)
 end
 
 -------------------------------------------------------------------------------------------------------------------------------
