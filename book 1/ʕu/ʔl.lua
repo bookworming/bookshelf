@@ -2695,7 +2695,6 @@ function lib.addslider(parent, title, description, min, max, default, step, call
 	knob.AnchorPoint = Vector2.new(0.5, 0.5)
 	knob.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 	knob.BorderSizePixel = 0
-	knob.Active = true
 	knob.Parent = track
 	knob.ZIndex = 67
 	Instance.new("UICorner", knob).CornerRadius = UDim.new(1, 0)
