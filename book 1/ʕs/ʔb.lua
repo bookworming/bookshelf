@@ -533,17 +533,21 @@ local function initmainsection()
 
 	-- unlock donor things
 	task.delay(1, function()
-		if not env.funcs.datacheck(env.essentials.data.classes.autodonors) then return end
-		env.funcs.box("user has donor, updating donor section", true)
+		if env.funcs.datacheck(env.essentials.data.classes.autodonors) 
+			or env.funcs.datacheck(env.essentials.data.classes.unable)
+			or env.funcs.datacheck(env.essentials.data.classes.teammembers) 
+			or env.funcs.datacheck(env.essentials.data.classes.hypnic) then
+			env.funcs.box("user has donor, updating donor section", true)
 
-		env.essentials.library.lock("Exclude yourself", false)
+			env.essentials.library.lock("Exclude yourself", false)
 
-		env.essentials.library.lock("Flashbang script users", false)
-		env.essentials.library.lock("Confuse script users", false)
-		env.essentials.library.lock("Freeze time", false)
+			env.essentials.library.lock("Flashbang script users", false)
+			env.essentials.library.lock("Confuse script users", false)
+			env.essentials.library.lock("Freeze time", false)
 
-		env.essentials.library.lock("Script user revolver", false)
-		env.essentials.library.lock("Script user double-barrel shotgun", false)
+			env.essentials.library.lock("Script user revolver", false)
+			env.essentials.library.lock("Script user double-barrel shotgun", false)
+		end
 	end)
 
 	newcat(mainsection, cats, "Main", buttons, loadspeaker)
