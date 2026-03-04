@@ -63,11 +63,13 @@ end
 
 env.funcs.introprogress(66)
 
+env.stuf.visualssectionloaded = false
 local viscat = env.funcs.recursivels("book%201/%CA%95s/%EF%BD%A1s/%CA%94v.lua", true)
 env.funcs.introconsolelog("\"Visuals\" section loaded.")
 if viscat.version ~= env.expectedcompiledscriptversion then
 	env.funcs.introconsolelog("The \"Visuals\" section is out of date.", "warn")
 end
+env.stuf.visualssectionloaded = true
 
 env.funcs.introprogress(69)
 
@@ -103,7 +105,7 @@ end
 
 env.funcs.introprogress(80)
 
-local donorcat = env.funcs.recursivels("book%201/%CA%95s/%EF%BD%A1s/%CA%94d.lua", true) env.stuf.donorsectionloaded = true
+local donorcat = env.funcs.recursivels("book%201/%CA%95s/%EF%BD%A1s/%CA%94d.lua", true) 
 env.funcs.introconsolelog("\"Donor\" section loaded.")
 if donorcat.version ~= env.expectedcompiledscriptversion then
 	env.funcs.introconsolelog("The \"Donor\" section is out of date.", "warn")
@@ -111,7 +113,7 @@ end
 
 env.funcs.introprogress(83)
 
-local scriptinfocats = env.funcs.recursivels("book%201/%CA%95s/%EF%BD%A1s/%CA%94si%26f.lua", true) env.stuf.scriptsectionloaded = true
+local scriptinfocats = env.funcs.recursivels("book%201/%CA%95s/%EF%BD%A1s/%CA%94si%26f.lua", true)
 env.funcs.introconsolelog("\"Script Info\" section loaded.")
 if scriptinfocats.version ~= env.expectedcompiledscriptversion then
 	env.funcs.introconsolelog("The \"Script Info\" section is out of date.", "warn")
@@ -119,7 +121,7 @@ end
 
 env.funcs.introprogress(86)
 
-local clcat = env.funcs.recursivels("book%201/%CA%95s/%EF%BD%A1s/%CA%94cl.lua", true) env.stuf.configsectionloaded = true
+local clcat = env.funcs.recursivels("book%201/%CA%95s/%EF%BD%A1s/%CA%94cl.lua", true)
 env.funcs.introconsolelog("\"Config Loading\" section loaded.")
 if clcat.version ~= env.expectedcompiledscriptversion then
 	env.funcs.introconsolelog("The \"Config Loading\" section is out of date.", "warn")
