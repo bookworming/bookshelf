@@ -705,26 +705,25 @@ function lib.makecoolscrollingframe(size, parent, pos, layoutpadding, Z)
 	end
 
 	local function updateBar()
-		local scale = getAncestorScale()
-		local view = scroll.AbsoluteWindowSize.Y / scale
-		local canvas = scroll.CanvasSize.Y.Offset
-		local barBackgroundHeight = scrollbar.AbsoluteSize.Y / scale
+    local view = scroll.AbsoluteWindowSize.Y
+    local canvas = scroll.CanvasSize.Y.Offset
+    local barBackgroundHeight = scrollbar.AbsoluteSize.Y
 
-		if canvas <= view then
-			bar.Visible = false
-			return
-		end
-		bar.Visible = true
+    if canvas <= view then
+        bar.Visible = false
+        return
+    end
+    bar.Visible = true
 
-		local ratio = view / canvas
-		local actualHeight = math.clamp(ratio * barBackgroundHeight, 10, barBackgroundHeight - 4)
-		bar.Size = UDim2.new(0, 6, 0, actualHeight - 4)
+    local ratio = view / canvas
+    local actualHeight = math.clamp(ratio * barBackgroundHeight, 10, barBackgroundHeight - 4)
+    bar.Size = UDim2.new(0, 6, 0, actualHeight - 4)
 
-		local maxScrollPos = canvas - view
-		local maxBarTravel = barBackgroundHeight - actualHeight
-		local scrollPercent = math.clamp(scroll.CanvasPosition.Y / maxScrollPos, 0, 1)
-		local barY = math.clamp(scrollPercent * maxBarTravel + 2, 2, barBackgroundHeight - actualHeight + 2)
-		bar.Position = UDim2.new(1, -2, 0, barY)
+    local maxScrollPos = canvas - view
+    local maxBarTravel = barBackgroundHeight - actualHeight
+    local scrollPercent = math.clamp(scroll.CanvasPosition.Y / maxScrollPos, 0, 1)
+    local barY = math.clamp(scrollPercent * maxBarTravel + 2, 2, barBackgroundHeight - actualHeight + 2)
+    bar.Position = UDim2.new(1, -2, 0, barY)
 	end
 
 	scroll:GetPropertyChangedSignal("CanvasPosition"):Connect(updateBar)
@@ -801,9 +800,9 @@ function lib.makecoolscrollingframe(size, parent, pos, layoutpadding, Z)
 	layout.Parent = scroll
 
 	local function updateCanvas()
-    local scale = getAncestorScale()
-    scroll.CanvasSize = UDim2.new(0, 0, 0, (layout.AbsoluteContentSize.Y / scale) + 6)
-	end	
+    scroll.CanvasSize = UDim2.new(0, 0, 0, layout.AbsoluteContentSize.Y + 6)
+	end
+
 	layout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(updateCanvas)
 	updateCanvas()
 
