@@ -801,8 +801,9 @@ function lib.makecoolscrollingframe(size, parent, pos, layoutpadding, Z)
 	layout.Parent = scroll
 
 	local function updateCanvas()
-		scroll.CanvasSize = UDim2.new(0, 0, 0, layout.AbsoluteContentSize.Y + 6)
-	end
+    local scale = getAncestorScale()
+    scroll.CanvasSize = UDim2.new(0, 0, 0, (layout.AbsoluteContentSize.Y / scale) + 6)
+	end	
 	layout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(updateCanvas)
 	updateCanvas()
 
