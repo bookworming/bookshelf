@@ -646,221 +646,176 @@ function lib.makecooltextbox(size, parent, defaulttext, textsize, phtext, icon, 
 end
 
 function lib.makecoolscrollingframe(size, parent, pos, layoutpadding, Z)
-    Z = Z or 1
+	Z = Z or 1
+	local bg = Instance.new("Frame")
+	bg.BorderSizePixel = 0
+	bg.Position = pos or UDim2.new(0.5, 0, 0.5, 0)
+	bg.ZIndex = Z
+	bg.AnchorPoint = Vector2.new(0.5, 0.5)
+	bg.Size = size or UDim2.new(0, 190, 0, 140)
+	bg.BackgroundTransparency = 1
+	bg.Parent = parent
+	local bground = Instance.new("UICorner")
+	bground.CornerRadius = UDim.new(0, 8)
+	bground.Parent = bg
+	local scroll = Instance.new("ScrollingFrame")
+	scroll.BorderSizePixel = 0
+	scroll.Size = UDim2.new(1, 0, 1, 0)
+	scroll.BackgroundTransparency = 1
+	scroll.Parent = bg
+	scroll.ZIndex = Z + 1
+	scroll.ScrollBarThickness = 0
+	scroll.ScrollBarImageTransparency = 1
+	scroll.ScrollBarImageColor3 = Color3.fromRGB(255, 255, 255)
+	local pad = Instance.new("UIPadding")
+	pad.PaddingTop = UDim.new(0, 2)
+	pad.PaddingLeft = UDim.new(0, -19)
+	pad.Parent = scroll
+	local scrollbar = Instance.new("Frame")
+	scrollbar.BorderSizePixel = 0
+	scrollbar.Position = UDim2.new(1, -5, 0.5, 0)
+	scrollbar.AnchorPoint = Vector2.new(0.5, 0.5)
+	scrollbar.Size = UDim2.new(0, 10, 0, size.Y.Offset - 4)
+	scrollbar.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	scrollbar.Parent = bg
+	scrollbar.ZIndex = Z + 2
+	scrollbar.Active = true
+	scrollbar.ClipsDescendants = true
+	local bggrad = Instance.new("UIGradient")
+	bggrad.Color = ColorSequence.new {
+		ColorSequenceKeypoint.new(0, Color3.fromRGB(22, 22, 22)),
+		ColorSequenceKeypoint.new(1, Color3.fromRGB(12, 12, 12)),
+	}
+	bggrad.Rotation = 90
+	bggrad.Parent = scrollbar
+	Instance.new("UICorner", scrollbar).CornerRadius = UDim.new(1, 0)
+	local bar = Instance.new("Frame")
+	bar.AnchorPoint = Vector2.new(1, 0)
+	bar.Position = UDim2.new(1, -2, 0, 2)
+	bar.Size = UDim2.new(0, 6, 1, -4)
+	bar.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	bar.BorderSizePixel = 0
+	bar.Active = true
+	bar.ZIndex = Z + 3
+	bar.Parent = scrollbar
+	Instance.new("UICorner", bar).CornerRadius = UDim.new(1, 0)
 
-    local bg = Instance.new("Frame")
-    bg.BorderSizePixel = 0
-    bg.Position = pos or UDim2.new(0.5, 0, 0.5, 0)
-    bg.ZIndex = Z
-    bg.AnchorPoint = Vector2.new(0.5, 0.5)
-    bg.Size = size or UDim2.new(0, 190, 0, 140)
-    bg.BackgroundTransparency = 1
-    bg.Parent = parent
+	local function getAncestorScale()
+		return env.stuf.mainframescale and env.stuf.mainframescale.Scale or 1
+	end
 
-    local bground = Instance.new("UICorner")
-    bground.CornerRadius = UDim.new(0, 8)
-    bground.Parent = bg
+	local function updateBar()
+		local scale = getAncestorScale()
+		local view = scroll.AbsoluteWindowSize.Y / scale
+		local canvas = scroll.CanvasSize.Y.Offset
+		local barBackgroundHeight = scrollbar.AbsoluteSize.Y / scale
 
-    local scroll = Instance.new("ScrollingFrame")
-    scroll.BorderSizePixel = 0
-    scroll.Size = UDim2.new(1, 0, 1, 0)
-    scroll.BackgroundTransparency = 1
-    scroll.Parent = bg
-    scroll.ZIndex = Z + 1
-    scroll.ScrollBarThickness = 0
-    scroll.ScrollBarImageTransparency = 1
-    scroll.ScrollBarImageColor3 = Color3.fromRGB(255, 255, 255)
+		if canvas <= view then
+			bar.Visible = false
+			return
+		end
+		bar.Visible = true
 
-    local pad = Instance.new("UIPadding")
-    pad.PaddingTop = UDim.new(0, 2)
-    pad.PaddingLeft = UDim.new(0, -19)
-    pad.Parent = scroll
+		local ratio = view / canvas
+		local actualHeight = math.clamp(ratio * barBackgroundHeight, 10, barBackgroundHeight - 4)
+		bar.Size = UDim2.new(0, 6, 0, actualHeight - 4)
 
-    local scrollbar = Instance.new("Frame")
-    scrollbar.BorderSizePixel = 0
-    scrollbar.Position = UDim2.new(1, -5, 0.5, 0)
-    scrollbar.AnchorPoint = Vector2.new(0.5, 0.5)
-    scrollbar.Size = UDim2.new(0, 10, 0, size.Y.Offset - 4)
-    scrollbar.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    scrollbar.Parent = bg
-    scrollbar.ZIndex = Z + 2
-    scrollbar.Active = true
-    scrollbar.ClipsDescendants = true
+		local maxScrollPos = canvas - view
+		local maxBarTravel = barBackgroundHeight - actualHeight
+		local scrollPercent = math.clamp(scroll.CanvasPosition.Y / maxScrollPos, 0, 1)
+		local barY = math.clamp(scrollPercent * maxBarTravel + 2, 2, barBackgroundHeight - actualHeight + 2)
+		bar.Position = UDim2.new(1, -2, 0, barY)
+	end
 
-    local bggrad = Instance.new("UIGradient")
-    bggrad.Color = ColorSequence.new {
-        ColorSequenceKeypoint.new(0, Color3.fromRGB(22, 22, 22)),
-        ColorSequenceKeypoint.new(1, Color3.fromRGB(12, 12, 12)),
-    }
-    bggrad.Rotation = 90
-    bggrad.Parent = scrollbar
+	scroll:GetPropertyChangedSignal("CanvasPosition"):Connect(updateBar)
+	scroll:GetPropertyChangedSignal("CanvasSize"):Connect(updateBar)
+	scroll:GetPropertyChangedSignal("AbsoluteWindowSize"):Connect(updateBar)
+	updateBar()
 
-    Instance.new("UICorner", scrollbar).CornerRadius = UDim.new(1, 0)
+	local dragging = false
+	local dragStartY = 0
+	local dragStartCanvasY = 0
 
-    local bar = Instance.new("Frame")
-    bar.AnchorPoint = Vector2.new(1, 0)
-    bar.Position = UDim2.new(1, -2, 0, 2)
-    bar.Size = UDim2.new(0, 6, 1, -4)
-    bar.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    bar.BorderSizePixel = 0
-    bar.Active = true
-    bar.ZIndex = Z + 3
-    bar.Parent = scrollbar
-    Instance.new("UICorner", bar).CornerRadius = UDim.new(1, 0)
+	bar.InputBegan:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+			dragging = true
+			candrag = false
+			dragStartY = input.Position.Y
+			dragStartCanvasY = scroll.CanvasPosition.Y
+		end
+	end)
 
-    -- ────────────────────────────────────────────────────────────────
-    --  Helpers
-    -- ────────────────────────────────────────────────────────────────
+	uis.InputChanged:Connect(function(input)
+		if not dragging then return end
+		if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+			local scale = getAncestorScale()
+			local view = scroll.AbsoluteWindowSize.Y / scale
+			local canvas = scroll.CanvasSize.Y.Offset
+			if canvas <= view then return end
 
-    local function getAncestorScale()
-        return env.stuf.mainframescale and env.stuf.mainframescale.Scale or 1
-    end
+			local barBackgroundHeight = scrollbar.AbsoluteSize.Y / scale
+			local actualHeight = math.clamp((view / canvas) * barBackgroundHeight, 10, barBackgroundHeight - 4)
+			local maxBarTravel = barBackgroundHeight - actualHeight
+			local maxScrollPos = canvas - view
 
-    local function updateCanvas()
-        local scale = getAncestorScale()
-        -- Very important: divide AbsoluteContentSize by scale
-        local contentHeightUnscaled = layout.AbsoluteContentSize.Y
-        local contentHeightScaled = contentHeightUnscaled / scale
+			local delta = input.Position.Y - dragStartY
+			local scrollDelta = (delta / scale / maxBarTravel) * maxScrollPos
+			scroll.CanvasPosition = Vector2.new(scroll.CanvasPosition.X, math.clamp(dragStartCanvasY + scrollDelta, 0, maxScrollPos))
+		end
+	end)
 
-        scroll.CanvasSize = UDim2.new(0, 0, 0, contentHeightScaled + 6)
-    end
+	uis.InputEnded:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseButton1
+			or input.UserInputType == Enum.UserInputType.Touch then
+			dragging = false
+			candrag = true
+		end
+	end)
 
-    local function updateBar()
-        local scale = getAncestorScale()
-        local viewHeight = scroll.AbsoluteWindowSize.Y / scale          -- visible area (logical pixels)
-        local canvasHeight = scroll.CanvasSize.Y.Offset                 -- already in logical pixels
+	local inline = Instance.new("UIStroke")
+	inline.Thickness = 1
+	inline.Color = Color3.fromRGB(100, 100, 100)
+	inline.Parent = scrollbar
+	inline.BorderOffset = UDim.new(0, -1)
+	local inlinegrad = Instance.new("UIGradient")
+	inlinegrad.Color = ColorSequence.new({
+		ColorSequenceKeypoint.new(0, Color3.fromRGB(189, 189, 189)),
+		ColorSequenceKeypoint.new(1, Color3.fromRGB(22, 22, 22)),
+	})
+	inlinegrad.Transparency = NumberSequence.new({
+		NumberSequenceKeypoint.new(0, 0),
+		NumberSequenceKeypoint.new(0.7, 0),
+		NumberSequenceKeypoint.new(1, 1),
+	})
+	inlinegrad.Rotation = 180
+	inlinegrad.Parent = inline
+	local shadow = Instance.new("UIStroke")
+	shadow.Thickness = 2
+	shadow.Color = Color3.fromRGB(0, 0, 0)
+	shadow.Parent = scrollbar
 
-        local barBackgroundHeight = scrollbar.AbsoluteSize.Y / scale   -- logical height of scrollbar track
+	local layout = Instance.new("UIListLayout")
+	layout.Padding = UDim.new(0, layoutpadding or 12)
+	layout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+	layout.SortOrder = Enum.SortOrder.LayoutOrder
+	layout.Parent = scroll
 
-        if canvasHeight <= viewHeight then
-            bar.Visible = false
-            return
-        end
+	local function updateCanvas()
+    local scale = getAncestorScale()
+    scroll.CanvasSize = UDim2.new(0, 0, 0, (layout.AbsoluteContentSize.Y / scale) + 6)
+	end	
+	layout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(updateCanvas)
+	updateCanvas()
 
-        bar.Visible = true
+	spwn(function()
+		repeat t() until env.stuf.mainframescale
+		env.stuf.mainframescale:GetPropertyChangedSignal("Scale"):Connect(function()
+			updateCanvas()
+			updateBar()
+		end)
+	end)
 
-        local ratio = viewHeight / canvasHeight
-        local handleHeight = math.clamp(ratio * barBackgroundHeight, 10, barBackgroundHeight - 4)
-
-        bar.Size = UDim2.new(0, 6, 0, handleHeight)
-
-        local maxScrollPos = canvasHeight - viewHeight
-        local maxBarTravel = barBackgroundHeight - handleHeight
-
-        local scrollPercent = math.clamp(scroll.CanvasPosition.Y / maxScrollPos, 0, 1)
-        local barY = math.clamp(scrollPercent * maxBarTravel + 2, 2, barBackgroundHeight - handleHeight + 2)
-
-        bar.Position = UDim2.new(1, -2, 0, barY)
-    end
-
-    -- ────────────────────────────────────────────────────────────────
-    --  Connections
-    -- ────────────────────────────────────────────────────────────────
-
-    layout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(updateCanvas)
-    scroll:GetPropertyChangedSignal("CanvasPosition"):Connect(updateBar)
-    scroll:GetPropertyChangedSignal("CanvasSize"):Connect(updateBar)
-    scroll:GetPropertyChangedSignal("AbsoluteWindowSize"):Connect(updateBar)
-
-    -- Initial updates
-    updateCanvas()
-    updateBar()
-
-    -- Watch for scale changes
-    task.spawn(function()
-        -- Wait for mainframescale to exist (your original approach)
-        repeat task.wait() until env.stuf.mainframescale
-
-        env.stuf.mainframescale:GetPropertyChangedSignal("Scale"):Connect(function()
-            updateCanvas()
-            updateBar()
-        end)
-
-        -- Also update once right after it appears
-        updateCanvas()
-        updateBar()
-    end)
-
-    -- ────────────────────────────────────────────────────────────────
-    --  Custom scrollbar dragging
-    -- ────────────────────────────────────────────────────────────────
-
-    local uis = game:GetService("UserInputService")
-
-    local dragging = false
-    local dragStartY = 0
-    local dragStartCanvasY = 0
-
-    bar.InputBegan:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-            dragging = true
-            dragStartY = input.Position.Y
-            dragStartCanvasY = scroll.CanvasPosition.Y
-        end
-    end)
-
-    uis.InputChanged:Connect(function(input)
-        if not dragging then return end
-        if input.UserInputType ~= Enum.UserInputType.MouseMovement and input.UserInputType ~= Enum.UserInputType.Touch then return end
-
-        local scale = getAncestorScale()
-        local view = scroll.AbsoluteWindowSize.Y / scale
-        local canvas = scroll.CanvasSize.Y.Offset
-
-        if canvas <= view then return end
-
-        local barBackgroundHeight = scrollbar.AbsoluteSize.Y / scale
-        local handleHeight = math.clamp((view / canvas) * barBackgroundHeight, 10, barBackgroundHeight - 4)
-        local maxBarTravel = barBackgroundHeight - handleHeight
-        local maxScrollPos = canvas - view
-
-        local delta = input.Position.Y - dragStartY
-        local scrollDelta = (delta / maxBarTravel) * maxScrollPos
-
-        scroll.CanvasPosition = Vector2.new(
-            scroll.CanvasPosition.X,
-            math.clamp(dragStartCanvasY + scrollDelta, 0, maxScrollPos)
-        )
-    end)
-
-    uis.InputEnded:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-            dragging = false
-        end
-    end)
-
-    -- Visuals (stroke + shadow) ─────────────────────────────────────
-
-    local inline = Instance.new("UIStroke")
-    inline.Thickness = 1
-    inline.Color = Color3.fromRGB(100, 100, 100)
-    inline.Parent = scrollbar
-
-    local inlinegrad = Instance.new("UIGradient")
-    inlinegrad.Color = ColorSequence.new({
-        ColorSequenceKeypoint.new(0, Color3.fromRGB(189, 189, 189)),
-        ColorSequenceKeypoint.new(1, Color3.fromRGB(22, 22, 22)),
-    })
-    inlinegrad.Transparency = NumberSequence.new({
-        NumberSequenceKeypoint.new(0, 0),
-        NumberSequenceKeypoint.new(0.7, 0),
-        NumberSequenceKeypoint.new(1, 1),
-    })
-    inlinegrad.Rotation = 180
-    inlinegrad.Parent = inline
-
-    local shadow = Instance.new("UIStroke")
-    shadow.Thickness = 2
-    shadow.Color = Color3.fromRGB(0, 0, 0)
-    shadow.Parent = scrollbar
-
-    local layout = Instance.new("UIListLayout")
-    layout.Padding = UDim.new(0, layoutpadding or 12)
-    layout.HorizontalAlignment = Enum.HorizontalAlignment.Center
-    layout.SortOrder = Enum.SortOrder.LayoutOrder
-    layout.Parent = scroll
-
-    return scroll, bg
+	return scroll, bg
 end
 
 function lib.addcooltab(size, parent, pos, text, icon)
