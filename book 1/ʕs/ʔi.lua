@@ -141,6 +141,9 @@ spwn(function()
 		"Keep on server switch",
 		"Ignore full Research Twisteds",
 
+		"Mainframe UI scale",
+		"Button UI scale"
+
 		"Alternate Boxten personality",
 		"Live Poppy reaction",
 		"Live Shrimpo reaction",
@@ -158,6 +161,9 @@ spwn(function()
 		"Debug mode",
 		"Keep on server switch",
 		"Ignore full Research Twisteds",
+
+		"Mainframe UI scale",
+		"Button UI scale"
 
 		"Alternate Boxten personality",
 		"Live Poppy reaction",
