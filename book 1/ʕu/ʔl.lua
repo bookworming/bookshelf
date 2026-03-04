@@ -10,7 +10,7 @@
 ---------------------------------------------------------------------------------------------------------------------------]]--
 
 local lib = {}
-lib.version = 1
+lib.version = 2
 
 -------------------------------------------------------------------------------------------------------------------------------
 
@@ -722,9 +722,9 @@ function lib.makecoolscrollingframe(size, parent, pos, layoutpadding, Z)
 		local actualHeight = math.clamp(ratio * barBackgroundHeight, 10, barBackgroundHeight - 4)
 		bar.Size = UDim2.new(0, 6, 0, actualHeight - 4)
 
-		local maxScrollPos = canvas - view
+		local maxScrollPos = scroll.CanvasSize.Y.Offset - view
 		local maxBarTravel = barBackgroundHeight - actualHeight
-		local scrollPercent = math.clamp(scroll.CanvasPosition.Y / maxScrollPos, 0, 1)
+		local scrollPercent = maxScrollPos > 0 and math.clamp(scroll.CanvasPosition.Y / maxScrollPos, 0, 1) or 0
 		local barY = math.clamp(scrollPercent * maxBarTravel + 2, 2, barBackgroundHeight - actualHeight + 2)
 		bar.Position = UDim2.new(1, -2, 0, barY)
 	end
@@ -760,8 +760,8 @@ function lib.makecoolscrollingframe(size, parent, pos, layoutpadding, Z)
 			local maxBarTravel = barBackgroundHeight - actualHeight
 			local maxScrollPos = canvas - view
 
-			local delta = input.Position.Y - dragStartY
-			local scrollDelta = (delta / scale / maxBarTravel) * maxScrollPos
+			local delta = (input.Position.Y - dragStartY) / scale
+			local scrollDelta = (delta / maxBarTravel) * maxScrollPos
 			scroll.CanvasPosition = Vector2.new(scroll.CanvasPosition.X, math.clamp(dragStartCanvasY + scrollDelta, 0, maxScrollPos))
 		end
 	end)
