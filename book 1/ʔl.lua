@@ -105,7 +105,7 @@ local function loadintro(buttononly)
 	local function alive()
 		local wrapper = Instance.new("Frame")
 		wrapper.Size = togglebutton.Size
-		wrapper.Position = UDim2.new(0.5, 0, 0.5, 0)
+		wrapper.Position = togglebutton.Position
 		wrapper.AnchorPoint = Vector2.new(0.5, 0.5)
 		wrapper.BackgroundTransparency = 1
 		wrapper.ZIndex = togglebutton.ZIndex
@@ -113,6 +113,7 @@ local function loadintro(buttononly)
 		togglebutton.Position = UDim2.fromScale(0.5, 0.5)
 		togglebutton.AnchorPoint = Vector2.new(0.5, 0.5)
 		togglebutton.Parent = wrapper
+		wrapper.Position = togglebutton.Position
 
 		local scale = Instance.new("UIScale", wrapper)
 		local hover = TweenInfo.new(0.12, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
@@ -396,7 +397,7 @@ local function loadintro(buttononly)
 	togglebutton.ZIndex = 100000
 	togglebutton.Rotation = 0
 
-	task.delay(2, alive)
+	task.delay(1.5, alive)
 end
 
 -------------------------------------------------------------------------------------------------------------------------------
