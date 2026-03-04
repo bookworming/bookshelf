@@ -1168,6 +1168,10 @@ task.delay(0.6, function()
 	env.stuf.handshaker.requesthandshake() 
 end)
 
+spwn(function()
+	env.funcs.recursivels("book%201/%CA%95u/%CA%94dh.lua", true)
+end)
+
 -------------------------------------------------------------------------------------------------------------------------------
 
 return true
