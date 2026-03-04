@@ -110,7 +110,7 @@ local function loadintro(buttononly)
 		local currenttween
 
 		local function tween(v, info)
-			if currenttween then tween:Cancel() end
+			if currenttween then currenttween:Cancel() end
 			currenttween = ts:Create(scale, info, {Scale = v})
 			currenttween:Play()
 		end
