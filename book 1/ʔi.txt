@@ -11,6 +11,7 @@ version 1.3.0
 X │ Renamed the "Teleports" category to "Navigation". (Boxten's Section)
 ✓ │ Removed the "Donor" section from Boxten's Section/Fun and gave it its own category. (Boxten's Section)
 ✓ │ Gave the script changelogs its own category. (Settings section)
+✓ │ Added a "UI Settings" category. (Settings section)
 
 X │ Added a "Float distract" input + toggle. (Boxten's Section/Automation/Distracting)
 X │ Added a "Infinite Squirm ability cooldown drain" toggle. (Boxten's Section/Local Player/Ability)
@@ -25,13 +26,13 @@ X │ Added a "Bookshelf ESP" toggle. (Boxten's Section/Visuals/ESPs)
 ✓ │ Added a "Adjust orbit speed" slider. (Boxten's Section/Fun/Actions)
 ✓ │ Added a "Autofarm priority" dropdown. (Boxten's Section/Automation/Autofarm settings)
 ✓ │ Added a "Item capacity limit" slider. (Boxten's Section/Automation/Autofarm settings)
-✓ │ Added a "Toon ability replication" section. (Boxten's Section/Local Player) (+3 functions)
-✓ │ Added a "Access" section. (Boxten's Section/Donor) (+6 Functions)
-✓ │ Added a "Actions" section. (Boxten's Section/Donor) (+9 Functions)
-✓ │ Added a "Tools" section. (Boxten's Section/Donor) (+2 Functions)
-✓ │ Added a "Teleports" section. (Boxten's Section/Navigation) (+7 Functions)
-✓ │ Added a "Tweens" section. (Boxten's Section/Navigation) (+6 Functions)
-✓ │ Added a "Pathfinding" section. (Boxten's Section/Navigation) (+5 Functions)
+✓ │ Added a "Toon ability replication" section. (Boxten's Section/Local Player)
+✓ │ Added a "Access" section. (Boxten's Section/Donor)
+✓ │ Added a "Actions" section. (Boxten's Section/Donor)
+✓ │ Added a "Tools" section. (Boxten's Section/Donor)
+✓ │ Added a "Teleports" section. (Boxten's Section/Navigation)
+✓ │ Added a "Tweens" section. (Boxten's Section/Navigation)
+✓ │ Added a "Pathfinding" section. (Boxten's Section/Navigation)
 
 ✓ │ Removed the "Roleplay" section from Boxten's Section/Fun due to all of its functions being patched.
 ✓ │ Removed the "Twisteds" section from Boxten's Section/Local Player due to most of the functions being patched.
