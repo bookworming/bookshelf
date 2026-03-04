@@ -48,7 +48,7 @@ repeat t() until env.setupcomplete and env.essentialsloaded
 env.funcs.box("setup complete")
 
 env.expectedcompiledscriptversions = {
-	library = 2,
+	library = 3,
 	data = 1,
 	
 	mainsection = 1,
@@ -379,7 +379,7 @@ local function loadintro()
 	if env.essentials.library then
 		env.funcs.introconsolelog("UI library successfully loaded.")
 		if env.essentials.library.version ~= env.expectedcompiledscriptversions.library then
-			env.funcs.introconsolelog("The UI library script is out of date.", "warn")
+			env.funcs.introconsolelog("The UI script library is out of date.", "warn")
 		end
 	else
 		env.funcs.introconsolelog("Something went wrong. (LibFail)", "warn")
