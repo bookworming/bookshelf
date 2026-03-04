@@ -1066,6 +1066,8 @@ function lib.loadmainframe()
 		createSeparator(i, img)
 	end
 
+	env.stuf.mainframescale = Instance.new("UIScale")
+
 	return mainframe, sections
 end
 
