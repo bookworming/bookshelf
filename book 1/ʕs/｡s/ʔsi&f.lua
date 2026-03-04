@@ -141,6 +141,7 @@ local sections = {
 		{ type = "slider", title = "Mainframe UI scale", desc = "Adjusts the UI sscale of the mainframe.", min = 0.5, max = 3, default = 1, step = 0.5,
 			callback = function(value)
 				env.gear.general.mainframescale = value
+				env.stuf.mainframescale.Scale = env.gear.general.mainframescale
 			end
 		},
 		{ type = "slider", title = "Button UI scale", desc = "Adjusts the UI scale of the buttons.", min = 0.5, max = 3, default = 1, step = 0.5,
