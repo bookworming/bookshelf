@@ -62,7 +62,7 @@ local function intro(container)
 
 	t(1)
 
-	task.delay(0.15, function() tween(display, {0.8}, {ImageTransparency = 0}) end)
+	task.delay(0.15, function() tween(display, {0.8, Enum.EasingStyle.Quad, Enum.EasingDirection.Out}, {ImageTransparency = 0}) end)
 
 	local currentFrame, nextFrameTime = 1, 0
 	local connection
@@ -109,7 +109,7 @@ local function loadintro(buttononly)
 		local press = TweenInfo.new(0.08, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
 		local tween
 
-		local function t(v, info)
+		local function tween(v, info)
 			if tween then tween:Cancel() end
 			tween = ts:Create(scale, info, {Scale = v})
 			tween:Play()
@@ -118,10 +118,10 @@ local function loadintro(buttononly)
 		env.stuf.togglebutton = togglebutton
 		env.stuf.togglebuttondrag = env.essentials.library.makedraggable(togglebutton)
 
-		togglebutton.MouseEnter:Connect(function() env.essentials.library.hov() t(1.02, hover) end)
-		togglebutton.MouseLeave:Connect(function() t(1, hover) end)
-		togglebutton.MouseButton1Up:Connect(function() t(1.02, hover) end)
-		togglebutton.MouseButton1Down:Connect(function() t(0.98, press) end)
+		togglebutton.MouseEnter:Connect(function() env.essentials.library.hov() tween(1.02, hover) end)
+		togglebutton.MouseLeave:Connect(function() tween(1, hover) end)
+		togglebutton.MouseButton1Up:Connect(function() tween(1.02, hover) end)
+		togglebutton.MouseButton1Down:Connect(function() tween(0.98, press) end)
 
 		togglebutton.Activated:Connect(function(i)
 			if env.stuf.togglebuttondrag.dragged then return end
@@ -178,8 +178,7 @@ local function loadintro(buttononly)
 	ico.ZIndex = 100001
 	ico.BackgroundTransparency, ico.Parent, ico.Image = 1, hi, env.stuf.introframes[1]
 
-	t(0.4)
-	js:Destroy()
+	t(0.4) js:Destroy()
 	ico.Position, ico.AnchorPoint = UDim2.fromOffset(-14, -14), Vector2.zero
 	tween(hi, {0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut}, {Size = UDim2.fromOffset(230, 64)})
 
@@ -231,9 +230,7 @@ local function loadintro(buttononly)
     end
 
     introconsole.Text = table.concat(introconsolelogs, "\n")
-		if outputtype == "warn" or outputtype == "err" then
-			t(1)
-		end
+		if outputtype == "warn" or outputtype == "err" then t(1) end
 	end
 
 	introconsole = env.essentials.library.makecooltext(yo, UDim2.new(0, 188, 0, 20), "", 10, nil, 2, UDim2.new(0.5, 2, 0, 16), Enum.TextXAlignment.Left, Enum.TextYAlignment.Top)
@@ -357,9 +354,8 @@ local function loadintro(buttononly)
 	end)
 
 	env.funcs.introconsolelog("Success: Script successfully loaded", "succ")
-	env.funcs.introconsolelog("Done!", "state")
-	t(0.1) env.funcs.introprogress(100, "Done!")
-	t(0.5)
+	env.funcs.introconsolelog("Done!", "state") env.funcs.introprogress(100, "Done!")
+	t(1)
 
 	local tween2 = tween(yo, {0.43, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut}, {
 		Size = UDim2.new(1, -28, 0, 1), 
