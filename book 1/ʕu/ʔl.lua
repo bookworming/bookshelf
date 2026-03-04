@@ -1066,9 +1066,6 @@ function lib.loadmainframe()
 		createSeparator(i, img)
 	end
 
-	local mainframescale = Instance.new("UIScale")
-	mainframescale.Scale = 0.5
-
 	return mainframe, sections
 end
 
