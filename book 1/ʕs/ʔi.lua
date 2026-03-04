@@ -74,7 +74,7 @@ spwn(function()
 	yield(true) env.funcs.pop("Hi!")
 	env.essentials.library = env.funcs.recursivels("book%201/%CA%95u/%CA%94l.lua", true) 
 	env.funcs.box("UI library loaded successfully")
-	
+
 	env.essentials.data = env.funcs.recursivels("book%201/%CA%95s/%CA%94d.lua", true) 
 	env.funcs.box("script data loaded successfully")
 
@@ -141,6 +141,9 @@ spwn(function()
 		"Keep on server switch",
 		"Ignore full Research Twisteds",
 
+		"Mainframe UI scale",
+		"Button UI scale",
+
 		"Alternate Boxten personality",
 		"Live Poppy reaction",
 		"Live Shrimpo reaction",
@@ -158,6 +161,9 @@ spwn(function()
 		"Debug mode",
 		"Keep on server switch",
 		"Ignore full Research Twisteds",
+
+		"Mainframe UI scale",
+		"Button UI scale",
 
 		"Alternate Boxten personality",
 		"Live Poppy reaction",
@@ -277,7 +283,7 @@ spwn(function()
 					local target = element.instance or element.elementtitle
 					data[title] = target and target.Text or ""
 				elseif element.type == "slider" then
-					data[title] = element.instance and element.instance.Text or "0"
+					data[title] = tonumber(element.instance and element.instance.Text) or 0
 				end
 			end
 		end
@@ -292,7 +298,7 @@ spwn(function()
 		for title, value in pairs(data) do
 			local element = env.essentials.elements[title] or env.essentials.toggles[title] or env.essentials.buttons[title]
 			if element and element.setValue then
-				element.setValue(value)
+				element.setValue(element.type == "slider" and tonumber(value) or value)
 			elseif element and element.updtoggles then
 				element.enabled = value
 				element.updtoggles()
@@ -732,15 +738,12 @@ do
 	env.stuf.soundholder = hiddenui:FindFirstChild("aud")
 	if not hiddenui:FindFirstChild("aud") then env.stuf.soundholder = Instance.new("Folder") env.stuf.soundholder.Name = "aud" env.stuf.soundholder.Parent = hiddenui end
 
-	env.stuf.mainframescale = Instance.new("UIScale") 
-	env.stuf.mainframescale.Parent = env.stuf.mainframe 
-	env.stuf.mainframescale.Scale = env.gear.general.mainframescale
+	env.stuf.buttonscalelistenercount = 0
+	env.stuf.buttonscalelisteners = {}
+	env.stuf.mainframescale = Instance.new("UIScale")
+	env.stuf.buttonscale = Instance.new("UIScale")
 
-	env.stuf.buttonscale = Instance.new("UIScale") 
-	env.stuf.buttonscale.Parent = env.stuf.togglebutton 
-	env.stuf.buttonscale.Scale = env.gear.general.buttonscale
-
-	-- donor hndling
+	-- donor handling
 	env.stuf.handshaker = {}
 	env.stuf.handshaker.handshakenclients = {}
 	env.stuf.handshaker.id = "rbxassetid://282574440BSGUI_"
