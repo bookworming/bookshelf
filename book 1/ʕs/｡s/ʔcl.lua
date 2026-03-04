@@ -9,6 +9,10 @@
    
 ---------------------------------------------------------------------------------------------------------------------------]]--
 
+local version = 1
+
+-------------------------------------------------------------------------------------------------------------------------------
+
 -- services & instances
 local t, spwn = task.wait, task.spawn
 local getmmfromerr = function(userdata, f, test) local ret = nil xpcall(f, function() ret = debug.info(2, "f") end, userdata, nil, 0) if (type(ret) ~= "function") or not test(ret) then return f end return ret end
@@ -62,6 +66,8 @@ local roleplayautoload = autoloadData[tostring(env.stuf.rpid)] or ""
 -------------------------------------------------------------------------------------------------------------------------------
 
 local section = {
+	version = version,
+
 	{ type = "separator", title = "File" },
 	{ type = "label", title = "List of saved configs", desc = "The list below contains all of your saved configs.", content = env.filemanager.getconfigcount() == 0 and "No configs found." or env.filemanager.listconfigs() },
 	{ type = "input", title = "Config name", desc = "Input the name of the config to save or load.", placeholder = "Config name",
