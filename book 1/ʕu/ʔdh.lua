@@ -4,9 +4,9 @@
  \ \ \-.  \  \ \ \/\ \  \/_/\_\/_  \ \ \  \ \ \/\ \  \ \ \_\ \  \ \___  \  
   \ \_\\"\_\  \ \_____\   /\_\/\_\  \ \_\  \ \_____\  \ \_____\  \/\_____\ 
    \/_/ \/_/   \/_____/   \/_/\/_/   \/_/   \/_____/   \/_____/   \/_____/
-   
+
    Made by Team Noxious -- Boxten Sex GUI [Dialogue handler]
-   
+
 ---------------------------------------------------------------------------------------------------------------------------]]--
 
 local dh = {}
@@ -98,7 +98,31 @@ local expressions = {
 	}
 }
 
--------------------------------------------------------------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------------------------------------------------------
+
+   the & is used to determine whether the word behind it should use "'s" or "s", or transforms "a" to an "an" depending on the word in front of it
+
+   {player} = indicates the player, will appear as their selected Toon's name
+   {twisted} = indicates the Twisted, will appear as "Twisted [name]"
+   {item} = indicates the item
+   {direction} = indicates the direction of an object, will show up as "to the [direction]" or "further [direction]"
+   {machinesleft} = indicates the amount of machines left to complete
+   {health} = indicates the user's current health
+   {heal} = like {item}, but just indicates a bandage or a health kit on the floor or in the user's inventory
+   {time} = indicates the time it took for the last floor to end, will appear in the "00m00s" format
+   {randitem} = picks out a random item from one of the three slots for sale in Dandy's Shop
+   {item1, 2, 3} = indicates the target slot of the item being sold in Dandy's Shop
+
+   {prefix} = indicates the command prefix
+   {command} = indicates the command
+   {commanddesc} = indicates the command's description
+   {randalias} = picks a random alias of the command if it has one
+   {input} = indicates the command bar's current input
+
+   {configname} = indicates the inputted text in the config name field
+   {totalconfigs} = indicates the total number of configs saved
+
+---------------------------------------------------------------------------------------------------------------------------]]--
 
 local padding, textsize = 2, 16
 local notifications = {}
@@ -162,7 +186,7 @@ local function newdialogue(text, whosaidit, expression)
 	holder.ClipsDescendants = false
 	holder.Parent = container
 
-	local allFadeable = {}
+	local tofade = {}
 	local letters = {}
 	local cursorX = 0
 
@@ -179,37 +203,37 @@ local function newdialogue(text, whosaidit, expression)
 		cursorX += iconsize + 4
 
     spwn(function()
-			ts:Create(icon, TweenInfo.new(1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Rotation = 10}):Play()
+			ts:Create(icon, TweenInfo.new(1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), { Rotation = 10 }):Play()
 			t(1) 
-			ts:Create(icon, TweenInfo.new(1, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {Rotation = 5}):Play()
+			ts:Create(icon, TweenInfo.new(1, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), { Rotation = 5 }):Play()
 		end)
 
-		table.insert(allFadeable, { label = icon, stroke = nil, baseX = icon.Position.X.Offset, isIcon = true })
+		table.insert(tofade, { label = icon, stroke = nil, baseX = icon.Position.X.Offset, iconpresent = true })
 	end
 
 	if nameText ~= "" then
-		local nameWidth = env.essentials.library.gettextbounds(nameText, Enum.Font.FredokaOne, textsize)
+		local nametagw = env.essentials.library.gettextbounds(nameText, Enum.Font.FredokaOne, textsize)
 
-		local nameLabel = Instance.new("TextLabel")
-		nameLabel.BackgroundTransparency = 1
-		nameLabel.Text = nameText
-		nameLabel.TextColor3 = nameColor
-		nameLabel.Font = Enum.Font.FredokaOne
-		nameLabel.TextSize = textsize
-		nameLabel.Size = UDim2.new(0, nameWidth, 1, 0)
-		nameLabel.Position = UDim2.new(0, cursorX, 0, 0)
-		nameLabel.TextTransparency = 1
-		nameLabel.TextXAlignment = Enum.TextXAlignment.Left
-		nameLabel.Parent = holder
+		local nametag = Instance.new("TextLabel")
+		nametag.BackgroundTransparency = 1
+		nametag.Text = nameText
+		nametag.TextColor3 = nameColor
+		nametag.Font = Enum.Font.FredokaOne
+		nametag.TextSize = textsize
+		nametag.Size = UDim2.new(0, nametagw, 1, 0)
+		nametag.Position = UDim2.new(0, cursorX, 0, 0)
+		nametag.TextTransparency = 1
+		nametag.TextXAlignment = Enum.TextXAlignment.Left
+		nametag.Parent = holder
 
 		local border = Instance.new("UIStroke")
-		border.Parent = nameLabel
+		border.Parent = nametag
 		border.Thickness = 1
 		border.Color = Color3.fromRGB(0, 0, 0)
 		border.Transparency = 1
 
-		table.insert(allFadeable, { label = nameLabel, stroke = border, baseX = cursorX })
-		cursorX += nameWidth
+		table.insert(tofade, { label = nametag, stroke = border, baseX = cursorX })
+		cursorX += nametagw
 	end
 
   local textStartX = cursorX
@@ -247,21 +271,17 @@ local function newdialogue(text, whosaidit, expression)
 	cursorX = textStartX + env.essentials.library.gettextbounds(text, Enum.Font.FredokaOne, textsize)
   holder.Size = UDim2.new(0, cursorX, 0, 16)
 
-	local newHeight = holder.AbsoluteSize.Y + padding
+	local newheight = holder.AbsoluteSize.Y + padding
 	for _, existing in ipairs(notifications) do
-		local currentY = existing.Position.Y.Offset
-		tweeny(existing, currentY - newHeight)
+		local currenty = existing.Position.Y.Offset
+		tweeny(existing, currenty - newheight)
 	end
 
 	table.insert(notifications, 1, holder)
+	ts:Create(holder, TweenInfo.new(0.5), { Position = UDim2.new(0.5, 0, 1, 0) }):Play()
 
-	local fadeInInfo = TweenInfo.new(0.5)
-	ts:Create(holder, fadeInInfo, {
-		Position = UDim2.new(0.5, 0, 1, 0)
-	}):Play()
-
-	for _, entry in ipairs(allFadeable) do
-		if entry.isIcon then
+	for _, entry in ipairs(tofade) do
+		if entry.iconpresent then
 			ts:Create(entry.label, fadeInInfo, { ImageTransparency = 0 }):Play()
 		else
 			ts:Create(entry.label, fadeInInfo, { TextTransparency = 0 }):Play()
@@ -272,37 +292,37 @@ local function newdialogue(text, whosaidit, expression)
 	end
 
 	spwn(function()
-		local popInfo = TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+		local fadein = TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
 		for _, entry in ipairs(letters) do
 			ts:Create(entry.label, popInfo, {
 				TextTransparency = 0,
 				Position = UDim2.new(0, entry.baseX, 0, 0),
 			}):Play()
 			if entry.stroke then
-				ts:Create(entry.stroke, popInfo, { Transparency = 0 }):Play()
+				ts:Create(entry.stroke, fadein, { Transparency = 0 }):Play()
 			end
 			rs.RenderStepped:Wait()
 		end
 	end)
 
 	task.delay(5, function()
-		local fadeOutInfo = TweenInfo.new(1)
+		local fadeout = TweenInfo.new(1)
 
-		for _, entry in ipairs(allFadeable) do
-			if entry.isIcon then
-				ts:Create(entry.label, fadeOutInfo, { ImageTransparency = 1 }):Play()
+		for _, entry in ipairs(tofade) do
+			if entry.iconpresent then
+				ts:Create(entry.label, fadeout, { ImageTransparency = 1 }):Play()
 			else
-				ts:Create(entry.label, fadeOutInfo, { TextTransparency = 1 }):Play()
+				ts:Create(entry.label, fadeout, { TextTransparency = 1 }):Play()
 				if entry.stroke then
-					ts:Create(entry.stroke, fadeOutInfo, { Transparency = 1 }):Play()
+					ts:Create(entry.stroke, fadeout, { Transparency = 1 }):Play()
 				end
 			end
 		end
 
 		for _, entry in ipairs(letters) do
-			ts:Create(entry.label, fadeOutInfo, { TextTransparency = 1 }):Play()
+			ts:Create(entry.label, fadeout, { TextTransparency = 1 }):Play()
 			if entry.stroke then
-				ts:Create(entry.stroke, fadeOutInfo, { Transparency = 1 }):Play()
+				ts:Create(entry.stroke, fadeout, { Transparency = 1 }):Play()
 			end
 		end
 
