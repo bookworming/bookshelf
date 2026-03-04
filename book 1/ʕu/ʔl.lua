@@ -1529,19 +1529,30 @@ function lib.addtoggle(parent, title, description, callback, bindable, default, 
 		buttonFrame.Activated:Connect(onToggle)
 		miniToggle.Activated:Connect(onToggle)
 
-		local scale = Instance.new("UIScale", buttonFrame)
-		local hoverInfo, pressInfo = TweenInfo.new(0.12, Enum.EasingStyle.Quad), TweenInfo.new(0.08, Enum.EasingStyle.Quad)
-		local scaleTween
-		local function playScale(v, info)
-			if scaleTween then scaleTween:Cancel() end
-			scaleTween = ts:Create(scale, info, {Scale = v})
-			scaleTween:Play()
-		end
+local scale = Instance.new("UIScale", buttonFrame)
+local baseScale = env.stuf.buttonscale and env.stuf.buttonscale.Scale or 1
+scale.Scale = baseScale
 
-		buttonFrame.MouseEnter:Connect(function() lib.hov() playScale(1.02, hoverInfo) end)
-		buttonFrame.MouseLeave:Connect(function() playScale(1, hoverInfo) end)
-		buttonFrame.MouseButton1Down:Connect(function() playScale(0.98, pressInfo) end)
-		buttonFrame.MouseButton1Up:Connect(function() playScale(1.02, hoverInfo) end)
+local hover, press = TweenInfo.new(0.12, Enum.EasingStyle.Quad), TweenInfo.new(0.08, Enum.EasingStyle.Quad)
+local currenttween
+local function playScale(v, info)
+    if currenttween then currenttween:Cancel() end
+    currenttween = ts:Create(scale, info, { Scale = baseScale * v })
+    currenttween:Play()
+end
+
+if env.stuf.buttonscale then
+    env.stuf.buttonscale:GetPropertyChangedSignal("Scale"):Connect(function()
+        if buttonFrame.Parent == nil then return end
+        baseScale = env.stuf.buttonscale.Scale
+        scale.Scale = baseScale
+    end)
+end
+
+buttonFrame.MouseEnter:Connect(function() lib.hov() playScale(1.02, hover) end)
+buttonFrame.MouseLeave:Connect(function() playScale(1, hover) end)
+buttonFrame.MouseButton1Down:Connect(function() playScale(0.98, press) end)
+buttonFrame.MouseButton1Up:Connect(function() playScale(1.02, hover) end)
 
 		return buttondata
 	end
@@ -1825,18 +1836,30 @@ function lib.addbutton(parent, title, description, callback, bindable, locked, l
 			if callback then spwn(callback) end
 		end)
 
-		local scale = Instance.new("UIScale", buttonFrame)
-		local hover, press = TweenInfo.new(0.12, Enum.EasingStyle.Quad), TweenInfo.new(0.08, Enum.EasingStyle.Quad)
-		local tween
-		local function playScale(v, info)
-			if tween then tween:Cancel() end
-			tween = ts:Create(scale, info, {Scale = v})
-			tween:Play()
-		end
-		buttonFrame.MouseEnter:Connect(function() lib.hov() playScale(1.02, hover) end)
-		buttonFrame.MouseLeave:Connect(function() playScale(1, hover) end)
-		buttonFrame.MouseButton1Down:Connect(function() playScale(0.98, press) end)
-		buttonFrame.MouseButton1Up:Connect(function() playScale(1.02, hover) end)
+local scale = Instance.new("UIScale", buttonFrame)
+local baseScale = env.stuf.buttonscale and env.stuf.buttonscale.Scale or 1
+scale.Scale = baseScale
+
+local hover, press = TweenInfo.new(0.12, Enum.EasingStyle.Quad), TweenInfo.new(0.08, Enum.EasingStyle.Quad)
+local currenttween
+local function playScale(v, info)
+    if currenttween then currenttween:Cancel() end
+    currenttween = ts:Create(scale, info, { Scale = baseScale * v })
+    currenttween:Play()
+end
+
+if env.stuf.buttonscale then
+    env.stuf.buttonscale:GetPropertyChangedSignal("Scale"):Connect(function()
+        if buttonFrame.Parent == nil then return end
+        baseScale = env.stuf.buttonscale.Scale
+        scale.Scale = baseScale
+    end)
+end
+
+buttonFrame.MouseEnter:Connect(function() lib.hov() playScale(1.02, hover) end)
+buttonFrame.MouseLeave:Connect(function() playScale(1, hover) end)
+buttonFrame.MouseButton1Down:Connect(function() playScale(0.98, press) end)
+buttonFrame.MouseButton1Up:Connect(function() playScale(1.02, hover) end)
 
 		return buttondata
 	end
