@@ -2696,7 +2696,7 @@ function lib.addslider(parent, title, description, min, max, default, step, call
 	knob.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 	knob.BorderSizePixel = 0
 	knob.Parent = track
-	knob.ZIndex = 67
+	knob.ZIndex = 66
 	Instance.new("UICorner", knob).CornerRadius = UDim.new(1, 0)
 
 	local box = lib.makecooltextbox(UDim2.new(0, 70, 0, 28), frame, default, 16, "...", nil, UDim2.new(1, -50, 1, -30), nil, 67)
