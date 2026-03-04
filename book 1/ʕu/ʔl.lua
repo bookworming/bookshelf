@@ -2475,7 +2475,7 @@ function lib.addinputandtoggle(parent, title, description, defaulttext, placehol
 		elementdesc.Position = UDim2.new(0, leftpadding + scaledTextWidth / 2, 0, newDescY + currDh / 2 + 5)
 
 		if toggle then toggle.Position = UDim2.new(1, -38, 1, -25) end
-		if inputbox then inputbox.Position = UDim2.new(0, leftpadding + 87, 1, -30) end
+		if inputbox then inputbox.Position = UDim2.new(0, leftpadding + 67, 1, -30) end
 
 		frame.Size = UDim2.new(0, width, 0, newTotalHeight)
 	end
