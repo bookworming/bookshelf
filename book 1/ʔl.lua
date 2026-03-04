@@ -44,7 +44,8 @@ local env = getgenv.BSGUI
 local setupsucc, setuperr = pcall(function() loadstring(game:HttpGet("https://raw.githubusercontent.com/bookworming/bookshelf/refs/heads/main/book%201/%CA%95s/%CA%94i.lua"))() end)
 
 repeat t() until env.setupcomplete and env.essentialsloaded
-env.funcs.box("intro ready")
+env.expectedcompiledscriptversions = 1 
+env.funcs.box("setup complete, expected CSV: " .. env.expectedcompiledscriptversions)
 
 -------------------------------------------------------------------------------------------------------------------------------
 
@@ -177,8 +178,8 @@ local function loadintro(buttononly)
 	ico.ZIndex = 100001
 	ico.BackgroundTransparency, ico.Parent, ico.Image = 1, hi, env.stuf.introframes[1]
 
-	task.delay(0.4, function() js:Destroy() end)
 	t(0.4)
+	js:Destroy()
 	ico.Position, ico.AnchorPoint = UDim2.fromOffset(-14, -14), Vector2.zero
 	tween(hi, {0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut}, {Size = UDim2.fromOffset(230, 64)})
 
@@ -206,7 +207,17 @@ local function loadintro(buttononly)
 
 	t(0.2)
 
-	local nametag = env.essentials.library.makecooltext(yo, UDim2.new(0, 188, 0, 20), getservertime() .. ": Initializing...", 10, nil, 2, UDim2.new(0.5, 2, 0, 16), Enum.TextXAlignment.Left, Enum.TextYAlignment.Top)
+	local logLines = {}
+
+	local function addLine(line)
+		table.insert(logLines, line)
+    if #logLines > 18 then
+      table.remove(logLines, 1)
+    end
+    nametag.Text = table.concat(logLines, "\n")
+	end
+
+	local nametag = env.essentials.library.makecooltext(yo, UDim2.new(0, 188, 0, 20), "", 10, nil, 2, UDim2.new(0.5, 2, 0, 16), Enum.TextXAlignment.Left, Enum.TextYAlignment.Top)
 
 	local currentPercent = Instance.new("NumberValue")
 	currentPercent.Value = 0
@@ -227,24 +238,24 @@ local function loadintro(buttononly)
 	changepb(0, 0.1)
 
 	if env.stuf.inlobby or env.stuf.inrun or env.stuf.inrp then
-		nametag.Text = nametag.Text .. "\n  <font size='8' color='rgb(133, 133, 133)'>Experience ID recognized (" .. game.PlaceId .. ").</font>"
+		addLine("  <font size='8' color='rgb(133, 133, 133)'>Experience ID recognized (" .. game.PlaceId .. ").</font>")
 	else
-		nametag.Text = nametag.Text .. "\n  <font size='8' color='rgb(247, 250, 92)'>Experience ID unrecognized (" .. game.PlaceId .. ").</font>"
+		addLine("  <font size='8' color='rgb(247, 250, 92)'>Experience ID unrecognized (" .. game.PlaceId .. ").</font>")
 	end
 
 	t() changepb(15, 0.6)
 
 	if env.funcs.exists() then
-		nametag.Text = nametag.Text .. "\n  <font size='8' color='rgb(133, 133, 133)'>Character model exists.</font>"
+		addLine("  <font size='8' color='rgb(133, 133, 133)'>Character model exists.</font>")
 	else
-		nametag.Text = nametag.Text .. "\n  <font size='8' color='rgb(247, 250, 92)'>Character doesn't exist yet.</font>"
+		addLine("  <font size='8' color='rgb(247, 250, 92)'>Character doesn't exist yet.</font>")
 	end
 
 	t() changepb(30, 0.4)
 
-	nametag.Text = nametag.Text .. "\n  <font size='8' color='rgb(84, 255, 101)'>Success: Environment check success\n</font>"
+	addLine("  <font size='8' color='rgb(84, 255, 101)'>Success: Environment check success</font>")
 
-	nametag.Text = nametag.Text .. getservertime() .. ": Downloading assets..."
+	addLine(getservertime() .. ": Downloading assets...")
 	t() changepb(45, 0.7)
 
 	if not isfolder(folder) then makefolder(folder) end
@@ -254,36 +265,36 @@ local function loadintro(buttononly)
 	local soundsfolder = folder .. "/Sounds"
 
 	if isfolder(imagesfolder) and isfolder(videosfolder) and isfolder(soundsfolder) then
-		nametag.Text = nametag.Text .. "\n  <font size='8' color='rgb(133, 133, 133)'>Fetching assets...</font>"
+		addLine("  <font size='8' color='rgb(133, 133, 133)'>Fetching assets...</font>")
 		t()
-		nametag.Text = nametag.Text .. "\n  <font size='8' color='rgb(84, 255, 101)'>Success: Assets already downloaded\n</font>"
+		addLine("  <font size='8' color='rgb(84, 255, 101)'>Success: Assets already downloaded</font>")
 	else
-		nametag.Text = nametag.Text .. "\n  <font size='8' color='rgb(133, 133, 133)'>Downloading and preloading...</font>"
+		addLine("  <font size='8' color='rgb(133, 133, 133)'>Downloading and preloading...</font>")
 
 		if not isfolder(imagesfolder) then makefolder(imagesfolder) end
 		if not isfolder(videosfolder) then makefolder(videosfolder) end
 		if not isfolder(soundsfolder) then makefolder(soundsfolder) end
 
-		nametag.Text = nametag.Text .. "\n  <font size='8' color='rgb(84, 255, 101)'>Success: Assets downloaded\n</font>"
+		addLine("  <font size='8' color='rgb(84, 255, 101)'>Success: Assets downloaded</font>")
 	end
 
 	t() changepb(65, 0.5)
 
-	nametag.Text = nametag.Text .. getservertime() .. ": Constructing script.."
+	addLine(getservertime() .. ": Constructing script..")
 	t() changepb(90, 0.4)
 
 	if env.essentials.library then
-		nametag.Text = nametag.Text .. "\n  <font size='8' color='rgb(133, 133, 133)'>UI library successfully loaded.</font>"
+		addLine("  <font size='8' color='rgb(133, 133, 133)'>UI library successfully loaded.</font>")
 	else
-		nametag.Text = nametag.Text .. "\n  <font size='8' color='rgb(247, 250, 92)'>Something went wrong.</font>"
+		addLine("  <font size='8' color='rgb(247, 250, 92)'>Something went wrong.</font>")
 	end
 
 	t()
 
 	if env.essentials.data then
-		nametag.Text = nametag.Text .. "\n  <font size='8' color='rgb(133, 133, 133)'>Script data successfully loaded.</font>"
+		addLine("  <font size='8' color='rgb(133, 133, 133)'>Script data successfully loaded.</font>")
 	else
-		nametag.Text = nametag.Text .. "\n  <font size='8' color='rgb(247, 250, 92)'>Something went wrong.</font>"
+		addLine("  <font size='8' color='rgb(247, 250, 92)'>Something went wrong.</font>")
 	end
 
 	t()
@@ -291,16 +302,16 @@ local function loadintro(buttononly)
 	local buildsucc = env.funcs.recursivels("book%201/%CA%95s/%CA%94b.lua", true)
 
 	if buildsucc then
-		nametag.Text = nametag.Text .. "\n  <font size='8' color='rgb(133, 133, 133)'>Applied script functionalities to UI.</font>"
+		addLine("  <font size='8' color='rgb(133, 133, 133)'>Applied script functionalities to UI.</font>")
 	else
-		nametag.Text = nametag.Text .. "\n  <font size='8' color='rgb(247, 250, 92)'>Something went wrong.</font>"
+		addLine("  <font size='8' color='rgb(247, 250, 92)'>Something went wrong.</font>")
 	end
 
 	t()
 
-	nametag.Text = nametag.Text .. "\n  <font size='8' color='rgb(84, 255, 101)'>Success: Scripts loaded\n</font>"
+	addLine("  <font size='8' color='rgb(84, 255, 101)'>Success: Scripts loaded</font>")
 
-	nametag.Text = nametag.Text .. getservertime() .. ": Finalizing..."
+	addLine(getservertime() .. ": Finalizing...")
 	t() changepb(99, 1.5)
 
 	env.filemanager.persistload()
@@ -314,11 +325,11 @@ local function loadintro(buttononly)
 
 	t()
 
-	nametag.Text = nametag.Text .. "\n  <font size='8' color='rgb(84, 255, 101)'>Success: Script successfully loaded\n</font>"
+	addLine("  <font size='8' color='rgb(84, 255, 101)'>Success: Script successfully loaded</font>")
 
 	t()
 
-	nametag.Text = nametag.Text .. getservertime() .. ": Done!"
+	addLine(getservertime() .. ": Done!")
 	t() changepb(100, 0.2, "Done!")
 
 	t(0.5)
