@@ -29,6 +29,7 @@ local ts = FindFirstChildOfClass(game, "TweenService")
 local hiddenui = gethui() or game:GetService("CoreGui")
 local getgenv = (syn and syn.getgenv) or getgenv() or _G
 local writefile = (syn and syn.writefile) or writefile
+local isfile = (syn and syn.isfile) or isfile
 local isfolder = (syn and syn.isfolder) or isfolder
 local makefolder = (syn and syn.makefolder) or makefolder
 
@@ -85,7 +86,7 @@ end
 env.stuf.mainframe, env.stuf.mainframesections = env.essentials.library.loadmainframe(env.essentials.sgui)
 local mainframe, togglebutton = env.stuf.mainframe, nil
 
-local function loadintro(buttononly)
+local function loadintro()
 	local function typein(label, text)
 		label.Text = ""
 		for i = 1, #text do
@@ -121,7 +122,7 @@ local function loadintro(buttononly)
 
 		env.stuf.setbuttonscale = function(v)
 			baseScale = v
-			env.stuf.buttonscale.Scale = v  -- keep the table in sync
+			env.stuf.buttonscale.Scale = v
 			ts:Create(scale, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), { Scale = baseScale }):Play()
 			if env.stuf.buttonscalelisteners then
 				for _, listener in pairs(env.stuf.buttonscalelisteners) do
@@ -162,43 +163,19 @@ local function loadintro(buttononly)
 		end)
 	end
 
-	local js
-	if not buttononly then
-		js = Instance.new("Frame")
-		js.Parent, js.AnchorPoint, js.BackgroundTransparency = env.essentials.sgui, Vector2.new(0.5, 0.5), 1
-		js.Size, js.Position, js.ZIndex = UDim2.new(1, 1, 2, 0), UDim2.new(0.5, 0, 0.5, -1), 100001
+	local js = Instance.new("Frame")
+	js.Parent, js.AnchorPoint, js.BackgroundTransparency = env.essentials.sgui, Vector2.new(0.5, 0.5), 1
+	js.Size, js.Position, js.ZIndex = UDim2.new(1, 1, 2, 0), UDim2.new(0.5, 0, 0.5, -1), 100001
 
-		local aspect = Instance.new("UIAspectRatioConstraint")
-		aspect.AspectRatio, aspect.DominantAxis, aspect.Parent = 1.5, Enum.DominantAxis.Height, js
+	local aspect = Instance.new("UIAspectRatioConstraint")
+	aspect.AspectRatio, aspect.DominantAxis, aspect.Parent = 1.5, Enum.DominantAxis.Height, js
 
-		spwn(function() intro(js) end)
+	spwn(function() intro(js) end)
 
-		tween(js, {3.2, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut}, {Size = UDim2.new(1, 0, 0, 243)}).Completed:Wait()
-		t()
-	end
+	tween(js, {3.2, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut}, {Size = UDim2.new(1, 0, 0, 243)}).Completed:Wait() t()
 
 	local hi = env.essentials.library.makecoolframe(UDim2.fromOffset(1, 1), env.essentials.sgui, true, false, nil, nil, nil, true)
-	tween(hi, {buttononly and 0 or 0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut}, {Size = UDim2.fromOffset(64, 64)})
-
-	if buttononly then
-		hi.Position = UDim2.new(0.5, 0, 0, -100)
-		tween(hi, {1, Enum.EasingStyle.Back, Enum.EasingDirection.Out}, {Position = UDim2.new(0.5, 0, 0, 100)})
-		hi.Size = UDim2.fromOffset(64, 64)
-		togglebutton = hi
-		togglebutton.ZIndex = 100000
-
-		local ico = Instance.new("ImageLabel")
-		ico.Size, ico.Position, ico.AnchorPoint = UDim2.fromOffset(92, 92), UDim2.fromScale(0.5, 0.5), Vector2.new(0.5, 0.5)
-		ico.BackgroundTransparency, ico.Parent, ico.Image = 1, hi, env.stuf.introframes[1]
-		ico.ZIndex = 100001
-		ico.Position, ico.AnchorPoint = UDim2.fromOffset(-14, -14), Vector2.zero
-
-		env.stuf.buttonscale = Instance.new("UIScale")
-		env.stuf.buttonscale.Parent = hi
-
-		alive()
-		return
-	end
+	tween(hi, {0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut}, {Size = UDim2.fromOffset(64, 64)})
 
 	local ico = Instance.new("ImageLabel")
 	ico.Size, ico.Position, ico.AnchorPoint = UDim2.fromOffset(92, 92), UDim2.fromScale(0.5, 0.5), Vector2.new(0.5, 0.5)
@@ -218,9 +195,7 @@ local function loadintro(buttononly)
 		spwn(typein, subtitle, "Version 1.3.0 | Initializing...")
 	end)
 
-	t(0.5)
-	tween(hi, {0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut}, {Size = UDim2.fromOffset(230, 253)})
-	t(0.06)
+	t(0.5) tween(hi, {0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut}, {Size = UDim2.fromOffset(230, 253)}) t(0.06)
 
 	local function getservertime() return "[" .. os.date("%H:%M:%S") .. "]" end
 
@@ -299,22 +274,75 @@ local function loadintro(buttononly)
 	t(0.1)
 
 	if not isfolder(folder) then makefolder(folder) end
-
 	local imagesfolder = folder .. "/Images"
 	local videosfolder = folder .. "/Videos"
 	local soundsfolder = folder .. "/Sounds"
 
-	if isfolder(imagesfolder) and isfolder(videosfolder) and isfolder(soundsfolder) then
-		env.funcs.introconsolelog("Fetching assets...")
-		t()
+	if not isfolder(imagesfolder) then makefolder(imagesfolder) end
+	if not isfolder(videosfolder) then makefolder(videosfolder) end
+	if not isfolder(soundsfolder) then makefolder(soundsfolder) end
+
+	local assetex = {
+		images = {},
+		videos = {
+			["dandelions forever.mp4"] = "https://files.catbox.moe/cjo1ji.mp4"
+		},
+		sounds = {
+			["call.mp3"] = "https://files.catbox.moe/fbd2e0.mp3"
+		}
+	}
+
+	local allPresent = true
+	for filename, _ in pairs(assetex.sounds) do
+		if not isfile(soundsfolder .. "/" .. filename) then
+			allPresent = false
+			break
+		end
+	end
+	for filename, _ in pairs(assetex.images) do
+		if not isfile(imagesfolder .. "/" .. filename) then
+			allPresent = false
+			break
+		end
+	end
+
+	if allPresent then
+		env.funcs.introconsolelog("Fetching assets...") t(0.1)
 		env.funcs.introconsolelog("Success: Assets already downloaded", "succ")
 	else
 		env.funcs.introconsolelog("Downloading assets...")
-		if not isfolder(imagesfolder) then makefolder(imagesfolder) end
+
 		env.funcs.introprogress(15)
-		if not isfolder(videosfolder) then makefolder(videosfolder) end
+
+		for filename, url in pairs(assetex.sounds) do
+			local path = soundsfolder .. "/" .. filename
+			if not isfile(path) then
+				-- env.funcs.introconsolelog("Downloading " .. filename .. "...")
+				writefile(path, game:HttpGet(url))
+			end
+		end
+
+		for filename, url in pairs(assetex.images) do
+			local path = imagesfolder .. "/" .. filename
+			if not isfile(path) then
+				-- env.funcs.introconsolelog("Downloading " .. filename .. "...")
+				writefile(path, game:HttpGet(url))
+			end
+		end
+
 		env.funcs.introprogress(20)
-		if not isfolder(soundsfolder) then makefolder(soundsfolder) end
+
+		for filename, url in pairs(assetex.videos) do
+			local path = videosfolder .. "/" .. filename
+			if not isfile(path) then
+				-- env.funcs.introconsolelog("Downloading " .. filename .. " (background)...")
+				spwn(function()
+					writefile(path, game:HttpGet(url))
+					env.funcs.introconsolelog("Success: " .. filename .. " downloaded", "succ")
+				end)
+			end
+		end
+
 		env.funcs.introprogress(25)
 		env.funcs.introconsolelog("Success: Assets downloaded", "succ")
 	end
