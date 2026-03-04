@@ -103,17 +103,14 @@ local function loadintro(buttononly)
 	end
 
 	local function alive()
-    local existing = togglebutton:FindFirstChildOfClass("UIScale")
-    if existing then existing:Destroy() end
-
-    local scale = Instance.new("UIScale", togglebutton)
-    local baseScale = env.gear.general.buttonscale or 1
+    local scale = togglebutton:FindFirstChildOfClass("UIScale") or Instance.new("UIScale", togglebutton)
+		local baseScale = env.gear.general.buttonscale or 1
 		scale.Scale = baseScale
 		env.stuf.buttonscale = scale
 		function env.stuf.setbuttonscale(v)
-    	baseScale = v
-    	scale.Scale = v
-		end
+    baseScale = v
+    ts:Create(scale, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), { Scale = v }):Play()
+	end
 
     local hover = TweenInfo.new(0.12, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
     local press = TweenInfo.new(0.08, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
@@ -381,12 +378,16 @@ local function loadintro(buttononly)
 	tween2.Completed:Wait()
 	yo:Destroy()
 
-	spwn(backspace, title)
-	spwn(backspace, subtitle)
-	task.delay(0.6, function()
-		title:Destroy()
-		subtitle:Destroy()
-	end)
+spwn(backspace, title)
+spwn(backspace, subtitle)
+
+env.stuf.buttonscale = Instance.new("UIScale", hi)
+tween(env.stuf.buttonscale, {1, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut}, {Scale = env.gear.general.buttonscale})
+
+task.delay(0.6, function()
+    title:Destroy()
+    subtitle:Destroy()
+end)
 
 	t(0.2)
 
