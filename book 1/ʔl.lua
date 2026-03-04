@@ -105,12 +105,11 @@ local function loadintro(buttononly)
 	local function alive()
 		local wrapper = Instance.new("Frame")
 		wrapper.Size = togglebutton.Size
-		wrapper.Position = togglebutton.Position
-		wrapper.AnchorPoint = togglebutton.AnchorPoint
+		wrapper.Position = UDim2.new(0.5, 0, 0.5, 0)
+		wrapper.AnchorPoint = Vector2.new(0.5, 0.5)
 		wrapper.BackgroundTransparency = 1
 		wrapper.ZIndex = togglebutton.ZIndex
 		wrapper.Parent = togglebutton.Parent
-		wrapper.AnchorPoint = Vector2.new(0.5, 0.5)
 		togglebutton.Position = UDim2.fromScale(0.5, 0.5)
 		togglebutton.AnchorPoint = Vector2.new(0.5, 0.5)
 		togglebutton.Parent = wrapper
