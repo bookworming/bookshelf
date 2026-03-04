@@ -86,10 +86,10 @@ env.stuf.mainframe, env.stuf.mainframesections = env.essentials.library.loadmain
 local mainframe, togglebutton = env.stuf.mainframe, nil
 
 local function loadintro(buttononly)
-	local function type(label, text)
+	local function typein(label, text)
 		label.Text = ""
 		for i = 1, #text do
-			label.Text = string.sub(text, 1, i)
+			label.Text = text:sub(1, i)
 			rs.RenderStepped:Wait()
 		end
 	end
@@ -97,47 +97,46 @@ local function loadintro(buttononly)
 	local function backspace(label)
 		local text = label.Text
 		for i = #text, 0, -1 do
-			label.Text = string.sub(text, 1, i)
+			label.Text = text:sub(1, i)
 			rs.RenderStepped:Wait()
 		end
 	end
 
 	local function alive()
-    local wrapper = Instance.new("Frame")
-    wrapper.Size = togglebutton.Size
-    wrapper.Position = togglebutton.Position
-    wrapper.AnchorPoint = togglebutton.AnchorPoint
-    wrapper.BackgroundTransparency = 1
-    wrapper.ZIndex = togglebutton.ZIndex
-    wrapper.Parent = togglebutton.Parent
-    togglebutton.Position = UDim2.fromScale(0.5, 0.5)
-    togglebutton.AnchorPoint = Vector2.new(0.5, 0.5)
-    togglebutton.Parent = wrapper
+		local wrapper = Instance.new("Frame")
+		wrapper.Size = togglebutton.Size
+		wrapper.Position = togglebutton.Position
+		wrapper.AnchorPoint = togglebutton.AnchorPoint
+		wrapper.BackgroundTransparency = 1
+		wrapper.ZIndex = togglebutton.ZIndex
+		wrapper.Parent = togglebutton.Parent
+		togglebutton.Position = UDim2.fromScale(0.5, 0.5)
+		togglebutton.AnchorPoint = Vector2.new(0.5, 0.5)
+		togglebutton.Parent = wrapper
 
-    local scale = Instance.new("UIScale", wrapper)
-    local hover = TweenInfo.new(0.12, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
-    local press = TweenInfo.new(0.08, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
-    local currenttween
-    local function tween(v, info)
-        if currenttween then currenttween:Cancel() end
-        currenttween = ts:Create(scale, info, { Scale = v })
-        currenttween:Play()
-    end
+		local scale = Instance.new("UIScale", wrapper)
+		local hover = TweenInfo.new(0.12, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+		local press = TweenInfo.new(0.08, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+		local currenttween
+		local function scaleTo(v, info)
+			if currenttween then currenttween:Cancel() end
+			currenttween = ts:Create(scale, info, { Scale = v })
+			currenttween:Play()
+		end
 
-    env.stuf.togglebutton = togglebutton
-    env.stuf.togglebuttonwrapper = wrapper
-    env.stuf.togglebuttondrag = env.essentials.library.makedraggable(wrapper)
+		env.stuf.togglebutton = togglebutton
+		env.stuf.togglebuttonwrapper = wrapper
+		env.stuf.togglebuttondrag = env.essentials.library.makedraggable(wrapper)
 
-    togglebutton.MouseEnter:Connect(function() env.essentials.library.hov() tween(1.02, hover) end)
-    togglebutton.MouseLeave:Connect(function() tween(1, hover) end)
-    togglebutton.MouseButton1Up:Connect(function() tween(1.02, hover) end)
-    togglebutton.MouseButton1Down:Connect(function() tween(0.98, press) end)
-    togglebutton.Activated:Connect(function()
-        if env.stuf.togglebuttondrag.dragged then return end
-        env.essentials.library.clik()
-        mainframe.Visible = not mainframe.Visible
-    end)
-	end
+		togglebutton.MouseEnter:Connect(function() env.essentials.library.hov() scaleTo(1.02, hover) end)
+		togglebutton.MouseLeave:Connect(function() scaleTo(1, hover) end)
+		togglebutton.MouseButton1Up:Connect(function() scaleTo(1.02, hover) end)
+		togglebutton.MouseButton1Down:Connect(function() scaleTo(0.98, press) end)
+		togglebutton.Activated:Connect(function()
+			if env.stuf.togglebuttondrag.dragged then return end
+			env.essentials.library.clik()
+			mainframe.Visible = not mainframe.Visible
+		end)
 
 		uis.InputBegan:Connect(function(input, processed)
 			if not processed and input.KeyCode == env.gear.general.defaultkeybind then
@@ -178,8 +177,10 @@ local function loadintro(buttononly)
 		ico.ZIndex = 100001
 		ico.Position, ico.AnchorPoint = UDim2.fromOffset(-14, -14), Vector2.zero
 
-		alive()
+		env.stuf.buttonscale = Instance.new("UIScale")
+		env.stuf.buttonscale.Parent = hi
 
+		alive()
 		return
 	end
 
@@ -192,12 +193,13 @@ local function loadintro(buttononly)
 	ico.Position, ico.AnchorPoint = UDim2.fromOffset(-14, -14), Vector2.zero
 	tween(hi, {0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut}, {Size = UDim2.fromOffset(230, 64)})
 
-	local title = env.essentials.library.makecooltext(hi, UDim2.fromOffset(200, 20), "", 16, nil, 2, UDim2.fromOffset(163, 22), Enum.TextXAlignment.Left, Enum.TextYAlignment.Center, nil, 100001)
-	local subtitle = env.essentials.library.makecooltext(hi, UDim2.fromOffset(200, 20), "", 12, Color3.fromRGB(187,187,187), 2, UDim2.fromOffset(163, 42), Enum.TextXAlignment.Left, Enum.TextYAlignment.Center, nil, 100001)
+	local lib = env.essentials.library
+	local title    = lib.makecooltext(hi, UDim2.fromOffset(200, 20), "", 16, nil, 2, UDim2.fromOffset(163, 22), Enum.TextXAlignment.Left, Enum.TextYAlignment.Center, nil, 100001)
+	local subtitle = lib.makecooltext(hi, UDim2.fromOffset(200, 20), "", 12, Color3.fromRGB(187, 187, 187), 2, UDim2.fromOffset(163, 42), Enum.TextXAlignment.Left, Enum.TextYAlignment.Center, nil, 100001)
 
-	task.delay(0.1, function() 
-		spwn(type, title, "Noxious: Boxten Sex GUI")
-		spwn(type, subtitle, "Version 1.3.0 | Initializing...")
+	task.delay(0.1, function()
+		spwn(typein, title, "Noxious: Boxten Sex GUI")
+		spwn(typein, subtitle, "Version 1.3.0 | Initializing...")
 	end)
 
 	t(0.5)
@@ -206,11 +208,12 @@ local function loadintro(buttononly)
 
 	local function getservertime() return "[" .. os.date("%H:%M:%S") .. "]" end
 
-	local yo = env.essentials.library.makecoolframe(UDim2.new(1, -28, 0, 1), hi, false, false, UDim2.new(0.5, 0, 0, 65), false, true)
-	yo.AnchorPoint = Vector2.new(0.5, 0) yo.ClipsDescendants = true
+	local yo = lib.makecoolframe(UDim2.new(1, -28, 0, 1), hi, false, false, UDim2.new(0.5, 0, 0, 65), false, true)
+	yo.AnchorPoint = Vector2.new(0.5, 0)
+	yo.ClipsDescendants = true
 
 	tween(yo, {0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut}, {
-		Size = UDim2.new(1, -28, 0, 175), 
+		Size = UDim2.new(1, -28, 0, 175),
 		Position = UDim2.new(0.5, 0, 0, 65)
 	})
 
@@ -235,29 +238,27 @@ local function loadintro(buttononly)
 		end
 
 		table.insert(introconsolelogs, line)
-    if #introconsolelogs > 16 then
-      table.remove(introconsolelogs, 1)
-    end
+		if #introconsolelogs > 16 then
+			table.remove(introconsolelogs, 1)
+		end
 
-    introconsole.Text = table.concat(introconsolelogs, "\n")
+		introconsole.Text = table.concat(introconsolelogs, "\n")
 		if outputtype == "warn" or outputtype == "err" then t(1) end
 	end
 
-	introconsole = env.essentials.library.makecooltext(yo, UDim2.new(0, 188, 0, 20), "", 10, nil, 2, UDim2.new(0.5, 2, 0, 16), Enum.TextXAlignment.Left, Enum.TextYAlignment.Top)
+	introconsole = lib.makecooltext(yo, UDim2.new(0, 188, 0, 20), "", 10, nil, 2, UDim2.new(0.5, 2, 0, 16), Enum.TextXAlignment.Left, Enum.TextYAlignment.Top)
 	env.funcs.introconsolelog("Initializing...", "state")
 
 	local currentPercent = Instance.new("NumberValue")
 	currentPercent.Value = 0
 
 	function env.funcs.introprogress(target, status)
-		local tween = ts:Create(currentPercent, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Value = target})
-
+		local tw = ts:Create(currentPercent, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Value = target})
 		local connection = currentPercent.Changed:Connect(function(val)
 			subtitle.Text = string.format("Version 1.3.0 | %s (%d%%)", status or "Loading...", math.floor(val))
 		end)
-
-		tween:Play()
-		return tween, connection
+		tw:Play()
+		return tw, connection
 	end
 
 	t(0.8) env.funcs.introprogress(0)
@@ -293,16 +294,12 @@ local function loadintro(buttononly)
 		env.funcs.introconsolelog("Success: Assets already downloaded", "succ")
 	else
 		env.funcs.introconsolelog("Downloading assets...")
-
 		if not isfolder(imagesfolder) then makefolder(imagesfolder) end
 		env.funcs.introprogress(15)
-
 		if not isfolder(videosfolder) then makefolder(videosfolder) end
 		env.funcs.introprogress(20)
-
 		if not isfolder(soundsfolder) then makefolder(soundsfolder) end
 		env.funcs.introprogress(25)
-
 		env.funcs.introconsolelog("Success: Assets downloaded", "succ")
 	end
 
@@ -335,7 +332,7 @@ local function loadintro(buttononly)
 
 	t(0.1) env.funcs.introprogress(55)
 	env.funcs.introconsolelog("Success: Script essentials loaded", "succ")
-	env.funcs.introconsolelog("Constructing UI...", "state")	
+	env.funcs.introconsolelog("Constructing UI...", "state")
 	t(0.1) env.funcs.introprogress(60)
 
 	local buildsucc = env.funcs.recursivels("book%201/%CA%95s/%CA%94b.lua", true)
@@ -354,13 +351,16 @@ local function loadintro(buttononly)
 	t(0.1) env.funcs.introprogress(98)
 
 	spwn(function()
-		if not env.funcs.exists() then 
-			env.funcs.pop("Waiting for character to load in before auto-loading configs...") 
-			repeat t() until env.funcs.exists() env.funcs.box("character loaded") t(1) 
+		if not env.funcs.exists() then
+			env.funcs.pop("Waiting for character to load in before auto-loading configs...")
+			repeat t() until env.funcs.exists()
+			env.funcs.box("character loaded")
+			t(1)
 		else
 			env.funcs.introconsolelog("Auto-loaded configs.")
 		end
-		env.filemanager:autoload() env.funcs.box("auto-loaded configs (if they exist)")
+		env.filemanager:autoload()
+		env.funcs.box("auto-loaded configs (if they exist)")
 	end)
 
 	env.funcs.introconsolelog("Success: Script successfully loaded", "succ")
@@ -368,22 +368,21 @@ local function loadintro(buttononly)
 	t(1)
 
 	local tween2 = tween(yo, {0.43, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut}, {
-		Size = UDim2.new(1, -28, 0, 1), 
+		Size = UDim2.new(1, -28, 0, 1),
 		Position = UDim2.new(0.5, 0, 0, 66)
 	})
 
 	env.stuf.buttonscale = Instance.new("UIScale")
 	env.stuf.buttonscale.Parent = hi
 
-	tween(hi, {0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut}, { Size = UDim2.fromOffset(230, 64) })
-	tween(env.stuf.buttonscale, {1, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut}, { Scale = env.gear.general.buttonscale })
+	tween(hi, {0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut}, {Size = UDim2.fromOffset(230, 64)})
+	tween(env.stuf.buttonscale, {1, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut}, {Scale = env.gear.general.buttonscale})
 
 	tween2.Completed:Wait()
 	yo:Destroy()
 
 	spwn(backspace, title)
 	spwn(backspace, subtitle)
-
 	task.delay(0.6, function()
 		title:Destroy()
 		subtitle:Destroy()
