@@ -21,8 +21,9 @@ local randstring = function() local s = "" for i = 1, math.random(8, 15) do if m
 local getins = getmmfromerr(game, function(a,b) return a[b] end, function(f) local a = Instance.new("Folder") local b = randstring() a.Name = b return f(a, "Name") == b end)
 local FindFirstChildOfClass = getins(game, "FindFirstChildOfClass") 
 
+local txts = FindFirstChildOfClass(game, "TextService")
 local plrs = FindFirstChildOfClass(game, "Players")
-local rs = game:GetService("RunService")
+local rs = FindFirstChildOfClass(game, "RunService")
 local uis = FindFirstChildOfClass(game, "UserInputService")
 local ts = FindFirstChildOfClass(game, "TweenService")
 
@@ -51,7 +52,7 @@ container.Size = UDim2.new(0, 400, 0, 300)
 container.BackgroundTransparency = 1
 container.Parent = screenGui
 
-local PADDING = -5
+local PADDING = 2
 local DISPLAY_TIME = 5
 local TWEEN_TIME = 0.5
 local TEXT_SIZE = 16
@@ -91,8 +92,8 @@ local NAME_COLORS = {
 }
 
 local function MeasureText(str, font, size)
-	local bounds = TextService:GetTextSize(str, size, font, Vector2.new(math.huge, math.huge))
-	return bounds.X
+    local bounds = txts:GetTextSize(str, size, font, Vector2.new(1920, 1080))
+    return bounds.X, bounds.Y
 end
 
 local function CreateNotification(text, whosaidit)
@@ -111,7 +112,7 @@ local function CreateNotification(text, whosaidit)
 
 	local holder = Instance.new("Frame")
 	holder.BackgroundTransparency = 1
-	holder.Size = UDim2.new(0, 0, 0, 28)
+	holder.Size = UDim2.new(0, 0, 0, 16)
 	holder.AnchorPoint = Vector2.new(0.5, 1)
 	holder.Position = UDim2.new(0.5, 0, 1, 5)
 	holder.ClipsDescendants = false
@@ -119,7 +120,6 @@ local function CreateNotification(text, whosaidit)
 
 	local allFadeable = {}
 	local letters = {}
-
 	local cursorX = 0
 
 	if whosaidit and ICONS[whosaidit] then
@@ -132,6 +132,8 @@ local function CreateNotification(text, whosaidit)
 		icon.ImageTransparency = 1
 		icon.Parent = holder
 		cursorX += ICON_SIZE + 4
+
+    spwn(function() ts:Create(icon, TweenInfo.new(1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Rotation = 10}):Play() t(1) ts:Create(icon, TweenInfo.new(1, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {Rotation = 5}):Play() end)
 
 		table.insert(allFadeable, { label = icon, stroke = nil, baseX = icon.Position.X.Offset, isIcon = true })
 	end
@@ -161,19 +163,24 @@ local function CreateNotification(text, whosaidit)
 		cursorX += nameWidth
 	end
 
-	for i = 1, #text do
-		local char = text:sub(i, i)
-		local charWidth = MeasureText(char, FONT, TEXT_SIZE)
-		if charWidth < 1 then charWidth = TEXT_SIZE * 0.3 end
+  local textStartX = cursorX
 
-		local letter = Instance.new("TextLabel")
+  for i = 1, #text do
+    local char = text:sub(i, i)
+
+    local widthUpToHere = MeasureText(text:sub(1, i), FONT, TEXT_SIZE)
+    local widthUpToPrev = i > 1 and MeasureText(text:sub(1, i - 1), FONT, TEXT_SIZE) or 0
+    local charWidth = widthUpToHere - widthUpToPrev
+    local xPos = textStartX + widthUpToPrev
+
+    local letter = Instance.new("TextLabel")
 		letter.BackgroundTransparency = 1
 		letter.Text = char
 		letter.TextColor3 = Color3.new(1, 1, 1)
 		letter.Font = FONT
 		letter.TextSize = TEXT_SIZE
 		letter.Size = UDim2.new(0, charWidth, 1, 0)
-		letter.Position = UDim2.new(0, cursorX, 0, -5)
+    letter.Position = UDim2.new(0, xPos, 0, -2)
 		letter.TextTransparency = 1
 		letter.TextXAlignment = Enum.TextXAlignment.Left
 		letter.Parent = holder
@@ -184,12 +191,12 @@ local function CreateNotification(text, whosaidit)
 		border.Color = Color3.fromRGB(0, 0, 0)
 		border.Transparency = 1
 
-		local entry = { label = letter, stroke = border, baseX = cursorX }
-		table.insert(letters, entry)
-		cursorX += charWidth
+		local entry = { label = letter, stroke = border, baseX = xPos }
+    table.insert(letters, entry)
 	end
 
-	holder.Size = UDim2.new(0, cursorX, 0, 28)
+	cursorX = textStartX + MeasureText(text, FONT, TEXT_SIZE)
+  holder.Size = UDim2.new(0, cursorX, 0, 16)
 
 	-- Push existing notifications up
 	local newHeight = holder.AbsoluteSize.Y + PADDING
@@ -271,11 +278,11 @@ end
 
 wait(1)
 CreateNotification("hello, im boxten. i was the first here.", "box")
-wait(1)
+wait(2)
 CreateNotification("I'm (the other) Boxten. My current behavior can be toggled...", "altbox")
-wait(1)
+wait(2)
 CreateNotification("Hi! I'm Poppy! I hold the Commands Section for Boxten Sex GUI!", "pop")
-wait(1)
+wait(2)
 CreateNotification("I'M SHRIMPO AND I HATE BEING IN AN EXPLOIT SCRIPT!!!", "shr")
 
 -------------------------------------------------------------------------------------------------------------------------------
