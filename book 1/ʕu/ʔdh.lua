@@ -35,30 +35,20 @@ local env = getgenv.BSGUI
 -------------------------------------------------------------------------------------------------------------------------------
 
 -- local dialogue = env.funcs.recursivels("book%201/%CA%95u/%CA%94d.lua", true)
+local sgui = env.essentials.sgui
 
 -------------------------------------------------------------------------------------------------------------------------------
 
-local function dialoguenoise(pitch)
-  local s = Instance.new("Sound")
-  s.SoundId = "rbxassetid://4841731967"
-  s.Volume = 0.6
-  s.Parent = gethui()
-  s:Play()
-  s.PlaybackSpeed = pitch or 1
-  s.Ended:Connect(function() s:Destroy() end)
+local function dialoguenoise()
+  env.funcs.playsound("rbxassetid://4841731967")
 end
-
-local screenGui = Instance.new("ScreenGui")
-screenGui.Name = "NotificationGui"
-screenGui.ResetOnSpawn = false
-screenGui.Parent = gethui()
 
 local container = Instance.new("Frame")
 container.AnchorPoint = Vector2.new(0.5, 1)
 container.Position = UDim2.new(0.5, 0, 1, -60)
 container.Size = UDim2.new(0, 400, 0, 300)
 container.BackgroundTransparency = 1
-container.Parent = screenGui
+container.Parent = screengui
 
 local PADDING = 2
 local DISPLAY_TIME = 5
@@ -68,7 +58,7 @@ local FONT = Enum.Font.FredokaOne
 
 local notifications = {}
 
-local function TweenPosition(obj, newY)
+local function tweeny(obj, newY)
 	ts:Create(obj, TweenInfo.new(TWEEN_TIME, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
 		Position = UDim2.new(0.5, 0, 1, newY)
 	}):Play()
@@ -78,7 +68,7 @@ local function RecalculatePositions()
 	local currentOffset = 0
 	for _, label in ipairs(notifications) do
 		local height = label.AbsoluteSize.Y
-		TweenPosition(label, -currentOffset)
+		tweeny(label, -currentOffset)
 		currentOffset += height + PADDING
 	end
 end
@@ -96,11 +86,6 @@ local NAME_COLORS = {
 	pop = Color3.fromRGB(112, 234, 255),
 	shr = Color3.fromRGB(247, 109, 40),
 }
-
-local function MeasureText(str, font, size)
-    local bounds = txts:GetTextSize(str, size, font, Vector2.new(1920, 1080))
-    return bounds.X, bounds.Y
-end
 
 local function CreateNotification(text, whosaidit)
 	local nameText = ""
@@ -147,7 +132,7 @@ local function CreateNotification(text, whosaidit)
 	end
 
 	if nameText ~= "" then
-		local nameWidth = MeasureText(nameText, FONT, TEXT_SIZE)
+		local nameWidth = env.essentials.library.gettextbounds(nameText, FONT, TEXT_SIZE)
 
 		local nameLabel = Instance.new("TextLabel")
 		nameLabel.BackgroundTransparency = 1
@@ -176,8 +161,8 @@ local function CreateNotification(text, whosaidit)
   for i = 1, #text do
     local char = text:sub(i, i)
 
-    local widthUpToHere = MeasureText(text:sub(1, i), FONT, TEXT_SIZE)
-    local widthUpToPrev = i > 1 and MeasureText(text:sub(1, i - 1), FONT, TEXT_SIZE) or 0
+    local widthUpToHere = env.essentials.library.gettextbounds(text:sub(1, i), FONT, TEXT_SIZE)
+    local widthUpToPrev = i > 1 and env.essentials.library.gettextbounds(text:sub(1, i - 1), FONT, TEXT_SIZE) or 0
     local charWidth = widthUpToHere - widthUpToPrev
     local xPos = textStartX + widthUpToPrev
 
@@ -203,19 +188,17 @@ local function CreateNotification(text, whosaidit)
     table.insert(letters, entry)
 	end
 
-	cursorX = textStartX + MeasureText(text, FONT, TEXT_SIZE)
+	cursorX = textStartX + env.essentials.library.gettextbounds(text, FONT, TEXT_SIZE)
   holder.Size = UDim2.new(0, cursorX, 0, 16)
 
-	-- Push existing notifications up
 	local newHeight = holder.AbsoluteSize.Y + PADDING
 	for _, existing in ipairs(notifications) do
 		local currentY = existing.Position.Y.Offset
-		TweenPosition(existing, currentY - newHeight)
+		tweeny(existing, currentY - newHeight)
 	end
 
 	table.insert(notifications, 1, holder)
 
-	-- Slide holder into view + fade in icon/name immediately
 	local fadeInInfo = TweenInfo.new(TWEEN_TIME)
 	ts:Create(holder, fadeInInfo, {
 		Position = UDim2.new(0.5, 0, 1, 0)
@@ -232,9 +215,7 @@ local function CreateNotification(text, whosaidit)
 		end
 	end
 
-	-- Staggered per-letter pop-in: one letter per frame
-	-- Each letter slides from Y=-2 to Y=0 and fades in simultaneously
-	task.spawn(function()
+	spwn(function()
 		local popInfo = TweenInfo.new(TWEEN_TIME, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
 		for _, entry in ipairs(letters) do
 			ts:Create(entry.label, popInfo, {
@@ -248,8 +229,7 @@ local function CreateNotification(text, whosaidit)
 		end
 	end)
 
-	-- Fade everything out after DISPLAY_TIME
-	task.delay(DISPLAY_TIME, function()
+	task.delay(5, function()
 		local fadeOutInfo = TweenInfo.new(1)
 
 		for _, entry in ipairs(allFadeable) do
@@ -270,7 +250,7 @@ local function CreateNotification(text, whosaidit)
 			end
 		end
 
-		task.wait(1)
+		t(1)
 
 		for i, v in ipairs(notifications) do
 			if v == holder then
