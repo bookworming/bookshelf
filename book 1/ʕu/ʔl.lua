@@ -1541,7 +1541,6 @@ local function playScale(v, info)
     currenttween:Play()
 end
 
--- listener for slider scale changes only, NOT connected to buttonscale signal
 local id = tostring(buttonFrame)
 env.stuf.buttonscalelisteners = env.stuf.buttonscalelisteners or {}
 env.stuf.buttonscalelisteners[id] = function(newScale)
@@ -1550,7 +1549,7 @@ env.stuf.buttonscalelisteners[id] = function(newScale)
         return
     end
     baseScale = newScale
-    scale.Scale = newScale
+    ts:Create(scale, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), { Scale = newScale }):Play()
 end
 
 buttonFrame.Destroying:Connect(function()
@@ -1858,7 +1857,6 @@ local function playScale(v, info)
     currenttween:Play()
 end
 
--- listener for slider scale changes only, NOT connected to buttonscale signal
 local id = tostring(buttonFrame)
 env.stuf.buttonscalelisteners = env.stuf.buttonscalelisteners or {}
 env.stuf.buttonscalelisteners[id] = function(newScale)
@@ -1867,7 +1865,7 @@ env.stuf.buttonscalelisteners[id] = function(newScale)
         return
     end
     baseScale = newScale
-    scale.Scale = newScale
+    ts:Create(scale, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), { Scale = newScale }):Play()
 end
 
 buttonFrame.Destroying:Connect(function()
