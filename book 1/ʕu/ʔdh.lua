@@ -33,6 +33,123 @@ local env = getgenv.BSGUI
 
 -------------------------------------------------------------------------------------------------------------------------------
 
-local dialogue = env.funcs.recursivels("book%201/%CA%95u/%CA%94d.lua", true)
+-- local dialogue = env.funcs.recursivels("book%201/%CA%95u/%CA%94d.lua", true)
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "NotificationGui"
+screenGui.ResetOnSpawn = false
+screenGui.Parent = gethui()
+
+local container = Instance.new("Frame")
+container.AnchorPoint = Vector2.new(0.5, 1)
+container.Position = UDim2.new(0.5, 0, 1, -60)
+container.Size = UDim2.new(0, 400, 0, 300)
+container.BackgroundTransparency = 1
+container.Parent = screenGui
+
+local PADDING = 2
+local DISPLAY_TIME = 5
+local TWEEN_TIME = 0.5
+
+local notifications = {}
+
+local function TweenPosition(obj, newY)
+	ts:Create(obj, TweenInfo.new(TWEEN_TIME, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+		Position = UDim2.new(0.5, 0, 1, newY)
+	}):Play()
+end
+
+local function RecalculatePositions()
+	local currentOffset = 0
+
+	for i, label in ipairs(notifications) do
+		local height = label.AbsoluteSize.Y
+		TweenPosition(label, -currentOffset)
+		currentOffset += height + PADDING
+	end
+end
+
+local function CreateNotification(text, whosaidit, shoutintensity)
+  if whosaidit then
+    if whosaidit == "box" then
+      text = "[Boxten]: " .. text
+    elseif whosaidit == "pop" then
+      text = "[Poppy]: " .. text
+    elseif whosaidit == "shr" then
+      text = "[Shrimpo]: " .. text
+    end
+  end
+	local label = Instance.new("TextLabel")
+	label.BackgroundTransparency = 1
+	label.Size = UDim2.new(1, 0, 0, 24)
+	label.TextWrapped = true
+	label.Text = text
+	label.TextColor3 = Color3.new(1, 1, 1)
+	label.TextTransparency = 1
+	label.Font = Enum.Font.FredokaOne
+	label.TextSize = 16
+	label.AnchorPoint = Vector2.new(0.5, 1)
+	label.Position = UDim2.new(0.5, 0, 1, 5)
+	label.Parent = container
+  label.RichText = true
+
+  local border = Instance.new("UIStroke")
+  border.Parent = label
+  border.Color = Color3.fromRGB(0, 0, 0)
+  border.Thickness = 1
+  border.Transparency = 1
+
+	task.wait()
+	label.Size = UDim2.new(1, 0, 0, label.TextBounds.Y)
+
+	local newHeight = label.AbsoluteSize.Y + PADDING
+	for _, existing in ipairs(notifications) do
+		local currentY = existing.Position.Y.Offset
+		TweenPosition(existing, currentY - newHeight)
+	end
+
+	table.insert(notifications, 1, label)
+
+	ts:Create(label, TweenInfo.new(TWEEN_TIME, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+		TextTransparency = 0,
+		Position = UDim2.new(0.5, 0, 1, 0)
+	}):Play()
+
+	ts:Create(border, TweenInfo.new(TWEEN_TIME, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+		Transparency = 0,
+	}):Play()
+
+	task.delay(DISPLAY_TIME, function()
+		local fade = ts:Create(label, TweenInfo.new(TWEEN_TIME, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
+			TextTransparency = 1
+		})
+
+		local fade2 = ts:Create(border, TweenInfo.new(TWEEN_TIME, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
+			Transparency = 1
+		})
+
+		fade:Play() fade2:Play()
+		fade.Completed:Wait()
+
+		for i, v in ipairs(notifications) do
+			if v == label then
+				table.remove(notifications, i)
+				break
+			end
+		end
+
+		label:Destroy()
+
+		RecalculatePositions()
+	end)
+end
+
+CreateNotification("First notification")
+wait(1)
+CreateNotification("Second notification")
+wait(1)
+CreateNotification("Third notification")
 
 -------------------------------------------------------------------------------------------------------------------------------
