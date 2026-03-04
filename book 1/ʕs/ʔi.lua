@@ -731,7 +731,7 @@ do
 	end
 
 	-- ui
-	env.stuf.mainframe, env.stuf.mainframesections = Instance.new("UIScale"), Instance.new("UIScale")
+	env.stuf.mainframe, env.stuf.mainframesections = nil
 	env.stuf.togglebutton, env.stuf.togglebuttondrag = nil
 	env.stuf.popup = nil
 
@@ -739,7 +739,7 @@ do
 	if not hiddenui:FindFirstChild("aud") then env.stuf.soundholder = Instance.new("Folder") env.stuf.soundholder.Name = "aud" env.stuf.soundholder.Parent = hiddenui end
 
   env.stuf.buttonscalelisteners = {}
-	env.stuf.mainframescale, env.stuf.buttonscale = nil
+	env.stuf.mainframescale, env.stuf.buttonscale = Instance.new("UIScale"), Instance.new("UIScale")
 
 	-- donor hndling
 	env.stuf.handshaker = {}
