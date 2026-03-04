@@ -108,17 +108,21 @@ local function loadintro(buttononly)
 
     local scale = Instance.new("UIScale", togglebutton)
     local baseScale = env.gear.general.buttonscale or 1
-    scale.Scale = baseScale  -- set initial scale here, replaces the old buttonscale tween
+		scale.Scale = baseScale
+		env.stuf.buttonscale = scale
+		function env.stuf.setbuttonscale(v)
+    	baseScale = v
+    	scale.Scale = v
+		end
 
     local hover = TweenInfo.new(0.12, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
     local press = TweenInfo.new(0.08, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
     local currenttween
 
-    -- scaleTo is defined here, after baseScale is known
     local function scaleTo(v, info)
-        if currenttween then currenttween:Cancel() end
-        currenttween = ts:Create(scale, info, { Scale = baseScale * v })
-        currenttween:Play()
+      if currenttween then currenttween:Cancel() end
+			currenttween = ts:Create(scale, info, { Scale = baseScale * v })
+      currenttween:Play()
     end
 
     togglebutton.AnchorPoint = Vector2.new(0.5, 0.5)
@@ -127,24 +131,23 @@ local function loadintro(buttononly)
     env.stuf.togglebutton = togglebutton
     env.stuf.togglebuttondrag = env.essentials.library.makedraggable(togglebutton)
 
-    -- scaleTo is called inside these connect callbacks
     togglebutton.MouseEnter:Connect(function() env.essentials.library.hov() scaleTo(1.02, hover) end)
     togglebutton.MouseLeave:Connect(function() scaleTo(1, hover) end)
     togglebutton.MouseButton1Up:Connect(function() scaleTo(1.02, hover) end)
     togglebutton.MouseButton1Down:Connect(function() scaleTo(0.98, press) end)
     togglebutton.Activated:Connect(function()
-        if env.stuf.togglebuttondrag.dragged then return end
-        env.essentials.library.clik()
-        mainframe.Visible = not mainframe.Visible
+      if env.stuf.togglebuttondrag.dragged then return end
+      env.essentials.library.clik()
+      mainframe.Visible = not mainframe.Visible
     end)
 
     uis.InputBegan:Connect(function(input, processed)
-        if not processed and input.KeyCode == env.gear.general.defaultkeybind then
-            mainframe.Visible = not mainframe.Visible
-            env.essentials.library.clik()
-        end
+      if not processed and input.KeyCode == env.gear.general.defaultkeybind then
+        mainframe.Visible = not mainframe.Visible
+        env.essentials.library.clik()
+      end
     end)
-end
+	end
 
 	local js
 	if not buttononly then
