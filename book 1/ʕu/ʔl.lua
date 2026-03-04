@@ -700,9 +700,9 @@ function lib.makecoolscrollingframe(size, parent, pos, layoutpadding, Z)
 	bar.Parent = scrollbar
 	Instance.new("UICorner", bar).CornerRadius = UDim.new(1, 0)
 
-local function getAncestorScale()
-    return env.stuf.mainframescale and env.stuf.mainframescale.Scale or 1
-end
+	local function getAncestorScale()
+    return env.stuf.mainframescale and env.stuf.mainframescale.Scale / 2 or 1
+	end
 
 	local function updateBar()
     local scale = getAncestorScale()
