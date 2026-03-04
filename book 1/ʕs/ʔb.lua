@@ -45,16 +45,7 @@ local load = env.funcs.recursivels
 -------------------------------------------------------------------------------------------------------------------------------
 
 -- load
-env.stuf.mainsectionloaded = false
-env.stuf.navigationssectionloaded = false
-env.stuf.visualssectionloaded = false
-env.stuf.localplayersectionloaded = false
-env.stuf.automationsectionloaded = false
-env.stuf.animationssectionloaded = false
-env.stuf.funsectionloaded = false
-env.stuf.donorsectionloaded = false
-env.stuf.scriptsectionloaded = false
-env.stuf.configsectionloaded = false
+env.stuf.sectionsloaded = false
 
 local maincat = env.funcs.recursivels("book%201/%CA%95s/%EF%BD%A1s/%CA%94m.lua", true) env.stuf.mainsectionloaded = true
 env.funcs.introconsolelog("  <font size='8' color='rgb(133, 133, 133)'>Main section loaded.</font>")
@@ -85,6 +76,8 @@ env.funcs.introconsolelog("  <font size='8' color='rgb(133, 133, 133)'>Script In
 
 local cfcat = env.funcs.recursivels("book%201/%CA%95s/%EF%BD%A1s/%CA%94cl.lua", true) env.stuf.configsectionloaded = true
 env.funcs.introconsolelog("  <font size='8' color='rgb(133, 133, 133)'>Config Loading section loaded.</font>")
+
+env.stuf.sectionsloaded = true
 
 -------------------------------------------------------------------------------------------------------------------------------
 
