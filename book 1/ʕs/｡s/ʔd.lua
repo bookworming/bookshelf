@@ -856,7 +856,7 @@ function giverevolver(state)
 
 				t(0.2) shooting = false
 			end)
-			
+
 			tool.Parent = env.stuf.backpack
 			env.funcs.setcore("bag", true)
 		end
@@ -869,8 +869,6 @@ function giverevolver(state)
 end
 
 env.stuf.handshaker.addcmd("revolver", function(sender, data)
-	if env.stuf.handshaker.excludeself and sender == env.stuf.plr then return end
-
 	local sendername, x, y, z = data:match("(%S+)%s+([%-%d%.]+)%s+([%-%d%.]+)%s+([%-%d%.]+)")
 	if not sendername or not x then return end
 
@@ -987,7 +985,7 @@ function givesawedoff(state)
 
 				t(0.2) shooting = false
 			end)
-			
+
 			tool.Parent = env.stuf.backpack
 			env.funcs.setcore("bag", true)
 		end
@@ -1000,8 +998,6 @@ function givesawedoff(state)
 end
 
 env.stuf.handshaker.addcmd("shotgun", function(sender, data)
-	if env.stuf.handshaker.excludeself and sender == env.stuf.plr then return end
-
 	local sendername, dat = data:match("(%S+)%s+(.+)")
 	if not sendername or not dat then return end
 
