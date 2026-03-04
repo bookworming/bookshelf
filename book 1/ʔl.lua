@@ -103,31 +103,41 @@ local function loadintro(buttononly)
 	end
 
 	local function alive()
-		local scale = Instance.new("UIScale", togglebutton)
+    local wrapper = Instance.new("Frame")
+    wrapper.Size = togglebutton.Size
+    wrapper.Position = togglebutton.Position
+    wrapper.AnchorPoint = togglebutton.AnchorPoint
+    wrapper.BackgroundTransparency = 1
+    wrapper.ZIndex = togglebutton.ZIndex
+    wrapper.Parent = togglebutton.Parent
+    togglebutton.Position = UDim2.fromScale(0.5, 0.5)
+    togglebutton.AnchorPoint = Vector2.new(0.5, 0.5)
+    togglebutton.Parent = wrapper
 
-		local hover = TweenInfo.new(0.12, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
-		local press = TweenInfo.new(0.08, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
-		local currenttween
+    local scale = Instance.new("UIScale", wrapper)
+    local hover = TweenInfo.new(0.12, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+    local press = TweenInfo.new(0.08, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+    local currenttween
+    local function tween(v, info)
+        if currenttween then currenttween:Cancel() end
+        currenttween = ts:Create(scale, info, { Scale = v })
+        currenttween:Play()
+    end
 
-		local function tween(v, info)
-			if currenttween then currenttween:Cancel() end
-			currenttween = ts:Create(scale, info, {Scale = v})
-			currenttween:Play()
-		end
+    env.stuf.togglebutton = togglebutton
+    env.stuf.togglebuttonwrapper = wrapper
+    env.stuf.togglebuttondrag = env.essentials.library.makedraggable(wrapper)
 
-		env.stuf.togglebutton = togglebutton
-		env.stuf.togglebuttondrag = env.essentials.library.makedraggable(togglebutton)
-
-		togglebutton.MouseEnter:Connect(function() env.essentials.library.hov() tween(1.02, hover) end)
-		togglebutton.MouseLeave:Connect(function() tween(1, hover) end)
-		togglebutton.MouseButton1Up:Connect(function() tween(1.02, hover) end)
-		togglebutton.MouseButton1Down:Connect(function() tween(0.98, press) end)
-
-		togglebutton.Activated:Connect(function(i)
-			if env.stuf.togglebuttondrag.dragged then return end
-			env.essentials.library.clik()
-			mainframe.Visible = not mainframe.Visible
-		end)
+    togglebutton.MouseEnter:Connect(function() env.essentials.library.hov() tween(1.02, hover) end)
+    togglebutton.MouseLeave:Connect(function() tween(1, hover) end)
+    togglebutton.MouseButton1Up:Connect(function() tween(1.02, hover) end)
+    togglebutton.MouseButton1Down:Connect(function() tween(0.98, press) end)
+    togglebutton.Activated:Connect(function()
+        if env.stuf.togglebuttondrag.dragged then return end
+        env.essentials.library.clik()
+        mainframe.Visible = not mainframe.Visible
+    end)
+	end
 
 		uis.InputBegan:Connect(function(input, processed)
 			if not processed and input.KeyCode == env.gear.general.defaultkeybind then
