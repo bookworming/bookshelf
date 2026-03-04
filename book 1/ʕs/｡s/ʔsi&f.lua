@@ -143,7 +143,7 @@ local sections = {
 		{ type = "slider", title = "Mainframe UI scale", desc = "Adjusts the UI sscale of the mainframe.", min = 0.5, max = 2, default = 1, step = 0.1,
 			callback = function(value)
 				env.gear.general.mainframescale = value
-    		ts:Create(env.stuf.mainframescale.Scale, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), { Scale = env.gear.general.mainframescale }):Play()
+    		ts:Create(env.stuf.mainframescale, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), { Scale = env.gear.general.mainframescale }):Play()
 			end
 		},
 		{ type = "slider", title = "Button UI scale", desc = "Adjusts the UI scale of the buttons.", min = 0.5, max = 2, default = 1, step = 0.1,
