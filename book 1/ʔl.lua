@@ -292,7 +292,7 @@ local function loadintro(buttononly)
 	if env.essentials.library then
 		env.funcs.introconsolelog("  <font size='8' color='rgb(133, 133, 133)'>UI library successfully loaded.</font>")
 	else
-		env.funcs.introconsolelog("  <font size='8' color='rgb(247, 250, 92)'>Something went wrong.</font>")
+		env.funcs.introconsolelog("  <font size='8' color='rgb(247, 250, 92)'>Something went wrong while trying to load the UI library.</font>")
 	end
 
 	t()
@@ -300,7 +300,7 @@ local function loadintro(buttononly)
 	if env.essentials.data then
 		env.funcs.introconsolelog("  <font size='8' color='rgb(133, 133, 133)'>Script data successfully loaded.</font>")
 	else
-		env.funcs.introconsolelog("  <font size='8' color='rgb(247, 250, 92)'>Something went wrong.</font>")
+		env.funcs.introconsolelog("  <font size='8' color='rgb(247, 250, 92)'>Something went wrong while trying to fetch script data.</font>")
 	end
 
 	t()
@@ -308,7 +308,7 @@ local function loadintro(buttononly)
 	local buildsucc = env.funcs.recursivels("book%201/%CA%95s/%CA%94b.lua", true)
 
 	if not buildsucc or not env.stuf.sectionsloaded then
-		env.funcs.introconsolelog("  <font size='8' color='rgb(247, 250, 92)'>Something went wrong.</font>")
+		env.funcs.introconsolelog("  <font size='8' color='rgb(247, 250, 92)'>Something went wrong while trying to load the script sections.</font>")
 	end
 
 	t()
