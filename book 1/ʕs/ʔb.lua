@@ -48,7 +48,7 @@ local load = env.funcs.recursivels
 env.stuf.sectionsloaded = false
 
 local maincat = env.funcs.recursivels("book%201/%CA%95s/%EF%BD%A1s/%CA%94m.lua", true)
-env.funcs.introconsolelog("  <font size='8' color='rgb(247, 250, 92)'>\"Main\" section loaded.</font>")
+env.funcs.introconsolelog("  <font size='8' color='rgb(133, 133, 133)'>\"Main\" section loaded.</font>")
 if maincat.version ~= env.expectedcompiledscriptversion then
 	env.funcs.introconsolelog("  <font size='8' color='rgb(247, 250, 92)'>The \"Main\" section is out of date.</font>")
 end
