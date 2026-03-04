@@ -701,7 +701,7 @@ function lib.makecoolscrollingframe(size, parent, pos, layoutpadding, Z)
 	Instance.new("UICorner", bar).CornerRadius = UDim.new(1, 0)
 
 	local function getAncestorScale()
-    return env.stuf.mainframescale and env.stuf.mainframescale.Scale / 2 or 1
+    return env.stuf.mainframescale and env.stuf.mainframescale.Scale or 1
 	end
 
 	local function updateBar()
@@ -803,8 +803,7 @@ function lib.makecoolscrollingframe(size, parent, pos, layoutpadding, Z)
 	updateCanvas()
 
 	local function updateCanvas()
-    local scale = getAncestorScale()
-    scroll.CanvasSize = UDim2.new(0, 0, 0, (layout.AbsoluteContentSize.Y + 6) / scale)
+    scroll.CanvasSize = UDim2.new(0, 0, 0, layout.AbsoluteContentSize.Y + 6)
 	end
 
 	spwn(function()
