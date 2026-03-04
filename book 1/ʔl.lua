@@ -295,13 +295,14 @@ local function loadintro(buttononly)
 	end
 
 	t(0.1)
-	env.funcs.introconsolelog("Preloading assets...")
+	env.funcs.introconsolelog("Preloading assets...", "state")
+	env.funcs.introconsolelog("Fetching images...")
 	t(0.1)
 	env.funcs.introconsolelog("Success: Preloaded images", "succ")
 	t(0.1)
 
 	t(0.1) changepb(65, 0.5)
-	env.funcs.introconsolelog("Constructing script...", "state")
+	env.funcs.introconsolelog("Loading UI...", "state")
 	t(0.1) changepb(90, 0.4)
 
 	if env.essentials.library then
@@ -319,6 +320,9 @@ local function loadintro(buttononly)
 	end
 
 	t(0.1)
+	env.funcs.introconsolelog("Success: Script essentials loaded", "succ")
+	env.funcs.introconsolelog("Constructing UI...", "state")	
+	t(0.1)
 
 	local buildsucc = env.funcs.recursivels("book%201/%CA%95s/%CA%94b.lua", true)
 
@@ -327,7 +331,7 @@ local function loadintro(buttononly)
 	end
 
 	t(0.1)
-	env.funcs.introconsolelog("Success: Scripts loaded", "succ")
+	env.funcs.introconsolelog("Success: Script sections loaded", "succ")
 	env.funcs.introconsolelog("Finalizing...", "state")
 	t(0.1) changepb(99, 1.5)
 
