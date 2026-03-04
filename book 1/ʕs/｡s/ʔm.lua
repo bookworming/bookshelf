@@ -223,19 +223,15 @@ local section = {
 		callback = function() 
 		end
 	},
-	{ type = "toggle", title = "Toggle console", desc = "Toggles the Roblox Developer Console.",
+	{ type = "button", title = "Show console", desc = "Shows the Roblox Developer Console.",
 		commandcat = "Main",
 
-		encommands = {"showconsole"},
-		enaliases = {"c"},
-		encommanddesc = "Shows the Roblox Developer Console",
+		command = "console",
+		aliases = {"c"},
+		commanddesc = "Opens the Roblox Developer Console",
 
-		discommands = {"hideconsole"},
-		disaliases = {"hc"},
-		discommanddesc = "Hides the Roblox Developer Console",
-
-		callback = function(state)
-			env.funcs.setcore("console", state)
+		callback = function()
+			env.funcs.setcore("console", true)
 		end
 	},
 
