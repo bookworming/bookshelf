@@ -212,7 +212,7 @@ local function loadintro(buttononly)
 
 	function env.funcs.introconsolelog(line)
 		table.insert(logLines, line)
-    if #logLines > 18 then
+    if #logLines > 17 then
       table.remove(logLines, 1)
     end
     nametag.Text = table.concat(logLines, "\n")
