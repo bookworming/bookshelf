@@ -103,17 +103,18 @@ local function loadintro(buttononly)
 	end
 
 	local function alive()
-		local wrapper = Instance.new("Frame")
-		wrapper.Size = togglebutton.Size
-		wrapper.Position = togglebutton.Position
-		wrapper.AnchorPoint = Vector2.new(0.5, 0.5)
-		wrapper.BackgroundTransparency = 1
-		wrapper.ZIndex = togglebutton.ZIndex
-		wrapper.Parent = togglebutton.Parent
-		togglebutton.Position = UDim2.fromScale(0.5, 0.5)
-		togglebutton.AnchorPoint = Vector2.new(0.5, 0.5)
-		togglebutton.Parent = wrapper
-		wrapper.Position = togglebutton.Position
+    local wrapper = Instance.new("Frame")
+    wrapper.Size = togglebutton.Size
+    wrapper.Position = togglebutton.Position
+    wrapper.AnchorPoint = togglebutton.AnchorPoint
+    wrapper.BackgroundTransparency = 1
+    wrapper.ZIndex = togglebutton.ZIndex
+    wrapper.Parent = togglebutton.Parent
+
+    togglebutton.Position = UDim2.new(0, 0, 0, 0)
+    togglebutton.AnchorPoint = Vector2.new(0, 0)
+    togglebutton.Size = UDim2.new(1, 0, 1, 0)
+    togglebutton.Parent = wrapper
 
 		local scale = Instance.new("UIScale", wrapper)
 		local hover = TweenInfo.new(0.12, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
