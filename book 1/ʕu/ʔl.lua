@@ -1085,6 +1085,7 @@ function lib.loadmainframe()
 
 	env.stuf.mainframescale = Instance.new("UIScale")
 	env.stuf.mainframescale.Parent = mainframe
+	env.stuf.mainframescale.Scale = env.gear.general.mainframescale
 
 	return mainframe, sections
 end
