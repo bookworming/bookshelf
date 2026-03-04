@@ -2722,14 +2722,15 @@ function lib.addslider(parent, title, description, min, max, default, step, call
 	end
 
 	env.essentials.elements[title] = {
-		frame = frame,
-		type = "slider",
-		dirty = false,
-		callback = callback,
-		setValue = function(val) 
-			updateVisuals(tonumber(val)) 
-			if callback then callback(value) end
-		end
+    frame = frame,
+    type = "slider",
+    dirty = false,
+    callback = callback,
+    instance = box,
+    setValue = function(val)
+      updateVisuals(tonumber(val))
+      if callback then callback(value) end
+    end
 	}
 
 	task.defer(updateVisuals)
