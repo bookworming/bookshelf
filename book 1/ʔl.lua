@@ -303,7 +303,7 @@ local function loadintro(buttononly)
 
 	t(0.1) changepb(65, 0.5)
 	env.funcs.introconsolelog("Loading UI...", "state")
-	t(0.1) changepb(90, 0.4)
+	t(0.1) changepb(70, 0.4)
 
 	if env.essentials.library then
 		env.funcs.introconsolelog("UI library successfully loaded.")
@@ -322,7 +322,7 @@ local function loadintro(buttononly)
 	t(0.1)
 	env.funcs.introconsolelog("Success: Script essentials loaded", "succ")
 	env.funcs.introconsolelog("Constructing UI...", "state")	
-	t(0.1)
+	t(0.1) changepb(90, 0.8)
 
 	local buildsucc = env.funcs.recursivels("book%201/%CA%95s/%CA%94b.lua", true)
 
@@ -333,7 +333,7 @@ local function loadintro(buttononly)
 	t(0.1)
 	env.funcs.introconsolelog("Success: Script sections loaded", "succ")
 	env.funcs.introconsolelog("Finalizing...", "state")
-	t(0.1) changepb(99, 1.5)
+	t(0.1) changepb(99, 0.6)
 
 	env.filemanager.persistload()
 	env.funcs.introconsolelog("Loaded persistent elements.")
@@ -349,9 +349,7 @@ local function loadintro(buttononly)
 		env.filemanager:autoload() env.funcs.box("auto-loaded configs (if they exist)")
 	end)
 
-	t(0.1)
 	env.funcs.introconsolelog("Success: Script successfully loaded", "succ")
-	t(0.1)
 	env.funcs.introconsolelog("Done!", "state")
 	t(0.1) changepb(100, 0.2, "Done!")
 	t(0.5)
