@@ -809,9 +809,17 @@ function lib.makecoolscrollingframe(size, parent, pos, layoutpadding, Z)
 	layout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(updateCanvas)
 	updateCanvas()
 
+	local function updateCanvas()
+    local scale = getAncestorScale()
+    scroll.CanvasSize = UDim2.new(0, 0, 0, (layout.AbsoluteContentSize.Y + 6) / scale)
+	end
+
 	spwn(function()
 		repeat t() until env.stuf.mainframescale
-		env.stuf.mainframescale:GetPropertyChangedSignal("Scale"):Connect(updateBar)
+		env.stuf.mainframescale:GetPropertyChangedSignal("Scale"):Connect(function()
+			updateBar()
+			updateCanvas()
+		end)
 	end)
 
 	return scroll, bg
@@ -2734,6 +2742,15 @@ function lib.addslider(parent, title, description, min, max, default, step, call
 
 	local dragging = false
 	track.InputBegan:Connect(function(i)
+		if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then
+			dragging = true
+			lib.clik()
+			setFromX(i.Position.X - track.AbsolutePosition.X)
+			candrag = false
+		end
+	end)
+
+	knob.InputBegan:Connect(function(i)
 		if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then
 			dragging = true
 			lib.clik()
