@@ -301,9 +301,9 @@ local function loadintro(buttononly)
 	env.funcs.introconsolelog("Success: Preloaded images", "succ")
 	t(0.1)
 
-	t(0.1) changepb(65, 0.5)
+	t(0.1) changepb(55, 0.5)
 	env.funcs.introconsolelog("Loading UI...", "state")
-	t(0.1) changepb(70, 0.4)
+	t(0.1) changepb(60, 0.4)
 
 	if env.essentials.library then
 		env.funcs.introconsolelog("UI library successfully loaded.")
@@ -311,7 +311,7 @@ local function loadintro(buttononly)
 		env.funcs.introconsolelog("Something went wrong. (LibFail)", "warn")
 	end
 
-	t(0.1)
+	t(0.1) changepb(70, 0.4)
 
 	if env.essentials.data then
 		env.funcs.introconsolelog("Script data successfully loaded.")
@@ -319,10 +319,10 @@ local function loadintro(buttononly)
 		env.funcs.introconsolelog("Something went wrong. (DataFail)", "warn")
 	end
 
-	t(0.1)
+	t(0.1) changepb(80, 0.4)
 	env.funcs.introconsolelog("Success: Script essentials loaded", "succ")
 	env.funcs.introconsolelog("Constructing UI...", "state")	
-	t(0.1) changepb(90, 0.8)
+	t(0.1) changepb(90, 0.2)
 
 	local buildsucc = env.funcs.recursivels("book%201/%CA%95s/%CA%94b.lua", true)
 
