@@ -2703,14 +2703,19 @@ function lib.addslider(parent, title, description, min, max, default, step, call
 	local box = lib.makecooltextbox(UDim2.new(0, 70, 0, 28), frame, default, 16, "...", nil, UDim2.new(1, -50, 1, -30), nil, 67)
 
 	local value = math.clamp(default or min, min, max)
-	local function snap(v) return math.clamp(math.floor(v / (step or 1) + 0.5) * (step or 1), min, max) end
+	local function snap(v)
+    local snapped = math.clamp(math.floor(v / step + 0.5) * step, min, max)
+    local decimals = math.max(0, math.ceil(-math.log10(step)))
+    return tonumber(string.format("%." .. decimals .. "f", snapped))
+	end
 
 	local function updateVisuals(newVal)
-		if newVal then value = snap(newVal) end
-		local pct = (value - min) / (max - min)
-		fill.Size = UDim2.new(pct, 0, 0, 5)
-		knob.Position = UDim2.new(pct, 0, 0.5, 0)
-		box.Text = tostring(value)
+    if newVal then value = snap(newVal) end
+    local pct = (value - min) / (max - min)
+    fill.Size = UDim2.new(pct, 0, 0, 5)
+    knob.Position = UDim2.new(pct, 0, 0.5, 0)
+    local decimals = math.max(0, math.ceil(-math.log10(step)))
+    box.Text = string.format("%." .. decimals .. "f", value)
 	end
 
 	local function setFromX(x)
