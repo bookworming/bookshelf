@@ -103,30 +103,36 @@ local function loadintro(buttononly)
 	end
 
 	local function alive()
-    local baseScaleObj = togglebutton:FindFirstChildOfClass("UIScale") or Instance.new("UIScale", togglebutton)
-    baseScaleObj.Scale = env.gear.general.buttonscale or 1
-    env.stuf.buttonscale = baseScaleObj
+    local existing = togglebutton:FindFirstChildOfClass("UIScale")
+    if existing then existing:Destroy() end
 
-    local hoverScaleObj = Instance.new("UIScale", togglebutton)
-    hoverScaleObj.Scale = 1
+    local scale = Instance.new("UIScale", togglebutton)
+    local baseScale = env.gear.general.buttonscale or 1
+    scale.Scale = baseScale
 
     local hover = TweenInfo.new(0.12, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
     local press = TweenInfo.new(0.08, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
     local currenttween
     local function scaleTo(v, info)
-        if currenttween then currenttween:Cancel() end
-        currenttween = ts:Create(hoverScaleObj, info, { Scale = v })
-        currenttween:Play()
+      if currenttween then currenttween:Cancel() end
+      currenttween = ts:Create(scale, info, { Scale = baseScale * v })
+      currenttween:Play()
     end
 
     env.stuf.setbuttonscale = function(v)
-        ts:Create(baseScaleObj, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), { Scale = v }):Play()
+        baseScale = v
+        env.stuf.buttonscale.Scale = v  -- keep the table in sync
+        ts:Create(scale, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), { Scale = baseScale }):Play()
         if env.stuf.buttonscalelisteners then
-            for _, listener in pairs(env.stuf.buttonscalelisteners) do
-                listener(v)
-            end
+          for _, listener in pairs(env.stuf.buttonscalelisteners) do
+            listener(v)
+          end
         end
     end
+
+    env.stuf.buttonscale = {
+        Scale = baseScale,
+    }
 
     local hover = TweenInfo.new(0.12, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
     local press = TweenInfo.new(0.08, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
