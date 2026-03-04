@@ -1530,7 +1530,7 @@ function lib.addtoggle(parent, title, description, callback, bindable, default, 
 		miniToggle.Activated:Connect(onToggle)
 
 local scale = Instance.new("UIScale", buttonFrame)
-local baseScale = env.stuf.buttonscale and env.stuf.buttonscale.Scale or 1
+local baseScale = env.stuf.buttonbaseScale or 1
 scale.Scale = baseScale
 
 local hover, press = TweenInfo.new(0.12, Enum.EasingStyle.Quad), TweenInfo.new(0.08, Enum.EasingStyle.Quad)
@@ -1540,6 +1540,20 @@ local function playScale(v, info)
     currenttween = ts:Create(scale, info, { Scale = baseScale * v })
     currenttween:Play()
 end
+
+local listenerIndex = #env.stuf.buttonscalelisteners + 1
+env.stuf.buttonscalelisteners[listenerIndex] = function(v)
+    if buttonFrame.Parent == nil then
+        env.stuf.buttonscalelisteners[listenerIndex] = nil
+        return
+    end
+    baseScale = v
+    scale.Scale = v
+end
+
+buttonFrame.Destroying:Connect(function()
+    env.stuf.buttonscalelisteners[listenerIndex] = nil
+end)
 
 if env.stuf.buttonscale then
     env.stuf.buttonscale:GetPropertyChangedSignal("Scale"):Connect(function()
@@ -1837,7 +1851,7 @@ function lib.addbutton(parent, title, description, callback, bindable, locked, l
 		end)
 
 local scale = Instance.new("UIScale", buttonFrame)
-local baseScale = env.stuf.buttonscale and env.stuf.buttonscale.Scale or 1
+local baseScale = env.stuf.buttonbaseScale or 1
 scale.Scale = baseScale
 
 local hover, press = TweenInfo.new(0.12, Enum.EasingStyle.Quad), TweenInfo.new(0.08, Enum.EasingStyle.Quad)
@@ -1847,6 +1861,20 @@ local function playScale(v, info)
     currenttween = ts:Create(scale, info, { Scale = baseScale * v })
     currenttween:Play()
 end
+
+local listenerIndex = #env.stuf.buttonscalelisteners + 1
+env.stuf.buttonscalelisteners[listenerIndex] = function(v)
+    if buttonFrame.Parent == nil then
+        env.stuf.buttonscalelisteners[listenerIndex] = nil
+        return
+    end
+    baseScale = v
+    scale.Scale = v
+end
+
+buttonFrame.Destroying:Connect(function()
+    env.stuf.buttonscalelisteners[listenerIndex] = nil
+end)
 
 if env.stuf.buttonscale then
     env.stuf.buttonscale:GetPropertyChangedSignal("Scale"):Connect(function()
