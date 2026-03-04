@@ -103,63 +103,63 @@ local function loadintro(buttononly)
 	end
 
 	local function alive()
-    local existing = togglebutton:FindFirstChildOfClass("UIScale")
-    if existing then existing:Destroy() end
+		local existing = togglebutton:FindFirstChildOfClass("UIScale")
+		if existing then existing:Destroy() end
 
-    local scale = Instance.new("UIScale", togglebutton)
-    local baseScale = env.gear.general.buttonscale or 1
-    scale.Scale = baseScale
+		local scale = Instance.new("UIScale", togglebutton)
+		local baseScale = env.gear.general.buttonscale or 1
+		scale.Scale = baseScale
 
-    local hover = TweenInfo.new(0.12, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
-    local press = TweenInfo.new(0.08, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
-    local currenttween
-    local function scaleTo(v, info)
-      if currenttween then currenttween:Cancel() end
-      currenttween = ts:Create(scale, info, { Scale = baseScale * v })
-      currenttween:Play()
-    end
+		local hover = TweenInfo.new(0.12, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+		local press = TweenInfo.new(0.08, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+		local currenttween
+		local function scaleTo(v, info)
+			if currenttween then currenttween:Cancel() end
+			currenttween = ts:Create(scale, info, { Scale = baseScale * v })
+			currenttween:Play()
+		end
 
-    env.stuf.setbuttonscale = function(v)
-        baseScale = v
-        env.stuf.buttonscale.Scale = v  -- keep the table in sync
-        ts:Create(scale, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), { Scale = baseScale }):Play()
-        if env.stuf.buttonscalelisteners then
-          for _, listener in pairs(env.stuf.buttonscalelisteners) do
-            listener(v)
-          end
-        end
-    end
+		env.stuf.setbuttonscale = function(v)
+			baseScale = v
+			env.stuf.buttonscale.Scale = v  -- keep the table in sync
+			ts:Create(scale, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), { Scale = baseScale }):Play()
+			if env.stuf.buttonscalelisteners then
+				for _, listener in pairs(env.stuf.buttonscalelisteners) do
+					listener(v)
+				end
+			end
+		end
 
-    env.stuf.buttonscale = {
-        Scale = baseScale,
-    }
+		env.stuf.buttonscale = {
+			Scale = baseScale,
+		}
 
-    local hover = TweenInfo.new(0.12, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
-    local press = TweenInfo.new(0.08, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
-    local currenttween
+		local hover = TweenInfo.new(0.12, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+		local press = TweenInfo.new(0.08, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+		local currenttween
 
-    togglebutton.AnchorPoint = Vector2.new(0.5, 0.5)
-    togglebutton.Position = UDim2.new(0.5, 0, 0, 100)
+		togglebutton.AnchorPoint = Vector2.new(0.5, 0.5)
+		togglebutton.Position = UDim2.new(0.5, 0, 0, 100)
 
-    env.stuf.togglebutton = togglebutton
-    env.stuf.togglebuttondrag = env.essentials.library.makedraggable(togglebutton)
+		env.stuf.togglebutton = togglebutton
+		env.stuf.togglebuttondrag = env.essentials.library.makedraggable(togglebutton)
 
-    togglebutton.MouseEnter:Connect(function() env.essentials.library.hov() scaleTo(1.02, hover) end)
-    togglebutton.MouseLeave:Connect(function() scaleTo(1, hover) end)
-    togglebutton.MouseButton1Up:Connect(function() scaleTo(1.02, hover) end)
-    togglebutton.MouseButton1Down:Connect(function() scaleTo(0.98, press) end)
-    togglebutton.Activated:Connect(function()
-      if env.stuf.togglebuttondrag.dragged then return end
-      env.essentials.library.clik()
-      mainframe.Visible = not mainframe.Visible
-    end)
+		togglebutton.MouseEnter:Connect(function() env.essentials.library.hov() scaleTo(1.02, hover) end)
+		togglebutton.MouseLeave:Connect(function() scaleTo(1, hover) end)
+		togglebutton.MouseButton1Up:Connect(function() scaleTo(1.02, hover) end)
+		togglebutton.MouseButton1Down:Connect(function() scaleTo(0.98, press) end)
+		togglebutton.Activated:Connect(function()
+			if env.stuf.togglebuttondrag.dragged then return end
+			env.essentials.library.clik()
+			mainframe.Visible = not mainframe.Visible
+		end)
 
-    uis.InputBegan:Connect(function(input, processed)
-      if not processed and input.KeyCode == env.gear.general.defaultkeybind then
-        mainframe.Visible = not mainframe.Visible
-        env.essentials.library.clik()
-      end
-    end)
+		uis.InputBegan:Connect(function(input, processed)
+			if not processed and input.KeyCode == env.gear.general.defaultkeybind then
+				mainframe.Visible = not mainframe.Visible
+				env.essentials.library.clik()
+			end
+		end)
 	end
 
 	local js
@@ -394,16 +394,16 @@ local function loadintro(buttononly)
 	tween2.Completed:Wait()
 	yo:Destroy()
 
-spwn(backspace, title)
-spwn(backspace, subtitle)
+	spwn(backspace, title)
+	spwn(backspace, subtitle)
 
-env.stuf.buttonscale = Instance.new("UIScale", hi)
-tween(env.stuf.buttonscale, {1, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut}, {Scale = env.gear.general.buttonscale})
+	env.stuf.buttonscale = Instance.new("UIScale", hi)
+	tween(env.stuf.buttonscale, {1, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut}, {Scale = env.gear.general.buttonscale})
 
-task.delay(0.6, function()
-    title:Destroy()
-    subtitle:Destroy()
-end)
+	task.delay(0.6, function()
+		title:Destroy()
+		subtitle:Destroy()
+	end)
 
 	t(0.2)
 
