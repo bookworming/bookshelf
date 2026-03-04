@@ -704,11 +704,13 @@ function lib.makecoolscrollingframe(size, parent, pos, layoutpadding, Z)
 		return env.stuf.mainframescale and env.stuf.mainframescale.Scale or 1
 	end
 
+	local ogscrollbarheight = size.Y.Offset - 4
+
 	local function updateBar()
 		local scale = getAncestorScale()
 		local view = scroll.AbsoluteWindowSize.Y / scale
 		local canvas = scroll.CanvasSize.Y.Offset
-		local barBackgroundHeight = scrollbar.AbsoluteSize.Y / scale
+		local barBackgroundHeight = ogscrollbarheight
 
 		if canvas <= view then
 			bar.Visible = false
@@ -753,7 +755,7 @@ function lib.makecoolscrollingframe(size, parent, pos, layoutpadding, Z)
 			local canvas = scroll.CanvasSize.Y.Offset
 			if canvas <= view then return end
 
-			local barBackgroundHeight = scrollbar.AbsoluteSize.Y / scale
+			local barBackgroundHeight = ogscrollbarheight
 			local actualHeight = math.clamp((view / canvas) * barBackgroundHeight, 10, barBackgroundHeight - 4)
 			local maxBarTravel = barBackgroundHeight - actualHeight
 			local maxScrollPos = canvas - view
