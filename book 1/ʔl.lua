@@ -145,7 +145,7 @@ local function loadintro(buttononly)
 		local aspect = Instance.new("UIAspectRatioConstraint")
 		aspect.AspectRatio, aspect.DominantAxis, aspect.Parent = 1.5, Enum.DominantAxis.Height, js
 
-		task.spawn(function() intro(js) end)
+		spwn(function() intro(js) end)
 
 		tween(js, {3.2, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut}, {Size = UDim2.new(1, 0, 0, 243)}).Completed:Wait()
 		t()
@@ -186,8 +186,8 @@ local function loadintro(buttononly)
 	local subtitle = env.essentials.library.makecooltext(hi, UDim2.fromOffset(200, 20), "", 12, Color3.fromRGB(187,187,187), 2, UDim2.fromOffset(163, 42), Enum.TextXAlignment.Left, Enum.TextYAlignment.Center, nil, 100001)
 
 	task.delay(0.1, function() 
-		task.spawn(type, title, "Noxious: Boxten Sex GUI")
-		task.spawn(type, subtitle, "Version 1.3.0 | Initializing...")
+		spwn(type, title, "Noxious: Boxten Sex GUI")
+		spwn(type, subtitle, "Version 1.3.0 | Initializing...")
 	end)
 
 	t(0.5)
@@ -333,8 +333,8 @@ local function loadintro(buttononly)
 	tween2.Completed:Wait()
 	yo:Destroy()
 
-	task.spawn(backspace, title)
-	task.spawn(backspace, subtitle)
+	spwn(backspace, title)
+	spwn(backspace, subtitle)
 
 	task.delay(0.6, function()
 		title:Destroy()
