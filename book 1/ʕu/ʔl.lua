@@ -2362,7 +2362,7 @@ function lib.addinputandtoggle(parent, title, description, defaulttext, placehol
 	local elementdesc = lib.makecooltext(frame, UDim2.new(0, textwidth, 0, dh), description, 10, Color3.fromRGB(170,170,170), 1, UDim2.new(0, leftpadding + textwidth / 2, 0, leftpadding + th + tetxgap + dh / 2 + 5), Enum.TextXAlignment.Left)
 	elementdesc.ZIndex = 61
 
-	local inputbox = lib.makecooltextbox(UDim2.new(0, 142, 0, 28), frame, defaulttext, 16, placeholdertext, nil, UDim2.new(0, 0, 1, -30), nil, 61)
+	local inputbox = lib.makecooltextbox(UDim2.new(0, 142, 0, 28), frame, defaulttext, 16, placeholdertext, nil, UDim2.new(1, 0, 1, -30), nil, 61)
 
 	if autofill then
 		local lastSuggestion = nil
