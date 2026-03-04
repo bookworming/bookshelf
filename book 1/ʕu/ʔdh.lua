@@ -9,7 +9,7 @@
    
 ---------------------------------------------------------------------------------------------------------------------------]]--
 
-if not game:IsLoaded() then game.Loaded:Wait() end local t = task.wait
+if not game:IsLoaded() then game.Loaded:Wait() end
 
 -------------------------------------------------------------------------------------------------------------------------------
 
@@ -54,7 +54,6 @@ local PADDING = 2
 local DISPLAY_TIME = 5
 local TWEEN_TIME = 0.5
 local TEXT_SIZE = 16
-local FONT = Enum.Font.FredokaOne
 
 local notifications = {}
 
@@ -132,13 +131,13 @@ local function CreateNotification(text, whosaidit)
 	end
 
 	if nameText ~= "" then
-		local nameWidth = env.essentials.library.gettextbounds(nameText, FONT, TEXT_SIZE)
+		local nameWidth = env.essentials.library.gettextbounds(nameText, Enum.Font.FredokaOne, TEXT_SIZE)
 
 		local nameLabel = Instance.new("TextLabel")
 		nameLabel.BackgroundTransparency = 1
 		nameLabel.Text = nameText
 		nameLabel.TextColor3 = nameColor
-		nameLabel.Font = FONT
+		nameLabel.Font = Enum.Font.FredokaOne
 		nameLabel.TextSize = TEXT_SIZE
 		nameLabel.Size = UDim2.new(0, nameWidth, 1, 0)
 		nameLabel.Position = UDim2.new(0, cursorX, 0, 0)
@@ -161,8 +160,8 @@ local function CreateNotification(text, whosaidit)
   for i = 1, #text do
     local char = text:sub(i, i)
 
-    local widthUpToHere = env.essentials.library.gettextbounds(text:sub(1, i), FONT, TEXT_SIZE)
-    local widthUpToPrev = i > 1 and env.essentials.library.gettextbounds(text:sub(1, i - 1), FONT, TEXT_SIZE) or 0
+    local widthUpToHere = env.essentials.library.gettextbounds(text:sub(1, i), Enum.Font.FredokaOne, TEXT_SIZE)
+    local widthUpToPrev = i > 1 and env.essentials.library.gettextbounds(text:sub(1, i - 1), Enum.Font.FredokaOne, TEXT_SIZE) or 0
     local charWidth = widthUpToHere - widthUpToPrev
     local xPos = textStartX + widthUpToPrev
 
@@ -170,7 +169,7 @@ local function CreateNotification(text, whosaidit)
 		letter.BackgroundTransparency = 1
 		letter.Text = char
 		letter.TextColor3 = Color3.new(1, 1, 1)
-		letter.Font = FONT
+		letter.Font = Enum.Font.FredokaOne
 		letter.TextSize = TEXT_SIZE
 		letter.Size = UDim2.new(0, charWidth, 1, 0)
     letter.Position = UDim2.new(0, xPos, 0, -2)
@@ -188,7 +187,7 @@ local function CreateNotification(text, whosaidit)
     table.insert(letters, entry)
 	end
 
-	cursorX = textStartX + env.essentials.library.gettextbounds(text, FONT, TEXT_SIZE)
+	cursorX = textStartX + env.essentials.library.gettextbounds(text, Enum.Font.FredokaOne, TEXT_SIZE)
   holder.Size = UDim2.new(0, cursorX, 0, 16)
 
 	local newHeight = holder.AbsoluteSize.Y + PADDING
