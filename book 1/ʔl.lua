@@ -134,12 +134,6 @@ local function loadintro(buttononly)
     local press = TweenInfo.new(0.08, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
     local currenttween
 
-    local function scaleTo(v, info)
-      if currenttween then currenttween:Cancel() end
-			currenttween = ts:Create(scale, info, { Scale = baseScale * v })
-      currenttween:Play()
-    end
-
     togglebutton.AnchorPoint = Vector2.new(0.5, 0.5)
     togglebutton.Position = UDim2.new(0.5, 0, 0, 100)
 
