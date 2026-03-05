@@ -48,20 +48,22 @@ repeat t() until env.setupcomplete and env.essentialsloaded
 env.funcs.box("setup complete")
 
 env.expectedcompiledscriptversions = {
-	library = 1,
-	data = 1,
+	library = 2,
+	data = 2,
+
+  builder = 2,
 	
-	mainsection = 1,
-	navigationsection = 1,
-	visualssection = 1,
-	localplayersection = 1,
-	automationsection = 1,
-	animationssection = 1,
-	funsection = 1,
-	donorsection = 1,
+	mainsection = 2,
+	navigationsection = 2,
+	visualssection = 2,
+	localplayersection = 2,
+	automationsection = 2,
+	animationssection = 2,
+	funsection = 2,
+	donorsection = 2,
 	
-	scriptinformationandchangelogssections = 1,
-	configloadingsection = 1
+	scriptinformationandchangelogssections = 2,
+	configloadingsection = 2
 }
 
 -------------------------------------------------------------------------------------------------------------------------------
@@ -399,6 +401,9 @@ local function loadintro()
 	t(0.1) env.funcs.introprogress(60)
 
 	local buildsucc = env.funcs.recursivels("book%201/%CA%95s/%CA%94b.lua", true)
+	if buildsucc.version ~= env.expectedcompiledscriptversions.builder then
+		env.funcs.introconsolelog("The UI builder is not up to date. (" .. buildsucc.version .. "OoD)", "warn")
+	end
 
 	if not buildsucc or not env.stuf.sectionsloaded then
 		env.funcs.introconsolelog("Something went wrong. (BuildFail)", "warn")
