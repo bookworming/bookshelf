@@ -374,7 +374,7 @@ local function loadintro()
 	t(0.1) env.funcs.introprogress(45)
 
 	if env.essentials.library then
-		env.funcs.introconsolelog("UI library successfully loaded.")
+		env.funcs.introconsolelog("UI library successfully loaded. (" .. env.essentials.library.version .. ")")
 		if env.essentials.library.version ~= env.expectedcompiledscriptversions.library then
 			env.funcs.introconsolelog("The UI script library is out of date. (" .. env.essentials.library.version .. "OoD)", "warn")
 		end
@@ -385,7 +385,7 @@ local function loadintro()
 	t(0.1) env.funcs.introprogress(50)
 
 	if env.essentials.data then
-		env.funcs.introconsolelog("Script data successfully loaded.")
+		env.funcs.introconsolelog("Script data successfully loaded. (" .. env.essentials.data.version .. ")")
 		if env.essentials.data.version ~= env.expectedcompiledscriptversions.data then
 			env.funcs.introconsolelog("The script data is out of date. (" .. env.essentials.data.version .. "OoD)", "warn")
 		end
