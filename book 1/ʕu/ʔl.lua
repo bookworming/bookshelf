@@ -10,7 +10,7 @@
 ---------------------------------------------------------------------------------------------------------------------------]]--
 
 local lib = {}
-lib.version = 6
+lib.version = 7
 
 -------------------------------------------------------------------------------------------------------------------------------
 
@@ -2850,8 +2850,8 @@ function lib.addinputandtoggle(parent, title, description, defaulttext, placehol
 end
 
 function lib.addinputandbutton(parent, title, description, defaulttext, placeholdertext, callback, autofill)
-	local width, leftpadding, rightpadding, tetxgap = 235, 14, 14, -5
-	local textwidth = width - rightpadding - 20
+	local width, leftpadding, rightpadding, tetxgap = 235, 14, 68, -5
+	local textwidth = width - rightpadding - leftpadding
 
 	local frame = lib.makecoolframe(UDim2.new(0, width, 0, 0), parent, false, false, nil, nil, nil, true, 60)
 	frame.AutomaticSize = Enum.AutomaticSize.Y
@@ -2887,28 +2887,25 @@ function lib.addinputandbutton(parent, title, description, defaulttext, placehol
 	local executebutton = lib.makecoolbutton("▶", UDim2.new(0, 70, 0, 28), frame, UDim2.new(1, -50, 1, -30), "yes", 17, {bottom = 7}, 61)
 
 	local function updateFrameSize()
-		local function stripRichText(str)
-			return str:gsub("<[^>]->", "")
-		end
+    local function stripRichText(str)
+      return str:gsub("<[^>]->", "")
+    end
 
-		local actualWidth = frame.AbsoluteSize.X
-		local scaledTextWidth = actualWidth - rightpadding - 20
+    local cleanTitleText = stripRichText(elementtitle.Text)
 
-		local cleanTitleText = stripRichText(elementtitle.Text)
+    local _, newTh = lib.gettextbounds(cleanTitleText, elementtitle.Font, elementtitle.TextSize, Vector2.new(textwidth, math.huge))
+    local _, currDh = lib.gettextbounds(description, elementdesc.Font, elementdesc.TextSize, Vector2.new(textwidth, math.huge))
 
-		local _, newTh = lib.gettextbounds(cleanTitleText, elementtitle.Font, elementtitle.TextSize, Vector2.new(scaledTextWidth, math.huge))
-		local _, currDh = lib.gettextbounds(description, elementdesc.Font, elementdesc.TextSize, Vector2.new(scaledTextWidth, math.huge))
+    local newDescY = leftpadding + newTh + tetxgap
+    local newTotalHeight = newTh + currDh + leftpadding * 2 + tetxgap + 45
 
-		local newDescY = leftpadding + newTh + tetxgap
-		local newTotalHeight = newTh + currDh + leftpadding * 2 + tetxgap + 45
+    elementtitle.Size = UDim2.new(0, textwidth, 0, newTh)
+    elementtitle.Position = UDim2.new(0, leftpadding + textwidth / 2, 0, leftpadding + newTh / 2 - 5)
 
-		elementtitle.Size = UDim2.new(0, scaledTextWidth, 0, newTh)
-		elementtitle.Position = UDim2.new(0, leftpadding + scaledTextWidth / 2, 0, leftpadding + newTh / 2 - 5)
+    elementdesc.Size = UDim2.new(0, textwidth, 0, currDh)
+    elementdesc.Position = UDim2.new(0, leftpadding + textwidth / 2, 0, newDescY + currDh / 2 + 5)
 
-		elementdesc.Size = UDim2.new(0, scaledTextWidth, 0, currDh)
-		elementdesc.Position = UDim2.new(0, leftpadding + scaledTextWidth / 2, 0, newDescY + currDh / 2 + 5)
-
-		frame.Size = UDim2.new(0, width, 0, newTotalHeight)
+    frame.Size = UDim2.new(0, width, 0, newTotalHeight)
 	end
 
 	frame:GetPropertyChangedSignal("AbsoluteSize"):Connect(updateFrameSize)
