@@ -167,8 +167,7 @@ function noclip()
 end
 
 function stopnoclipping()
-	env.funcs.rid(noclipconn)
-	noclipconn = nil
+	if noclipconn then noclipconn:Disconnect() noclipconn = nil end
 
 	for part, data in pairs(noclipmodparts) do
 		if part and part.Parent then
