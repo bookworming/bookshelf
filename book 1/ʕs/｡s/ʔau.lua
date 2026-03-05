@@ -24,7 +24,7 @@ local FindFirstChildOfClass = getins(game, "FindFirstChildOfClass")
 local ws = FindFirstChildOfClass(game, "Workspace")
 local uis = FindFirstChildOfClass(game, "UserInputService")
 local rs = FindFirstChildOfClass(game, "RunService")
-local rps = FindFirstChildOfClass(ws, "ReplicatedStorage")
+local rst = FindFirstChildOfClass(ws, "ReplicatedStorage")
 local plrs = FindFirstChildOfClass(game, "Players")
 
 local getgenv = getgenv() or _G
@@ -40,7 +40,7 @@ local autoescapewormdelay = 0.1
 local function autoescape(state)
 	if state then
 		local function tap(dir)
-			rps.Events.TwistedSquirmGrab:FireServer(unpack({"Struggle", dir}))
+			rst.Events.TwistedSquirmGrab:FireServer(unpack({"Struggle", dir}))
 		end
 
 		local uivisible
