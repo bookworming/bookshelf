@@ -322,7 +322,7 @@ local function newcat(catparent, categories, defaultcat, catdat, infoframe)
 			elseif item.type == "input and toggle" then
 				element = env.essentials.library.addinputandtoggle(scroll, 
 					item.title, item.desc or "", 
-					item.default or "", 
+					item.defaulttext or "", 
 					item.placeholder or "", 
 					function(text, state) 
 						if item.callback then 
