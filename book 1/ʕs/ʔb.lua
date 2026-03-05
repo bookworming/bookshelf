@@ -9,7 +9,7 @@
    
 ---------------------------------------------------------------------------------------------------------------------------]]--
 
-local box = {} -- its wed jan 4 26
+local version 2 -- its wed jan 4 26
 
 -------------------------------------------------------------------------------------------------------------------------------
 
@@ -417,7 +417,6 @@ local function newcat(catparent, categories, defaultcat, catdat, infoframe)
 
 			if element then				
 				element.LayoutOrder = i
-				box[item.title] = element
 
 				if item.type == "separator" then
 					table.insert(catconts[cat].seps, element)
