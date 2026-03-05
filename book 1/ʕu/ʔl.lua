@@ -10,7 +10,7 @@
 ---------------------------------------------------------------------------------------------------------------------------]]--
 
 local lib = {}
-lib.version = 5
+lib.version = 6
 
 -------------------------------------------------------------------------------------------------------------------------------
 
@@ -2397,7 +2397,7 @@ function lib.addinputandtoggle(parent, title, description, defaulttext, placehol
 		end)
 	end
 
-	toggle = lib.makecoolframe(UDim2.new(0, 38, 0, 20), frame, false, false, UDim2.new(1, -38, 1, -39), true, true, nil, 61)
+	toggle = lib.makecoolframe(UDim2.new(0, 38, 0, 20), frame, false, false, UDim2.new(1, -38, 1, 0), true, true, nil, 61)
 	knob = Instance.new("Frame", toggle)
 	knob.Size, knob.Position, knob.ZIndex, knob.AnchorPoint, knob.BackgroundColor3 = UDim2.new(0, 16, 0, 16), UDim2.new(0, 2, 0.5, 0), toggle.ZIndex + 1, Vector2.new(0, 0.5), Color3.new(1,1,1)
 	Instance.new("UICorner", knob).CornerRadius = UDim.new(1,0)
@@ -2474,7 +2474,7 @@ function lib.addinputandtoggle(parent, title, description, defaulttext, placehol
 		elementdesc.Size = UDim2.new(0, scaledTextWidth, 0, currDh)
 		elementdesc.Position = UDim2.new(0, leftpadding + scaledTextWidth / 2, 0, newDescY + currDh / 2 + 5)
 
-		if toggle then toggle.Position = UDim2.new(1, -38, 1, -25) end
+		if toggle then toggle.Position = UDim2.new(1, -38, 1, -35) end
 		if inputbox then inputbox.Position = UDim2.new(0, leftpadding + 73, 1, -30) end
 
 		frame.Size = UDim2.new(0, width, 0, newTotalHeight)
