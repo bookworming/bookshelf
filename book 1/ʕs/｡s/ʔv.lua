@@ -304,25 +304,25 @@ local espsettings = {
 		playerhurt = Color3.fromRGB(0, 0, 190),
 		playerbadlyhurt = Color3.fromRGB(0, 0, 130),
 		playerdead = Color3.fromRGB(0, 0, 70),
-		
+
 		machine = Color3.fromRGB(150, 150, 150),
 		possessedmachine = Color3.fromRGB(87, 234, 249),
 		completedmachine = Color3.fromRGB(255, 80, 250),
-		
+
 		item = Color3.fromRGB(0, 255, 0),
 		rareitem = Color3.fromRGB(173, 65, 245),
 		ultrarareitem = Color3.fromRGB(255, 141, 45),
 		dangerousitem = Color3.fromRGB(255, 255, 0),
-		
+
 		elevator = Color3.fromRGB(80, 80, 80),
 		fakeelevator = Color3.fromRGB(171, 171, 4),
-		
+
 		twisted = Color3.fromRGB(255, 0, 0),
 		twistedobstacle = Color3.fromRGB(122, 7, 0),
 	},
-	
+
 	hover = false,
-	
+
 	playerindicators = {
 		username = true,
 		displayname = true,
@@ -339,7 +339,7 @@ local espsettings = {
 		insight = true,
 		sightcooldown = true
 	},
-	
+
 	hidemachineespconditions = {
 		completed = false,
 		hasprogress = false,
@@ -382,7 +382,7 @@ local function setupplayeresp(state)
 	local function apply(player)
 		if player == env.stuf.plr then return end
 		if not env.stuf.plrfolder:FindFirstChild(player.Name) then return end
-		
+
 		local function onchar(char)
 			if esphandler.player.hls[player.Name] then
 				esphandler.player.hls[player.Name]:Destroy()
@@ -497,7 +497,7 @@ local function setupelevatoresp(state)
 		yield(function() return env.stuf.elevator end)
 		local elevator = env.stuf.elevator
 		local door = elevator:FindFirstChild("ElevatorDoor")
-		
+
 		local h = newhl(door, espsettings.colors.elevator)
 		esphandler.elevator.hls[door] = h
 	end
@@ -641,10 +641,10 @@ end
 
 function toggleborders(state)
 	if not env.stuf.inrun then return end
-	
+
 	if state then
 		if env.stuf.currentroom then removeborders() end
-		
+
 		noclipfactiveconn = env.funcs.getgamestat("flooractive").Changed:Connect(function(active)
 			if active then
 				removeborders()
@@ -948,7 +948,7 @@ local section = {
 	},
 	{ type = "toggle", title = "Show players' health bar", desc = "Shows the health stats GUI under every player in a run.",
 		commandcat = "Visuals",
-		
+
 		encommands = {"showhealthbars"},
 		enaliases = {"showhb", "shb"},
 		encommanddesc = "Shows players' health bars",
