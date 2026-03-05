@@ -2309,7 +2309,7 @@ end
 
 function lib.addinputandtoggle(parent, title, description, defaulttext, placeholdertext, callback, default, locked, lockreason, autofill)
 	local width, leftpadding, rightpadding, tetxgap = 235, 14, 14, -5
-	local textwidth = width - rightpadding - 20
+	local textwidth = width - rightpadding - 40
 
 	local ON = {
 		bg = {
@@ -2458,7 +2458,7 @@ function lib.addinputandtoggle(parent, title, description, defaulttext, placehol
 		end
 
 		local actualWidth = frame.AbsoluteSize.X
-		local scaledTextWidth = actualWidth - rightpadding - 20
+		local scaledTextWidth = actualWidth - rightpadding - 40
 
 		local cleanTitleText = stripRichText(elementtitle.Text)
 
@@ -2471,8 +2471,8 @@ function lib.addinputandtoggle(parent, title, description, defaulttext, placehol
 		elementtitle.Size = UDim2.new(0, scaledTextWidth, 0, newTh)
 		elementtitle.Position = UDim2.new(0, leftpadding + scaledTextWidth / 2, 0, leftpadding + newTh / 2 - 5)
 
-		-- elementdesc.Size = UDim2.new(0, scaledTextWidth, 0, currDh)
-		-- elementdesc.Position = UDim2.new(0, leftpadding + scaledTextWidth / 2, 0, newDescY + currDh / 2 + 5)
+		elementdesc.Size = UDim2.new(0, scaledTextWidth, 0, currDh)
+		elementdesc.Position = UDim2.new(0, leftpadding + scaledTextWidth / 2, 0, newDescY + currDh / 2 + 5)
 
 		if toggle then toggle.Position = UDim2.new(1, -38, 1, -27) end
 		if inputbox then inputbox.Position = UDim2.new(0, leftpadding + 73, 1, -30) end
@@ -2851,7 +2851,7 @@ end
 
 function lib.addinputandbutton(parent, title, description, defaulttext, placeholdertext, callback, autofill)
 	local width, leftpadding, rightpadding, tetxgap = 235, 14, 14, -5
-	local textwidth = width - rightpadding - 20
+	local textwidth = width - rightpadding - 40
 
 	local frame = lib.makecoolframe(UDim2.new(0, width, 0, 0), parent, false, false, nil, nil, nil, true, 60)
 	frame.AutomaticSize = Enum.AutomaticSize.Y
@@ -2892,7 +2892,7 @@ function lib.addinputandbutton(parent, title, description, defaulttext, placehol
 		end
 
 		local actualWidth = frame.AbsoluteSize.X
-		local scaledTextWidth = actualWidth - rightpadding - 20
+		local scaledTextWidth = actualWidth - rightpadding - 40
 
 		local cleanTitleText = stripRichText(elementtitle.Text)
 
@@ -2905,8 +2905,8 @@ function lib.addinputandbutton(parent, title, description, defaulttext, placehol
 		elementtitle.Size = UDim2.new(0, scaledTextWidth, 0, newTh)
 		elementtitle.Position = UDim2.new(0, leftpadding + scaledTextWidth / 2, 0, leftpadding + newTh / 2 - 5)
 
-		-- elementdesc.Size = UDim2.new(0, scaledTextWidth, 0, currDh)
-		-- elementdesc.Position = UDim2.new(0, leftpadding + scaledTextWidth / 2, 0, newDescY + currDh / 2 + 5)
+		elementdesc.Size = UDim2.new(0, scaledTextWidth, 0, currDh)
+		elementdesc.Position = UDim2.new(0, leftpadding + scaledTextWidth / 2, 0, newDescY + currDh / 2 + 5)
 
 		frame.Size = UDim2.new(0, width, 0, newTotalHeight)
 	end
