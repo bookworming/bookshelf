@@ -109,7 +109,7 @@ end
 
 env.funcs.introprogress(83)
 
-local scriptinfocats = env.funcs.recursivels("book%201/%CA%95s/%EF%BD%A1s/%CA%94si%26f.lua", true)
+local scriptinfocats = env.funcs.recursivels("book%201/%CA%95s/%EF%BD%A1s/%CA%94si%26s.lua", true)
 env.funcs.introconsolelog("Script info sections loaded. (" .. scriptinfocats.version .. ")")
 if scriptinfocats.version ~= env.expectedcompiledscriptversions.scriptinformationandchangelogssections then
 	env.funcs.introconsolelog("The script info sections is out of date. (" .. scriptinfocats.version .. "OoD)", "warn")
