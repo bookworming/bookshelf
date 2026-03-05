@@ -10,7 +10,7 @@
 ---------------------------------------------------------------------------------------------------------------------------]]--
 
 local lib = {}
-lib.version = 7
+lib.version = 8
 
 -------------------------------------------------------------------------------------------------------------------------------
 
@@ -2356,10 +2356,10 @@ function lib.addinputandtoggle(parent, title, description, defaulttext, placehol
 
 	frame.Size = UDim2.new(0, width, 0, th + dh + leftpadding * 2 + tetxgap + 45)
 
-	local elementtitle = lib.makecooltext(frame, UDim2.new(0, textwidth, 0, th), title, 13, nil, 2, UDim2.new(0, leftpadding + textwidth / 2, 0, leftpadding + th / 2 - 5), Enum.TextXAlignment.Left)
+	local elementtitle = lib.makecooltext(frame, UDim2.new(0, textwidth, 0, th), title, 13, nil, 2, UDim2.new(0, leftpadding, 0, leftpadding + th / 2 - 5), Enum.TextXAlignment.Left)
 	elementtitle.ZIndex = 61
 
-	local elementdesc = lib.makecooltext(frame, UDim2.new(0, textwidth, 0, dh), description, 10, Color3.fromRGB(170,170,170), 1, UDim2.new(0, leftpadding + textwidth / 2, 0, leftpadding + th + tetxgap + dh / 2 + 5), Enum.TextXAlignment.Left)
+	local elementdesc = lib.makecooltext(frame, UDim2.new(0, textwidth, 0, dh), description, 10, Color3.fromRGB(170,170,170), 1, UDim2.new(0, leftpadding, 0, leftpadding + th + textgap + 5), Enum.TextXAlignment.Left)
 	elementdesc.ZIndex = 61
 
 	local inputbox = lib.makecooltextbox(UDim2.new(0, 142, 0, 28), frame, defaulttext, 16, placeholdertext, nil, UDim2.new(0, 0, 1, -30), nil, 61)
@@ -2474,7 +2474,7 @@ function lib.addinputandtoggle(parent, title, description, defaulttext, placehol
 		elementdesc.Size = UDim2.new(0, scaledTextWidth, 0, currDh)
 		elementdesc.Position = UDim2.new(0, leftpadding + scaledTextWidth / 2, 0, newDescY + currDh / 2 + 5)
 
-		if toggle then toggle.Position = UDim2.new(1, -38, 1, -29) end
+		if toggle then toggle.Position = UDim2.new(1, -38, 1, -30) end
 		if inputbox then inputbox.Position = UDim2.new(0, leftpadding + 73, 1, -30) end
 
 		frame.Size = UDim2.new(0, width, 0, newTotalHeight)
