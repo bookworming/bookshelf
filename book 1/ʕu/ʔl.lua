@@ -2592,7 +2592,7 @@ function lib.addinputandtoggle(parent, title, description, defaulttext, placehol
 		local zplus = lib.seperatebuttonzindexoff
 
 		local _, textHeight = lib.gettextbounds(title, Enum.Font.FredokaOne, 14, Vector2.new(100, math.huge))
-		local baseWidth = 220
+		local baseWidth = 240
 		local isTooHigh = textHeight > 30
 		local buttonWidth = isTooHigh and (baseWidth + 40) or baseWidth
 
@@ -2603,10 +2603,14 @@ function lib.addinputandtoggle(parent, title, description, defaulttext, placehol
 		ts:Create(buttonFrame, TweenInfo.new(1, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Position = targetPos}):Play()
 
 		local toggleWidth, leftPadding = 46, 24
-		local miniToggle = lib.makecoolframe(UDim2.new(0, toggleWidth, 0, 24), buttonFrame, false, false, UDim2.new(1, -35, 0.5, 0), true, true, true, 90001 + zplus)
-
 		local inputWidth = 80
-		local miniInput = lib.makecooltextbox(UDim2.new(0, inputWidth, 0, 24), buttonFrame, inputbox.Text, 14, placeholdertext, nil, UDim2.new(0, leftPadding, 0.5, 0), nil, 90001 + zplus)
+
+		local textAreaWidth = buttonWidth - toggleWidth - inputWidth - (leftPadding * 2) - 8
+		local titleText = lib.makecooltext(buttonFrame, UDim2.new(0, textAreaWidth, 0, textHeight), title, 14, nil, 2, UDim2.new(0, leftPadding, 0.5, 0), Enum.TextXAlignment.Left, nil, nil, 90001 + zplus)
+		titleText.TextWrapped = true
+
+		local miniInput = lib.makecooltextbox(UDim2.new(0, inputWidth, 0, 24), buttonFrame, inputbox.Text, 14, placeholdertext, nil, UDim2.new(0, leftPadding + textAreaWidth + 4, 0.5, 0), nil, 90001 + zplus)
+		local miniToggle = lib.makecoolframe(UDim2.new(0, toggleWidth, 0, 24), buttonFrame, false, false, UDim2.new(1, -35, 0.5, 0), true, true, true, 90001 + zplus)
 
 		local textAreaWidth = buttonWidth - toggleWidth - inputWidth - (leftPadding * 2) - 6
 		local textPosX = leftPadding + inputWidth + 4 + textAreaWidth / 2
