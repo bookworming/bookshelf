@@ -45,8 +45,8 @@ fbconn, altfbconn, fogconn = nil
 ogl = {}
 
 function killfb()
-	env.funcs.rid(fbconn) fbconn = nil
-	env.funcs.rid(altfbconn) altfbconn = nil
+	if fbconn then fbconn:Disconnect() fbconn = nil end 
+	if altfbconn then altfbconn:Disconnect() altfbconn = nil end
 end
 
 function savelighting()
@@ -59,6 +59,8 @@ end
 
 spwn(function() repeat t() until env.funcs.exists() savelighting() end)
 
+-------------------------------------------------------------------------------------------------------------------------------
+
 function relighting()
 	l.Brightness = ogl.Brightness
 	l.ClockTime = ogl.ClockTime
@@ -67,6 +69,8 @@ function relighting()
 	l.OutdoorAmbient = ogl.OutdoorAmbient
 end
 
+-------------------------------------------------------------------------------------------------------------------------------
+
 function fb(alt)
 	l.Brightness = 2
 	l.ClockTime = alt and 0 or 14
@@ -74,6 +78,8 @@ function fb(alt)
 	l.GlobalShadows = false
 	l.OutdoorAmbient = Color3.fromRGB(128, 128, 128)
 end
+
+-------------------------------------------------------------------------------------------------------------------------------
 
 function togglefb(state)
 	if state then
@@ -85,6 +91,8 @@ function togglefb(state)
 		relighting()
 	end
 end
+
+-------------------------------------------------------------------------------------------------------------------------------
 
 function toggleafb(state)
 	if state then
@@ -103,7 +111,7 @@ end
 
 function nofog(state)
 	if state then
-		env.funcs.rid(fogconn) fogconn = nil
+		if fogconn then fogconn:Disconnect() fogconn = nil end
 		relighting()
 	else
 		fogconn = rs.Heartbeat:Connect(function()
@@ -133,7 +141,7 @@ function norender(state)
 
 		rs:Set3dRenderingEnabled(false)
 	else
-		env.funcs.rid(brightblock.sgui) brightblock.sgui = nil
+		if brightblock.sgui then brightblock.sgui:Destroy() brightblock.sgui = nil end
 		rs:Set3dRenderingEnabled(true)
 	end
 end
@@ -168,7 +176,7 @@ function showhealth(state)
 			end)
 		end
 	else
-		env.funcs.rid(showhealthconnection) showhealthconnection = nil
+		if showhealthconnection then showhealthconnection:Disconnect() showhealthconnection = nil end
 		updhealths(false, 30)
 	end
 end
@@ -205,7 +213,7 @@ function showtrinkets(state)
 			end)
 		end
 	else
-		env.funcs.rid(showtrinketsconn) showtrinketsconn = nil
+		if showtrinketsconn then showtrinketsconn:Disconnect() showtrinketsconn = nil end
 		updtrinketlos(false, 0)
 	end
 end
@@ -643,7 +651,7 @@ function toggleborders(state)
 			end
 		end)
 	else
-		env.funcs.rid(noclipfactiveconn) noclipfactiveconn = nil restoreborders()
+		if noclipfactiveconn then noclipfactiveconn:Disconnect() noclipfactiveconn = nil end restoreborders()
 	end
 end
 
