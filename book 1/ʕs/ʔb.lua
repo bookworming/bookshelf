@@ -522,8 +522,8 @@ local function initmainsection()
 
 		local swapbutton = env.essentials.library.makecoolbutton(">>", UDim2.new(0, 42, 0, 28), boxten, UDim2.new(0, 31, 0.5, 27), "info", 21, {bottom = 7})
 
-		local nametag = env.essentials.library.makecooltext(boxten, UDim2.new(0, 60, 0, 20), "Boxten", 15, nil, 2, UDim2.new(0, 92, 0, 15), Enum.TextXAlignment.Left)
-		local saying = env.essentials.library.makecooltext(boxten, UDim2.new(0, 140, 0, 70), "welcome to Boxten Sex GUI. the most over-the-top script ever made for Dandy's World.", 11, Color3.fromRGB(170, 170, 170), 2, UDim2.new(0, 132, 0, 60), Enum.TextXAlignment.Left, Enum.TextYAlignment.Top)
+		local nametag = env.essentials.library.makecooltext(boxten, UDim2.new(0, 60, 0, 20), "Boxten", 15, nil, 1, UDim2.new(0, 92, 0, 15), Enum.TextXAlignment.Left)
+		local saying = env.essentials.library.makecooltext(boxten, UDim2.new(0, 140, 0, 70), "welcome to Boxten Sex GUI. the most over-the-top script ever made for Dandy's World.", 11, Color3.fromRGB(170, 170, 170), 1, UDim2.new(0, 132, 0, 60), Enum.TextXAlignment.Left, Enum.TextYAlignment.Top)
 	end
 
 	-- unlock donor things
@@ -574,7 +574,7 @@ Version: 1.3.0
 
 Supported executors:
 <font color='rgb(130,200,130)' size='13'>Hydrogen, Macsploit, Xeno, Delta, Velocity,</font> <font color='rgb(180,180,130)' size='12'>Zenith, Vega X, Seliware, Bunni.lol, Ronix,</font> <font color='rgb(130,130,130)' size='11'>Volcano</font>
-        ]], 14, nil, 2, UDim2.new(0.5, -1, 0, 16), Enum.TextXAlignment.Left, Enum.TextYAlignment.Top)
+        ]], 14, nil, 1, UDim2.new(0.5, -1, 0, 16), Enum.TextXAlignment.Left, Enum.TextYAlignment.Top)
 	end
 
 	newcat(settingssection, cats, "Script Settings", buttons, versionInfo)
@@ -605,8 +605,8 @@ local function initconfigssection()
 
 		local swapbutton = env.essentials.library.makecoolbutton(">>", UDim2.new(0, 42, 0, 28), shrimpo, UDim2.new(0, 31, 0.5, 27), "info", 21, {bottom = 7})
 
-		local nametag = env.essentials.library.makecooltext(shrimpo, UDim2.new(0, 60, 0, 20), "Shrimpo", 15, nil, 2, UDim2.new(0, 92, 0, 15), Enum.TextXAlignment.Left)
-		local saying = env.essentials.library.makecooltext(shrimpo, UDim2.new(0, 140, 0, 70), "HEY!!! YOU THERE!!! I HATE YOU!!!", 11, Color3.fromRGB(170, 170, 170), 2, UDim2.new(0, 132, 0, 60), Enum.TextXAlignment.Left, Enum.TextYAlignment.Top)
+		local nametag = env.essentials.library.makecooltext(shrimpo, UDim2.new(0, 60, 0, 20), "Shrimpo", 15, nil, 1, UDim2.new(0, 92, 0, 15), Enum.TextXAlignment.Left)
+		local saying = env.essentials.library.makecooltext(shrimpo, UDim2.new(0, 140, 0, 70), "HEY!!! YOU THERE!!! I HATE YOU!!!", 11, Color3.fromRGB(170, 170, 170), 1, UDim2.new(0, 132, 0, 60), Enum.TextXAlignment.Left, Enum.TextYAlignment.Top)
 
 		local fileinfo = env.essentials.library.makecoolframe(UDim2.new(0, 209, 0, 76), p, false, false, UDim2.new(0, 109, 1, -42), false, true)
 		env.stuf.fileinfolabel = env.essentials.library.makecooltext(fileinfo, UDim2.new(0, 200, 0, 20), [[
@@ -617,7 +617,7 @@ Total configs: ]] .. env.filemanager.getconfigcount() .. [[
 Current executor: ]] .. env.funcs.identifyexec() .. [[
 
 <font color='rgb(130,130,130)' size='11'>Your executor is supported.</font>
-        ]], 14, nil, 2, UDim2.new(0.5, 5, 0, 16), Enum.TextXAlignment.Left, Enum.TextYAlignment.Top)
+        ]], 14, nil, 1, UDim2.new(0.5, 5, 0, 16), Enum.TextXAlignment.Left, Enum.TextYAlignment.Top)
 	end
 
 	newcat(configsection, cats, "Config Loading", buttons, info)
@@ -740,8 +740,8 @@ local function initcommandssection()
 
 	local swapbutton = env.essentials.library.makecoolbutton(">>", UDim2.new(0, 42, 0, 28), poppy, UDim2.new(0, 31, 0.5, 27), "info", 21, {bottom = 7})
 
-	local nametag = env.essentials.library.makecooltext(poppy, UDim2.new(0, 60, 0, 20), "Poppy", 15, nil, 2, UDim2.new(0, 92, 0, 15), Enum.TextXAlignment.Left)
-	local saying = env.essentials.library.makecooltext(poppy, UDim2.new(0, 140, 0, 70), "Hello! I'm Poppy! It's nice to meet you!", 11, Color3.fromRGB(170, 170, 170), 2, UDim2.new(0, 132, 0, 60), Enum.TextXAlignment.Left, Enum.TextYAlignment.Top)
+	local nametag = env.essentials.library.makecooltext(poppy, UDim2.new(0, 60, 0, 20), "Poppy", 15, nil, 1, UDim2.new(0, 92, 0, 15), Enum.TextXAlignment.Left)
+	local saying = env.essentials.library.makecooltext(poppy, UDim2.new(0, 140, 0, 70), "Hello! I'm Poppy! It's nice to meet you!", 11, Color3.fromRGB(170, 170, 170), 1, UDim2.new(0, 132, 0, 60), Enum.TextXAlignment.Left, Enum.TextYAlignment.Top)
 
 	local commandbar = env.essentials.library.makecooltextbox(UDim2.new(0, 216, 0, 32), commandssection, "", 20, "Command Bar", nil, UDim2.new(1, -160, 1, -23))
 	local executebutton = env.essentials.library.makecoolbutton("▶", UDim2.new(0, 32, 0, 32), commandssection, UDim2.new(1, -22, 1, -23), "yes", 20, {bottom = 7})
