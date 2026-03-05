@@ -190,17 +190,6 @@ local section = {
 			env.funcs.popup("Are you sure you want to destroy the interface? This is irreversable.", "Yes", function() if env.stuf.mainframe then env.stuf.mainframe:Destroy() end if env.stuf.togglebutton then env.stuf.togglebutton:Destroy() end end, "Nevermind", nil)
 		end
 	},
-	{ type = "button", title = "Unbind all elements", desc = "Unbinds every single element with a keybind.",
-		commandcat = "Main",
-
-		command = "unbindallelements",
-		aliases = {"unbindall", "unba"},
-		commanddesc = "Unbinds every single binded element",
-
-		callback = function()
-			env.funcs.popup("Are you sure you want to unbind every element? This is irreversable.", "Yes", function() env.essentials.library.unbindall() end, "Nevermind", nil)
-		end
-	},
 	{ type = "button", title = "Disconnect all connections", desc = "Disconnects all running connections, essentially resetting everything back to normal.",
 		commandcat = "Main",
 
@@ -209,6 +198,7 @@ local section = {
 		commanddesc = "Disconnects all connections",
 
 		callback = function() 
+			env.funcs.popup("Are you sure you want to disconnect all connections? This will reset everything to default.", "Yes", function() end, "Nevermind", nil)
 		end
 	},
 
