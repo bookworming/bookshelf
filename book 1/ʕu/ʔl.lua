@@ -10,7 +10,7 @@
 ---------------------------------------------------------------------------------------------------------------------------]]--
 
 local lib = {}
-lib.version = 4
+lib.version = 5
 
 -------------------------------------------------------------------------------------------------------------------------------
 
@@ -2362,7 +2362,7 @@ function lib.addinputandtoggle(parent, title, description, defaulttext, placehol
 	local elementdesc = lib.makecooltext(frame, UDim2.new(0, textwidth, 0, dh), description, 10, Color3.fromRGB(170,170,170), 1, UDim2.new(0, leftpadding + textwidth / 2, 0, leftpadding + th + tetxgap + dh / 2 + 5), Enum.TextXAlignment.Left)
 	elementdesc.ZIndex = 61
 
-	local inputbox = lib.makecooltextbox(UDim2.new(0, 142, 0, 28), frame, defaulttext, 16, placeholdertext, nil, UDim2.new(0, 87, 1, -30), nil, 61)
+	local inputbox = lib.makecooltextbox(UDim2.new(0, 142, 0, 28), frame, defaulttext, 16, placeholdertext, nil, UDim2.new(0, 0, 1, -30), nil, 61)
 
 	if autofill then
 		local lastSuggestion = nil
@@ -2397,7 +2397,7 @@ function lib.addinputandtoggle(parent, title, description, defaulttext, placehol
 		end)
 	end
 
-	toggle = lib.makecoolframe(UDim2.new(0, 38, 0, 20), frame, false, false, UDim2.new(1, -38, 1, -31), true, true, nil, 61)
+	toggle = lib.makecoolframe(UDim2.new(0, 38, 0, 20), frame, false, false, UDim2.new(1, -38, 1, -39), true, true, nil, 61)
 	knob = Instance.new("Frame", toggle)
 	knob.Size, knob.Position, knob.ZIndex, knob.AnchorPoint, knob.BackgroundColor3 = UDim2.new(0, 16, 0, 16), UDim2.new(0, 2, 0.5, 0), toggle.ZIndex + 1, Vector2.new(0, 0.5), Color3.new(1,1,1)
 	Instance.new("UICorner", knob).CornerRadius = UDim.new(1,0)
@@ -2475,7 +2475,7 @@ function lib.addinputandtoggle(parent, title, description, defaulttext, placehol
 		elementdesc.Position = UDim2.new(0, leftpadding + scaledTextWidth / 2, 0, newDescY + currDh / 2 + 5)
 
 		if toggle then toggle.Position = UDim2.new(1, -38, 1, -25) end
-		if inputbox then inputbox.Position = UDim2.new(0, leftpadding, 1, -30) end
+		if inputbox then inputbox.Position = UDim2.new(0, leftpadding + 73, 1, -30) end
 
 		frame.Size = UDim2.new(0, width, 0, newTotalHeight)
 	end
@@ -2577,7 +2577,6 @@ function lib.addinputandtoggle(parent, title, description, defaulttext, placehol
 
 	state.updtoggles = updtoggles
 
-	-- separate button creation (same as addtoggle)
 	local function makeseperatebutton(destination)
 		env.essentials.toggles[toggleId].dirty = true
 
@@ -2708,7 +2707,6 @@ function lib.addinputandtoggle(parent, title, description, defaulttext, placehol
 
 	state.makeseperatebutton = makeseperatebutton
 
-	-- keybinding (same as addtoggle)
 	local waitbra, listening, opened = false, false, false
 
 	local kb = Instance.new("ImageButton", frame)
@@ -2886,7 +2884,7 @@ function lib.addinputandbutton(parent, title, description, defaulttext, placehol
 	elementdesc.ZIndex = 61
 
 	local inputbox = lib.makecooltextbox(UDim2.new(0, 118, 0, 28), frame, defaulttext, 16, placeholdertext, nil, UDim2.new(0, 74, 1, -30), nil, 61)
-	local executebutton = lib.makecoolbutton("▶", UDim2.new(0, 70, 0, 28), frame, UDim2.new(1, -50, 1, -30), "yes", 17, {bottom = 7})
+	local executebutton = lib.makecoolbutton("▶", UDim2.new(0, 70, 0, 28), frame, UDim2.new(1, -50, 1, -30), "yes", 17, {bottom = 7}, 61)
 
 	local function updateFrameSize()
 		local function stripRichText(str)
@@ -2976,7 +2974,6 @@ function lib.addinputandbutton(parent, title, description, defaulttext, placehol
 		end
 	}
 
-	-- separate button creation
 	local function makeseperatebutton(destination)
 		env.essentials.buttons[buttonId].dirty = true
 
@@ -3061,7 +3058,6 @@ function lib.addinputandbutton(parent, title, description, defaulttext, placehol
 
 	state.makeseperatebutton = makeseperatebutton
 
-	-- keybinding
 	local waitbra, listening, opened = false, false, false
 
 	local kb = Instance.new("ImageButton", frame)
