@@ -44,7 +44,7 @@ local function autoescape(state)
 		end
 
 		local uivisible
-		autoescapewormconn = env.stuf.plr.PlayerGui.TwistedSquirmEscapeUI.Enabled.Changed:Connect(function(vis)
+		autoescapewormconn = env.stuf.plrgui.TwistedSquirmEscapeUI.Enabled.Changed:Connect(function(vis)
 			if vis then
 				uivisible = true
 				while uivisible do
