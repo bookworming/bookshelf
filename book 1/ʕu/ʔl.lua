@@ -2362,7 +2362,7 @@ function lib.addinputandtoggle(parent, title, description, defaulttext, placehol
 	local elementdesc = lib.makecooltext(frame, UDim2.new(0, textwidth, 0, dh), description, 10, Color3.fromRGB(170,170,170), 1, UDim2.new(0, leftpadding + textwidth / 2, 0, leftpadding + th + tetxgap + dh / 2 + 5), Enum.TextXAlignment.Left)
 	elementdesc.ZIndex = 61
 
-	local inputbox = lib.makecooltextbox(UDim2.new(0, 142, 0, 28), frame, defaulttext, 16, placeholdertext, nil, UDim2.new(0, 0, 1, -30), nil, 61)
+	local inputbox = lib.makecooltextbox(UDim2.new(0, 142, 0, 28), frame, defaulttext, 16, placeholdertext, nil, UDim2.new(0, 87, 1, -30), nil, 61)
 
 	if autofill then
 		local lastSuggestion = nil
@@ -2397,7 +2397,7 @@ function lib.addinputandtoggle(parent, title, description, defaulttext, placehol
 		end)
 	end
 
-	toggle = lib.makecoolframe(UDim2.new(0, 38, 0, 20), frame, false, false, UDim2.new(1, -38, 1, -39), true, true, nil, 61)
+	toggle = lib.makecoolframe(UDim2.new(0, 38, 0, 20), frame, false, false, UDim2.new(1, -38, 1, -31), true, true, nil, 61)
 	knob = Instance.new("Frame", toggle)
 	knob.Size, knob.Position, knob.ZIndex, knob.AnchorPoint, knob.BackgroundColor3 = UDim2.new(0, 16, 0, 16), UDim2.new(0, 2, 0.5, 0), toggle.ZIndex + 1, Vector2.new(0, 0.5), Color3.new(1,1,1)
 	Instance.new("UICorner", knob).CornerRadius = UDim.new(1,0)
@@ -2475,7 +2475,7 @@ function lib.addinputandtoggle(parent, title, description, defaulttext, placehol
 		elementdesc.Position = UDim2.new(0, leftpadding + scaledTextWidth / 2, 0, newDescY + currDh / 2 + 5)
 
 		if toggle then toggle.Position = UDim2.new(1, -38, 1, -25) end
-		if inputbox then inputbox.Position = UDim2.new(0, leftpadding + 73, 1, -30) end
+		if inputbox then inputbox.Position = UDim2.new(0, leftpadding, 1, -30) end
 
 		frame.Size = UDim2.new(0, width, 0, newTotalHeight)
 	end
@@ -2577,6 +2577,7 @@ function lib.addinputandtoggle(parent, title, description, defaulttext, placehol
 
 	state.updtoggles = updtoggles
 
+	-- separate button creation (same as addtoggle)
 	local function makeseperatebutton(destination)
 		env.essentials.toggles[toggleId].dirty = true
 
@@ -2592,7 +2593,7 @@ function lib.addinputandtoggle(parent, title, description, defaulttext, placehol
 		local zplus = lib.seperatebuttonzindexoff
 
 		local _, textHeight = lib.gettextbounds(title, Enum.Font.FredokaOne, 14, Vector2.new(100, math.huge))
-		local baseWidth = 240
+		local baseWidth = 150
 		local isTooHigh = textHeight > 30
 		local buttonWidth = isTooHigh and (baseWidth + 40) or baseWidth
 
@@ -2603,31 +2604,12 @@ function lib.addinputandtoggle(parent, title, description, defaulttext, placehol
 		ts:Create(buttonFrame, TweenInfo.new(1, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Position = targetPos}):Play()
 
 		local toggleWidth, leftPadding = 46, 24
-		local inputWidth = 80
-
-		local textAreaWidth = buttonWidth - toggleWidth - inputWidth - (leftPadding * 2) - 8
-		local titleText = lib.makecooltext(buttonFrame, UDim2.new(0, textAreaWidth, 0, textHeight), title, 14, nil, 2, UDim2.new(0, leftPadding, 0.5, 0), Enum.TextXAlignment.Left, nil, nil, 90001 + zplus)
-		titleText.TextWrapped = true
-
-		local miniInput = lib.makecooltextbox(UDim2.new(0, inputWidth, 0, 24), buttonFrame, inputbox.Text, 14, placeholdertext, nil, UDim2.new(0, leftPadding + textAreaWidth + 4, 0.5, 0), nil, 90001 + zplus)
 		local miniToggle = lib.makecoolframe(UDim2.new(0, toggleWidth, 0, 24), buttonFrame, false, false, UDim2.new(1, -35, 0.5, 0), true, true, true, 90001 + zplus)
 
-		miniInput:GetPropertyChangedSignal("Text"):Connect(function()
-			inputbox.Text = miniInput.Text
-		end)
-		inputbox:GetPropertyChangedSignal("Text"):Connect(function()
-			if miniInput.Text ~= inputbox.Text then
-				miniInput.Text = inputbox.Text
-			end
-		end)
-
-		miniInput.FocusLost:Connect(function()
-			env.essentials.elements[inputId].dirty = true
-			if state.enabled and callback then
-				callback(miniInput.Text, state.enabled)
-			end
-			if table.find(env.filemanager.persist, title) then env.filemanager.persistsave() end
-		end)
+		local textAreaWidth = (buttonWidth - toggleWidth) - (leftPadding * 2)
+		local textPosX = leftPadding + (textAreaWidth / 2) - 4
+		local titleText = lib.makecooltext(buttonFrame, UDim2.new(0, textAreaWidth, 0, textHeight), title, 14, nil, 2, UDim2.new(0, textPosX, 0.5, 0), Enum.TextXAlignment.Center, nil, nil, 90001 + zplus)
+		titleText.TextWrapped = true
 
 		local miniKnob = Instance.new("Frame")
 		miniKnob.Size, miniKnob.AnchorPoint, miniKnob.BackgroundColor3, miniKnob.Parent, miniKnob.ZIndex = UDim2.new(0, 20, 0, 20), Vector2.new(0, 0.5), Color3.new(1, 1, 1), miniToggle, miniToggle.ZIndex + 1
@@ -2726,6 +2708,7 @@ function lib.addinputandtoggle(parent, title, description, defaulttext, placehol
 
 	state.makeseperatebutton = makeseperatebutton
 
+	-- keybinding (same as addtoggle)
 	local waitbra, listening, opened = false, false, false
 
 	local kb = Instance.new("ImageButton", frame)
@@ -2872,19 +2855,68 @@ function lib.addinputandbutton(parent, title, description, defaulttext, placehol
 	local width, leftpadding, rightpadding, tetxgap = 235, 14, 14, -5
 	local textwidth = width - rightpadding - 20
 
-	local frame = lib.makecoolframe(UDim2.new(0, width, 0, 0), parent, false, false)
+	local frame = lib.makecoolframe(UDim2.new(0, width, 0, 0), parent, false, false, nil, nil, nil, true, 60)
 	frame.AutomaticSize = Enum.AutomaticSize.Y
 	frame.LayoutOrder = #parent:GetChildren()
+
+	local buttonId = title
+
+	env.essentials.buttons[buttonId] = {
+		type = "inputbutton",
+		frame = frame,
+		dirty = false,
+		currentBind = nil,
+		title = title,
+		callback = callback,
+		elementtitle = nil,
+		createdButtons = {},
+		currentButtonData = nil,
+		buttonFrame = nil,
+		updateSize = nil
+	}
+	local state = env.essentials.buttons[buttonId]
 
 	local _, th = lib.gettextbounds(title, Enum.Font.FredokaOne, 13, Vector2.new(textwidth, math.huge))
 	local _, dh = lib.gettextbounds(description, Enum.Font.FredokaOne, 10, Vector2.new(textwidth, math.huge))
 	frame.Size = UDim2.new(0, width, 0, th + dh + leftpadding * 2 + tetxgap + 45)
 
-	lib.makecooltext(frame, UDim2.new(0, textwidth, 0, th), title, 13, nil, 2, UDim2.new(0, leftpadding + textwidth / 2, 0, leftpadding + th / 2 - 5), Enum.TextXAlignment.Left)
-	lib.makecooltext(frame, UDim2.new(0, textwidth, 0, dh), description, 10, Color3.fromRGB(170,170,170), 1, UDim2.new(0, leftpadding + textwidth / 2, 0, leftpadding + th + tetxgap + dh / 2 + 5), Enum.TextXAlignment.Left )
+	local elementtitle = lib.makecooltext(frame, UDim2.new(0, textwidth, 0, th), title, 13, nil, 2, UDim2.new(0, leftpadding + textwidth / 2, 0, leftpadding + th / 2 - 5), Enum.TextXAlignment.Left)
+	elementtitle.ZIndex = 61
+	local elementdesc = lib.makecooltext(frame, UDim2.new(0, textwidth, 0, dh), description, 10, Color3.fromRGB(170,170,170), 1, UDim2.new(0, leftpadding + textwidth / 2, 0, leftpadding + th + tetxgap + dh / 2 + 5), Enum.TextXAlignment.Left)
+	elementdesc.ZIndex = 61
 
 	local inputbox = lib.makecooltextbox(UDim2.new(0, 118, 0, 28), frame, defaulttext, 16, placeholdertext, nil, UDim2.new(0, 74, 1, -30), nil, 61)
 	local executebutton = lib.makecoolbutton("▶", UDim2.new(0, 70, 0, 28), frame, UDim2.new(1, -50, 1, -30), "yes", 17, {bottom = 7})
+
+	local function updateFrameSize()
+		local function stripRichText(str)
+			return str:gsub("<[^>]->", "")
+		end
+
+		local actualWidth = frame.AbsoluteSize.X
+		local scaledTextWidth = actualWidth - rightpadding - 20
+
+		local cleanTitleText = stripRichText(elementtitle.Text)
+
+		local _, newTh = lib.gettextbounds(cleanTitleText, elementtitle.Font, elementtitle.TextSize, Vector2.new(scaledTextWidth, math.huge))
+		local _, currDh = lib.gettextbounds(description, elementdesc.Font, elementdesc.TextSize, Vector2.new(scaledTextWidth, math.huge))
+
+		local newDescY = leftpadding + newTh + tetxgap
+		local newTotalHeight = newTh + currDh + leftpadding * 2 + tetxgap + 45
+
+		elementtitle.Size = UDim2.new(0, scaledTextWidth, 0, newTh)
+		elementtitle.Position = UDim2.new(0, leftpadding + scaledTextWidth / 2, 0, leftpadding + newTh / 2 - 5)
+
+		elementdesc.Size = UDim2.new(0, scaledTextWidth, 0, currDh)
+		elementdesc.Position = UDim2.new(0, leftpadding + scaledTextWidth / 2, 0, newDescY + currDh / 2 + 5)
+
+		frame.Size = UDim2.new(0, width, 0, newTotalHeight)
+	end
+
+	frame:GetPropertyChangedSignal("AbsoluteSize"):Connect(updateFrameSize)
+
+	state.elementtitle = elementtitle
+	state.updateSize = updateFrameSize
 
 	if autofill then
 		local lastSuggestion = nil
@@ -2898,7 +2930,6 @@ function lib.addinputandbutton(parent, title, description, defaulttext, placehol
 			local currentText = inputbox.Text
 			if not currentText:find(",") then
 				local resolved = resolvetargets(currentText)
-
 				if #resolved == 1 and resolved[1] ~= plr then
 					local targetPlayer = resolved[1]
 					if targetPlayer.Name:lower():sub(1, #currentText) == currentText:lower() then
@@ -2922,16 +2953,16 @@ function lib.addinputandbutton(parent, title, description, defaulttext, placehol
 
 	inputbox.Focused:Connect(function() lib.clik() end)
 	inputbox.MouseEnter:Connect(function() lib.hov() end)
-	inputbox.FocusLost:Connect(function() 
-		env.essentials.elements[title .. "/input"].dirty = true 
+	inputbox.FocusLost:Connect(function()
+		env.essentials.elements[title .. "/input"].dirty = true
 		if table.find(env.filemanager.persist, title) then env.filemanager.persistsave() end
 	end)
 
 	env.essentials.elements[title .. "/input"] = {
 		type = "input",
 		instance = inputbox,
-		setValue = function(val) 
-			inputbox.Text = tostring(val) 
+		setValue = function(val)
+			inputbox.Text = tostring(val)
 		end
 	}
 
@@ -2940,14 +2971,213 @@ function lib.addinputandbutton(parent, title, description, defaulttext, placehol
 		frame = frame,
 		instance = inputbox,
 		callback = callback,
-		setValue = function(val) 
+		setValue = function(val)
 			inputbox.Text = tostring(val)
 		end
 	}
 
+	-- separate button creation
+	local function makeseperatebutton(destination)
+		env.essentials.buttons[buttonId].dirty = true
+
+		if state.currentButtonData then
+			state.currentButtonData.frame:Destroy()
+			state.createdButtons = {}
+			state.currentButtonData = nil
+			state.buttonFrame = nil
+			return nil
+		end
+
+		lib.seperatebuttonzindexoff += 4
+		local zplus = lib.seperatebuttonzindexoff
+
+		local _, textHeight = lib.gettextbounds(title, Enum.Font.FredokaOne, 14, Vector2.new(100, math.huge))
+		local baseWidth = 150
+		local isTooHigh = textHeight > 30
+		local buttonWidth = isTooHigh and (baseWidth + 40) or baseWidth
+
+		local startPos = UDim2.new(0.5, 0, 0, -100)
+		local targetPos = destination or UDim2.new(0.5, 0, 0, 100)
+
+		local buttonFrame, drag = lib.makecoolframe(UDim2.new(0, buttonWidth, 0, 64), env.essentials.sgui, false, true, startPos, nil, nil, true, 90000 + zplus)
+		ts:Create(buttonFrame, TweenInfo.new(1, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Position = targetPos}):Play()
+
+		local textAreaWidth = buttonWidth - 48
+		local titleText = lib.makecooltext(buttonFrame, UDim2.new(0, textAreaWidth, 0, textHeight), title, 14, nil, 2, UDim2.new(0.5, 0, 0.5, 0), Enum.TextXAlignment.Center, nil, nil, 90001 + zplus)
+		titleText.TextWrapped = true
+
+		local buttondata = { frame = buttonFrame }
+		table.insert(state.createdButtons, buttondata)
+		state.currentButtonData = buttondata
+		state.buttonFrame = buttonFrame
+
+		buttonFrame.Destroying:Connect(function()
+			if state.currentButtonData == buttondata then state.currentButtonData = nil end
+			state.buttonFrame = nil
+		end)
+
+		buttonFrame.Activated:Connect(function()
+			if drag.dragged then return end
+			if buttonFrame:GetAttribute("locked") then return end
+			lib.clik()
+			if callback then spwn(callback, inputbox.Text) end
+		end)
+
+		local scale = Instance.new("UIScale", buttonFrame)
+		local baseScale = env.stuf.buttonscale and env.stuf.buttonscale.Scale or 1
+		scale.Scale = baseScale
+
+		local hover, press = TweenInfo.new(0.12, Enum.EasingStyle.Quad), TweenInfo.new(0.08, Enum.EasingStyle.Quad)
+		local currenttween
+		local function playScale(v, info)
+			if currenttween then currenttween:Cancel() end
+			currenttween = ts:Create(scale, info, { Scale = baseScale * v })
+			currenttween:Play()
+		end
+
+		env.stuf.buttonscalelistenercount += 1
+		local id = env.stuf.buttonscalelistenercount
+
+		env.stuf.buttonscalelisteners[id] = function(newScale)
+			if buttonFrame.Parent == nil then
+				env.stuf.buttonscalelisteners[id] = nil
+				return
+			end
+			baseScale = newScale
+			ts:Create(scale, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), { Scale = newScale }):Play()
+		end
+
+		buttonFrame.Destroying:Connect(function()
+			env.stuf.buttonscalelisteners[id] = nil
+		end)
+
+		buttonFrame.MouseEnter:Connect(function() lib.hov() playScale(1.02, hover) end)
+		buttonFrame.MouseLeave:Connect(function() playScale(1, hover) end)
+		buttonFrame.MouseButton1Down:Connect(function() playScale(0.98, press) end)
+		buttonFrame.MouseButton1Up:Connect(function() playScale(1.02, hover) end)
+
+		return buttondata
+	end
+
+	state.makeseperatebutton = makeseperatebutton
+
+	-- keybinding
+	local waitbra, listening, opened = false, false, false
+
+	local kb = Instance.new("ImageButton", frame)
+	kb.Size, kb.Position, kb.AnchorPoint = UDim2.fromOffset(14, 14), UDim2.new(1, 4, 0, -4), Vector2.new(1, 0)
+	kb.BackgroundTransparency, kb.Image, kb.ZIndex = 1, "rbxassetid://9405931578", 103
+
+	local dropdown = lib.makecoolframe(UDim2.fromOffset(18, 18), frame, false, false, UDim2.new(1, 6, 0, -6), true, true, nil, 69)
+	dropdown.AnchorPoint, dropdown.ClipsDescendants = Vector2.new(1, 0), true
+
+	local textMask = Instance.new("Frame")
+	textMask.Name = "TextMask"
+	textMask.Size = UDim2.new(1, -20, 1, 0)
+	textMask.Position = UDim2.new(0, 0, 0, 0)
+	textMask.BackgroundTransparency = 1
+	textMask.ClipsDescendants = true
+	textMask.Parent = dropdown
+
+	local bindbutton = lib.makecooltext(textMask, UDim2.new(0, 30, 1, 0), "Bind", 11, nil, 0, UDim2.new(0, 20, 0.5, 0), nil, nil, true, 101)
+	local sep = lib.makecooltext(textMask, UDim2.new(0, 10, 1, 0), "<b>│</b>", 10, nil, 0, UDim2.new(0, 38, 0.5, 0), nil, nil, true, 101)
+	local addbuttonbutton = lib.makecooltext(textMask, UDim2.new(0, 50, 1, 0), "New button", 11, nil, 0, UDim2.new(0, 71, 0.5, 0), nil, nil, true, 101)
+	addbuttonbutton.TextWrapped = false
+
+	local function closedd()
+		if not opened or waitbra then return end
+		waitbra, opened, listening = true, false, false
+		local ti = TweenInfo.new(0.3, Enum.EasingStyle.Quart, Enum.EasingDirection.Out)
+		ts:Create(dropdown, ti, {Size = UDim2.new(0, 18, 0, 18)}):Play()
+		bindbutton.Text = "Bind"
+		waitbra = false
+	end
+
+	bindbutton.Activated:Connect(function()
+		t()
+		if waitbra or listening then return end
+		lib.clik() listening, bindbutton.Text = true, "..."
+	end)
+
+	addbuttonbutton.Activated:Connect(function()
+		t()
+		if waitbra or listening then return end
+		lib.clik() makeseperatebutton() closedd()
+	end)
+
+	kb.Activated:Connect(function()
+		if frame:GetAttribute("locked") or waitbra then return end
+		lib.clik()
+		if opened then
+			closedd()
+		else
+			waitbra = true
+			opened = true
+			local ti = TweenInfo.new(0.3, Enum.EasingStyle.Quart, Enum.EasingDirection.Out)
+			ts:Create(dropdown, ti, {Size = UDim2.new(0, 120, 0, 18)}):Play()
+			waitbra = false
+		end
+	end)
+
+	uis.InputBegan:Connect(function(input, processed)
+		if listening then
+			if input.UserInputType == Enum.UserInputType.MouseButton2 then
+				state.currentBind = nil
+				listening = false
+				bindbutton.Text = "Bind"
+				elementtitle.Text = title
+				updateFrameSize()
+				closedd()
+				if table.find(env.filemanager.persist, title) then env.filemanager.persistsave() end
+				return
+			end
+
+			if input.UserInputType == Enum.UserInputType.Keyboard then
+				local key = input.KeyCode
+				if key == state.currentBind then
+					listening = false
+					bindbutton.Text = "Bind"
+					closedd()
+					return
+				end
+				state.currentBind = key
+				listening = false
+				bindbutton.Text = "Bind"
+				elementtitle.RichText = true
+				local mappedName = lib.mapkey(key)
+				elementtitle.Text = title .. " <font color='rgb(71, 190, 255)'>[" .. mappedName .. "]</font>"
+				updateFrameSize()
+				closedd()
+				if table.find(env.filemanager.persist, title) then env.filemanager.persistsave() end
+				return
+			end
+		end
+
+		if not processed and state.currentBind ~= nil and input.KeyCode == state.currentBind then
+			if frame:GetAttribute("locked") then return end
+			env.essentials.buttons[buttonId].dirty = true
+			lib.clik()
+			if callback then spwn(callback, inputbox.Text) end
+			return
+		end
+
+		if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) and opened then
+			local AbsPos, AbsSize = dropdown.AbsolutePosition, dropdown.AbsoluteSize
+			if mouse.X < AbsPos.X or mouse.X > AbsPos.X + AbsSize.X
+				or mouse.Y < (AbsPos.Y - 20 - 1) or mouse.Y > AbsPos.Y + AbsSize.Y then
+				if not listening then closedd() end
+			end
+		end
+	end)
+
 	executebutton.Activated:Connect(function()
 		lib.clik()
 		if callback then callback(inputbox.Text) end
+	end)
+
+	inputbox.FocusLost:Connect(function()
+		env.essentials.elements[title .. "/input"].dirty = true
+		if table.find(env.filemanager.persist, title) then env.filemanager.persistsave() end
 	end)
 
 	return frame
