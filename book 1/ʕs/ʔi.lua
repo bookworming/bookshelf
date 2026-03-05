@@ -9,10 +9,6 @@
    
 ---------------------------------------------------------------------------------------------------------------------------]]--
 
-if not game.Loaded then game.Loaded:Wait() end
-
--------------------------------------------------------------------------------------------------------------------------------
-
 -- services & instances
 local t, spwn = task.wait, task.spawn
 local getmmfromerr = function(userdata, f, test) local ret = nil xpcall(f, function() ret = debug.info(2, "f") end, userdata, nil, 0) if (type(ret) ~= "function") or not test(ret) then return f end return ret end
@@ -117,7 +113,6 @@ logFrame.AnchorPoint = Vector2.new(0, 1)
 logFrame.BackgroundTransparency = 1
 logFrame.Parent = debugsgui
 
--- UIListLayout stacks entries bottom-up
 local layout = Instance.new("UIListLayout")
 layout.Parent = logFrame
 layout.SortOrder = Enum.SortOrder.LayoutOrder
@@ -144,12 +139,10 @@ local function bottomleft(text, log)
 	debuglog.TextTruncate = Enum.TextTruncate.AtEnd
 	debuglog.Parent = logFrame
 
-	-- Pad the label background
 	local padding = Instance.new("UIPadding")
 	padding.PaddingLeft = UDim.new(0, 4)
 	padding.Parent = debuglog
 
-	-- Fade out after 5 seconds
 	task.delay(5, function()
 		local tweenInfo = TweenInfo.new(0.6, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
 		local tween = game:GetService("TweenService"):Create(debuglog, tweenInfo, {
@@ -163,10 +156,8 @@ local function bottomleft(text, log)
 	end)
 end
 
--- Hook into the developer console / LogService
 local LogService = game:GetService("LogService")
 
--- Replay existing messages already in the log
 for _, entry in ipairs(LogService:GetLogHistory()) do
 	local prefix = ({
 		[Enum.MessageType.MessageOutput]  = "[OUT] ",
