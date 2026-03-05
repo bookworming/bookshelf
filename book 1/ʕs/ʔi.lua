@@ -131,9 +131,7 @@ local function bottomleft(text, log)
 
 	task.delay(5, function()
 		local tween = ts:Create(debuglog, TweenInfo.new(0.6, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {TextTransparency = 1, BackgroundTransparency = 1}):Play()
-		tween.Completed:Connect(function()
-			debuglog:Destroy()
-		end)
+		d:AddItem(debuglog, 0.6)
 	end)
 end
 
