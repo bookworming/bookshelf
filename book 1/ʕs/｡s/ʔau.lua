@@ -9,7 +9,7 @@
    
 ---------------------------------------------------------------------------------------------------------------------------]]--
 
-local version = 1
+local version = 2
 
 -------------------------------------------------------------------------------------------------------------------------------
 
@@ -44,8 +44,9 @@ local function autoescape(state)
 		end
 
 		local uivisible
-		autoescapewormconn = env.stuf.plrgui.TwistedSquirmEscapeUI.Enabled.Changed:Connect(function(vis)
-			if vis then
+    local ui = env.stuf.plrgui.TwistedSquirmEscapeUI
+		autoescapewormconn = ui.Changed:Connect(function()
+			if ui.Enabled then
 				uivisible = true
 				while uivisible do
 					tap("left") t(autoescapewormdelay)
@@ -60,12 +61,35 @@ end
 
 -------------------------------------------------------------------------------------------------------------------------------
 
+env.stuf.afe = {
+  running = false,
+  priority = {},
+  maxitemcap = 2,
+  itemmaxdist = 0,
+  machmaxdist = 0,
+  preset = "Default",
+  actiontrigger = "Map fully loaded",
+  actions = {
+    "Auto pick up all items", 
+    "Auto pick up all event items", 
+    "Auto pick up all Research Capsules",
+		"Auto pick up all Tapes", 
+    "Auto pick up all heals", 
+    "Auto pick up all extraction items", 
+    "Auto encounter Twisteds",
+		"Auto buy items"
+  }
+}
+
+-------------------------------------------------------------------------------------------------------------------------------
+
 local section = {
 	version = version,
 
 	{ type = "separator", title = "Autofarming" },
 	{ type = "toggle", title = "Toggle autofarm", desc = "Toggles the autofarm. Turning on any functions that modify or adjust the player's behavior may result in conflicts.",
 		callback = function(state) 
+      env.stuf.afe.running = state
 		end
 	},
 
@@ -74,18 +98,22 @@ local section = {
 		options = {"Research", "Heals", "Extraction speed"},
 
 		callback = function(selected) 
+      env.stuf.afe.priority = selected
 		end 
 	},
 	{ type = "slider", title = "Item capacity limit for autofarm", desc = "Limits the amount of items you can hold in your inventory.", min = 0, max = 4, default = 0, step = 1,
 		callback = function(value)
+      env.stuf.afe.maxitemcap = value
 		end
 	},
 	{ type = "slider", title = "Item max distance for autofarm", desc = "Avoids items when a Twisted is within the set distance of the item.", min = 0, max = 100, default = 0, step = 1,
 		callback = function(value)
+      env.stuf.afe.itemmaxdist = value
 		end
 	},
 	{ type = "slider", title = "Machine max distance for autofarm", desc = "Avoids machines when a Twisted is within the set distance of the machine.", min = 0, max = 100, default = 0, step = 1,
 		callback = function(value)
+      env.stuf.afe.machmaxdist = value
 		end
 	},
 	{ type = "toggle", title = "Anti crash for autofarm", desc = "Toggles a mode that prevents your device from crashing due to memory leaks all while trying to keep your device's temperature stable. Use this when you want to autofarm on a low-end device for a long period of time.",
@@ -98,32 +126,33 @@ local section = {
 	},
 	{ type = "dropdown", title = "Autofarm preset", desc = "Sets a custom preset for the Autofarm.", 
 		options = {"Default", "Toon Mastery", "Twisted Research"},
-		default = "Default",
+		default = env.stuf.afe.preset,
 		canbeempty = false,
 
 		callback = function(selected) 
+      env.stuf.afe.preset = selected
 		end 
 	},
 
 	{ type = "separator", title = "Autofarm actions" },
 	{ type = "dropdown", title = "Perform autofarm actions trigger", desc = "Performs the autofarm actions when the selected event is triggered.", 
 		options = {"Map fully loaded", "On floor start", "On panic mode"},
-		default = "Map fully loaded",
+		default = env.stuf.afe.actiontrigger,
 		canbeempty = false,
 		multiselect = true,
 
 		callback = function(selected) 
+      env.stuf.afe.actiontrigger = selected
 		end 
 	},
 	{ type = "dropdown", title = "Automate actions", desc = "Automatically performs the selected actions while autofarming.", 
 		options = {"Auto pick up all items", "Auto pick up all event items", "Auto pick up all Research Capsules",
 			"Auto pick up all Tapes", "Auto pick up all heals", "Auto pick up all extraction items", "Auto encounter Twisteds"},
-		default = {"Auto pick up all items", "Auto pick up all event items", "Auto pick up all Research Capsules",
-			"Auto pick up all Tapes", "Auto pick up all heals", "Auto pick up all extraction items", "Auto encounter Twisteds",
-			"Auto buy items"},
+		default = env.stuf.afe.actions,
 		multiselect = true,
 
 		callback = function(selected) 
+      env.stuf.afe.actions = selected
 		end 
 	},
 
