@@ -30,6 +30,7 @@ local https = FindFirstChildOfClass(game, "HttpService")
 local contp = FindFirstChildOfClass(game, "ContentProvider")
 local srgui = FindFirstChildOfClass(game, "StarterGui")
 local mps = FindFirstChildOfClass(game, "MarketplaceService")
+local ls = FindFirstChildOfClass(game, "LogService")
 
 local core = FindFirstChildOfClass(game, "CoreGui")
 local getgenv = (syn and syn.getgenv) or getgenv() or _G
@@ -77,38 +78,13 @@ spwn(function()
 	env.essentialsloaded = true
 end)
 
---[[
-local rdch 
-local function monitor()
-	if rdch then rdch:Disconnect() rdch = nil end
-	rdch = rs.Heartbeat:Connect(function()
-		local master = core:FindFirstChild("DevConsoleMaster") if not master then return end
-		for _, v in ipairs(master:GetDescendants()) do
-			if v:IsA("TextLabel") and v.Text:find("<font") then
-				if not v.RichText then v.RichText = true v.TextYAlignment = Enum.TextYAlignment.Center end
-				local stripped = v.Text:gsub("<[^>]+>", "")
-				local bounds = txts:GetTextSize(stripped, v.TextSize, v.Font, Vector2.new(v.AbsoluteSize.X, math.huge))
-				local nh = UDim2.new(1, 0, 0, bounds.Y)
-				if v.Size ~= nh then v.Size = nh if v.Parent and v.Parent:IsA("GuiObject") then v.Parent.Size = nh end end
-			end
-		end
-	end)
-end
-
-spwn(function()
-	local dcm = core:FindFirstChild("DevConsoleMaster") if dcm then monitor() end
-	core.ChildAdded:Connect(function(ins) if ins.Name == "DevConsoleMaster" then dcm = ins monitor() end end)
-end)
-]]
-
 local debugsgui = Instance.new("ScreenGui")
 debugsgui.IgnoreGuiInset = true
 debugsgui.Parent = hiddenui
 
--- Container frame anchored to the bottom-left
 local logFrame = Instance.new("Frame")
 logFrame.Size = UDim2.new(0, 420, 0, 300)
-logFrame.Position = UDim2.new(0, 8, 1, -8)
+logFrame.Position = UDim2.new(1, -420, 1, -8)
 logFrame.AnchorPoint = Vector2.new(0, 1)
 logFrame.BackgroundTransparency = 1
 logFrame.Parent = debugsgui
@@ -122,19 +98,29 @@ layout.Padding = UDim.new(0, 2)
 local logCount = 0
 
 local function bottomleft(text, log)
-	repeat t() until env.essentials.sgui
+	if not env.essentials.sgui then repeat t() until env.essentials.sgui end
+	if not env.gear.general.debugmode then return end
 
 	logCount = logCount + 1
+	local col = Color3.fromRGB(255, 255, 255)
+	if log then
+		if log == "warn" then 
+			col = Color3.fromRGB(254, 240, 117)
+		elseif log == "err" then 
+			col = Color3.fromRGB(237, 106, 100)
+		elseif log == "info" then 
+			col = Color3.fromRGB(102, 187, 255)
+		end
+	end
 
 	local debuglog = Instance.new("TextLabel")
 	debuglog.Size = UDim2.new(1, 0, 0, 20)
-	debuglog.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-	debuglog.BackgroundTransparency = 0.45
-	debuglog.TextColor3 = Color3.fromRGB(255, 255, 255)
-	debuglog.TextXAlignment = Enum.TextXAlignment.Left
-	debuglog.Font = Enum.Font.Code
+	debuglog.BackgroundTransparency = 1
+	debuglog.TextColor3 = col
+	debuglog.TextXAlignment = Enum.TextXAlignment.Right
+	debuglog.Font = Enum.Font.RobotoMono
 	debuglog.TextSize = 13
-	debuglog.Text = "  " .. text
+	debuglog.Text = text
 	debuglog.LayoutOrder = logCount
 	debuglog.TextTruncate = Enum.TextTruncate.AtEnd
 	debuglog.Parent = logFrame
@@ -145,7 +131,7 @@ local function bottomleft(text, log)
 
 	task.delay(5, function()
 		local tweenInfo = TweenInfo.new(0.6, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
-		local tween = game:GetService("TweenService"):Create(debuglog, tweenInfo, {
+		local tween = ts:Create(debuglog, tweenInfo, {
 			TextTransparency = 1,
 			BackgroundTransparency = 1,
 		})
@@ -157,26 +143,22 @@ local function bottomleft(text, log)
 end
 
 spwn(function()
-	local LogService = game:GetService("LogService")
-
-	for _, entry in ipairs(LogService:GetLogHistory()) do
+	for _, entry in ipairs(ls:GetLogHistory()) do
 		local prefix = ({
-			[Enum.MessageType.MessageOutput]  = "[OUT] ",
-			[Enum.MessageType.MessageInfo]    = "[INFO] ",
-			[Enum.MessageType.MessageWarning] = "[WARN] ",
-			[Enum.MessageType.MessageError]   = "[ERR] ",
+			[Enum.MessageType.MessageInfo]    = "info",
+			[Enum.MessageType.MessageWarning] = "warn",
+			[Enum.MessageType.MessageError]   = "err",
 		})[entry.messageType] or ""
-		bottomleft(prefix .. entry.message)
+		bottomleft(entry.message, prefix)
 	end
 
-	LogService.MessageOut:Connect(function(message, messageType)
+	ls.MessageOut:Connect(function(message, messageType)
 		local prefix = ({
-			[Enum.MessageType.MessageOutput]  = "[OUT] ",
-			[Enum.MessageType.MessageInfo]    = "[INFO] ",
-			[Enum.MessageType.MessageWarning] = "[WARN] ",
-			[Enum.MessageType.MessageError]   = "[ERR] ",
+			[Enum.MessageType.MessageInfo]    = "info",
+			[Enum.MessageType.MessageWarning] = "warn",
+			[Enum.MessageType.MessageError]   = "err",
 		})[messageType] or ""
-		bottomleft(prefix .. message)
+		bottomleft(message, prefix)
 	end)
 end)
 
@@ -871,24 +853,21 @@ do
 		return os.date("%H:%M:%S")
 	end
 
-	function env.funcs.box(s, force) -- boxten said...
+	function env.funcs.box(s, force) -- output
 		if env.gear.general.debugmode or force then
-			-- print('<font color="rgb(197, 61, 224)">[Boxten]:</font> <font color="rgb(255,255,255)">' .. tostring(s) .. '</font>')
-			print("[Boxten]: " .. tostring(s))
+			print("[Boxten Sex GUI]: " .. tostring(s))
 		end
 	end
 
-	function env.funcs.pop(s, force) -- poppy said...
+	function env.funcs.pop(s, force) -- warn
 		if env.gear.general.debugmode or force then
-			-- print('<font color="rgb(112, 234, 255)">[Poppy]:</font> <font color="rgb(255,255,255)">' .. tostring(s) .. '</font>')
-			warn("[Poppy]: " .. tostring(s))
+			warn("[Boxten Sex GUI]: " .. tostring(s))
 		end
 	end
 
-	function env.funcs.shr(s, force) -- shrimpo said...
+	function env.funcs.shr(s, force) -- error
 		if env.gear.general.debugmode or force then
-			-- print('<font color="rgb(247, 109, 40)">[Shrimpo]:</font> <font color="rgb(255,255,255)">' .. tostring(s) .. '</font>')
-			error("[Shrimpo]: " .. tostring(s))
+			error("[Boxten Sex GUI]: " .. tostring(s))
 		end
 	end
 
