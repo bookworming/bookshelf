@@ -53,7 +53,7 @@ end)
 
 local dB = {
 	version = version,
-	
+
 	-- changelogs
 	cl = {
 		current = {
@@ -65,32 +65,33 @@ local dB = {
 • Re-designed the UI.
 • Fully re-factored and optimized the script and hopefully made it more performant.
 • Renamed a few elements and updated their descriptions.
-• Renamed the "Teleports" category to "Navigation". (Boxten's Section)
+• Renamed the "Teleports" category to "Navigation".
 • Removed the "Donor" section from Boxten's Section/Fun and gave it its own category. (Boxten's Section)
 • Gave the script changelogs its own category. (Settings section)
 
-• Added a "Auto escape Twisted Squirm" toggle + input. (Boxten's Section/Automation/Player)
-• Added a "Hide machine ESP conditions" dropdown. (Boxten's Section/Environment/ESPs)
-• Added a "Hover ESP" toggle. (Boxten's Section/Environment/ESPs)
-• Added a "Toggle barriers" toggle. (Boxten's Section/Environment/Utility)
-• Added a "Orbit player" toggle + input. (Boxten's Section/Fun/Actions)
-• Added a "Adjust orbit radius" slider. (Boxten's Section/Fun/Actions)
-• Added a "Adjust orbit speed" slider. (Boxten's Section/Fun/Actions)
-• Added a "Autofarm priority" dropdown. (Boxten's Section/Automation/Autofarm settings)
-• Added a "Item capacity limit" slider. (Boxten's Section/Automation/Autofarm settings)
-• Added a "Toon ability replication" section. (Boxten's Section/Local Player)
-• Added a "Access" section. (Boxten's Section/Donor)
-• Added a "Actions" section. (Boxten's Section/Donor)
-• Added a "Tools" section. (Boxten's Section/Donor)
-• Added a "Teleports" section. (Boxten's Section/Navigation)
-• Added a "Tweens" section. (Boxten's Section/Navigation)
-• Added a "Pathfinding" section. (Boxten's Section/Navigation)
+• Added a "Auto escape Twisted Squirm" toggle + input. (Automation/Player)
+• Added a "Hide machine ESP conditions" dropdown. (Environment/ESPs)
+• Added a "Hover ESP" toggle. (Environment/ESPs)
+• Added a "Toggle barriers" toggle. (Environment/Utility)
+• Added a "Orbit player" toggle + input. (Fun/Actions)
+• Added a "Adjust orbit radius" slider. (Fun/Actions)
+• Added a "Adjust orbit speed" slider. (Fun/Actions)
+• Added a "Autofarm priority" dropdown. (Automation/Autofarm settings)
+• Added a "Item capacity limit" slider. (Automation/Autofarm settings)
+• Added a "Toon ability replication" section. (Local Player)
+• Added a "Access" section. (Donor)
+• Added a "Actions" section. (Donor)
+• Added a "Tools" section. (Donor)
+• Added a "Teleports" section. (Navigation)
+• Added a "Tweens" section. (Navigation)
+• Added a "Pathfinding" section. (Navigation)
 
-• Removed the "Roleplay" section from Boxten's Section/Fun due to all of its functions being patched.
-• Removed the "Twisteds" section from Boxten's Section/Local Player due to most of the functions being patched.
+• Removed the "Roleplay" section from (Fun) due to all of its functions being patched.
+• Removed the "Twisteds" section from (Local Player) due to most of the functions being patched.
 • Removed the "Buy event sticker" button due to it requiring event currency in order for it to work.
 • Removed the "Buy event skin" button due to it requiring event currency in order for it to work.
 
+• Moved the Item, Buy, and Machine auras to (Local Player/Utility).
 • Updated the list of available animations and made it so the animation target list only shows Toons that have animations that can only be applied on your current Toon.
 • Moved the "Animatons" section to Boxten's Section.
 • Moved the "Autofarm" section to Boxten's Section.
