@@ -50,7 +50,7 @@ local env = getgenv.BSGUI
 
 -------------------------------------------------------------------------------------------------------------------------------
 
--- env & debugger setup
+-- env setup
 env.essentialsloaded, env.setupcomplete = nil
 env.funcs, env.stuf, env.gear, env.essentials = {}, {}, {}, {}
 
@@ -78,30 +78,34 @@ spwn(function()
 	env.essentialsloaded = true
 end)
 
-local debugsgui = Instance.new("ScreenGui")
-debugsgui.IgnoreGuiInset = true
-debugsgui.Parent = hiddenui
+-------------------------------------------------------------------------------------------------------------------------------
 
-local logFrame = Instance.new("Frame")
-logFrame.Size = UDim2.new(0, 420, 0, 300)
-logFrame.Position = UDim2.new(1, -420, 1, -8)
-logFrame.AnchorPoint = Vector2.new(0, 1)
-logFrame.BackgroundTransparency = 1
-logFrame.Parent = debugsgui
+-- debugger setup
+env.essentials.debugger = {}
+env.essentials.debugger.logcount = 0
 
-local layout = Instance.new("UIListLayout")
-layout.Parent = logFrame
-layout.SortOrder = Enum.SortOrder.LayoutOrder
-layout.VerticalAlignment = Enum.VerticalAlignment.Bottom
-layout.Padding = UDim.new(0, 2)
+env.essentials.debugger.sgui = Instance.new("ScreenGui")
+env.essentials.debugger.sgui.IgnoreGuiInset = true
+env.essentials.debugger.sgui.Parent = hiddenui
 
-local logCount = 0
+env.essentials.debugger.container = Instance.new("Frame")
+env.essentials.debugger.container.Size = UDim2.new(0, 420, 0, 300)
+env.essentials.debugger.container.Position = UDim2.new(1, -425, 1, -5)
+env.essentials.debugger.container.AnchorPoint = Vector2.new(0, 1)
+env.essentials.debugger.container.BackgroundTransparency = 1
+env.essentials.debugger.container.Parent = env.essentials.debugger.sgui
+
+env.essentials.debugger.containerlayout = Instance.new("UIListLayout")
+env.essentials.debugger.containerlayout.Parent = env.essentials.debugger.container
+env.essentials.debugger.containerlayout.SortOrder = Enum.SortOrder.LayoutOrder
+env.essentials.debugger.containerlayout.VerticalAlignment = Enum.VerticalAlignment.Bottom
+env.essentials.debugger.containerlayout.Padding = UDim.new(0, 1)
 
 local function bottomleft(text, log)
 	if not env.essentials.sgui then repeat t() until env.essentials.sgui end
 	if not env.gear.general.debugmode then return end
 
-	logCount = logCount + 1
+	env.essentials.debugger.logcount = env.essentials.debugger.logcount + 1
 	local col = Color3.fromRGB(255, 255, 255)
 	if log then
 		if log == "warn" then 
@@ -114,29 +118,19 @@ local function bottomleft(text, log)
 	end
 
 	local debuglog = Instance.new("TextLabel")
-	debuglog.Size = UDim2.new(1, 0, 0, 20)
+	debuglog.Size = UDim2.new(1, 0, 0, 13)
 	debuglog.BackgroundTransparency = 1
 	debuglog.TextColor3 = col
 	debuglog.TextXAlignment = Enum.TextXAlignment.Right
 	debuglog.Font = Enum.Font.RobotoMono
-	debuglog.TextSize = 13
+	debuglog.TextSize = 10
 	debuglog.Text = text
-	debuglog.LayoutOrder = logCount
-	debuglog.TextTruncate = Enum.TextTruncate.AtEnd
-	debuglog.Parent = logFrame
-
-	local padding = Instance.new("UIPadding")
-	padding.PaddingLeft = UDim.new(0, 4)
-	padding.Parent = debuglog
+	debuglog.LayoutOrder = env.essentials.debugger.logcount
+	debuglog.TextTruncate = Enum.TextTruncate.SplitWord
+	debuglog.Parent = env.essentials.debugger.container
 
 	task.delay(5, function()
-		local tweenInfo = TweenInfo.new(0.6, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
-		local tween = ts:Create(debuglog, tweenInfo, {
-			TextTransparency = 1,
-			BackgroundTransparency = 1,
-		})
-		tween:Play()
-		tween.Completed:Connect(function()
+		ts:Create(debuglog, TweenInfo.new(0.6, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {TextTransparency = 1, BackgroundTransparency = 1}):Play().Completed:Connect(function()
 			debuglog:Destroy()
 		end)
 	end)
