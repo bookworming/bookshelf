@@ -334,7 +334,6 @@ local function loadintro()
 		for filename, url in pairs(assetex.sounds) do
 			local path = soundsfolder .. "/" .. filename
 			if not isfile(path) then
-				-- env.funcs.introconsolelog("Downloading " .. filename .. "...")
 				writefile(path, game:HttpGet(url))
 			end
 		end
@@ -342,7 +341,6 @@ local function loadintro()
 		for filename, url in pairs(assetex.images) do
 			local path = imagesfolder .. "/" .. filename
 			if not isfile(path) then
-				-- env.funcs.introconsolelog("Downloading " .. filename .. "...")
 				writefile(path, game:HttpGet(url))
 			end
 		end
@@ -352,7 +350,6 @@ local function loadintro()
 		for filename, url in pairs(assetex.videos) do
 			local path = videosfolder .. "/" .. filename
 			if not isfile(path) then
-				-- env.funcs.introconsolelog("Downloading " .. filename .. " (background)...")
 				spwn(function()
 					writefile(path, game:HttpGet(url))
 				end)
@@ -379,7 +376,7 @@ local function loadintro()
 	if env.essentials.library then
 		env.funcs.introconsolelog("UI library successfully loaded.")
 		if env.essentials.library.version ~= env.expectedcompiledscriptversions.library then
-			env.funcs.introconsolelog("The UI script library is out of date.", "warn")
+			env.funcs.introconsolelog("The UI script library is out of date. (" .. env.essentials.library.version .. "OoD)", "warn")
 		end
 	else
 		env.funcs.introconsolelog("Something went wrong. (LibFail)", "warn")
@@ -390,7 +387,7 @@ local function loadintro()
 	if env.essentials.data then
 		env.funcs.introconsolelog("Script data successfully loaded.")
 		if env.essentials.data.version ~= env.expectedcompiledscriptversions.data then
-			env.funcs.introconsolelog("The script data is out of date.", "warn")
+			env.funcs.introconsolelog("The script data is out of date. (" .. env.essentials.data.version .. "OoD)", "warn")
 		end
 	else
 		env.funcs.introconsolelog("Something went wrong. (DataFail)", "warn")
