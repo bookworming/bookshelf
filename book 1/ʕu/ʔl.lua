@@ -10,7 +10,7 @@
 ---------------------------------------------------------------------------------------------------------------------------]]--
 
 local lib = {}
-lib.version = 5
+lib.version = 1
 
 -------------------------------------------------------------------------------------------------------------------------------
 
@@ -2356,10 +2356,10 @@ function lib.addinputandtoggle(parent, title, description, defaulttext, placehol
 
 	frame.Size = UDim2.new(0, width, 0, th + dh + leftpadding * 2 + tetxgap + 45)
 
-	local elementtitle = lib.makecooltext(frame, UDim2.new(0, textwidth, 0, th), title, 13, nil, 2, UDim2.new(0, leftpadding, 0, leftpadding + th / 2 - 5), Enum.TextXAlignment.Left)
+	local elementtitle = lib.makecooltext(frame, UDim2.new(0, textwidth, 0, th), title, 13, nil, 2, UDim2.new(0, leftpadding + textwidth / 2, 0, leftpadding + th / 2 - 5), Enum.TextXAlignment.Left)
 	elementtitle.ZIndex = 61
 
-	local elementdesc = lib.makecooltext(frame, UDim2.new(0, textwidth, 0, dh), description, 10, Color3.fromRGB(170,170,170), 1, UDim2.new(0, leftpadding, 0, leftpadding + th + tetxgap + 5), Enum.TextXAlignment.Left)
+	local elementdesc = lib.makecooltext(frame, UDim2.new(0, textwidth, 0, dh), description, 10, Color3.fromRGB(170,170,170), 1, UDim2.new(0, leftpadding + textwidth / 2, 0, leftpadding + th + tetxgap + dh / 2 + 5), Enum.TextXAlignment.Left)
 	elementdesc.ZIndex = 61
 
 	local inputbox = lib.makecooltextbox(UDim2.new(0, 142, 0, 28), frame, defaulttext, 16, placeholdertext, nil, UDim2.new(0, 0, 1, -30), nil, 61)
@@ -2453,28 +2453,34 @@ function lib.addinputandtoggle(parent, title, description, defaulttext, placehol
 	end
 
 	local function updateFrameSize()
-    local function stripRichText(str)
-        return str:gsub("<[^>]->", "")
-    end
+		local function stripRichText(str)
+			return str:gsub("<[^>]->", "")
+		end
 
-    local scaledTextWidth = width - rightpadding - leftpadding
+		local actualWidth = frame.AbsoluteSize.X
+		local scaledTextWidth = actualWidth - rightpadding - 20
 
-    local cleanTitleText = stripRichText(elementtitle.Text)
+		local cleanTitleText = stripRichText(elementtitle.Text)
 
-    local _, newTh = lib.gettextbounds(cleanTitleText, elementtitle.Font, elementtitle.TextSize, Vector2.new(scaledTextWidth, math.huge))
-    local _, currDh = lib.gettextbounds(description, elementdesc.Font, elementdesc.TextSize, Vector2.new(scaledTextWidth, math.huge))
+		local _, newTh = lib.gettextbounds(cleanTitleText, elementtitle.Font, elementtitle.TextSize, Vector2.new(scaledTextWidth, math.huge))
+		local _, currDh = lib.gettextbounds(description, elementdesc.Font, elementdesc.TextSize, Vector2.new(scaledTextWidth, math.huge))
 
-    local newDescY = leftpadding + newTh + tetxgap
-    local newTotalHeight = newTh + currDh + leftpadding * 2 + tetxgap + 45
+		local newDescY = leftpadding + newTh + tetxgap
+		local newTotalHeight = newTh + currDh + leftpadding * 2 + tetxgap + 45
 
-    elementtitle.Size = UDim2.new(0, scaledTextWidth, 0, newTh)
-    elementtitle.Position = UDim2.new(0, leftpadding, 0, leftpadding + newTh / 2 - 5)
+		elementtitle.Size = UDim2.new(0, scaledTextWidth, 0, newTh)
+		elementtitle.Position = UDim2.new(0, leftpadding + scaledTextWidth / 2, 0, leftpadding + newTh / 2 - 5)
 
-    elementdesc.Size = UDim2.new(0, scaledTextWidth, 0, currDh)
-    elementdesc.Position = UDim2.new(0, leftpadding, 0, newDescY + currDh / 2 + 5)
+		elementdesc.Size = UDim2.new(0, scaledTextWidth, 0, currDh)
+		elementdesc.Position = UDim2.new(0, leftpadding + scaledTextWidth / 2, 0, newDescY + currDh / 2 + 5)
 
-    frame.Size = UDim2.new(0, width, 0, newTotalHeight)
+		if toggle then toggle.Position = UDim2.new(1, -38, 1, -35) end
+		if inputbox then inputbox.Position = UDim2.new(0, leftpadding + 73, 1, -30) end
+
+		frame.Size = UDim2.new(0, width, 0, newTotalHeight)
 	end
+
+	frame:GetPropertyChangedSignal("AbsoluteSize"):Connect(updateFrameSize)
 
 	state.elementtitle = elementtitle
 	state.updateSize = updateFrameSize
@@ -2844,8 +2850,8 @@ function lib.addinputandtoggle(parent, title, description, defaulttext, placehol
 end
 
 function lib.addinputandbutton(parent, title, description, defaulttext, placeholdertext, callback, autofill)
-	local width, leftpadding, rightpadding, tetxgap = 235, 14, 68, -5
-	local textwidth = width - rightpadding - leftpadding
+	local width, leftpadding, rightpadding, tetxgap = 235, 14, 14, -5
+	local textwidth = width - rightpadding - 20
 
 	local frame = lib.makecoolframe(UDim2.new(0, width, 0, 0), parent, false, false, nil, nil, nil, true, 60)
 	frame.AutomaticSize = Enum.AutomaticSize.Y
@@ -2872,38 +2878,40 @@ function lib.addinputandbutton(parent, title, description, defaulttext, placehol
 	local _, dh = lib.gettextbounds(description, Enum.Font.FredokaOne, 10, Vector2.new(textwidth, math.huge))
 	frame.Size = UDim2.new(0, width, 0, th + dh + leftpadding * 2 + tetxgap + 45)
 
-	local elementtitle = lib.makecooltext(frame, UDim2.new(0, textwidth, 0, th), title, 13, nil, 2, UDim2.new(0, leftpadding, 0, leftpadding + th / 2 - 5), Enum.TextXAlignment.Left)
+	local elementtitle = lib.makecooltext(frame, UDim2.new(0, textwidth, 0, th), title, 13, nil, 2, UDim2.new(0, leftpadding + textwidth / 2, 0, leftpadding + th / 2 - 5), Enum.TextXAlignment.Left)
 	elementtitle.ZIndex = 61
-
-	local elementdesc = lib.makecooltext(frame, UDim2.new(0, textwidth, 0, dh), description, 10, Color3.fromRGB(170,170,170), 1, UDim2.new(0, leftpadding, 0, leftpadding + th + tetxgap + 5), Enum.TextXAlignment.Left)
+	local elementdesc = lib.makecooltext(frame, UDim2.new(0, textwidth, 0, dh), description, 10, Color3.fromRGB(170,170,170), 1, UDim2.new(0, leftpadding + textwidth / 2, 0, leftpadding + th + tetxgap + dh / 2 + 5), Enum.TextXAlignment.Left)
 	elementdesc.ZIndex = 61
 
 	local inputbox = lib.makecooltextbox(UDim2.new(0, 118, 0, 28), frame, defaulttext, 16, placeholdertext, nil, UDim2.new(0, 74, 1, -30), nil, 61)
 	local executebutton = lib.makecoolbutton("▶", UDim2.new(0, 70, 0, 28), frame, UDim2.new(1, -50, 1, -30), "yes", 17, {bottom = 7}, 61)
 
 	local function updateFrameSize()
-    local function stripRichText(str)
-        return str:gsub("<[^>]->", "")
-    end
+		local function stripRichText(str)
+			return str:gsub("<[^>]->", "")
+		end
 
-    local scaledTextWidth = width - rightpadding - leftpadding
+		local actualWidth = frame.AbsoluteSize.X
+		local scaledTextWidth = actualWidth - rightpadding - 20
 
-    local cleanTitleText = stripRichText(elementtitle.Text)
+		local cleanTitleText = stripRichText(elementtitle.Text)
 
-    local _, newTh = lib.gettextbounds(cleanTitleText, elementtitle.Font, elementtitle.TextSize, Vector2.new(scaledTextWidth, math.huge))
-    local _, currDh = lib.gettextbounds(description, elementdesc.Font, elementdesc.TextSize, Vector2.new(scaledTextWidth, math.huge))
+		local _, newTh = lib.gettextbounds(cleanTitleText, elementtitle.Font, elementtitle.TextSize, Vector2.new(scaledTextWidth, math.huge))
+		local _, currDh = lib.gettextbounds(description, elementdesc.Font, elementdesc.TextSize, Vector2.new(scaledTextWidth, math.huge))
 
-    local newDescY = leftpadding + newTh + tetxgap
-    local newTotalHeight = newTh + currDh + leftpadding * 2 + tetxgap + 45
+		local newDescY = leftpadding + newTh + tetxgap
+		local newTotalHeight = newTh + currDh + leftpadding * 2 + tetxgap + 45
 
-    elementtitle.Size = UDim2.new(0, scaledTextWidth, 0, newTh)
-    elementtitle.Position = UDim2.new(0, leftpadding, 0, leftpadding + newTh / 2 - 5)
+		elementtitle.Size = UDim2.new(0, scaledTextWidth, 0, newTh)
+		elementtitle.Position = UDim2.new(0, leftpadding + scaledTextWidth / 2, 0, leftpadding + newTh / 2 - 5)
 
-    elementdesc.Size = UDim2.new(0, scaledTextWidth, 0, currDh)
-    elementdesc.Position = UDim2.new(0, leftpadding, 0, newDescY + currDh / 2 + 5)
+		elementdesc.Size = UDim2.new(0, scaledTextWidth, 0, currDh)
+		elementdesc.Position = UDim2.new(0, leftpadding + scaledTextWidth / 2, 0, newDescY + currDh / 2 + 5)
 
-    frame.Size = UDim2.new(0, width, 0, newTotalHeight)
+		frame.Size = UDim2.new(0, width, 0, newTotalHeight)
 	end
+
+	frame:GetPropertyChangedSignal("AbsoluteSize"):Connect(updateFrameSize)
 
 	state.elementtitle = elementtitle
 	state.updateSize = updateFrameSize
@@ -3166,132 +3174,6 @@ function lib.addinputandbutton(parent, title, description, defaulttext, placehol
 	inputbox.FocusLost:Connect(function()
 		env.essentials.elements[title .. "/input"].dirty = true
 		if table.find(env.filemanager.persist, title) then env.filemanager.persistsave() end
-	end)
-
-	return frame
-end
-
-function lib.addslider(parent, title, description, min, max, default, step, callback)
-	local width, leftpadding, rightpadding, tetxgap = 235, 14, 14, -7
-	local textwidth = width - rightpadding - 20
-	step = step or 1
-
-	local frame = lib.makecoolframe(UDim2.new(0, width, 0, 0), parent, false, false, nil, nil, nil, nil)
-	frame.AutomaticSize = Enum.AutomaticSize.Y
-	frame.Active = true
-	frame.LayoutOrder = #parent:GetChildren()
-
-	local _, th = lib.gettextbounds(title, Enum.Font.FredokaOne, 13, Vector2.new(textwidth, math.huge))
-	local _, dh = lib.gettextbounds(description, Enum.Font.FredokaOne, 10, Vector2.new(textwidth, math.huge))
-
-	frame.Size = UDim2.new(0, width, 0, th + dh + leftpadding * 2 + tetxgap + 45)
-
-	lib.makecooltext(frame, UDim2.new(0, textwidth, 0, th), title, 13, nil, 2, UDim2.new(0, leftpadding + textwidth / 2, 0, leftpadding + th / 2 - 5), Enum.TextXAlignment.Left)
-	lib.makecooltext(frame, UDim2.new(0, textwidth, 0, dh), description, 10, Color3.fromRGB(170,170,170), 1, UDim2.new(0, leftpadding + textwidth / 2, 0, leftpadding + th + tetxgap + dh / 2 + 5), Enum.TextXAlignment.Left)
-
-	local track = lib.makecoolframe(UDim2.new(0, width - leftpadding * 2 - 95, 0, 9), frame, false, false, UDim2.new(0.5, leftpadding - 57, 1, -30), true, true, nil, 65)
-	track.Active = true
-
-	local fill = Instance.new("Frame")
-	fill.Size = UDim2.new(0, 0, 0, 5)
-	fill.AnchorPoint = Vector2.new(0, 0.5)
-	fill.Position = UDim2.new(0, 2, 0.5, 0)
-	fill.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-	fill.BorderSizePixel = 0
-	fill.Parent = track
-	fill.ZIndex = 66
-	Instance.new("UICorner", fill).CornerRadius = UDim.new(1, 0)
-
-	local knob = Instance.new("Frame")
-	knob.Size = UDim2.new(0, 15, 0, 15)
-	knob.AnchorPoint = Vector2.new(0.5, 0.5)
-	knob.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-	knob.BorderSizePixel = 0
-	knob.Parent = track
-	knob.ZIndex = 66
-	Instance.new("UICorner", knob).CornerRadius = UDim.new(1, 0)
-
-	local box = lib.makecooltextbox(UDim2.new(0, 70, 0, 28), frame, default, 16, "...", nil, UDim2.new(1, -50, 1, -30), nil, 67)
-
-	local value = math.clamp(default or min, min, max)
-	local function snap(v)
-		local snapped = math.clamp(math.floor(v / step + 0.5) * step, min, max)
-		local decimals = math.max(0, math.ceil(-math.log10(step)))
-		return tonumber(string.format("%." .. decimals .. "f", snapped))
-	end
-
-	local function updateVisuals(newVal)
-		if newVal then value = snap(newVal) end
-		local pct = (value - min) / (max - min)
-		fill.Size = UDim2.new(pct, 0, 0, 5)
-		knob.Position = UDim2.new(pct, 0, 0.5, 0)
-		local decimals = math.max(0, math.ceil(-math.log10(step)))
-		box.Text = string.format("%." .. decimals .. "f", value)
-	end
-
-	local function setFromX(x)
-		local pct = math.clamp(x / track.AbsoluteSize.X, 0, 1)
-		value = snap(min + (max - min) * pct)
-		updateVisuals()
-		env.essentials.elements[title].value = value
-		env.essentials.elements[title].dirty = true
-		if callback then callback(value) end
-		if table.find(env.filemanager.persist, title) then env.filemanager.persistsave() end
-	end
-
-	env.essentials.elements[title] = {
-		frame = frame,
-		type = "slider",
-		dirty = false,
-		callback = callback,
-		instance = box,
-		setValue = function(val)
-			updateVisuals(tonumber(val))
-			if callback then callback(value) end
-		end
-	}
-
-	task.defer(updateVisuals)
-
-	local dragging = false
-	track.InputBegan:Connect(function(i)
-		if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then
-			dragging = true
-			lib.clik()
-			setFromX(i.Position.X - track.AbsolutePosition.X)
-			candrag = false
-		end
-	end)
-
-	uis.InputEnded:Connect(function(i)
-		if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then
-			if dragging then
-				dragging = false
-				candrag = true
-				lib.scrollbardragging = false
-			end
-		end
-	end)
-
-	uis.InputChanged:Connect(function(i)
-		if dragging and (i.UserInputType == Enum.UserInputType.MouseMovement or i.UserInputType == Enum.UserInputType.Touch) then
-			setFromX(i.Position.X - track.AbsolutePosition.X)
-		end
-	end)
-
-	box.FocusLost:Connect(function()
-		env.essentials.elements[title].dirty = true
-
-		local num = tonumber(box.Text)
-		if num then
-			value = snap(num)
-			updateVisuals()
-			if callback then callback(value) end
-
-			if table.find(env.filemanager.persist, title) then env.filemanager.persistsave() end
-		else
-			updateVisuals()
-		end
 	end)
 
 	return frame
