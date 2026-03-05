@@ -401,12 +401,13 @@ local function loadintro()
 	t(0.1) env.funcs.introprogress(60)
 
 	local buildsucc = env.funcs.recursivels("book%201/%CA%95s/%CA%94b.lua", true)
-	if buildsucc.version ~= env.expectedcompiledscriptversions.builder then
-		env.funcs.introconsolelog("The UI builder is not up to date. (" .. buildsucc.version .. "OoD)", "warn")
-	end
 
 	if not buildsucc or not env.stuf.sectionsloaded then
 		env.funcs.introconsolelog("Something went wrong. (BuildFail)", "warn")
+  else
+  	if buildsucc.version ~= env.expectedcompiledscriptversions.builder then
+  		env.funcs.introconsolelog("Holding construction worker at gunpoint. (" .. buildsucc.version .. ")")
+  	end
 	end
 
 	t(0.1)
