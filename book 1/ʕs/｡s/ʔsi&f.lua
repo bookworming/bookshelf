@@ -41,7 +41,7 @@ function queuescript(state)
 			queueotp("")
 		end)
 	else
-		env.funcs.rid(queueconn) queueconn = nil
+		if queueconn then queueconn:Disconnect() queueconn = nil end
 	end
 end
 
