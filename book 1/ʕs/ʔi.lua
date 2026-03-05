@@ -85,7 +85,7 @@ env.essentials.debugger = {}
 env.essentials.debugger.logcount = 0
 
 env.essentials.debugger.sgui = Instance.new("ScreenGui")
-env.essentials.debugger.sgui.IgnoreGuiInset = true
+env.essentials.debugger.sgui.ResetOnSpawn = false
 env.essentials.debugger.sgui.Parent = hiddenui
 
 env.essentials.debugger.container = Instance.new("Frame")
@@ -122,12 +122,17 @@ local function bottomleft(text, log)
 	debuglog.BackgroundTransparency = 1
 	debuglog.TextColor3 = col
 	debuglog.TextXAlignment = Enum.TextXAlignment.Right
-	debuglog.Font = Enum.Font.RobotoMono
+	debuglog.Font = Enum.Font.FredokaOne
 	debuglog.TextSize = 10
 	debuglog.Text = text
 	debuglog.LayoutOrder = env.essentials.debugger.logcount
 	debuglog.TextTruncate = Enum.TextTruncate.AtEnd
 	debuglog.Parent = env.essentials.debugger.container
+	
+	local border = Instance.new("UIStroke")
+	border.Parent = debuglog
+	border.Thickness = 1
+	border.Color = Color3.fromRGB(0, 0, 0)
 
 	task.delay(5, function()
 		local tween = ts:Create(debuglog, TweenInfo.new(0.6, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {TextTransparency = 1, BackgroundTransparency = 1}):Play()
@@ -499,7 +504,6 @@ spwn(function()
 	-- main screengui
 	env.essentials.sgui = Instance.new("ScreenGui")
 	env.essentials.sgui.Name = folder
-	env.essentials.sgui.IgnoreGuiInset = true
 	env.essentials.sgui.ResetOnSpawn = false
 	env.essentials.sgui.Parent = hiddenui
 end)
