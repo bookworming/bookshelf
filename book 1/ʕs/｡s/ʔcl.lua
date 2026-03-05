@@ -79,9 +79,14 @@ local section = {
 		callback = function()
 			if not configname or configname == "" then env.funcs.pop("Invalid config name!") return end
 
-			local succ, err = pcall(function() env.filemanager.saveconfig(configname) end)
-			if not succ then env.funcs.shr("CONFIG ERROR!!!: " .. err) else env.funcs.box("config \"" .. configname .. "\" saved successfully") updateindi() end
-			updateindi()
+			if isfile(env.filemanager.configfolder .. "/" .. configname .. ".json") then
+				env.funcs.popup("A config with the name \"" .. configname .. "\" already exists. Do you want to override it?", "Yes", 
+					function() 
+						local succ, err = pcall(function() env.filemanager.saveconfig(configname) end)
+						if not succ then env.funcs.shr("CONFIG ERROR!!!: " .. err) else env.funcs.box("config \"" .. configname .. "\" saved successfully") updateindi() end
+						updateindi()
+					end, "No", nil)
+			end
 		end
 	},
 	{ type = "button", title = "Load config", desc = "Loads the target config.", 
@@ -96,11 +101,17 @@ local section = {
 	{ type = "button", title = "Delete config", desc = "Deletes the current config.", 
 		callback = function()
 			if not configname or configname == "" then env.funcs.pop("Invalid config name!") return end
-			if not isfile(env.filemanager.configfolder .. "/" .. configname .. ".json") then env.funcs.pop("Config \"" .. configname .. "\" doesn't exist!") return end
 
-			local succ, err = pcall(function() env.filemanager.deleteconfig(configname) end)
-			if not succ then env.funcs.shr("CONFIG ERROR!!!: " .. err) else env.funcs.box("config \"" .. configname .. "\" deleted successfully") updateindi() end
-			updateindi()
+			if isfile(env.filemanager.configfolder .. "/" .. configname .. ".json") then
+				env.funcs.popup("Are you sure you want to delete the config \"" .. configname .. "\"? This is irreversable.", "Yes", 
+					function() 
+						if not isfile(env.filemanager.configfolder .. "/" .. configname .. ".json") then env.funcs.pop("Config \"" .. configname .. "\" doesn't exist!") return end
+
+						local succ, err = pcall(function() env.filemanager.deleteconfig(configname) end)
+						if not succ then env.funcs.shr("CONFIG ERROR!!!: " .. err) else env.funcs.box("config \"" .. configname .. "\" deleted successfully") updateindi() end
+						updateindi()
+					end, "No", nil)
+			end
 		end
 	},
 	{ type = "button", title = "Delete all configs", desc = "Permanently deletes every saved config file.", 
