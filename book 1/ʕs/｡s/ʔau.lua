@@ -155,7 +155,7 @@ local section = {
 		callback = function(state) 
 		end
 	},
-	{ type = "inputandtoggle", title = "Auto escape Squirm", desc = "Automatically frees yourself when you get caught by Twisted Squirm with the set struggle delay.",
+	{ type = "input and toggle", title = "Auto escape Squirm", desc = "Automatically frees yourself when you get caught by Twisted Squirm with the set struggle delay.",
 		commandcat = "Automation",
 
 		encommands = {"enableautoescapesquirm"},
@@ -166,7 +166,9 @@ local section = {
 		disaliases = {"daes"},
 		discommanddesc = "Disables auto escape Twisted Squirm",
 
-		callback = function(state) 
+		callback = function(text, state) 
+			autoescapewormdelay = text or 0.1
+			autoescape(state)
 		end
 	},
 	{ type = "toggle", title = "Auto close pop-ups", desc = "Automatically closes pop-ups that pop up on your screen.",
