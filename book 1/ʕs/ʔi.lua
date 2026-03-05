@@ -828,7 +828,7 @@ do
 
 	spwn(function()
 		if env.stuf.handshaker.scanningplayers then return end
-		repeat t() until env.funcs.exists()
+		if not env.funcs.exists() then repeat t() until env.funcs.exists() end
 		for _, plr in ipairs(plrs:GetPlayers()) do env.stuf.handshaker.monitor(plr) end plrs.PlayerAdded:Connect(function(plr) env.stuf.handshaker.monitor(plr) end)
 		env.stuf.handshaker.scanningplayers = true
 	end)
@@ -1063,6 +1063,7 @@ do
 
 		if type == "floor" then
 			local floorname = env.stuf.currentroom.Name
+			local hasdialoguetriggers = obj:GetAttribute("HasDialogueTriggers")
 
 			local twistedsonfloor = {}
 			for model in ipairs(env.stuf.twisteds:GetChildren()) do
@@ -1078,7 +1079,7 @@ do
 				end
 			end
 
-			return {floorname, twistedsonfloor, itemsonfloor}
+			return {floorname, twistedsonfloor, itemsonfloor, hasdialoguetriggers}
 
 		elseif type == "item" then
 			local prompt = obj:FindFirstChild("Prompt")
@@ -1102,10 +1103,10 @@ do
 			local amount = stats:FindFirstChild("CurrentAmount").Value
 			local required = stats:FindFirstChild("RequiredAmount").Value
 
-			local machtype
-			if obj:FindFirstChild("TreadmillGame") then 
+			local machtype = obj:GetAttribute("MinigameType")
+			if machtype == "MovementTreadmill" then 
 				machtype = "treadmill"
-			elseif obj:FindFirstChild("CircleMinigame") then 
+			elseif machtype == "Circle" then 
 				machtype = "circle"
 			else
 				machtype = "normal"
@@ -1115,7 +1116,7 @@ do
 
 		elseif type == "twisted" then
 			local name = obj.Name
-			local troot = obj:FindFirstChild("HumanoidRootPart")
+			local troot = obj:FindFirstChild("HumanoidRootPart") or obj.PrimaryPart or obj:FindFirstChildWhichIsA("BasePart")
 			local chaser = obj:FindFirstChild("Chaser")
 
 			local hearingrad = chaser:FindFirstChild("HearingRadius").Value
@@ -1132,10 +1133,11 @@ do
 
 			local hasability = obj:FindFirstChild("Grabbing")
 			local usingability = hasability.Value
+			local alerted = obj:GetAttribute("Alerted")
 
 			local research = rst:FindFirstChild("PlayerData"):FindFirstChild(env.stuf.plrid):FindFirstChild("Research"):FindFirstChild(name).Value
 
-			return {name, troot, research, hearingrad, intrestrad, hitboxrad, visionrad, intresttime, LoS, hitcooldown, chasing, ischasing, hasability, usingability}
+			return {name, troot, alerted, research, hearingrad, intrestrad, hitboxrad, visionrad, intresttime, LoS, hitcooldown, chasing, ischasing, hasability, usingability}
 
 		elseif type == "player" then
 			local inserver = plrs:FindFirstChild(obj.Name)
@@ -1156,7 +1158,7 @@ do
 			local ichorearned = runstats:FindFirstChild("Ichor").Value
 			local twistedsencountered = runstats:FindFirstChild("Monsters").Value
 			local tapescollected = runstats:FindFirstChild("SurvivalPoints").Value
-			local toonpicked = env.stuf.gameinfo:FindFirstChild("PickedCharacters"):FindFirstChild(ins.Name).Value
+			local toonpicked = ins:GetAttribute("SelectedCharacter")
 
 			local dead = inserver and not ws:FindFirstChild("InGamePlayers"):FindFirstChild(ins.Name)
 			local left = inserver == false
@@ -1168,14 +1170,16 @@ do
 			end
 
 			local function fetchtrinket(slot)
-				return obj:FindFirstChild("Trinkets"):FindFirstChild("Trinket" .. slot).Value
+				return ins:GetAttribute("EquippedTrinket" .. slot)
 			end
 
 			local slot1, slot2, slot3, slot4 = fetchitem(1), fetchitem(2), fetchitem(3), fetchitem(4)
-			local inventoryfull = slot1 ~= "None" and slot2 ~= "None" and slot3 ~= "None" and slot4 ~= "None"
+			local inventoryfull = slot1 ~= "None" and slot2 ~= "None" and slot3 ~= "None" and (slot4 and slot4 ~= "None")
 			local trinket1, trinket2 = fetchtrinket(1), fetchtrinket(2)
 
 			local extracting = obj:FindFirstChild("Decoding")
+			local currentstealth = ins:GetAttribute("Stealth")
+			local twistedschasing = ins:GetAttribute("ChaseCount")
 
 			local abilitycooldown, currentabilitycooldown
 
@@ -1186,7 +1190,7 @@ do
 				end
 			end
 
-			return {currenttoon, inserver, ins, dead, left, capsulespickedup, itemspickedup, machinescompleted, ichorearned, twistedsencountered, tapescollected, toonpicked, slot1, slot2, slot3, slot4, trinket1, trinket2, extracting, icon, abilitycooldown, currentabilitycooldown}
+			return {currentstealth, twistedschasing, currenttoon, inserver, ins, dead, left, capsulespickedup, itemspickedup, machinescompleted, ichorearned, twistedsencountered, tapescollected, toonpicked, slot1, slot2, slot3, slot4, trinket1, trinket2, extracting, icon, abilitycooldown, currentabilitycooldown}
 		end
 	end
 
