@@ -2082,7 +2082,7 @@ function lib.adddropdown(parent, title, description, options, callback, isPlayer
 	frame.Size = UDim2.new(0, width, 0, th + dh + leftpadding * 2 + textgap + 43)
 
 	lib.makecooltext(frame, UDim2.new(0, textwidth, 0, th), title, 13, nil, 2, UDim2.new(0, leftpadding + textwidth / 2, 0, leftpadding + th / 2 - 5), Enum.TextXAlignment.Left)
-	lib.makecooltext(frame, UDim2.new(0, textwidth, 0, dh), description, 9, Color3.fromRGB(170,170,170), 1, UDim2.new(0, leftpadding + textwidth / 2, 0, leftpadding + th + textgap + dh / 2 + 5), Enum.TextXAlignment.Left)
+	lib.makecooltext(frame, UDim2.new(0, textwidth, 0, dh), description, 10, Color3.fromRGB(170,170,170), 1, UDim2.new(0, leftpadding + textwidth / 2, 0, leftpadding + th + textgap + dh / 2 + 5), Enum.TextXAlignment.Left)
 
 	local staticYOffset = th + dh + (leftpadding * 2) + textgap + 5
 	local selector, selectortext = lib.makecoolbutton("Select...", UDim2.new(0, 208, 0, 28), frame, UDim2.new(0.5, 0, 0, staticYOffset + 10), "info", 14, nil, 63, true)
