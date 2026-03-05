@@ -1358,7 +1358,7 @@ do
 
 		yes.Activated:Connect(function()
 			if yescallback then yescallback() end
-			env.stuf.popup:Destroy env.stuf.popup = nil
+			env.stuf.popup:Destroy() env.stuf.popup = nil
 		end)
 	end
 
