@@ -708,10 +708,17 @@ do
 	env.stuf.cam = ws.CurrentCamera
 	env.stuf.mouse = getins(env.stuf.plr, "GetMouse")(env.stuf.plr)
 	env.stuf.plrgui = env.stuf.plr:WaitForChild("PlayerGui")
+	
+	env.stuf.plrstats = nil
 
 	local function updcharrefs(char)
 		if not char then return end
 		env.stuf.char = char
+		
+		local statsfolder = env.stuf.char:FindFirstChild("Stats")
+		if statsfolder then
+			env.stuf.plrstats = statsfolder
+		end
 
 		local hum = char:WaitForChild("Humanoid", 5)
 		if not hum then return end
