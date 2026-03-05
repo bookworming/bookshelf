@@ -126,11 +126,12 @@ local function bottomleft(text, log)
 	debuglog.TextSize = 10
 	debuglog.Text = text
 	debuglog.LayoutOrder = env.essentials.debugger.logcount
-	debuglog.TextTruncate = Enum.TextTruncate.SplitWord
+	debuglog.TextTruncate = Enum.TextTruncate.AtEnd
 	debuglog.Parent = env.essentials.debugger.container
 
 	task.delay(5, function()
-		ts:Create(debuglog, TweenInfo.new(0.6, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {TextTransparency = 1, BackgroundTransparency = 1}):Play().Completed:Connect(function()
+		local tween = ts:Create(debuglog, TweenInfo.new(0.6, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {TextTransparency = 1, BackgroundTransparency = 1}):Play()
+		tween.Completed:Connect(function()
 			debuglog:Destroy()
 		end)
 	end)
