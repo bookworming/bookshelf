@@ -51,17 +51,17 @@ env.expectedcompiledscriptversions = {
 	library = 2,
 	data = 2,
 
-  builder = 2,
-	
+	builder = 2,
+
 	mainsection = 2,
 	navigationsection = 2,
 	visualssection = 2,
-	localplayersection = 2,
+	localplayersection = 3,
 	automationsection = 2,
 	animationssection = 2,
 	funsection = 2,
 	donorsection = 2,
-	
+
 	scriptinformationandchangelogssections = 2,
 	configloadingsection = 2
 }
@@ -404,10 +404,6 @@ local function loadintro()
 
 	if not buildsucc or not env.stuf.sectionsloaded then
 		env.funcs.introconsolelog("Something went wrong. (BuildFail)", "warn")
-  else
-  	if buildsucc.version ~= env.expectedcompiledscriptversions.builder then
-  		env.funcs.introconsolelog("Holding construction worker at gunpoint. (" .. buildsucc.version .. ")")
-  	end
 	end
 
 	t(0.1)
