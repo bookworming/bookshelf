@@ -10,7 +10,7 @@
 ---------------------------------------------------------------------------------------------------------------------------]]--
 
 local lib = {}
-lib.version = 8
+lib.version = 7
 
 -------------------------------------------------------------------------------------------------------------------------------
 
@@ -2878,9 +2878,10 @@ function lib.addinputandbutton(parent, title, description, defaulttext, placehol
 	local _, dh = lib.gettextbounds(description, Enum.Font.FredokaOne, 10, Vector2.new(textwidth, math.huge))
 	frame.Size = UDim2.new(0, width, 0, th + dh + leftpadding * 2 + tetxgap + 45)
 
-	local elementtitle = lib.makecooltext(frame, UDim2.new(0, textwidth, 0, th), title, 13, nil, 2, UDim2.new(0, leftpadding + textwidth / 2, 0, leftpadding + th / 2 - 5), Enum.TextXAlignment.Left)
+	local elementtitle = lib.makecooltext(frame, UDim2.new(0, textwidth, 0, th), title, 13, nil, 2, UDim2.new(0, leftpadding, 0, leftpadding + th / 2 - 5), Enum.TextXAlignment.Left)
 	elementtitle.ZIndex = 61
-	local elementdesc = lib.makecooltext(frame, UDim2.new(0, textwidth, 0, dh), description, 10, Color3.fromRGB(170,170,170), 1, UDim2.new(0, leftpadding + textwidth / 2, 0, leftpadding + th + tetxgap + dh / 2 + 5), Enum.TextXAlignment.Left)
+
+	local elementdesc = lib.makecooltext(frame, UDim2.new(0, textwidth, 0, dh), description, 10, Color3.fromRGB(170,170,170), 1, UDim2.new(0, leftpadding, 0, leftpadding + th + textgap + 5), Enum.TextXAlignment.Left)
 	elementdesc.ZIndex = 61
 
 	local inputbox = lib.makecooltextbox(UDim2.new(0, 118, 0, 28), frame, defaulttext, 16, placeholdertext, nil, UDim2.new(0, 74, 1, -30), nil, 61)
