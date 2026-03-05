@@ -109,6 +109,7 @@ local debugsgui = Instance.new("ScreenGui")
 debugsgui.IgnoreGuiInset = true
 debugsgui.Parent = hiddenui
 
+-- Container frame anchored to the bottom-left
 local logFrame = Instance.new("Frame")
 logFrame.Size = UDim2.new(0, 420, 0, 300)
 logFrame.Position = UDim2.new(0, 8, 1, -8)
@@ -116,6 +117,7 @@ logFrame.AnchorPoint = Vector2.new(0, 1)
 logFrame.BackgroundTransparency = 1
 logFrame.Parent = debugsgui
 
+-- UIListLayout stacks entries bottom-up
 local layout = Instance.new("UIListLayout")
 layout.Parent = logFrame
 layout.SortOrder = Enum.SortOrder.LayoutOrder
@@ -142,10 +144,12 @@ local function bottomleft(text, log)
 	debuglog.TextTruncate = Enum.TextTruncate.AtEnd
 	debuglog.Parent = logFrame
 
+	-- Pad the label background
 	local padding = Instance.new("UIPadding")
 	padding.PaddingLeft = UDim.new(0, 4)
 	padding.Parent = debuglog
 
+	-- Fade out after 5 seconds
 	task.delay(5, function()
 		local tweenInfo = TweenInfo.new(0.6, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
 		local tween = game:GetService("TweenService"):Create(debuglog, tweenInfo, {
@@ -159,8 +163,10 @@ local function bottomleft(text, log)
 	end)
 end
 
+-- Hook into the developer console / LogService
 local LogService = game:GetService("LogService")
 
+-- Replay existing messages already in the log
 for _, entry in ipairs(LogService:GetLogHistory()) do
 	local prefix = ({
 		[Enum.MessageType.MessageOutput]  = "[OUT] ",
@@ -171,6 +177,7 @@ for _, entry in ipairs(LogService:GetLogHistory()) do
 	bottomleft(prefix .. entry.message)
 end
 
+-- Listen for new messages
 LogService.MessageOut:Connect(function(message, messageType)
 	local prefix = ({
 		[Enum.MessageType.MessageOutput]  = "[OUT] ",
@@ -772,8 +779,8 @@ do
 					env.stuf.currentroom = env.funcs.getroom() 
 
 					if not env.stuf.currentroom then 
-						env.funcs.rid(env.stuf.refconn) env.stuf.refconn = nil 
-						env.funcs.rid(env.stuf.refconn2) env.stuf.refconn2 = nil 
+						if env.stuf.refconn then env.stuf.refconn:Disconnect() env.stuf.refconn = nil end
+						if env.stuf.refconn2 then env.stuf.refconn2:Disconnect() env.stuf.refconn2 = nil end
 						env.funcs.pop("The room doesn't exist yet!")
 						return 
 					end
@@ -934,16 +941,6 @@ do
 		else 
 			return "Unknown" 
 		end 
-	end
-
-	function env.funcs.rid(obj) -- removes an object or disconnects a connection
-		if obj then
-			if typeof(obj) == "RBXScriptConnection" then
-				obj:Disconnect()
-			elseif typeof(obj) == "Instance" then
-				obj:Destroy()
-			end
-		end
 	end
 
 	function env.funcs.copytoclipboard(txt) -- copies a string to the player's clipboard
@@ -1403,14 +1400,14 @@ do
 
 	-- ui
 	function env.funcs.popup(desc, notext, nocallback, yestext, yescallback) -- popup
-		if env.stuf.popup then env.funcs.rid(env.stuf.popup) env.stuf.popup = nil end
+		if env.stuf.popup then env.stuf.popup:Destroy() env.stuf.popup = nil end
 
 		env.stuf.popup = env.essentials.library.makecoolframe(UDim2.new(0, 310, 0, 250), env.essentials.sgui, false, true, UDim2.new(0.5, 0, -0.4, 0), nil, nil, nil, 9000)
 		spwn(function() env.essentials.library.centerui(env.stuf.popup, false, Enum.EasingStyle.Back) end)
 
 		env.essentials.library.addcooltab(UDim2.new(0, 200, 0, 40), env.stuf.popup, UDim2.new(0, 120, 0, -12), "Noxious: Boxten Sex GUI")
 		local close = env.essentials.library.addclosebutton(UDim2.new(0, 48, 0, 27), env.stuf.popup, UDim2.new(0.5, 110, 0, 0), "X", 22)
-		close.Activated:Connect(function() env.funcs.rid(env.stuf.popup) env.stuf.popup = nil end)
+		close.Activated:Connect(function() env.stuf.popup:Destroy() env.stuf.popup = nil end)
 
 		env.essentials.library.makecooltext(env.stuf.popup, UDim2.new(1, -30, 0, 90), "Hold it!", 20, nil, 2, UDim2.new(0.5, 0, 0.5, -102), nil, nil, nil, 9001)
 
@@ -1439,12 +1436,12 @@ do
 
 		no.Activated:Connect(function()
 			if nocallback then yescallback() end
-			env.funcs.rid(env.stuf.popup) env.stuf.popup = nil
+			env.stuf.popup:Destroy() env.stuf.popup = nil
 		end)
 
 		yes.Activated:Connect(function()
 			if yescallback then yescallback() end
-			env.funcs.rid(env.stuf.popup) env.stuf.popup = nil
+			env.stuf.popup:Destroy() env.stuf.popup = nil
 		end)
 	end
 
