@@ -1009,6 +1009,17 @@ local section = {
 		callback = function(selected) 
 		end 
 	},
+	{ type = "dropdown", title = "Player audit log item blacklist", desc = "Blacklists the selected items from being logged from player audit logs.", 
+		options = {"Air Horn", "Bandage", "Bonbon", "Bottle o' Pop", "Box o' Chocolates", 
+			"Chocolate", "Eject Button", "Extraction Speed Candy", "Gumballs", 
+			"Health Kit", "Instructions", "Jawbreaker", "Jumper Cable", "Pop", "Protein Bar", 
+			"Skill Check Candy", "Smoke Bomb", "Speed Candy", "Stealth Candy", 
+			"Stopwatch", "Valve"},
+		multiselect = true,
+
+		callback = function(selected) 
+		end 
+	},
 	{ type = "toggle", title = "Twisted audit logging", desc = "Monitors every single Twisted's actions and logs it into the chat.",
 		commandcat = "Visuals",
 
@@ -1036,6 +1047,25 @@ local section = {
 		options = {"Hit player", "Killed player", "Used ability"},
 		default = {"Hit player", "Killed player", "Used ability"},
 		canbeempty = false,
+
+		callback = function(selected) 
+		end 
+	},
+	{ type = "dropdown", title = "Twisted audit log blacklist", desc = "Blacklists the selected Twisteds from being logged from Twisted audit logs.", 
+		options = {"Twisted Astro", "Twisted Bassie", "Twisted Blot", "Twisted Bobette", "Twisted Boxten", "Twisted Brightney", "Twisted Brusha",
+			"Twisted Coal", "Twisted Cocoa", "Twisted Connie", "Twisted Cosmo",
+			"Twisted Dandy", "Twisted Dazzle", "Twisted Dyle",
+			"Twisted Eggson", "Twisted Eclipse",
+			"Twisted Finn", "Twisted Flutter", "Twisted Flyte",
+			"Twisted Gigi", "Twisted Ginger", "Twisted Glisten", "Twisted Goob", "Twisted Gourdy",
+			"Twisted Looey",
+			"Twisted Pebble", "Twisted Poppy",
+			"Twisted Razzle", "Twisted Ribecca", "Twisted Rodger", "Twisted Rudie",
+			"Twisted Scraps", "Twisted Shelly", "Twisted Shrimpo", "Twisted Soulvester", "Twisted Sprout",
+			"Twisted Teagan", "Twisted Tisha", "Twisted Toodles",
+			"Twisted Vee",
+			"Twisted Yatta"},
+		multiselect = true,
 
 		callback = function(selected) 
 		end 
