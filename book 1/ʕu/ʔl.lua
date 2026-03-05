@@ -2397,7 +2397,7 @@ function lib.addinputandtoggle(parent, title, description, defaulttext, placehol
 		end)
 	end
 
-	toggle = lib.makecoolframe(UDim2.new(0, 38, 0, 20), frame, false, false, UDim2.new(1, -38, 1, -31), true, true, nil, 61)
+	toggle = lib.makecoolframe(UDim2.new(0, 38, 0, 20), frame, false, false, UDim2.new(1, -38, 1, -39), true, true, nil, 61)
 	knob = Instance.new("Frame", toggle)
 	knob.Size, knob.Position, knob.ZIndex, knob.AnchorPoint, knob.BackgroundColor3 = UDim2.new(0, 16, 0, 16), UDim2.new(0, 2, 0.5, 0), toggle.ZIndex + 1, Vector2.new(0, 0.5), Color3.new(1,1,1)
 	Instance.new("UICorner", knob).CornerRadius = UDim.new(1,0)
@@ -2611,11 +2611,6 @@ function lib.addinputandtoggle(parent, title, description, defaulttext, placehol
 
 		local miniInput = lib.makecooltextbox(UDim2.new(0, inputWidth, 0, 24), buttonFrame, inputbox.Text, 14, placeholdertext, nil, UDim2.new(0, leftPadding + textAreaWidth + 4, 0.5, 0), nil, 90001 + zplus)
 		local miniToggle = lib.makecoolframe(UDim2.new(0, toggleWidth, 0, 24), buttonFrame, false, false, UDim2.new(1, -35, 0.5, 0), true, true, true, 90001 + zplus)
-
-		local textAreaWidth = buttonWidth - toggleWidth - inputWidth - (leftPadding * 2) - 6
-		local textPosX = leftPadding + inputWidth + 4 + textAreaWidth / 2
-		local titleText = lib.makecooltext(buttonFrame, UDim2.new(0, textAreaWidth, 0, textHeight), title, 14, nil, 2, UDim2.new(0, textPosX, 0.5, 0), Enum.TextXAlignment.Center, nil, nil, 90001 + zplus)
-		titleText.TextWrapped = true
 
 		miniInput:GetPropertyChangedSignal("Text"):Connect(function()
 			inputbox.Text = miniInput.Text
