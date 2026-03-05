@@ -301,7 +301,7 @@ local section = {
 	},
 
 	{ type = "separator", title = "Actions" },
-	{ type = "input and toggle", title = "Headsit", desc = "Makes you sit on the target player's head.", placeholder = "Target",
+	{ type = "input and toggle", title = "Headsit player", desc = "Makes you sit on the target player's head.", placeholder = "Target",
 		commandcat = "Fun",
 
 		encommands = {"headsit [plr]"},
@@ -323,7 +323,7 @@ local section = {
 		callback = function(value)
 		end
 	},
-	{ type = "input and toggle", title = "Orbit", desc = "Makes you orbit around the player.", placeholder = "Target",
+	{ type = "input and toggle", title = "Orbit player", desc = "Makes you orbit around the player.", placeholder = "Target",
 		commandcat = "Fun",
 
 		encommands = {"orbit [plr]"},
