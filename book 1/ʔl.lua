@@ -48,7 +48,7 @@ repeat t() until env.setupcomplete and env.essentialsloaded
 env.funcs.box("setup complete")
 
 env.expectedcompiledscriptversions = {
-	library = 6,
+	library = 7,
 	data = 1,
 	
 	mainsection = 1,
