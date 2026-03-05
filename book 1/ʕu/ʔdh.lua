@@ -43,57 +43,57 @@ local dialogue = env.funcs.recursivels("book%201/%CA%95u/%CA%94d.lua", true)
 local expressions = {
 	-- BSGUI boxten
 	boxten = {
-		neutral = "placeholder", -- / uninterested / resting
-		ticked = "placeholder", -- / disgusted / shocked (disgusted)
-		annoyed = "rbxassetid://87876871905320", -- / pissed
-		disgusted = "placeholder", -- / holding back
-		proud = "placeholder", -- / overconfident / somewhat ragebaitish / sarcastic?
+		neutral = "122111994185494", -- / uninterested / resting
+		ticked = "119698259738476", -- / disgusted / shocked (disgusted)
+		annoyed = "87876871905320", -- / pissed
+		disgusted = "117471778623435", -- / holding back
+		proud = "121200224630300", -- / overconfident / somewhat ragebaitish / sarcastic?
 		nervous = "placeholder", -- / unreadable / apathetic / somewhat uninterested
 		sad = "placeholder", -- / sarcastic, a bit of a "boo hoo" type thing
 		happy = "placeholder", -- / unreadable / slightly happy. the smile is still there.
-		shoutingmad = "placeholder", -- / rage / mega mega fucking fuming
+		shoutingmad = "138041333635868", -- / rage / mega mega fucking fuming
 		shoutinghappy = "placeholder", -- / laughing / call or insult
 	},
 
 	-- SC-004 boxten
 	altboxten = {
-		neutral = "placeholder", -- / sad / nervous looking / resting
-		ticked = "placeholder", -- / shocked (disgusted) / bit of the "SSSHHHH... OOOHH..." you say while trying to suppress the pain of your toe after stubbing it 
+		neutral = "104366477729543", -- / sad / nervous looking / resting
+		ticked = "95507962845165", -- / shocked (disgusted) / bit of the "SSSHHHH... OOOHH..." you say while trying to suppress the pain of your toe after stubbing it 
 		annoyed = "placeholder", -- / uninterested / sad
 		disgusted = "placeholder", -- / holding back / still sad lol
-		proud = "placeholder", -- / happy / ^_^ type thing
-		nervous = "placeholder", -- / come on. do i need to explain?
+		proud = "108675658414571", -- / happy / ^_^ type thing
+		nervous = "123129368409117", -- / come on. do i need to explain?
 		sad = "placeholder", -- / looking down (emotionally and literally)
-		happy = "placeholder", -- / happy (nervosity)
-		shoutingmad = "placeholder", -- / tense
+		happy = "104366477729543", -- / happy (nervosity)
+		shoutingmad = "120792697294977", -- / tense
 		shoutinghappy = "placeholder", -- / ^ᗜ^
 	},
 
 	-- SC-003 poppy
 	poppy = {
-		neutral = "placeholder", -- / very generic smile
-		ticked = "placeholder", -- / shocked (worried) / kind of like a "ouch, you okay there?" type thing
+		neutral = "104725304950571", -- / very generic smile
+		ticked = "71699034161008", -- / shocked (worried) / kind of like a "ouch, you okay there?" type thing
 		annoyed = "placeholder", -- / i think this is only gonna be used in convos between her and shrimpo lol
 		disgusted = "placeholder", -- / holding baaaaack
 		proud = "placeholder", -- / ecstatic / overconfident
-		nervous = "placeholder", -- / worried
+		nervous = "106522771451375", -- / worried
 		sad = "placeholder", -- / kinda like worried but more sadder?? idk
-		happy = "rbxassetid://104725304950571", -- / fucking overjoyed
+		happy = "104725304950571", -- / fucking overjoyed
 		shoutingmad = "placeholder", -- / tense like SC-004 boxten
 		shoutinghappy = "placeholder", -- / decibel battle
 	},
 
 	-- SC-001 shrimpo
 	shrimpo = {
-		neutral = "placeholder", -- / pouting
-		ticked = "rbxassetid://71382889666653", -- / shocked (annoyed)
-		annoyed = "placeholder", -- / do your best "UGHHH" look and then envision it
+		neutral = "98476525830185", -- / smiling
+		ticked = "71382889666653", -- / shocked (annoyed)
+		annoyed = "105837335646604", -- / do your best "UGHHH" look and then envision it
 		disgusted = "placeholder", -- / "EEEWWWW!!!"
-		proud = "placeholder", -- / overproud / overconfident
+		proud = "87338047321463", -- / overproud / overconfident
 		nervous = "placeholder", -- / probably gonna get used when BSGUI boxten tells him to kiss him out of nowhere
 		sad = "placeholder", -- / sarcastic obviously this bitch is always angry
 		happy = "placeholder", -- / overconfident and crossing their arms
-		shoutingmad = "placeholder", -- / drunk dad yelling at their son
+		shoutingmad = "71382889666653", -- / drunk dad yelling at their son
 		shoutinghappy = "placeholder", -- / when the ragebait is successful
 	}
 }
