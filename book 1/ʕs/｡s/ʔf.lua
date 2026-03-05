@@ -97,7 +97,7 @@ function togglejumping(state)
 			end
 		end)
 	else
-		env.funcs.rid(jumpanimconn) jumpanimconn = nil
+		if jumpanimconn then jumpanimconn:Disconnect() jumpanimconn = nil end
 
 		if mobile and jump then
 			jump.Visible = false
@@ -106,7 +106,7 @@ function togglejumping(state)
 			settings.Visible = true
 		end
 
-		env.funcs.rid(jumppowerloopconn) jumppowerloopconn = nil
+		if jumppowerloopconn then jumppowerloopconn:Disconnect() jumppowerloopconn = nil end
 
 		if env.stuf.hum then
 			env.stuf.hum.JumpPower = 0
@@ -123,7 +123,7 @@ infjumpconn = nil
 infjumpdebounce = false
 function infjump(state)
 	if not state then
-		env.funcs.rid(infjumpconn) infjumpconn = nil
+		if infjumpconn then infjumpconn:Disconnect() infjumpconn = nil end
 		infjumpdebounce = false
 		return
 	else
