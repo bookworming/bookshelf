@@ -116,8 +116,8 @@ function givemovenenttool(method, state)
 
 		hi() dat.conn = env.stuf.plr.CharacterAdded:Connect(hi)
 	else
-		env.funcs.rid(dat.conn) dat.conn = nil
-		env.funcs.rid(dat.ins) dat.ins = nil
+		if dat.conn then dat.conn:Disconnect() dat.conn = nil end
+		if dat.ins then dat.ins:Destroy() dat.ins = nil end
 		dat.ins = nil
 		dat.conn = nil
 	end
@@ -136,14 +136,14 @@ function toplr(plr, method)
 		local cf = target.Character:FindFirstChild("HumanoidRootPart").CFrame
 
 		if method == "looptp" then
-			env.funcs.rid(looptptoplrconn) looptptoplrconn = nil
+			if looptptoplrconn then looptptoplrconn:Disconnect() looptptoplrconn = nil end
 
 			looptptoplrconn = rs.Heartbeat:Connect(function()
 				env.funcs.moveplr(cf, "tp")
 			end)
 
 		elseif method == "unlooptp" then
-			env.funcs.rid(looptptoplrconn) looptptoplrconn = nil
+			if looptptoplrconn then looptptoplrconn:Disconnect() looptptoplrconn = nil end
 
 		else
 			env.funcs.moveplr(cf, method) 			
