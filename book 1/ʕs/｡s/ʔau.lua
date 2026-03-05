@@ -21,8 +21,10 @@ local randstring = function() local s = "" for i = 1, math.random(8, 15) do if m
 local getins = getmmfromerr(game, function(a,b) return a[b] end, function(f) local a = Instance.new("Folder") local b = randstring() a.Name = b return f(a, "Name") == b end)
 local FindFirstChildOfClass = getins(game, "FindFirstChildOfClass") 
 
+local ws = FindFirstChildOfClass(game, "Workspace")
 local uis = FindFirstChildOfClass(game, "UserInputService")
 local rs = FindFirstChildOfClass(game, "RunService")
+local rps = FindFirstChildOfClass(ws, "ReplicatedStorage")
 local plrs = FindFirstChildOfClass(game, "Players")
 
 local getgenv = getgenv() or _G
@@ -30,6 +32,30 @@ local getgenv = getgenv() or _G
 local folder = "Bоxten Sеx GUI"
 local env = getgenv.BSGUI
 local mobile = uis.TouchEnabled
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+local autoescapewormconn
+local autoescapewormdelay = 0.1
+local function autoescape(state)
+	if state then
+		local function tap(dir)
+			rps:WaitForChild("Events"):WaitForChild("TwistedSquirmGrab"):FireServer(unpack({"Struggle", dir}))
+		end
+
+		local uivisible
+		autoescapewormconn = env.stuf.plr.PlayerGui.TwistedSquirmEscapeUI.Enabled.Changed:Connect(function(vis)
+			if vis then
+				uivisible = true
+				while uivisible do
+					tap("left") t(autoescapewormdelay)
+					tap("right") t(autoescapewormdelay)
+				end
+			else
+				uivisible = false
+			end
+		end)
+end
 
 -------------------------------------------------------------------------------------------------------------------------------
 
@@ -125,6 +151,20 @@ local section = {
 		discommands = {"disableinstantcalibrationsuccess"},
 		disaliases = {"dics"},
 		discommanddesc = "Disables instant machine calibration success",
+
+		callback = function(state) 
+		end
+	},
+	{ type = "inputandtoggle", title = "Auto escape Squirm", desc = "Automatically frees yourself when you get caught by Twisted Squirm with the set struggle delay.",
+		commandcat = "Automation",
+
+		encommands = {"enableautoescapesquirm"},
+		enaliases = {"eaes"},
+		encommanddesc = "Enables auto escape Twisted Squirm",
+
+		discommands = {"disableautoescapesquirm"},
+		disaliases = {"daes"},
+		discommanddesc = "Disables auto escape Twisted Squirm",
 
 		callback = function(state) 
 		end
