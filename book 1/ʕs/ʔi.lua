@@ -522,6 +522,9 @@ do
 		ignoreresearchcompleted = true,
 		itemtpposyoffset = -2.5,
 
+		-- blacklists
+		encountertwistedblacklist = {},
+
 		-- ui settings
 		mainframescale = 1,
 		buttonscale = 1,
