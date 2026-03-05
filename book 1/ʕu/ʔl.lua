@@ -2077,7 +2077,7 @@ function lib.adddropdown(parent, title, description, options, callback, isPlayer
 	Instance.new("UIPadding", frame).PaddingBottom = UDim.new(0, 13)
 
 	local _, th = lib.gettextbounds(title, Enum.Font.FredokaOne, 13, Vector2.new(textwidth, math.huge))
-	local _, dh = lib.gettextbounds(description, Enum.Font.FredokaOne, 9, Vector2.new(textwidth, math.huge))
+	local _, dh = lib.gettextbounds(description, Enum.Font.FredokaOne, 10, Vector2.new(textwidth, math.huge))
 
 	frame.Size = UDim2.new(0, width, 0, th + dh + leftpadding * 2 + textgap + 43)
 
