@@ -314,10 +314,10 @@ local function newcat(catparent, categories, defaultcat, catdat, infoframe)
 					item.title, item.desc or "", 
 					item.default or "", 
 					item.placeholder or "", 
-					function(text, state) 
+					function(text) 
 						if item.callback then 
-							if env.gear.general.debugmode then env.funcs.box("ran \"" .. tostring(state) .. "\" callback for input \"" .. item.title .. "\" with value \"" .. text .. "\"") end 
-							item.callback(text, state) 
+							if env.gear.general.debugmode then env.funcs.box("ran callback for input \"" .. item.title .. "\" with value \"" .. text .. "\"") end 
+							item.callback(text) 
 						end 
 					end,
 					item.autofill
@@ -328,10 +328,10 @@ local function newcat(catparent, categories, defaultcat, catdat, infoframe)
 					item.title, item.desc or "", 
 					item.default or "", 
 					item.placeholder or "", 
-					function(text) 
+					function(text, state) 
 						if item.callback then 
-							if env.gear.general.debugmode then env.funcs.box("ran callback for input and toggle \"" .. item.title .. "\" with state \"" .. text .. "\"") end 
-							item.callback(text) 
+							if env.gear.general.debugmode then env.funcs.box("ran " .. tostring(state) .. "callback for input and toggle \"" .. item.title .. "\" with value \"" .. text .. "\"") end 
+							item.callback(text, state) 
 						end 
 					end,
 					item.default, 
@@ -344,10 +344,10 @@ local function newcat(catparent, categories, defaultcat, catdat, infoframe)
 					item.title, item.desc or "", 
 					item.default or "", 
 					item.placeholder or "", 
-					function(text) 
+					function(text, state) 
 						if item.callback then 
-							if env.gear.general.debugmode then env.funcs.box("ran callback for input and button \"" .. item.title .. "\" with value \"" .. text .. "\"") end 
-							item.callback(text) 
+							if env.gear.general.debugmode then env.funcs.box("ran " .. tostring(state) .. " callback for input and button \"" .. item.title .. "\" with value \"" .. text .. "\"") end 
+							item.callback(text, state) 
 						end 
 					end,
 					item.autofill
