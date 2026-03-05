@@ -167,6 +167,7 @@ local section = {
 		disaliases = {"daes"},
 		discommanddesc = "Disables auto escape Twisted Squirm",
 
+		default = 0.1,
 		callback = function(text, state) 
 			autoescapewormdelay = text or 0.1
 			autoescape(state)
