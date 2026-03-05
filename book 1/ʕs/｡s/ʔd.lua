@@ -734,21 +734,22 @@ function fakehurt(char, death)
 	})
 
 	local function fade(p,dur)
-		p.Enabled,p.Rate=false,0
-		local start,keys=tick(),p.Transparency.Keypoints
-		local c; c=rs.RenderStepped:Connect(function()
-			local a=math.clamp((tick()-start)/dur,0,1)
-			local n={}
-			for _,k in ipairs(keys) do
-				n[#n+1]=NumberSequenceKeypoint.new(k.Time,k.Value+(1-k.Value)*a)
+		p.Enabled, p.Rate = false,0
+		local start, keys = tick(), p.Transparency.Keypoints
+		local c 
+		c = rs.RenderStepped:Connect(function()
+			local a = math.clamp((tick() - start) / dur, 0, 1)
+			local n = {}
+			for _, k in ipairs(keys) do
+				n[#n + 1] = NumberSequenceKeypoint.new(k.Time, k.Value + (1 - k.Value) * a)
 			end
-			p.Transparency=NumberSequence.new(n)
-			if a>=1 then p.Transparency=NumberSequence.new(1) env.funcs.rid(c) c = nil end
+			p.Transparency = NumberSequence.new(n)
+			if a >= 1 then p.Transparency = NumberSequence.new(1) c:Disconnect() c = nil end
 		end)
 	end
 
-	task.delay(.3,function() fade(p1,.4) fade(p2,.4) end)
-	d:AddItem(p1,1) d:AddItem(p2,1)
+	task.delay(.3, function() fade(p1, .4) fade(p2, .4) end)
+	d:AddItem(p1, 1) d:AddItem(p2, 1)
 end
 
 function fakedeath(char)
@@ -773,7 +774,14 @@ function fakedeath(char)
 	end)
 
 	env.funcs.playsound("rbxassetid://5920004288", 0.4, 1, 0, env.stuf.root)
-	task.delay(2, function() env.stuf.hum.Health = 0 env.funcs.rid(conn) conn = nil char:FindFirstChild("HumanoidRootPart").Anchored = false end)
+	task.delay(2, function() 
+		env.stuf.hum.Health = 0 
+		if conn then
+			conn:Disconnect()
+			conn = nil 
+		end
+		char:FindFirstChild("HumanoidRootPart").Anchored = false 
+	end)
 end
 
 revolvertoolconn = nil
@@ -863,8 +871,8 @@ function giverevolver(state)
 
 		hi() revolvertoolconn = env.stuf.plr.CharacterAdded:Connect(hi)
 	else
-		env.funcs.rid(revolvertoolconn) revolvertoolconn = nil
-		env.funcs.rid(revolvertool) revolvertool = nil
+		if revolvertoolconn then revolvertoolconn:Disconnect() revolvertoolconn = nil end
+		if revolvertool then revolvertool:Destroy() revolvertool = nil end
 	end
 end
 
@@ -992,8 +1000,8 @@ function givesawedoff(state)
 
 		hi() shotguntoolconn = env.stuf.plr.CharacterAdded:Connect(hi)
 	else
-		env.funcs.rid(shotguntool) shotguntool = nil
-		env.funcs.rid(shotguntoolconn) shotguntoolconn = nil
+		if shotguntool then shotguntool:Destroy() shotguntool = nil end
+		if shotguntoolconn then shotguntoolconn:Disconnect() shotguntoolconn = nil end
 	end
 end
 
