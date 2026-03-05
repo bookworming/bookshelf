@@ -105,6 +105,82 @@ spwn(function()
 end)
 ]]
 
+local debugsgui = Instance.new("ScreenGui")
+debugsgui.IgnoreGuiInset = true
+debugsgui.Parent = hiddenui
+
+local logFrame = Instance.new("Frame")
+logFrame.Size = UDim2.new(0, 420, 0, 300)
+logFrame.Position = UDim2.new(0, 8, 1, -8)
+logFrame.AnchorPoint = Vector2.new(0, 1)
+logFrame.BackgroundTransparency = 1
+logFrame.Parent = debugsgui
+
+local layout = Instance.new("UIListLayout")
+layout.Parent = logFrame
+layout.SortOrder = Enum.SortOrder.LayoutOrder
+layout.VerticalAlignment = Enum.VerticalAlignment.Bottom
+layout.Padding = UDim.new(0, 2)
+
+local logCount = 0
+
+local function bottomleft(text, log)
+	repeat t() until env.essentials.sgui
+
+	logCount = logCount + 1
+
+	local debuglog = Instance.new("TextLabel")
+	debuglog.Size = UDim2.new(1, 0, 0, 20)
+	debuglog.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+	debuglog.BackgroundTransparency = 0.45
+	debuglog.TextColor3 = Color3.fromRGB(255, 255, 255)
+	debuglog.TextXAlignment = Enum.TextXAlignment.Left
+	debuglog.Font = Enum.Font.Code
+	debuglog.TextSize = 13
+	debuglog.Text = "  " .. text
+	debuglog.LayoutOrder = logCount
+	debuglog.TextTruncate = Enum.TextTruncate.AtEnd
+	debuglog.Parent = logFrame
+
+	local padding = Instance.new("UIPadding")
+	padding.PaddingLeft = UDim.new(0, 4)
+	padding.Parent = debuglog
+
+	task.delay(5, function()
+		local tweenInfo = TweenInfo.new(0.6, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+		local tween = game:GetService("TweenService"):Create(debuglog, tweenInfo, {
+			TextTransparency = 1,
+			BackgroundTransparency = 1,
+		})
+		tween:Play()
+		tween.Completed:Connect(function()
+			debuglog:Destroy()
+		end)
+	end)
+end
+
+local LogService = game:GetService("LogService")
+
+for _, entry in ipairs(LogService:GetLogHistory()) do
+	local prefix = ({
+		[Enum.MessageType.MessageOutput]  = "[OUT] ",
+		[Enum.MessageType.MessageInfo]    = "[INFO] ",
+		[Enum.MessageType.MessageWarning] = "[WARN] ",
+		[Enum.MessageType.MessageError]   = "[ERR] ",
+	})[entry.messageType] or ""
+	bottomleft(prefix .. entry.message)
+end
+
+LogService.MessageOut:Connect(function(message, messageType)
+	local prefix = ({
+		[Enum.MessageType.MessageOutput]  = "[OUT] ",
+		[Enum.MessageType.MessageInfo]    = "[INFO] ",
+		[Enum.MessageType.MessageWarning] = "[WARN] ",
+		[Enum.MessageType.MessageError]   = "[ERR] ",
+	})[messageType] or ""
+	bottomleft(prefix .. message)
+end)
+
 -------------------------------------------------------------------------------------------------------------------------------
 
 -- script info & file manager
@@ -696,8 +772,8 @@ do
 					env.stuf.currentroom = env.funcs.getroom() 
 
 					if not env.stuf.currentroom then 
-						if env.stuf.refconn then env.stuf.refconn:Disconnect() env.stuf.refconn = nil end
-						if env.stuf.refconn2 then env.stuf.refconn2:Disconnect() env.stuf.refconn2 = nil end
+						env.funcs.rid(env.stuf.refconn) env.stuf.refconn = nil 
+						env.funcs.rid(env.stuf.refconn2) env.stuf.refconn2 = nil 
 						env.funcs.pop("The room doesn't exist yet!")
 						return 
 					end
@@ -858,6 +934,16 @@ do
 		else 
 			return "Unknown" 
 		end 
+	end
+
+	function env.funcs.rid(obj) -- removes an object or disconnects a connection
+		if obj then
+			if typeof(obj) == "RBXScriptConnection" then
+				obj:Disconnect()
+			elseif typeof(obj) == "Instance" then
+				obj:Destroy()
+			end
+		end
 	end
 
 	function env.funcs.copytoclipboard(txt) -- copies a string to the player's clipboard
@@ -1317,14 +1403,14 @@ do
 
 	-- ui
 	function env.funcs.popup(desc, notext, nocallback, yestext, yescallback) -- popup
-		if env.stuf.popup then env.stuf.popup:Destroy() env.stuf.popup = nil end
+		if env.stuf.popup then env.funcs.rid(env.stuf.popup) env.stuf.popup = nil end
 
 		env.stuf.popup = env.essentials.library.makecoolframe(UDim2.new(0, 310, 0, 250), env.essentials.sgui, false, true, UDim2.new(0.5, 0, -0.4, 0), nil, nil, nil, 9000)
 		spwn(function() env.essentials.library.centerui(env.stuf.popup, false, Enum.EasingStyle.Back) end)
 
 		env.essentials.library.addcooltab(UDim2.new(0, 200, 0, 40), env.stuf.popup, UDim2.new(0, 120, 0, -12), "Noxious: Boxten Sex GUI")
 		local close = env.essentials.library.addclosebutton(UDim2.new(0, 48, 0, 27), env.stuf.popup, UDim2.new(0.5, 110, 0, 0), "X", 22)
-		close.Activated:Connect(function() env.stuf.popup:Destroy() env.stuf.popup = nil end)
+		close.Activated:Connect(function() env.funcs.rid(env.stuf.popup) env.stuf.popup = nil end)
 
 		env.essentials.library.makecooltext(env.stuf.popup, UDim2.new(1, -30, 0, 90), "Hold it!", 20, nil, 2, UDim2.new(0.5, 0, 0.5, -102), nil, nil, nil, 9001)
 
@@ -1353,12 +1439,12 @@ do
 
 		no.Activated:Connect(function()
 			if nocallback then yescallback() end
-			env.stuf.popup:Destroy() env.stuf.popup = nil
+			env.funcs.rid(env.stuf.popup) env.stuf.popup = nil
 		end)
 
 		yes.Activated:Connect(function()
 			if yescallback then yescallback() end
-			env.stuf.popup:Destroy() env.stuf.popup = nil
+			env.funcs.rid(env.stuf.popup) env.stuf.popup = nil
 		end)
 	end
 
