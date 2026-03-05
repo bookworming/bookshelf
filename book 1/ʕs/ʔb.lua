@@ -9,10 +9,6 @@
    
 ---------------------------------------------------------------------------------------------------------------------------]]--
 
-local version = 2 -- its wed jan 4 26
-
--------------------------------------------------------------------------------------------------------------------------------
-
 -- services & instances
 local t, spwn = task.wait, task.spawn
 local getmmfromerr = function(userdata, f, test) local ret = nil xpcall(f, function() ret = debug.info(2, "f") end, userdata, nil, 0) if (type(ret) ~= "function") or not test(ret) then return f end return ret end
@@ -45,7 +41,6 @@ local load = env.funcs.recursivels
 -------------------------------------------------------------------------------------------------------------------------------
 
 -- load
-spwn(function() return version end)
 env.stuf.sectionsloaded = false
 
 local maincat = env.funcs.recursivels("book%201/%CA%95s/%EF%BD%A1s/%CA%94m.lua", true)
