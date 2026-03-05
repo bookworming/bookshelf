@@ -696,8 +696,8 @@ do
 					env.stuf.currentroom = env.funcs.getroom() 
 
 					if not env.stuf.currentroom then 
-						env.funcs.rid(env.stuf.refconn) env.stuf.refconn = nil 
-						env.funcs.rid(env.stuf.refconn2) env.stuf.refconn2 = nil 
+						if env.stuf.refconn then env.stuf.refconn:Disconnect() env.stuf.refconn = nil end
+						if env.stuf.refconn2 then env.stuf.refconn2:Disconnect() env.stuf.refconn2 = nil end
 						env.funcs.pop("The room doesn't exist yet!")
 						return 
 					end
@@ -858,16 +858,6 @@ do
 		else 
 			return "Unknown" 
 		end 
-	end
-
-	function env.funcs.rid(obj) -- removes an object or disconnects a connection
-		if obj then
-			if typeof(obj) == "RBXScriptConnection" then
-				obj:Disconnect()
-			elseif typeof(obj) == "Instance" then
-				obj:Destroy()
-			end
-		end
 	end
 
 	function env.funcs.copytoclipboard(txt) -- copies a string to the player's clipboard
@@ -1327,14 +1317,14 @@ do
 
 	-- ui
 	function env.funcs.popup(desc, notext, nocallback, yestext, yescallback) -- popup
-		if env.stuf.popup then env.funcs.rid(env.stuf.popup) env.stuf.popup = nil end
+		if env.stuf.popup then env.stuf.popup:Destroy() env.stuf.popup = nil end
 
 		env.stuf.popup = env.essentials.library.makecoolframe(UDim2.new(0, 310, 0, 250), env.essentials.sgui, false, true, UDim2.new(0.5, 0, -0.4, 0), nil, nil, nil, 9000)
 		spwn(function() env.essentials.library.centerui(env.stuf.popup, false, Enum.EasingStyle.Back) end)
 
 		env.essentials.library.addcooltab(UDim2.new(0, 200, 0, 40), env.stuf.popup, UDim2.new(0, 120, 0, -12), "Noxious: Boxten Sex GUI")
 		local close = env.essentials.library.addclosebutton(UDim2.new(0, 48, 0, 27), env.stuf.popup, UDim2.new(0.5, 110, 0, 0), "X", 22)
-		close.Activated:Connect(function() env.funcs.rid(env.stuf.popup) env.stuf.popup = nil end)
+		close.Activated:Connect(function() env.stuf.popup:Destroy() env.stuf.popup = nil end)
 
 		env.essentials.library.makecooltext(env.stuf.popup, UDim2.new(1, -30, 0, 90), "Hold it!", 20, nil, 2, UDim2.new(0.5, 0, 0.5, -102), nil, nil, nil, 9001)
 
@@ -1363,12 +1353,12 @@ do
 
 		no.Activated:Connect(function()
 			if nocallback then yescallback() end
-			env.funcs.rid(env.stuf.popup) env.stuf.popup = nil
+			env.stuf.popup:Destroy() env.stuf.popup = nil
 		end)
 
 		yes.Activated:Connect(function()
 			if yescallback then yescallback() end
-			env.funcs.rid(env.stuf.popup) env.stuf.popup = nil
+			env.stuf.popup:Destroy env.stuf.popup = nil
 		end)
 	end
 
