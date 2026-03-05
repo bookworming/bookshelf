@@ -2471,8 +2471,8 @@ function lib.addinputandtoggle(parent, title, description, defaulttext, placehol
 		elementtitle.Size = UDim2.new(0, scaledTextWidth, 0, newTh)
 		elementtitle.Position = UDim2.new(0, leftpadding + scaledTextWidth / 2, 0, leftpadding + newTh / 2 - 5)
 
-		elementdesc.Size = UDim2.new(0, scaledTextWidth, 0, currDh)
-		elementdesc.Position = UDim2.new(0, leftpadding + scaledTextWidth / 2, 0, newDescY + currDh / 2 + 5)
+		-- elementdesc.Size = UDim2.new(0, scaledTextWidth, 0, currDh)
+		-- elementdesc.Position = UDim2.new(0, leftpadding + scaledTextWidth / 2, 0, newDescY + currDh / 2 + 5)
 
 		if toggle then toggle.Position = UDim2.new(1, -38, 1, -29) end
 		if inputbox then inputbox.Position = UDim2.new(0, leftpadding + 73, 1, -30) end
@@ -2905,8 +2905,8 @@ function lib.addinputandbutton(parent, title, description, defaulttext, placehol
 		elementtitle.Size = UDim2.new(0, scaledTextWidth, 0, newTh)
 		elementtitle.Position = UDim2.new(0, leftpadding + scaledTextWidth / 2, 0, leftpadding + newTh / 2 - 5)
 
-		elementdesc.Size = UDim2.new(0, scaledTextWidth, 0, currDh)
-		elementdesc.Position = UDim2.new(0, leftpadding + scaledTextWidth / 2, 0, newDescY + currDh / 2 + 5)
+		-- elementdesc.Size = UDim2.new(0, scaledTextWidth, 0, currDh)
+		-- elementdesc.Position = UDim2.new(0, leftpadding + scaledTextWidth / 2, 0, newDescY + currDh / 2 + 5)
 
 		frame.Size = UDim2.new(0, width, 0, newTotalHeight)
 	end
