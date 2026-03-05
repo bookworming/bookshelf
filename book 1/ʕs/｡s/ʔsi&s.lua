@@ -5,7 +5,7 @@
   \ \_\\"\_\  \ \_____\   /\_\/\_\  \ \_\  \ \_____\  \ \_____\  \/\_____\ 
    \/_/ \/_/   \/_____/   \/_/\/_/   \/_/   \/_____/   \/_____/   \/_____/
    
-   Made by Team Noxious -- Boxten Sex GUI [Script Information & File sections]
+   Made by Team Noxious -- Boxten Sex GUI [Script Information & Settings sections]
    
 ---------------------------------------------------------------------------------------------------------------------------]]--
 
