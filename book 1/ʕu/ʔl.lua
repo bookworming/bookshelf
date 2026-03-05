@@ -2308,7 +2308,7 @@ function lib.addinput(parent, title, description, defaulttext, placeholdertext, 
 end
 
 function lib.addinputandtoggle(parent, title, description, defaulttext, placeholdertext, callback, default, locked, lockreason, autofill)
-	local width, leftpadding, rightpadding, tetxgap = 235, 14, 30, -5
+	local width, leftpadding, rightpadding, tetxgap = 235, 14, 50, -5
 	local textwidth = width - rightpadding - 20
 
 	local ON = {
@@ -2474,7 +2474,7 @@ function lib.addinputandtoggle(parent, title, description, defaulttext, placehol
 		elementdesc.Size = UDim2.new(0, scaledTextWidth, 0, currDh)
 		elementdesc.Position = UDim2.new(0, leftpadding + scaledTextWidth / 2, 0, newDescY + currDh / 2 + 5)
 
-		if toggle then toggle.Position = UDim2.new(1, -38, 1, -27) end
+		if toggle then toggle.Position = UDim2.new(1, -38, 1, -30) end
 		if inputbox then inputbox.Position = UDim2.new(0, leftpadding + 73, 1, -30) end
 
 		frame.Size = UDim2.new(0, width, 0, newTotalHeight)
@@ -2850,7 +2850,7 @@ function lib.addinputandtoggle(parent, title, description, defaulttext, placehol
 end
 
 function lib.addinputandbutton(parent, title, description, defaulttext, placeholdertext, callback, autofill)
-	local width, leftpadding, rightpadding, tetxgap = 235, 14, 30, -5
+	local width, leftpadding, rightpadding, tetxgap = 235, 14, 50, -5
 	local textwidth = width - rightpadding - 20
 
 	local frame = lib.makecoolframe(UDim2.new(0, width, 0, 0), parent, false, false, nil, nil, nil, true, 60)
