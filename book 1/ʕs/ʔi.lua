@@ -156,27 +156,28 @@ local function bottomleft(text, log)
 	end)
 end
 
-local LogService = game:GetService("LogService")
+spwn(function()
+	local LogService = game:GetService("LogService")
 
-for _, entry in ipairs(LogService:GetLogHistory()) do
-	local prefix = ({
-		[Enum.MessageType.MessageOutput]  = "[OUT] ",
-		[Enum.MessageType.MessageInfo]    = "[INFO] ",
-		[Enum.MessageType.MessageWarning] = "[WARN] ",
-		[Enum.MessageType.MessageError]   = "[ERR] ",
-	})[entry.messageType] or ""
-	bottomleft(prefix .. entry.message)
-end
+	for _, entry in ipairs(LogService:GetLogHistory()) do
+		local prefix = ({
+			[Enum.MessageType.MessageOutput]  = "[OUT] ",
+			[Enum.MessageType.MessageInfo]    = "[INFO] ",
+			[Enum.MessageType.MessageWarning] = "[WARN] ",
+			[Enum.MessageType.MessageError]   = "[ERR] ",
+		})[entry.messageType] or ""
+		bottomleft(prefix .. entry.message)
+	end
 
--- Listen for new messages
-LogService.MessageOut:Connect(function(message, messageType)
-	local prefix = ({
-		[Enum.MessageType.MessageOutput]  = "[OUT] ",
-		[Enum.MessageType.MessageInfo]    = "[INFO] ",
-		[Enum.MessageType.MessageWarning] = "[WARN] ",
-		[Enum.MessageType.MessageError]   = "[ERR] ",
-	})[messageType] or ""
-	bottomleft(prefix .. message)
+	LogService.MessageOut:Connect(function(message, messageType)
+		local prefix = ({
+			[Enum.MessageType.MessageOutput]  = "[OUT] ",
+			[Enum.MessageType.MessageInfo]    = "[INFO] ",
+			[Enum.MessageType.MessageWarning] = "[WARN] ",
+			[Enum.MessageType.MessageError]   = "[ERR] ",
+		})[messageType] or ""
+		bottomleft(prefix .. message)
+	end)
 end)
 
 -------------------------------------------------------------------------------------------------------------------------------
