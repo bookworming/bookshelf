@@ -1,9 +1,11 @@
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 
-boxten sex gui update checklist
+boxten sex gui update notepad
 version 1.3.0
 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+checklist
 
 ✓ │ Re-designed the UI.
 ✓ │ Fully re-factored and optimized the script and hopefully made it more performant.
@@ -54,5 +56,12 @@ X │ Made it so the "Auto boost player extraction speed" now targets appropriat
 ✓ │ Added an expand button to Poppy.
 ✓ │ Added more messages to Boxten.
 X │ Fixed an issue where Boxten is unable to properly display or the time spent on a floor.
+
+───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+the autofarm notepad + priority
+
+priority: extraction speed
+the autofarm should
 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
