@@ -9,7 +9,7 @@
    
 ---------------------------------------------------------------------------------------------------------------------------]]--
 
-local version = 2
+local version = 3
 
 -------------------------------------------------------------------------------------------------------------------------------
 
@@ -69,6 +69,7 @@ local dB = {
 • Removed the "Donor" section from Boxten's Section/Fun and gave it its own category. (Boxten's Section)
 • Gave the script changelogs its own category. (Settings section)
 
+• Added a "Machine aura condition" Dropdown. (Local Player/Utility)
 • Added a "Auto escape Twisted Squirm" toggle + input. (Automation/Player)
 • Added a "Hide machine ESP conditions" dropdown. (Environment/ESPs)
 • Added a "Hover ESP" toggle. (Environment/ESPs)
