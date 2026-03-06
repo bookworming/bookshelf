@@ -1715,6 +1715,30 @@ end
 
 -------------------------------------------------------------------------------------------------------------------------------
 
+local extrawalkspeedunits = 0
+local extrarunspeedunits = 0
+local extraunitconn
+
+local function addextraunits()
+	if not env.stuf.inrun then return end
+
+	if extraunitconn then return end
+	extraunitconn = rs.Heartebeat:Connect(function()
+		if extrawalkspeedunits < 0 and extrarunspeedunits < 0 then 
+			extraunitconn:Disconnect() 
+			extraunitconn = nil 
+		end
+
+		if env.stuf.plrstats:FindFirstChild("Sprinting") then
+			env.stuf.hum.Walkspeed = env.stuf.plrstats:FindFirstChild("RunSpeed") + extrawalkspeedunits
+		else
+			env.stuf.hum.Walkspeed = env.stuf.plrstats:FindFirstChild("Walkspeed") + extrawalkspeedunits
+		end
+	end)
+end
+
+-------------------------------------------------------------------------------------------------------------------------------
+
 local section = {
 	version = version,
 
@@ -1794,6 +1818,7 @@ local section = {
 			"Health Kit", "Jawbreaker", "Jumper Cable", "Pop", "Protein Bar", "Research Capsule", 
 			"Skill Check Candy", "Smoke Bomb", "Speed Candy", "Stealth Candy", "Tape"},
 		multiselect = true,
+		
 		callback = function(selected)
 			itemaurablacklist = {}
 			for _, label in ipairs(selected) do
@@ -1824,6 +1849,7 @@ local section = {
 			"Skill Check Candy", "Smoke Bomb", "Speed Candy", "Stealth Candy", "Stopwatch", 
 			"Valve"},
 		multiselect = true,
+		
 		callback = function(selected)
 			buyaurablacklist = {}
 			for _, label in ipairs(selected) do
@@ -2282,6 +2308,8 @@ local section = {
 		commanddesc = "Adds extra speed to your walk movement speed",
 
 		callback = function(text)
+			extrawalkspeedunits = tonumber(text)
+			addextraunits()
 		end
 	},
 	{ type = "input", title = "Extra run speed units", desc = "Adds extra speed to your run movement speed.", placeholder = "Speed",
@@ -2292,6 +2320,8 @@ local section = {
 		commanddesc = "Adds extra speed to your run movement speed",
 
 		callback = function(text)
+			extrarunspeedunits = tonumber(text)
+			addextraunits()
 		end
 	},
 
