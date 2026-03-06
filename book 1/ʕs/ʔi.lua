@@ -89,8 +89,8 @@ env.essentials.debugger.sgui.ResetOnSpawn = false
 env.essentials.debugger.sgui.Parent = hiddenui
 
 env.essentials.debugger.container = Instance.new("Frame")
-env.essentials.debugger.container.Size = UDim2.new(0, 420, 0, 300)
-env.essentials.debugger.container.Position = UDim2.new(1, -425, 1, -5)
+env.essentials.debugger.container.Size = UDim2.new(0, 500, 0, 300)
+env.essentials.debugger.container.Position = UDim2.new(1, -510, 1, -10)
 env.essentials.debugger.container.AnchorPoint = Vector2.new(0, 1)
 env.essentials.debugger.container.BackgroundTransparency = 1
 env.essentials.debugger.container.Parent = env.essentials.debugger.sgui
