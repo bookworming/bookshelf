@@ -245,6 +245,67 @@ local section = {
 	},
 	
 	{ type = "separator", title = "Teleports" },
+	{ type = "toggle", title = "Auto teleport to elevator", desc = "Automatically teleports you to the elevator when panic mode is on.",
+		commandcat = "Automation",
+
+		encommands = {"enableautoteleporttoelevator"},
+		enaliases = {"eatpte"},
+		encommanddesc = "Enables auto teleport to elevator",
+
+		discommands = {"disableautoteleporttoelevator"},
+		disaliases = {"datpte"},
+		discommanddesc = "Disables auto teleport to elevator",
+
+		callback = function(state)
+			autoteleporttoelevator(state)
+		end
+	},
+	{ type = "dropdown", title = "Auto teleport to elevator condition", desc = "Sets the condition that has to be followed before automatically teleporting to the elevator.", 
+		options = {"Instant", "Everyone at elevator", "At the last second"},
+		default = "Instant",
+		canbeempty = false,
+
+		callback = function(selected)
+			autoteleporttoelevatorconditions = selected
+		end
+	},
+	{ type = "toggle", title = "Auto teleport to machine", desc = "Automatically teleports you to a random machine.",
+		commandcat = "Automation",
+
+		encommands = {"enableautoteleporttomachine"},
+		enaliases = {"eatptm"},
+		encommanddesc = "Enables auto teleport to machine",
+
+		discommands = {"disableautoteleporttomachine"},
+		disaliases = {"datptm"},
+		discommanddesc = "Disables auto teleport to machine",
+
+		callback = function(state) 
+		end
+	},
+	{ type = "dropdown", title = "Auto teleport to machine condition", desc = "Sets the condition that has to be followed before automatically teleporting to a random machine.", 
+		options = {"Extraction start", "Extraction end", "Player is near", "On floor start", "Map fully loaded"},
+		default = "Extraction start",
+		canbeempty = false,
+		multiselect = true,
+
+		callback = function(selected) 
+		end 
+	},
+	{ type = "toggle", title = "Force stop extraction when teleporting to machine", desc = "Forcefully quits machine extraction when teleporting to a random generator.",
+		commandcat = "Automation",
+
+		encommands = {"enableautoforcequitmachine"},
+		enaliases = {"eafqm"},
+		encommanddesc = "Enables auto force quit machine",
+
+		discommands = {"disableautoforcequitmachine"},
+		disaliases = {"dafqm"},
+		discommanddesc = "Disables auto force quit machine",
+
+		callback = function(state) 
+		end
+	},
 
 	{ type = "separator", title = "Player" },
 	{ type = "toggle", title = "Auto machine calibration", desc = "Automatically completes skillchecks.",
@@ -650,69 +711,6 @@ local section = {
 		discommanddesc = "Disables auto join elevator with the target amount of players in the queue",
 
 		callback = function(text, state) 
-		end
-	},
-
-	{ type = "separator", title = "Teleports" },
-	{ type = "toggle", title = "Auto teleport to elevator", desc = "Automatically teleports you to the elevator when panic mode is on.",
-		commandcat = "Automation",
-		
-		encommands = {"enableautoteleporttoelevator"},
-		enaliases = {"eatpte"},
-		encommanddesc = "Enables auto teleport to elevator",
-		
-		discommands = {"disableautoteleporttoelevator"},
-		disaliases = {"datpte"},
-		discommanddesc = "Disables auto teleport to elevator",
-		
-		callback = function(state)
-			autoteleporttoelevator(state)
-		end
-	},
-	{ type = "dropdown", title = "Auto teleport to elevator condition", desc = "Sets the condition that has to be followed before automatically teleporting to the elevator.", 
-		options = {"Instant", "Everyone at elevator", "At the last second"},
-		default = "Instant",
-		canbeempty = false,
-		
-		callback = function(selected)
-			autoteleporttoelevatorconditions = selected
-		end
-	},
-	{ type = "toggle", title = "Auto teleport to machine", desc = "Automatically teleports you to a random machine.",
-		commandcat = "Automation",
-
-		encommands = {"enableautoteleporttomachine"},
-		enaliases = {"eatptm"},
-		encommanddesc = "Enables auto teleport to machine",
-
-		discommands = {"disableautoteleporttomachine"},
-		disaliases = {"datptm"},
-		discommanddesc = "Disables auto teleport to machine",
-
-		callback = function(state) 
-		end
-	},
-	{ type = "dropdown", title = "Auto teleport to machine condition", desc = "Sets the condition that has to be followed before automatically teleporting to a random machine.", 
-		options = {"Extraction start", "Extraction end", "Player is near", "On floor start", "Map fully loaded"},
-		default = "Extraction start",
-		canbeempty = false,
-		multiselect = true,
-
-		callback = function(selected) 
-		end 
-	},
-	{ type = "toggle", title = "Force stop extraction when teleporting to machine", desc = "Forcefully quits machine extraction when teleporting to a random generator.",
-		commandcat = "Automation",
-
-		encommands = {"enableautoforcequitmachine"},
-		enaliases = {"eafqm"},
-		encommanddesc = "Enables auto force quit machine",
-
-		discommands = {"disableautoforcequitmachine"},
-		disaliases = {"dafqm"},
-		discommanddesc = "Disables auto force quit machine",
-
-		callback = function(state) 
 		end
 	},
 
