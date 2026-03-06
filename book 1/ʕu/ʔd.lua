@@ -15,6 +15,18 @@ dialogue.version = 2
 
 --[[---------------------------------------------------------------------------------------------------------------------------
 
+   TODO:
+   make more messages idiot
+
+---------------------------------------------------------------------------------------------------------------------------]]--
+
+dialogue.boxten, dialogue.altboxten = {}, {}
+dialogue.poppy = {}
+dialogue.shrimpo = {}
+dialogue.conversations = {}
+
+--[[---------------------------------------------------------------------------------------------------------------------------
+
    the & is used to determine whether the word behind it should use "'s" or "s", or transforms "a" to an "an" depending on the word in front of it
 
    {player} = indicates the player, will appear as their selected Toon's name
@@ -39,15 +51,8 @@ dialogue.version = 2
 
 ---------------------------------------------------------------------------------------------------------------------------]]--
 
-dialogue.boxten, dialogue.altboxten = {}, {}
-dialogue.poppy = {}
-dialogue.shrimpo = {}
-dialogue.conversations = {}
-
--------------------------------------------------------------------------------------------------------------------------------
-
 -- BSGUI boxten: sullen, sarcastic, satirical, passive-aggressive, but nice sometimes ig idk
-dialogue.boxten = {
+boxten = {
 	mainsection = {
 		randomlobbymessages = {
 			"thequickbrownfoxjumpsoverthelazydog"
@@ -753,7 +758,7 @@ dialogue.boxten = {
 -------------------------------------------------------------------------------------------------------------------------------
 
 -- boxten (SC-004): shy, nervous, pessimistic (?), anxious, stutters sometimes
-dialogue.altboxten = {
+altboxten = {
 	mainsection = {
 		randomlobbymessages = {
 			"thequickbrownfoxjumpsoverthelazydog"
@@ -1282,7 +1287,7 @@ dialogue.altboxten = {
 -------------------------------------------------------------------------------------------------------------------------------
 
 -- poppy (SC-003): confident, optimistic, loud and fuckin proud
-dialogue.poppy = {
+poppy = {
 	mainsection = {
 		randomlobbymessages = {
 			"thequickbrownfoxjumpsoverthelazydog"
@@ -1817,7 +1822,7 @@ dialogue.poppy = {
 -------------------------------------------------------------------------------------------------------------------------------
 
 -- shrimpo (SC-001): constantly shouting, rude, short-tempered, abrasive, arrogant
-dialogue.shrimpo = {
+shrimpo = {
 	mainsection = {
 		randomlobbymessages = {
 			"thequickbrownfoxjumpsoverthelazydog"
