@@ -11,8 +11,14 @@
 
 local version = 3
 
--------------------------------------------------------------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------------------------------------------------------
 
+   TODO:
+   all caught up!
+
+---------------------------------------------------------------------------------------------------------------------------]]--
+
+-- services & instances
 local t, spwn = task.wait, task.spawn
 local getmmfromerr = function(userdata, f, test) local ret = nil xpcall(f, function() ret = debug.info(2, "f") end, userdata, nil, 0) if (type(ret) ~= "function") or not test(ret) then return f end return ret end
 local randstring = function() local s = "" for i = 1, math.random(8, 15) do if math.random(2) == 2 then s = s .. string.char(math.random(65, 90)) else s = s .. string.char(math.random(97, 122)) end end return s end
