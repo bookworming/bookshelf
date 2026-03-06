@@ -11,7 +11,15 @@
 
 if not game:IsLoaded() then game.Loaded:Wait() end local t = task.wait
 
--------------------------------------------------------------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------------------------------------------------------
+
+   TODO:
+   when finally done with the script refactorment or whatever make sure to finalize by reformatting some of the variables in all of the
+   combined scripts for optimization (plus its very dirty)
+   
+   dont forget to obfuscate : )
+
+---------------------------------------------------------------------------------------------------------------------------]]--
 
 -- services & instances
 local t, spwn = task.wait, task.spawn
