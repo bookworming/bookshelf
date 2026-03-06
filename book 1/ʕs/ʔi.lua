@@ -135,7 +135,8 @@ local function bottomleft(text, log)
 	border.Color = Color3.fromRGB(0, 0, 0)
 
 	task.delay(5, function()
-		local tween = ts:Create(debuglog, TweenInfo.new(0.6, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {TextTransparency = 1, BackgroundTransparency = 1}):Play()
+		ts:Create(debuglog, TweenInfo.new(0.6, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {TextTransparency = 1, BackgroundTransparency = 1}):Play()
+		ts:Create(border, TweenInfo.new(0.6, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Transparency = 1}):Play()
 		d:AddItem(debuglog, 0.6)
 	end)
 end
