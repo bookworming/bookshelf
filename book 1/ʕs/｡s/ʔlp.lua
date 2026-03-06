@@ -1378,7 +1378,7 @@ end)
 
 local loopspeedinput = 16
 local loopspeeding = false
-humanmodifcons = {}
+local humanmodifcons = {}
 
 local function setloopspeed(speed)
 	if speed then
@@ -1533,6 +1533,7 @@ local rejoindeathconn, exitdeathconn, rerundeathconn
 
 local itemaurablacklist = {}
 local itemauraenabled = false
+local itemaurathread = nil
 
 local itemnamemap = {
 	["Air Horn"]                 = "AirHorn",
@@ -1561,33 +1562,41 @@ local itemnamemap = {
 local function itemaura(state)
 	itemauraenabled = state
 
-	local function pickup()
-		for _, item in pairs(env.stuf.items:GetChildren()) do
-			if not itemaurablacklist[item.Name] then
-				local promptPart = item:FindFirstChild("Prompt")
-				if promptPart then
-					local proximityPrompt = promptPart:FindFirstChildOfClass("ProximityPrompt")
-					if proximityPrompt and proximityPrompt.Enabled then
-						fireproximityprompt(proximityPrompt)
+	if not state then
+		if itemaurathread then
+			task.cancel(itemaurathread)
+			itemaurathread = nil
+		end
+		return
+	end
+
+	if itemaurathread then return end
+
+	itemaurathread = spwn(function()
+		while itemauraenabled do
+			if env.stuf.currentroom and env.stuf.items then
+				for _, item in pairs(env.stuf.items:GetChildren()) do
+					if not itemaurablacklist[item.Name] then
+						local promptPart = item:FindFirstChild("Prompt")
+						if promptPart then
+							local proximityPrompt = promptPart:FindFirstChildOfClass("ProximityPrompt")
+							if proximityPrompt and proximityPrompt.Enabled then
+								fireproximityprompt(proximityPrompt)
+							end
+						end
 					end
 				end
 			end
+			t()
 		end
-	end
-
-	if state then
-		if not env.stuf.currentroom or not env.stuf.items or itemauraenabled then return end
-		while itemauraenabled do
-			pickup() t()
-			if not itemauraenabled then break end
-		end
-	end
+	end)
 end
 
 -------------------------------------------------------------------------------------------------------------------------------
 
 local buyaurablacklist = {}
 local buyauraenabled = false
+local buyaurathread = nil
 
 local buynamemap = {
 	["Air Horn"]               = "AirHorn",
@@ -1615,41 +1624,93 @@ local buynamemap = {
 
 local function buyaura(state)
 	buyauraenabled = state
-	
-	local store = env.stuf.elevator:FindFirstChild("DandyStore")
-	if not store then return end
-	
-	local function buy()
-		for _, slot in ipairs(store:GetChildren()) do
-			if slot.Name:lower():match("^slot") then
-				local itemModel = slot:FindFirstChildWhichIsA("Model")
-				if itemModel and not buyaurablacklist[itemModel.Name] then
-					local promptPart = itemModel:FindFirstChild("Prompt")
-					if promptPart then
-						local prompt = promptPart:FindFirstChildOfClass("ProximityPrompt")
-						if prompt and prompt.Enabled then
-							fireproximityprompt(prompt)
+
+	if not state then
+		if buyaurathread then
+			task.cancel(buyaurathread)
+			buyaurathread = nil
+		end
+		return
+	end
+
+	if buyaurathread then return end
+
+	buyaurathread = spwn(function()
+		while buyauraenabled do
+			local store = env.stuf.elevator:FindFirstChild("DandyStore")
+			if store then
+				for _, slot in ipairs(store:GetChildren()) do
+					if slot.Name:lower():match("^slot") then
+						local itemModel = slot:FindFirstChildWhichIsA("Model")
+						if itemModel and not buyaurablacklist[itemModel.Name] then
+							local promptPart = itemModel:FindFirstChild("Prompt")
+							if promptPart then
+								local prompt = promptPart:FindFirstChildOfClass("ProximityPrompt")
+								if prompt and prompt.Enabled then
+									fireproximityprompt(prompt)
+								end
+							end
 						end
 					end
 				end
 			end
+			t()
 		end
-	end
-	
-	if state then
-		if buyauraenabled then return end
-		while buyauraenabled do
-			buy() t()
-			if not buyauraenabled then break end
-		end
-	end
+	end)
 end
 
 -------------------------------------------------------------------------------------------------------------------------------
 
 local machineauraconditions = {}
-local function machineaura(state)
+local machineauraenabled = false
+local machineaurathread = nil
 
+local function machineaura(state)
+	machineauraenabled = state
+
+	if not state then
+		if machineaurathread then
+			task.cancel(machineaurathread)
+			machineaurathread = nil
+		end
+		return
+	end
+
+	if machineaurathread then return end
+
+	machineaurathread = spwn(function()
+		while machineauraenabled do
+			if env.stuf.machines then
+				for _, machine in ipairs(env.stuf.machines:GetChildren()) do
+					local stats = env.funcs.getstats("machine", machine)
+					local possessed = stats.possessed
+					local hasprogress = stats.amount ~= 0.1
+					local machinetype = stats.machtype
+
+					local conditions = machineauraconditions
+					if #conditions > 0 then
+						local noprogress    = not table.find(conditions, "No progress")    or not hasprogress
+						local notpossessed  = not table.find(conditions, "Not possessed")  or not possessed
+						local typenormal    = not table.find(conditions, "Normal machine type")    or machinetype == "Normal"
+						local typecircle    = not table.find(conditions, "Circle machine type")    or machinetype == "Circle"
+						local typetreadmill = not table.find(conditions, "Treadmill machine type") or machinetype == "Treadmill"
+
+						if not (noprogress and notpossessed and (typenormal or typecircle or typetreadmill)) then
+							continue
+						end
+					end
+
+					for _, v in ipairs(machine:GetDescendants()) do
+						if v:IsA("ProximityPrompt") and v.Enabled then
+							fireproximityprompt(v)
+							break
+						end
+					end
+				end
+			end
+			t()
+		end
+	end)
 end
 
 -------------------------------------------------------------------------------------------------------------------------------
@@ -1791,6 +1852,7 @@ local section = {
 		multiselect = true,
 
 		callback = function(selected) 
+			machineauraconditions = selected
 		end 
 	},
 	{ type = "toggle", title = "Anti slowness debuff", desc = "Makes you immune to the slowness debuff.",
