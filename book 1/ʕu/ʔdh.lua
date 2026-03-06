@@ -192,12 +192,16 @@ local function newdialogue(text, whosaidit, expression)
 
 	if whosaidit and expression then
 		local iconsize = 25
+    local name =
+			(whosaidit == "box" or whosaidit == "altbox") and "boxten" or
+			whosaidit == "pop" and "poppy" or
+			whosaidit == "shr" and "shrimpo"
 
 		local icon = Instance.new("ImageLabel")
 		icon.BackgroundTransparency = 1
 		icon.Size = UDim2.new(0, iconsize, 0, iconsize)
 		icon.Position = UDim2.new(0, cursorX, 0.5, -iconsize / 2)
-		icon.Image = expressions[whosaidit][expression]
+		icon.Image = expressions[name][expression]
 		icon.ImageTransparency = 1
 		icon.Parent = holder
 		cursorX += iconsize + 4
