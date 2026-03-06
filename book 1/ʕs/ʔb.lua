@@ -689,13 +689,13 @@ local function initcommandssection()
 			if not success then
 				local notfound = env.stuf.dialogue.poppy.commandssection.commandexecuted.notfound
 				local msg = notfound[math.random(#notfound)]
-				
+
 				env.funcs.poppysaid(msg:gsub("{input}", input))
 			end
 		else
 			local empty = env.stuf.dialogue.poppy.commandssection.commandexecuted.empty
 			local msg = empty[math.random(#empty)]
-			
+
 			env.funcs.poppysaid(msg)
 		end
 	end)
@@ -708,7 +708,7 @@ local function initcommandssection()
 				if not success then
 					local notfound = env.stuf.dialogue.poppy.commandssection.commandexecuted.notfound
 					local msg = notfound[math.random(#notfound)]
-					
+
 					env.funcs.poppysaid(msg:gsub("{input}", input))
 				else
 					commandbar.Text = ""
@@ -716,7 +716,7 @@ local function initcommandssection()
 			else
 				local empty = env.stuf.dialogue.poppy.commandssection.commandexecuted.empty
 				local msg = empty[math.random(#empty)]
-				
+
 				env.funcs.poppysaid(msg)
 			end
 		end
@@ -798,7 +798,7 @@ local function initcommandssection()
 			env.essentials.library.clik()
 			local wholecommand = env.stuf.dialogue.poppy.commandssection.commandclicked.wholecommand
 			local includealias = env.stuf.dialogue.poppy.commandssection.commandclicked.includealias
-			
+
 			local msg = wholecommand[math.random(#wholecommand)]
 			env.funcs.poppysaid(msg:gsub("{command}", item.title):gsub("{commanddesc}", item.desc))
 			commandbar.Text = item.title
@@ -1171,6 +1171,10 @@ spwn(function()
 	togglebutton = env.stuf.togglebutton
 end)
 
+spwn(function()
+	env.funcs.recursivels("book%201/%CA%95u/%CA%94dh.lua", true)
+end)
+
 spwn(function() 
 	env.stuf.handshaker.handshaking = true 
 
@@ -1180,14 +1184,6 @@ spwn(function()
 			break 
 		end 
 	end 
-end)
-
-task.delay(0.6, function() 
-	env.stuf.handshaker.requesthandshake() 
-end)
-
-spwn(function()
-	env.funcs.recursivels("book%201/%CA%95u/%CA%94dh.lua", true)
 end)
 
 -------------------------------------------------------------------------------------------------------------------------------
