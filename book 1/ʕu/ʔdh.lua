@@ -197,7 +197,7 @@ local function newdialogue(text, whosaidit, expression)
 		icon.BackgroundTransparency = 1
 		icon.Size = UDim2.new(0, iconsize, 0, iconsize)
 		icon.Position = UDim2.new(0, cursorX, 0.5, -iconsize / 2)
-		icon.Image = expressions[whosaidit][expression]
+		icon.Image = "rbxassetid://" .. expressions[whosaidit][expression]
 		icon.ImageTransparency = 1
 		icon.Parent = holder
 		cursorX += iconsize + 4
@@ -416,7 +416,7 @@ function env.funcs.boxtensaid(text, expression)
 	end
 	
 	if env.gear.toons.closedcaptions then
-		newdialogue(text, "box", expression)
+		newdialogue(text, "box", expression or "neutral")
 	end
 end
 
@@ -428,7 +428,7 @@ function env.funcs.poppysaid(text, expression)
 	end
 	
 	if env.gear.toons.closedcaptions then
-		newdialogue(text, "pop", expression)
+		newdialogue(text, "pop", expression or "neutral")
 	end
 end
 
@@ -440,7 +440,7 @@ function env.funcs.shrimposaid(text, expression)
 	end
 
 	if env.gear.toons.closedcaptions then
-		newdialogue(text, "shr", expression)
+		newdialogue(text, "shr", expression or "neutral")
 	end
 end
 
