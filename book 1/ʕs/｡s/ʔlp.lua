@@ -1723,7 +1723,7 @@ local function addextraunits()
 	if not env.stuf.inrun then return end
 
 	if extraunitconn then return end
-	extraunitconn = rs.Heartebeat:Connect(function()
+	extraunitconn = rs.Heartbeat:Connect(function()
 		if extrawalkspeedunits < 0 and extrarunspeedunits < 0 then 
 			extraunitconn:Disconnect() 
 			extraunitconn = nil 
