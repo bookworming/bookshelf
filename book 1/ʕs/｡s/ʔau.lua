@@ -11,7 +11,16 @@
 
 local version = 2
 
--------------------------------------------------------------------------------------------------------------------------------
+
+--[[---------------------------------------------------------------------------------------------------------------------------
+
+   TODO:
+   make an auto distract thing that can be useful for autofarming with alts that makes the player move upward to gather every single twisted and then
+   utilize pathfinding in order to move the twisteds into one enclosed spot
+   
+   havent tested this yet but using the click indicators for skillchecks can also be used to auto calibrate (more optimized?)
+
+---------------------------------------------------------------------------------------------------------------------------]]--
 
 -- services & instances
 local t, spwn = task.wait, task.spawn
@@ -243,7 +252,7 @@ local section = {
 			env.stuf.afe.actions = selected
 		end 
 	},
-	
+
 	{ type = "separator", title = "Teleports" },
 	{ type = "toggle", title = "Auto teleport to elevator", desc = "Automatically teleports you to the elevator when panic mode is on.",
 		commandcat = "Automation",
