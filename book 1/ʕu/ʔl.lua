@@ -282,31 +282,6 @@ end
 -------------------------------------------------------------------------------------------------------------------------------
 
 -- ui functions
-function lib.unbindall()
-	local elementsToUnbind = {}
-
-	for _, state in pairs(env.essentials.toggles) do table.insert(elementsToUnbind, state) end
-	for _, state in pairs(env.essentials.buttons) do table.insert(elementsToUnbind, state) end
-
-	for _, state in ipairs(elementsToUnbind) do
-		if state.currentBind ~= nil then
-			state.currentBind = nil
-
-			if state.elementtitle then
-				state.elementtitle.Text = state.title
-
-				if state.updateSize then
-					state.updateSize()
-				end
-			end
-		end
-	end
-
-	if env.filemanager then
-		env.filemanager.persistsave()
-	end
-end
-
 function lib.makecooltext(parent, size, text, textsize, color, borderthickness, pos, alignment, alignment2, button, Z)
 	local txt = button and Instance.new("TextButton") or Instance.new("TextLabel")
 	txt.BorderSizePixel = 0
@@ -2888,25 +2863,25 @@ function lib.addinputandbutton(parent, title, description, defaulttext, placehol
 	local executebutton = lib.makecoolbutton("▶", UDim2.new(0, 70, 0, 28), frame, UDim2.new(1, -50, 1, -30), "yes", 17, {bottom = 7}, 61)
 
 	local function updateFrameSize()
-    local function stripRichText(str)
-      return str:gsub("<[^>]->", "")
-    end
+		local function stripRichText(str)
+			return str:gsub("<[^>]->", "")
+		end
 
-    local cleanTitleText = stripRichText(elementtitle.Text)
+		local cleanTitleText = stripRichText(elementtitle.Text)
 
-    local _, newTh = lib.gettextbounds(cleanTitleText, elementtitle.Font, elementtitle.TextSize, Vector2.new(textwidth, math.huge))
-    local _, currDh = lib.gettextbounds(description, elementdesc.Font, elementdesc.TextSize, Vector2.new(textwidth, math.huge))
+		local _, newTh = lib.gettextbounds(cleanTitleText, elementtitle.Font, elementtitle.TextSize, Vector2.new(textwidth, math.huge))
+		local _, currDh = lib.gettextbounds(description, elementdesc.Font, elementdesc.TextSize, Vector2.new(textwidth, math.huge))
 
-    local newDescY = leftpadding + newTh + tetxgap
-    local newTotalHeight = newTh + currDh + leftpadding * 2 + tetxgap + 45
+		local newDescY = leftpadding + newTh + tetxgap
+		local newTotalHeight = newTh + currDh + leftpadding * 2 + tetxgap + 45
 
-    elementtitle.Size = UDim2.new(0, textwidth, 0, newTh)
-    elementtitle.Position = UDim2.new(0, leftpadding + textwidth / 2, 0, leftpadding + newTh / 2 - 5)
+		elementtitle.Size = UDim2.new(0, textwidth, 0, newTh)
+		elementtitle.Position = UDim2.new(0, leftpadding + textwidth / 2, 0, leftpadding + newTh / 2 - 5)
 
-    elementdesc.Size = UDim2.new(0, textwidth, 0, currDh)
-    elementdesc.Position = UDim2.new(0, leftpadding + textwidth / 2, 0, newDescY + currDh / 2 + 5)
+		elementdesc.Size = UDim2.new(0, textwidth, 0, currDh)
+		elementdesc.Position = UDim2.new(0, leftpadding + textwidth / 2, 0, newDescY + currDh / 2 + 5)
 
-    frame.Size = UDim2.new(0, width, 0, newTotalHeight)
+		frame.Size = UDim2.new(0, width, 0, newTotalHeight)
 	end
 
 	frame:GetPropertyChangedSignal("AbsoluteSize"):Connect(updateFrameSize)
