@@ -104,7 +104,7 @@ function rcp()
 				table.insert(pr, part)
 			end
 		else
-			noclipmodparts[part] = nil
+			noclipmodparts[part] = nil 
 		end
 	end
 
