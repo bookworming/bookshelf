@@ -9,6 +9,7 @@
 
 ---------------------------------------------------------------------------------------------------------------------------]]--
 
+-- skidjolt was here kyehehehe
 local dh = {}
 dh.version = 1
 
@@ -23,6 +24,7 @@ local getins = getmmfromerr(game, function(a,b) return a[b] end, function(f) loc
 local FindFirstChildOfClass = getins(game, "FindFirstChildOfClass") 
 
 local txts = FindFirstChildOfClass(game, "TextService")
+local txtcs = FindFirstChildOfClass(game, "TextChatService")
 local plrs = FindFirstChildOfClass(game, "Players")
 local rs = FindFirstChildOfClass(game, "RunService")
 local uis = FindFirstChildOfClass(game, "UserInputService")
@@ -35,9 +37,6 @@ local env = getgenv.BSGUI
 local sgui = env.essentials.sgui
 
 -------------------------------------------------------------------------------------------------------------------------------
-
--- skidjolt was here kyehehehe
-local dialogue = env.funcs.recursivels("book%201/%CA%95u/%CA%94d.lua", true)
 
 -- THEYRE ALL SPEAKING!!! IHRE MÄULEN SIND ALLE OFFEN!!! (some of them have their teeth shown too)
 local expressions = {
@@ -147,8 +146,8 @@ local function recalcy()
 end
 
 local tagcolors = {
-	box = Color3.fromRGB(197, 61, 224),
-	altbox = Color3.fromRGB(197, 61, 224),
+	box = Color3.fromRGB(175, 52, 209),
+	altbox = Color3.fromRGB(175, 52, 209),
 	pop = Color3.fromRGB(112, 234, 255),
 	shr = Color3.fromRGB(247, 109, 40),
 }
@@ -413,7 +412,7 @@ function env.funcs.boxtensaid(text, expression)
 	taip(env.stuf.boxtenschatbox, text)
 	
 	if env.gear.toons.sendmsgsinchat then
-
+		txtcs.TextChannels.RBXGeneral:DisplaySystemMessage("<font color=\"rgb(175, 52, 209)\">Boxten:</font> " .. text)
 	end
 	
 	if env.gear.toons.closedcaptions then
@@ -425,7 +424,7 @@ function env.funcs.poppysaid(text, expression)
 	taip(env.stuf.poppyschatbox, text)
 	
 	if env.gear.toons.sendmsgsinchat then
-
+		txtcs.TextChannels.RBXGeneral:DisplaySystemMessage("<font color=\"rgb(112, 234, 255)\">Boxten:</font> " .. text)
 	end
 	
 	if env.gear.toons.closedcaptions then
@@ -435,14 +434,25 @@ end
 
 function env.funcs.shrimposaid(text, expression)
 	taip(env.stuf.shrimposchatbox, text)
-	
+
 	if env.gear.toons.sendmsgsinchat then
-		
+		txtcs.TextChannels.RBXGeneral:DisplaySystemMessage("<font color=\"rgb(247, 109, 40)\">Boxten:</font> " .. text)
 	end
-	
+
 	if env.gear.toons.closedcaptions then
 		newdialogue(text, "shr", expression)
 	end
+end
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+-- listeners
+if env.stuf.inlobby then
+
+elseif env.stuf.inrun then
+
+elseif env.stuf.inrp then
+
 end
 
 -------------------------------------------------------------------------------------------------------------------------------
