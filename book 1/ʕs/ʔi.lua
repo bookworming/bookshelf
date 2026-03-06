@@ -199,6 +199,7 @@ spwn(function()
 		"Mainframe UI scale",
 		"Button UI scale",
 
+		"Closed captions",
 		"Alternate Boxten personality",
 		"Live Poppy reaction",
 		"Live Shrimpo reaction",
@@ -220,6 +221,7 @@ spwn(function()
 		"Mainframe UI scale",
 		"Button UI scale",
 
+		"Closed captions",
 		"Alternate Boxten personality",
 		"Live Poppy reaction",
 		"Live Shrimpo reaction",
