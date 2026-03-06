@@ -302,13 +302,17 @@ local function loadintro()
 	if not isfolder(soundsfolder) then makefolder(soundsfolder) end
 
 	local assetex = {
-		images = {},
+		images = {
+			["ive made a severe and continuous lapse in my judgement.png"] = "https://files.catbox.moe/gameg3.png",
+			["heterochromia.png"] = "https://files.catbox.moe/ymqhre.png",
+		},
 		videos = {
-			["dandelions forever.mp4"] = "https://files.catbox.moe/cjo1ji.mp4"
+			["dandelions forever.mp4"] = "https://files.catbox.moe/cjo1ji.mp4",
 		},
 		sounds = {
-			["call.mp3"] = "https://files.catbox.moe/fbd2e0.mp3"
-			["the things id do for a whopper with cheese.mp3"] = "https://files.catbox.moe/ycx2f9.mp3"
+			["call.mp3"] = "https://files.catbox.moe/fbd2e0.mp3",
+			["the things id do for a whopper with cheese.mp3"] = "https://files.catbox.moe/ycx2f9.mp3",
+			["flashbang.mp3"] = "https://files.catbox.moe/lc4bq1.mp3",
 		}
 	}
 
