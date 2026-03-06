@@ -61,6 +61,94 @@ end
 
 -------------------------------------------------------------------------------------------------------------------------------
 
+local autoteleporttoelevatorconditions = {}
+local autoteleporttoelevatorconn
+local autoteleporttoelevatorenabled = false
+
+function getelevatorcframe(ele, nearshop)
+	local placednearshop = ele.CFrame * CFrame.new(-6, -10.5, 0) * CFrame.Angles(0, math.rad(-90), 0)
+	local center = ele.CFrame * CFrame.new(0, -10.5, 0) * CFrame.Angles(0, math.rad(-90), 0)
+	return nearshop and placednearshop or center
+end
+
+local function toelevator(fake, method)
+	if env.stuf.root then
+		if fake and env.stuf.freearea then
+			local base = env.stuf.freearea:FindFirstChild("FakeElevator"):FindFirstChild("Base")
+			if base:IsA("Part") then
+				env.funcs.moveplr(base.CFrame * CFrame.new(0, 2.7, 0) * CFrame.Angles(0, math.rad(-90), 0), method)
+			end
+		else
+			env.funcs.moveplr(getelevatorcframe(env.stuf.elevator:FindFirstChild("MonsterBlocker")), method)
+		end
+	end
+end
+
+local function checkeveryoneatelevaor()
+	local blocker = env.stuf.elevator:FindFirstChild("MonsterBlocker")
+	if not blocker then return false end
+	for _, player in ipairs(plrs:GetPlayers()) do
+		if player ~= env.stuf.plr and player.Character then
+			local root = player.Character:FindFirstChild("HumanoidRootPart")
+			if not root or (root.Position - blocker.Position).Magnitude > 40 then
+				return false
+			end
+		end
+	end
+	return true
+end
+
+local function autoteleporttoelevator(state)
+	autoteleporttoelevatorenabled = state
+
+	if not state then
+		if autoteleporttoelevatorconn then
+			autoteleporttoelevatorconn:Disconnect()
+			autoteleporttoelevatorconn = nil
+		end
+		return
+	end
+
+	if autoteleporttoelevatorconn then return end
+
+	local panic = env.stuf.gameinfo:FindFirstChild("Panic")
+	local timer = env.stuf.gameinfo:FindFirstChild("PanicTimer")
+
+	autoteleporttoelevatorconn = panic.Changed:Connect(function()
+		if not panic.Value then return end
+
+		local condition = autoteleporttoelevatorconditions
+
+		if condition == "Instant" then
+			toelevator(nil, "tp")
+
+		elseif condition == "Everyone at elevator" then
+			task.spawn(function()
+				while autoteleporttoelevatorenabled and panic.Value do
+					if checkeveryoneatelevaor() then
+						toelevator(nil, "tp")
+						break
+					end
+					t()
+				end
+			end)
+
+		elseif condition == "At the last second" then
+			task.spawn(function()
+				while autoteleporttoelevatorenabled and panic.Value do
+					if timer and timer.Value <= 1 then
+						toelevator(nil, "tp")
+						break
+					end
+					t()
+				end
+			end)
+		end
+	end)
+end
+
+-------------------------------------------------------------------------------------------------------------------------------
+
 env.stuf.afe = {
 	running = false,
 	priority = {},
@@ -155,6 +243,8 @@ local section = {
 			env.stuf.afe.actions = selected
 		end 
 	},
+	
+	{ type = "separator", title = "Teleports" },
 
 	{ type = "separator", title = "Player" },
 	{ type = "toggle", title = "Auto machine calibration", desc = "Automatically completes skillchecks.",
@@ -566,25 +656,27 @@ local section = {
 	{ type = "separator", title = "Teleports" },
 	{ type = "toggle", title = "Auto teleport to elevator", desc = "Automatically teleports you to the elevator when panic mode is on.",
 		commandcat = "Automation",
-
+		
 		encommands = {"enableautoteleporttoelevator"},
 		enaliases = {"eatpte"},
 		encommanddesc = "Enables auto teleport to elevator",
-
+		
 		discommands = {"disableautoteleporttoelevator"},
 		disaliases = {"datpte"},
 		discommanddesc = "Disables auto teleport to elevator",
-
-		callback = function(state) 
+		
+		callback = function(state)
+			autoteleporttoelevator(state)
 		end
 	},
 	{ type = "dropdown", title = "Auto teleport to elevator condition", desc = "Sets the condition that has to be followed before automatically teleporting to the elevator.", 
 		options = {"Instant", "Everyone at elevator", "At the last second"},
 		default = "Instant",
 		canbeempty = false,
-
-		callback = function(selected) 
-		end 
+		
+		callback = function(selected)
+			autoteleporttoelevatorconditions = selected
+		end
 	},
 	{ type = "toggle", title = "Auto teleport to machine", desc = "Automatically teleports you to a random machine.",
 		commandcat = "Automation",
@@ -645,7 +737,7 @@ local section = {
 		callback = function(state) 
 		end
 	},
-	{ type = "toggle", title = "Kite distract island target toggle", desc = "Toggles the visibility of the island you will walk around.",
+	{ type = "toggle", title = "Kite distract island target toggle", desc = "Toggles the visibility of the indicator showing which island you will walk around.",
 		callback = function(state) 
 		end
 	},
