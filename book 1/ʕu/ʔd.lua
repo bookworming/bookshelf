@@ -39,7 +39,7 @@ dialogue.version = 2
 
 ---------------------------------------------------------------------------------------------------------------------------]]--
 
-dialogue.boxten, dialogue.altboxten = {}
+dialogue.boxten, dialogue.altboxten = {}, {}
 dialogue.poppy = {}
 dialogue.shrimpo = {}
 dialogue.conversations = {}
