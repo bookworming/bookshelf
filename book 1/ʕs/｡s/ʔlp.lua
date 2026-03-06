@@ -1015,9 +1015,9 @@ local function pickupallitems()
 				
 				if item:IsA("Model") then
 					local itemCFrame = item:GetPivot() * CFrame.new(0, env.gear.general.itemtpposyoffset, 0)
-					env.funcs.moveplr(itemCFrame, "tp")
 					fireproximityprompt(item.Prompt:FindFirstChildOfClass("ProximityPrompt"))
-					t(0.15)
+					for _ = 1, 15 do env.funcs.moveplr(itemCFrame, "tp") t() end
+					fireproximityprompt(item.Prompt:FindFirstChildOfClass("ProximityPrompt"))
 				end
 			end
 		end
@@ -1035,11 +1035,11 @@ local function pickupallcapsules()
 	if env.stuf.currentroom then
 		if env.stuf.items and #env.stuf.items:GetChildren() > 0 then
 			for _, item in ipairs(env.stuf.items:GetChildren()) do
-				if item:IsA("Model") and item.Name:Find("ResearchCap") then
+				if item:IsA("Model") and item.Name:find("ResearchCapsule") then
 					local itemCFrame = item:GetPivot() * CFrame.new(0, env.gear.general.itemtpposyoffset, 0)
-					env.funcs.moveplr(itemCFrame, "tp")
 					fireproximityprompt(item.Prompt:FindFirstChildOfClass("ProximityPrompt"))
-					t(0.15)
+					for _ = 1, 15 do env.funcs.moveplr(itemCFrame, "tp") t() end
+					fireproximityprompt(item.Prompt:FindFirstChildOfClass("ProximityPrompt"))
 				end
 			end
 		end
@@ -1057,11 +1057,11 @@ local function pickupalltapes()
 	if env.stuf.currentroom then
 		if env.stuf.items and #env.stuf.items:GetChildren() > 0 then
 			for _, item in ipairs(env.stuf.items:GetChildren()) do
-				if item:IsA("Model") and item.Name:Find("Tape") then
+				if item:IsA("Model") and item.Name:find("Tape") then
 					local itemCFrame = item:GetPivot() * CFrame.new(0, env.gear.general.itemtpposyoffset, 0)
-					env.funcs.moveplr(itemCFrame, "tp")
 					fireproximityprompt(item.Prompt:FindFirstChildOfClass("ProximityPrompt"))
-					t(0.15)
+					for _ = 1, 15 do env.funcs.moveplr(itemCFrame, "tp") t() end
+					fireproximityprompt(item.Prompt:FindFirstChildOfClass("ProximityPrompt"))
 				end
 			end
 		end
@@ -1079,11 +1079,11 @@ local function pickupallheals()
 	if env.stuf.currentroom then
 		if env.stuf.items and #env.stuf.items:GetChildren() > 0 then
 			for _, item in ipairs(env.stuf.items:GetChildren()) do
-				if item:IsA("Model") and item.Name:Find("Health") or item.Name:Find("Band") then
+				if item:IsA("Model") and item.Name:find("HealthKit") or item.Name:find("Bandage") then
 					local itemCFrame = item:GetPivot() * CFrame.new(0, env.gear.general.itemtpposyoffset, 0)
-					env.funcs.moveplr(itemCFrame, "tp")
 					fireproximityprompt(item.Prompt:FindFirstChildOfClass("ProximityPrompt"))
-					t(0.15)
+					for _ = 1, 15 do env.funcs.moveplr(itemCFrame, "tp") t() end
+					fireproximityprompt(item.Prompt:FindFirstChildOfClass("ProximityPrompt"))
 				end
 			end
 		end
@@ -1101,11 +1101,11 @@ local function pickupallextitems()
 	if env.stuf.currentroom then
 		if env.stuf.items and #env.stuf.items:GetChildren() > 0 then
 			for _, item in ipairs(env.stuf.items:GetChildren()) do
-				if item:IsA("Model") and item.Name:Find("Jumper") or item.Name:Find("ExtractionSpeed") or item.Name:Find("Skill") or item.Name:Find("Jawbreak") then
+				if item:IsA("Model") and item.Name:find("JumperCable") or item.Name:find("ExtractionSpeedCandy") or item.Name:find("SkillCheckCandy") or item.Name:find("Jawbreaker") then
 					local itemCFrame = item:GetPivot() * CFrame.new(0, env.gear.general.itemtpposyoffset, 0)
-					env.funcs.moveplr(itemCFrame, "tp")
 					fireproximityprompt(item.Prompt:FindFirstChildOfClass("ProximityPrompt"))
-					t(0.15)
+					for _ = 1, 15 do env.funcs.moveplr(itemCFrame, "tp") t() end
+					fireproximityprompt(item.Prompt:FindFirstChildOfClass("ProximityPrompt"))
 				end
 			end
 		end	
@@ -1123,11 +1123,11 @@ local function pickupalleventitems()
 	if env.stuf.currentroom then
 		if env.stuf.items and #env.stuf.items:GetChildren() > 0 then
 			for _, item in ipairs(env.stuf.items:GetChildren()) do
-				if item:IsA("Model") then
+				if item:IsA("Model") and item.Name:find("HolidayCollectibleItem") then
 					local itemCFrame = item:GetPivot() * CFrame.new(0, env.gear.general.itemtpposyoffset, 0)
-					env.funcs.moveplr(itemCFrame, "tp")
 					fireproximityprompt(item.Prompt:FindFirstChildOfClass("ProximityPrompt"))
-					t(0.15)
+					for _ = 1, 15 do env.funcs.moveplr(itemCFrame, "tp") t() end
+					fireproximityprompt(item.Prompt:FindFirstChildOfClass("ProximityPrompt"))
 				end
 			end
 		end
