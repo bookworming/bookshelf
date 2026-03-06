@@ -192,7 +192,7 @@ local function newdialogue(text, whosaidit, expression)
 
 	if whosaidit and expression then
 		local iconsize = 25
-    local name =
+		local name =
 			(whosaidit == "box" or whosaidit == "altbox") and "boxten" or
 			whosaidit == "pop" and "poppy" or
 			whosaidit == "shr" and "shrimpo"
@@ -414,11 +414,11 @@ end
 -- universal functions
 function env.funcs.boxtensaid(text, expression)
 	taip(env.stuf.boxtenschatbox, text)
-	
+
 	if env.gear.toons.sendmsgsinchat then
 		txtcs.TextChannels.RBXGeneral:DisplaySystemMessage("<font color=\"rgb(175, 52, 209)\">Boxten:</font> " .. text)
 	end
-	
+
 	if env.gear.toons.closedcaptions then
 		newdialogue(text, "box", expression or "neutral")
 	end
@@ -426,11 +426,11 @@ end
 
 function env.funcs.poppysaid(text, expression)
 	taip(env.stuf.poppyschatbox, text)
-	
+
 	if env.gear.toons.sendmsgsinchat then
 		txtcs.TextChannels.RBXGeneral:DisplaySystemMessage("<font color=\"rgb(112, 234, 255)\">Poppy:</font> " .. text)
 	end
-	
+
 	if env.gear.toons.closedcaptions then
 		newdialogue(text, "pop", expression or "neutral")
 	end
