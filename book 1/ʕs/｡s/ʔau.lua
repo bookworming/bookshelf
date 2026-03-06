@@ -123,7 +123,7 @@ local function autoteleporttoelevator(state)
 			toelevator(nil, "tp")
 
 		elseif condition == "Everyone at elevator" then
-			task.spawn(function()
+			spwn(function()
 				while autoteleporttoelevatorenabled and panic.Value do
 					if checkeveryoneatelevaor() then
 						toelevator(nil, "tp")
@@ -134,7 +134,7 @@ local function autoteleporttoelevator(state)
 			end)
 
 		elseif condition == "At the last second" then
-			task.spawn(function()
+			spwn(function()
 				while autoteleporttoelevatorenabled and panic.Value do
 					if timer and timer.Value <= 1 then
 						toelevator(nil, "tp")
