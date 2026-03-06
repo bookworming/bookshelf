@@ -9,6 +9,8 @@
    
 ---------------------------------------------------------------------------------------------------------------------------]]--
 
+local version = 1
+
 --[[---------------------------------------------------------------------------------------------------------------------------
 
    TODO:
@@ -83,88 +85,6 @@ spwn(function()
 	env.funcs.box("script data loaded successfully")
 
 	env.essentialsloaded = true
-end)
-
--------------------------------------------------------------------------------------------------------------------------------
-
--- debugger setup
-env.essentials.debugger = {}
-env.essentials.debugger.logcount = 0
-
-env.essentials.debugger.sgui = Instance.new("ScreenGui")
-env.essentials.debugger.sgui.ResetOnSpawn = false
-env.essentials.debugger.sgui.Parent = hiddenui
-
-env.essentials.debugger.container = Instance.new("Frame")
-env.essentials.debugger.container.Size = UDim2.new(0, 420, 0, 300)
-env.essentials.debugger.container.Position = UDim2.new(1, -425, 1, -5)
-env.essentials.debugger.container.AnchorPoint = Vector2.new(0, 1)
-env.essentials.debugger.container.BackgroundTransparency = 1
-env.essentials.debugger.container.Parent = env.essentials.debugger.sgui
-
-env.essentials.debugger.containerlayout = Instance.new("UIListLayout")
-env.essentials.debugger.containerlayout.Parent = env.essentials.debugger.container
-env.essentials.debugger.containerlayout.SortOrder = Enum.SortOrder.LayoutOrder
-env.essentials.debugger.containerlayout.VerticalAlignment = Enum.VerticalAlignment.Bottom
-env.essentials.debugger.containerlayout.Padding = UDim.new(0, 1)
-
-local function bottomleft(text, log)
-	if not env.essentials.sgui then repeat t() until env.essentials.sgui end
-	if not env.gear.general.debugmode then return end
-
-	env.essentials.debugger.logcount = env.essentials.debugger.logcount + 1
-	local col = Color3.fromRGB(255, 255, 255)
-	if log then
-		if log == "warn" then 
-			col = Color3.fromRGB(254, 240, 117)
-		elseif log == "err" then 
-			col = Color3.fromRGB(237, 106, 100)
-		elseif log == "info" then 
-			col = Color3.fromRGB(102, 187, 255)
-		end
-	end
-
-	local debuglog = Instance.new("TextLabel")
-	debuglog.Size = UDim2.new(1, 0, 0, 13)
-	debuglog.BackgroundTransparency = 1
-	debuglog.TextColor3 = col
-	debuglog.TextXAlignment = Enum.TextXAlignment.Right
-	debuglog.Font = Enum.Font.FredokaOne
-	debuglog.TextSize = 10
-	debuglog.Text = text
-	debuglog.LayoutOrder = env.essentials.debugger.logcount
-	debuglog.TextTruncate = Enum.TextTruncate.AtEnd
-	debuglog.Parent = env.essentials.debugger.container
-
-	local border = Instance.new("UIStroke")
-	border.Parent = debuglog
-	border.Thickness = 1
-	border.Color = Color3.fromRGB(0, 0, 0)
-
-	task.delay(5, function()
-		local tween = ts:Create(debuglog, TweenInfo.new(0.6, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {TextTransparency = 1, BackgroundTransparency = 1}):Play()
-		d:AddItem(debuglog, 0.6)
-	end)
-end
-
-spwn(function()
-	for _, entry in ipairs(ls:GetLogHistory()) do
-		local prefix = ({
-			[Enum.MessageType.MessageInfo]    = "info",
-			[Enum.MessageType.MessageWarning] = "warn",
-			[Enum.MessageType.MessageError]   = "err",
-		})[entry.messageType] or ""
-		bottomleft(entry.message, prefix)
-	end
-
-	ls.MessageOut:Connect(function(message, messageType)
-		local prefix = ({
-			[Enum.MessageType.MessageInfo]    = "info",
-			[Enum.MessageType.MessageWarning] = "warn",
-			[Enum.MessageType.MessageError]   = "err",
-		})[messageType] or ""
-		bottomleft(message, prefix)
-	end)
 end)
 
 -------------------------------------------------------------------------------------------------------------------------------
@@ -1586,5 +1506,6 @@ end
 
 env.setupcomplete = true
 env.funcs.box("hello") -- hi!
+return version
 
 -------------------------------------------------------------------------------------------------------------------------------
