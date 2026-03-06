@@ -42,57 +42,57 @@ local sgui = env.essentials.sgui
 local expressions = {
 	-- BSGUI boxten
 	boxten = {
-		neutral = "122111994185494", -- / uninterested / resting
-		ticked = "119698259738476", -- / disgusted / shocked (disgusted)
-		annoyed = "87876871905320", -- / pissed
-		disgusted = "117471778623435", -- / holding back
-		proud = "121200224630300", -- / overconfident / somewhat ragebaitish / sarcastic?
+		neutral = "rbxassetid://122111994185494", -- / uninterested / resting
+		ticked = "rbxassetid://119698259738476", -- / disgusted / shocked (disgusted)
+		annoyed = "rbxassetid://87876871905320", -- / pissed
+		disgusted = "rbxassetid://117471778623435", -- / holding back
+		proud = "rbxassetid://121200224630300", -- / overconfident / somewhat ragebaitish / sarcastic?
 		nervous = "placeholder", -- / unreadable / apathetic / somewhat uninterested
 		sad = "placeholder", -- / sarcastic, a bit of a "boo hoo" type thing
 		happy = "placeholder", -- / unreadable / slightly happy. the smile is still there.
-		shoutingmad = "138041333635868", -- / rage / mega mega fucking fuming
+		shoutingmad = "rbxassetid://138041333635868", -- / rage / mega mega fucking fuming
 		shoutinghappy = "placeholder", -- / laughing / call or insult
 	},
 
 	-- SC-004 boxten
 	altboxten = {
-		neutral = "104366477729543", -- / sad / nervous looking / resting
-		ticked = "95507962845165", -- / shocked (disgusted) / bit of the "SSSHHHH... OOOHH..." you say while trying to suppress the pain of your toe after stubbing it 
+		neutral = "rbxassetid://104366477729543", -- / sad / nervous looking / resting
+		ticked = "rbxassetid://95507962845165", -- / shocked (disgusted) / bit of the "SSSHHHH... OOOHH..." you say while trying to suppress the pain of your toe after stubbing it 
 		annoyed = "placeholder", -- / uninterested / sad
 		disgusted = "placeholder", -- / holding back / still sad lol
-		proud = "108675658414571", -- / happy / ^_^ type thing
-		nervous = "123129368409117", -- / come on. do i need to explain?
+		proud = "rbxassetid://108675658414571", -- / happy / ^_^ type thing
+		nervous = "rbxassetid://123129368409117", -- / come on. do i need to explain?
 		sad = "placeholder", -- / looking down (emotionally and literally)
-		happy = "104366477729543", -- / happy (nervosity)
-		shoutingmad = "120792697294977", -- / tense
+		happy = "rbxassetid://104366477729543", -- / happy (nervosity)
+		shoutingmad = "rbxassetid://120792697294977", -- / tense
 		shoutinghappy = "placeholder", -- / ^ᗜ^
 	},
 
 	-- SC-003 poppy
 	poppy = {
-		neutral = "104725304950571", -- / very generic smile
-		ticked = "71699034161008", -- / shocked (worried) / kind of like a "ouch, you okay there?" type thing
+		neutral = "rbxassetid://104725304950571", -- / very generic smile
+		ticked = "rbxassetid://71699034161008", -- / shocked (worried) / kind of like a "ouch, you okay there?" type thing
 		annoyed = "placeholder", -- / i think this is only gonna be used in convos between her and shrimpo lol
 		disgusted = "placeholder", -- / holding baaaaack
 		proud = "placeholder", -- / ecstatic / overconfident
-		nervous = "106522771451375", -- / worried
+		nervous = "rbxassetid://106522771451375", -- / worried
 		sad = "placeholder", -- / kinda like worried but more sadder?? idk
-		happy = "104725304950571", -- / fucking overjoyed
+		happy = "rbxassetid://104725304950571", -- / fucking overjoyed
 		shoutingmad = "placeholder", -- / tense like SC-004 boxten
 		shoutinghappy = "placeholder", -- / decibel battle
 	},
 
 	-- SC-001 shrimpo
 	shrimpo = {
-		neutral = "98476525830185", -- / smiling
-		ticked = "71382889666653", -- / shocked (annoyed)
-		annoyed = "105837335646604", -- / do your best "UGHHH" look and then envision it
+		neutral = "rbxassetid://98476525830185", -- / smiling
+		ticked = "rbxassetid://71382889666653", -- / shocked (annoyed)
+		annoyed = "rbxassetid://105837335646604", -- / do your best "UGHHH" look and then envision it
 		disgusted = "placeholder", -- / "EEEWWWW!!!"
-		proud = "87338047321463", -- / overproud / overconfident
+		proud = "rbxassetid://87338047321463", -- / overproud / overconfident
 		nervous = "placeholder", -- / probably gonna get used when BSGUI boxten tells him to kiss him out of nowhere
 		sad = "placeholder", -- / sarcastic obviously this bitch is always angry
 		happy = "placeholder", -- / overconfident and crossing their arms
-		shoutingmad = "71382889666653", -- / drunk dad yelling at their son
+		shoutingmad = "rbxassetid://71382889666653", -- / drunk dad yelling at their son
 		shoutinghappy = "placeholder", -- / when the ragebait is successful
 	}
 }
@@ -197,7 +197,7 @@ local function newdialogue(text, whosaidit, expression)
 		icon.BackgroundTransparency = 1
 		icon.Size = UDim2.new(0, iconsize, 0, iconsize)
 		icon.Position = UDim2.new(0, cursorX, 0.5, -iconsize / 2)
-		icon.Image = "rbxassetid://" .. expressions[whosaidit][expression]
+		icon.Image = expressions[whosaidit][expression]
 		icon.ImageTransparency = 1
 		icon.Parent = holder
 		cursorX += iconsize + 4
