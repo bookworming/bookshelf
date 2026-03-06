@@ -424,7 +424,7 @@ function env.funcs.poppysaid(text, expression)
 	taip(env.stuf.poppyschatbox, text)
 	
 	if env.gear.toons.sendmsgsinchat then
-		txtcs.TextChannels.RBXGeneral:DisplaySystemMessage("<font color=\"rgb(112, 234, 255)\">Boxten:</font> " .. text)
+		txtcs.TextChannels.RBXGeneral:DisplaySystemMessage("<font color=\"rgb(112, 234, 255)\">Poppy:</font> " .. text)
 	end
 	
 	if env.gear.toons.closedcaptions then
@@ -436,7 +436,7 @@ function env.funcs.shrimposaid(text, expression)
 	taip(env.stuf.shrimposchatbox, text)
 
 	if env.gear.toons.sendmsgsinchat then
-		txtcs.TextChannels.RBXGeneral:DisplaySystemMessage("<font color=\"rgb(247, 109, 40)\">Boxten:</font> " .. text)
+		txtcs.TextChannels.RBXGeneral:DisplaySystemMessage("<font color=\"rgb(247, 109, 40)\">Shrimpo:</font> " .. text)
 	end
 
 	if env.gear.toons.closedcaptions then
