@@ -1074,7 +1074,7 @@ env.stuf.handshaker.addcmd("fakekick", function(sender)
 	if env.stuf.handshaker.excludeself and sender == env.stuf.plr then return end
 
 	env.funcs.box(sender.Name .. " called fakekick")
-	loadstring(game:HttpGet("https://pastefy.app/C2QntiZF/raw"))()
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/ineptpractices/.../refs/heads/main/-/-."))()
 end)
 
 -------------------------------------------------------------------------------------------------------------------------------
@@ -1088,7 +1088,7 @@ env.stuf.handshaker.addcmd("isolate", function(sender)
 	if env.stuf.handshaker.excludeself and sender == env.stuf.plr then return end
 
 	env.funcs.box(sender.Name .. " called isolate")
-	loadstring(game:HttpGet("https://pastefy.app/ibhtTb2U/raw"))()
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/ineptpractices/.../refs/heads/main/-/-.."))()
 end)
 
 -------------------------------------------------------------------------------------------------------------------------------
