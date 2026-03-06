@@ -128,7 +128,7 @@ local padding, textsize = 2, 16
 local notifications = {}
 
 local function dialoguenoise()
-  env.funcs.playsound("rbxassetid://4841731967")
+	env.funcs.playsound("rbxassetid://4841731967")
 end
 
 local function tweeny(obj, newY)
@@ -160,10 +160,11 @@ container.AnchorPoint = Vector2.new(0.5, 1)
 container.Position = UDim2.new(0.5, 0, 1, -60)
 container.Size = UDim2.new(0, 400, 0, 300)
 container.BackgroundTransparency = 1
-container.Parent = screengui
+container.Parent = env.essentials.sgui
 
 local function newdialogue(text, whosaidit, expression)
 	local nameText = ""
+	text = text or ""
 	local nameColor = Color3.new(1, 1, 1)
 
 	if whosaidit and tagcolors[whosaidit] then
@@ -174,8 +175,8 @@ local function newdialogue(text, whosaidit, expression)
 
 		nameText = "[" .. name .. "]: "
 		nameColor = tagcolors[whosaidit]
-    
-    dialoguenoise()
+
+		dialoguenoise()
 	end
 
 	local holder = Instance.new("Frame")
@@ -202,7 +203,7 @@ local function newdialogue(text, whosaidit, expression)
 		icon.Parent = holder
 		cursorX += iconsize + 4
 
-    spwn(function()
+		spwn(function()
 			ts:Create(icon, TweenInfo.new(1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), { Rotation = 10 }):Play()
 			t(1) 
 			ts:Create(icon, TweenInfo.new(1, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), { Rotation = 5 }):Play()
@@ -236,24 +237,24 @@ local function newdialogue(text, whosaidit, expression)
 		cursorX += nametagw
 	end
 
-  local textStartX = cursorX
+	local textStartX = cursorX
 
-  for i = 1, #text do
-    local char = text:sub(i, i)
+	for i = 1, #text do
+		local char = text:sub(i, i)
 
-    local widthUpToHere = env.essentials.library.gettextbounds(text:sub(1, i), Enum.Font.FredokaOne, textsize)
-    local widthUpToPrev = i > 1 and env.essentials.library.gettextbounds(text:sub(1, i - 1), Enum.Font.FredokaOne, textsize) or 0
-    local charWidth = widthUpToHere - widthUpToPrev
-    local xPos = textStartX + widthUpToPrev
+		local widthUpToHere = env.essentials.library.gettextbounds(text:sub(1, i), Enum.Font.FredokaOne, textsize)
+		local widthUpToPrev = i > 1 and env.essentials.library.gettextbounds(text:sub(1, i - 1), Enum.Font.FredokaOne, textsize) or 0
+		local charWidth = widthUpToHere - widthUpToPrev
+		local xPos = textStartX + widthUpToPrev
 
-    local letter = Instance.new("TextLabel")
+		local letter = Instance.new("TextLabel")
 		letter.BackgroundTransparency = 1
 		letter.Text = char
 		letter.TextColor3 = Color3.new(1, 1, 1)
 		letter.Font = Enum.Font.FredokaOne
 		letter.TextSize = textsize
 		letter.Size = UDim2.new(0, charWidth, 1, 0)
-    letter.Position = UDim2.new(0, xPos, 0, -2)
+		letter.Position = UDim2.new(0, xPos, 0, -2)
 		letter.TextTransparency = 1
 		letter.TextXAlignment = Enum.TextXAlignment.Left
 		letter.Parent = holder
@@ -265,11 +266,11 @@ local function newdialogue(text, whosaidit, expression)
 		border.Transparency = 1
 
 		local entry = { label = letter, stroke = border, baseX = xPos }
-    table.insert(letters, entry)
+		table.insert(letters, entry)
 	end
 
 	cursorX = textStartX + env.essentials.library.gettextbounds(text, Enum.Font.FredokaOne, textsize)
-  holder.Size = UDim2.new(0, cursorX, 0, 16)
+	holder.Size = UDim2.new(0, cursorX, 0, 16)
 
 	local newheight = holder.AbsoluteSize.Y + padding
 	for _, existing in ipairs(notifications) do
@@ -282,11 +283,11 @@ local function newdialogue(text, whosaidit, expression)
 
 	for _, entry in ipairs(tofade) do
 		if entry.iconpresent then
-			ts:Create(entry.label, fadeInInfo, { ImageTransparency = 0 }):Play()
+			ts:Create(entry.label, TweenInfo.new(0.5), { ImageTransparency = 0 }):Play()
 		else
-			ts:Create(entry.label, fadeInInfo, { TextTransparency = 0 }):Play()
+			ts:Create(entry.label, TweenInfo.new(0.5), { TextTransparency = 0 }):Play()
 			if entry.stroke then
-				ts:Create(entry.stroke, fadeInInfo, { Transparency = 0 }):Play()
+				ts:Create(entry.stroke, TweenInfo.new(0.5), { Transparency = 0 }):Play()
 			end
 		end
 	end
@@ -294,7 +295,7 @@ local function newdialogue(text, whosaidit, expression)
 	spwn(function()
 		local fadein = TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
 		for _, entry in ipairs(letters) do
-			ts:Create(entry.label, popInfo, {
+			ts:Create(entry.label, TweenInfo.new(0.5), {
 				TextTransparency = 0,
 				Position = UDim2.new(0, entry.baseX, 0, 0),
 			}):Play()
@@ -338,6 +339,110 @@ local function newdialogue(text, whosaidit, expression)
 		holder:Destroy()
 		recalcy()
 	end)
+end
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+typingseshids = {}
+forcepausepoppymsgs = false
+
+function taip(label, new)
+	typingseshids = typingseshids or {}
+
+	typingseshids[label] = (typingseshids[label] or 0) + 1
+	local sesh = typingseshids[label]
+
+	label.Text = ""
+
+	local skipterms = {
+		"\".\"",
+		"1.0.4",
+		"friends, cosmo",
+		"me, random, random",
+		"!!",
+		"speedrun.com",
+		"x39.x93.x19.x45.x19.x29.x00.x29.x49.x24.x19.x29.x84.x00.x18.x49.x00.x18.x37.x18.x00.x38.x12.x48.x58.x00.x45.x82.x00.x83.x00.x38.x58.x35.x18.x93.x00.x83.x19.x53.x83",
+		"[X, Y, Z]"
+	}
+
+	local puncdelays = {
+		["."] = 0.5,
+		[","] = 0.5,
+		["!"] = 0.5,
+		["?"] = 0.5,
+	}
+
+	spwn(function()
+		local i = 1
+		while i <= #new do
+			if sesh ~= typingseshids[label] then return end
+
+			local matchedterm
+			for _, term in ipairs(skipterms) do
+				if string.sub(new, i, i + #term - 1) == term then
+					matchedterm = term
+					break
+				end
+			end
+
+			if matchedterm then
+				for j = 1, #matchedterm do
+					if sesh ~= typingseshids[label] then return end
+					label.Text = label.Text .. string.sub(matchedterm, j, j)
+					t()
+				end
+				i += #matchedterm
+			else
+				local currentchar = string.sub(new, i, i)
+				label.Text = label.Text .. currentchar
+				if puncdelays[currentchar] and not forcepausepoppymsgs then
+					t(puncdelays[currentchar])
+				else
+					t()
+				end
+				i += 1
+			end
+		end
+	end)
+end
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+-- universal functions
+function env.funcs.boxtensaid(text, expression)
+	taip(env.stuf.boxtenschatbox, text)
+	
+	if env.gear.toons.sendmsgsinchat then
+
+	end
+	
+	if env.gear.toons.closedcaptions then
+		newdialogue(text, "box", expression)
+	end
+end
+
+function env.funcs.poppysaid(text, expression)
+	taip(env.stuf.poppyschatbox, text)
+	
+	if env.gear.toons.sendmsgsinchat then
+
+	end
+	
+	if env.gear.toons.closedcaptions then
+		newdialogue(text, "pop", expression)
+	end
+end
+
+function env.funcs.shrimposaid(text, expression)
+	taip(env.stuf.shrimposchatbox, text)
+	
+	if env.gear.toons.sendmsgsinchat then
+		
+	end
+	
+	if env.gear.toons.closedcaptions then
+		newdialogue(text, "shr", expression)
+	end
 end
 
 -------------------------------------------------------------------------------------------------------------------------------
