@@ -618,7 +618,7 @@ function removeborders()
 		for _, model in ipairs(env.stuf.currentroom:GetChildren()) do
 			if model:IsA("Model") then
 				for _, part in ipairs(model:GetDescendants()) do
-					if part:IsA("BasePart") and part.Name == "NoClip_Collider" and part.Name ~= "hello" then
+					if part:IsA("BasePart") and part.Name == "NoClip_Collider" and part.Name ~= "plz dont clip through this plz plz" then
 						if not noclipcolliderparts[part] then
 							noclipcolliderparts[part] = part.CanCollide
 							part.CanCollide = false
