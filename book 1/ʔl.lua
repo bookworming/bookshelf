@@ -49,7 +49,7 @@ env.funcs.box("setup complete")
 
 env.expectedcompiledscriptversions = {
 	library = 2,
-	data = 2,
+	data = 3,
 
 	builder = 2,
 
