@@ -69,6 +69,11 @@ local dB = {
 • Removed the "Donor" section from Boxten's Section/Fun and gave it its own category. (Boxten's Section)
 • Gave the script changelogs its own category. (Settings section)
 
+• Added a "Kite distract" toggle. (Automation/Distracting)
+• Added a "Kite distract island target toggle" toggle. (Automation/Distracting)
+• Added a "Force stop extraction when teleporting to machine" toggle. (Automation/Teleports)
+• Added a "Auto teleport to machine condition" dropdown. (Automation/Teleports)
+• Added a "Auto teleport to elevator condition" dropdown. (Automation/Teleports)
 • Added a "Machine aura condition" Dropdown. (Local Player/Utility)
 • Added a "Auto escape Twisted Squirm" toggle + input. (Automation/Player)
 • Added a "Hide machine ESP conditions" dropdown. (Environment/ESPs)
