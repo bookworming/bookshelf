@@ -29,7 +29,6 @@ local vim = FindFirstChildOfClass(game, "VirtualInputManager")
 local plrs = FindFirstChildOfClass(game, "Players")
 
 local getgenv = getgenv() or _G
-local cloneref = (syn and syn.cloneref) or cloneref()
 local firesignal = (syn and syn.firesignal) or firesignal()
 local queueotp = (syn and syn.queue_on_teleport) or queue_on_teleport or (fluxus and fluxus.queue_on_teleport)
 local hiddenui = (syn and syn.gethui) or gethui() or FindFirstChildOfClass(game, "CoreGui")
