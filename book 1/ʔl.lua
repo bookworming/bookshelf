@@ -308,6 +308,7 @@ local function loadintro()
 		},
 		sounds = {
 			["call.mp3"] = "https://files.catbox.moe/fbd2e0.mp3"
+			["the things id do for a whopper with cheese.mp3"] = "https://files.catbox.moe/ycx2f9.mp3"
 		}
 	}
 
