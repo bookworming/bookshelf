@@ -47,7 +47,7 @@ dialogue.conversations = {}
 -------------------------------------------------------------------------------------------------------------------------------
 
 -- BSGUI boxten: sullen, sarcastic, satirical, passive-aggressive, but nice sometimes ig idk
-boxten = {
+dialogue.boxten = {
 	mainsection = {
 		randomlobbymessages = {
 			"thequickbrownfoxjumpsoverthelazydog"
@@ -753,7 +753,7 @@ boxten = {
 -------------------------------------------------------------------------------------------------------------------------------
 
 -- boxten (SC-004): shy, nervous, pessimistic (?), anxious, stutters sometimes
-altboxten = {
+dialogue.altboxten = {
 	mainsection = {
 		randomlobbymessages = {
 			"thequickbrownfoxjumpsoverthelazydog"
@@ -1282,7 +1282,7 @@ altboxten = {
 -------------------------------------------------------------------------------------------------------------------------------
 
 -- poppy (SC-003): confident, optimistic, loud and fuckin proud
-poppy = {
+dialogue.poppy = {
 	mainsection = {
 		randomlobbymessages = {
 			"thequickbrownfoxjumpsoverthelazydog"
@@ -1817,7 +1817,7 @@ poppy = {
 -------------------------------------------------------------------------------------------------------------------------------
 
 -- shrimpo (SC-001): constantly shouting, rude, short-tempered, abrasive, arrogant
-shrimpo = {
+dialogue.shrimpo = {
 	mainsection = {
 		randomlobbymessages = {
 			"thequickbrownfoxjumpsoverthelazydog"
