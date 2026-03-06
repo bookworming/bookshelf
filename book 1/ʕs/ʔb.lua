@@ -687,8 +687,16 @@ local function initcommandssection()
 		if input ~= "" then
 			local success, err = execcmd(input)
 			if not success then
-				env.funcs.poppysaid("Sorry, I couldn't find a command named '" .. input .. "'.")
+				local notfound = env.stuf.dialogue.poppy.commandssection.commandexecuted.notfound
+				local msg = notfound[math.random(#notfound)]
+				
+				env.funcs.poppysaid(msg:gsub("{input}", input))
 			end
+		else
+			local empty = env.stuf.dialogue.poppy.commandssection.commandexecuted.empty
+			local msg = empty[math.random(#empty)]
+			
+			env.funcs.poppysaid(msg)
 		end
 	end)
 
@@ -697,11 +705,19 @@ local function initcommandssection()
 			local input = commandbar.Text
 			if input ~= "" then
 				local success, err = execcmd(input)
-				if success then
-					commandbar.Text = ""
+				if not success then
+					local notfound = env.stuf.dialogue.poppy.commandssection.commandexecuted.notfound
+					local msg = notfound[math.random(#notfound)]
+					
+					env.funcs.poppysaid(msg:gsub("{input}", input))
 				else
-					env.funcs.poppysaid("Sorry, I couldn't find a command named '" .. input .. "'.")
+					commandbar.Text = ""
 				end
+			else
+				local empty = env.stuf.dialogue.poppy.commandssection.commandexecuted.empty
+				local msg = empty[math.random(#empty)]
+				
+				env.funcs.poppysaid(msg)
 			end
 		end
 	end)
@@ -780,7 +796,11 @@ local function initcommandssection()
 
 		cmdBtn.Activated:Connect(function()
 			env.essentials.library.clik()
-			env.funcs.poppysaid("Executing \"" .. item.title .. "\" " .. item.desc .. "!")
+			local wholecommand = env.stuf.dialogue.poppy.commandssection.commandclicked.wholecommand
+			local includealias = env.stuf.dialogue.poppy.commandssection.commandclicked.includealias
+			
+			local msg = wholecommand[math.random(#wholecommand)]
+			env.funcs.poppysaid(msg:gsub("{command}", item.title):gsub("{commanddesc}", item.desc))
 			commandbar.Text = item.title
 		end)
 
