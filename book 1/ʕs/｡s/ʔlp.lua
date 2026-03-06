@@ -640,18 +640,6 @@ end
 
 -------------------------------------------------------------------------------------------------------------------------------
 
-Services = setmetatable({}, {
-	__index = function(self, name)
-		local success, cache = pcall(function()
-			return cloneref(game:GetService(name))
-		end)
-		if success then
-			rawset(self, name, cache)
-			return cache
-		end
-	end
-})
-
 local lmao = nil
 
 function antiafk(state)
@@ -666,10 +654,6 @@ function antiafk(state)
 			end
 		else
 			if not lmao then
-				lmao = env.stuf.plr.Idled:Connect(function()
-					Services.VirtualUser:CaptureController()
-					Services.VirtualUser:ClickButton2(Vector2.new())
-				end)
 			end
 		end
 	else
