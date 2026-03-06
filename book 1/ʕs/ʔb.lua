@@ -9,6 +9,15 @@
    
 ---------------------------------------------------------------------------------------------------------------------------]]--
 
+env.stuf.sectionsloaded = false
+
+--[[---------------------------------------------------------------------------------------------------------------------------
+
+   TODO:
+   all caught up!
+
+---------------------------------------------------------------------------------------------------------------------------]]--
+
 -- services & instances
 local t, spwn = task.wait, task.spawn
 local getmmfromerr = function(userdata, f, test) local ret = nil xpcall(f, function() ret = debug.info(2, "f") end, userdata, nil, 0) if (type(ret) ~= "function") or not test(ret) then return f end return ret end
@@ -41,8 +50,6 @@ local load = env.funcs.recursivels
 -------------------------------------------------------------------------------------------------------------------------------
 
 -- load
-env.stuf.sectionsloaded = false
-
 local maincat = env.funcs.recursivels("book%201/%CA%95s/%EF%BD%A1s/%CA%94m.lua", true)
 env.funcs.introconsolelog("\"Main\" section loaded. (" .. maincat.version .. ")")
 if maincat.version ~= env.expectedcompiledscriptversions.mainsection then
