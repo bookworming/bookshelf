@@ -2308,7 +2308,7 @@ local section = {
 		commanddesc = "Adds extra speed to your walk movement speed",
 
 		callback = function(text)
-			extrawalkspeedunits = tonumber(text)
+			extrawalkspeedunits = tonumber(text) or 0
 			addextraunits()
 		end
 	},
@@ -2320,7 +2320,7 @@ local section = {
 		commanddesc = "Adds extra speed to your run movement speed",
 
 		callback = function(text)
-			extrarunspeedunits = tonumber(text)
+			extrarunspeedunits = tonumber(text) or 0
 			addextraunits()
 		end
 	},
