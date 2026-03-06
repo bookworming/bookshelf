@@ -697,7 +697,7 @@ local function forcequitmachine()
 	if decoding ~= nil then
 		decoding.Stats.StopInteracting:FireServer("Stop")
 	end
-	return not env.stuf.plrgui.Menu.StopGenerator.Visible
+	return not env.stuf.plrgui.ScreenGui.Menu.StopGenerator.Visible
 end
 
 -------------------------------------------------------------------------------------------------------------------------------
