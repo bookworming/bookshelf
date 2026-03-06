@@ -166,7 +166,7 @@ local dB = {
 			"c00lunable", "stupiddumbmusicalbox", "uwunable", "CerebralAneurysms", "trinketIess",
 			"findbypropslazy", "ksuuuuuuuuuuuuuuuuvi", "eL8x94nSlddwxjX3rdPs", "apophists",
 			"roblox_user_8429009562", "zestyassboxten", "ksuvee", "renophic", "ksytrict", "boxclockwork",
-			"xhantist", "penqulum", "heartcloak", "boxtengexsui", "bcxten"
+			"xhantist", "penqulum", "heartcloak", "boxtengexsui", "bcxten", "ichorichorichorichor"
 		},
 		hypnic = {
 			"gaydandy", "gayastro", "parabrasque", "hyqnic", "stymuli"
@@ -182,7 +182,7 @@ local dB = {
 			"roblox_user_8429009562", "zestyassboxten", "ksuvee", "renophic", "ksytrict",
 			"gaydandy", "gayastro", "parabrasque", "hyqnic", "stymuli", "boxclockwork", "xhantist",
 			"Eva1718282", "heartcloak", "Chance_XLC", "Breadis_cool67", "husdgjhalw100", "asdasd2safwefsd",
-			"blotxboxten", "boxtengexsui"
+			"blotxboxten", "boxtengexsui", "ichorichorichorichor"
 		},
 		blacklisted = {
 			"KINGMOBMEDIA"
