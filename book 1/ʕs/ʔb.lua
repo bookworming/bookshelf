@@ -130,70 +130,6 @@ env.stuf.sectionsloaded = true
 -------------------------------------------------------------------------------------------------------------------------------
 
 -- category integration
-typingseshids = {}
-sendinchat = false
-forcepausepoppymsgs = false
-
-function taip(label, new)
-	typingseshids = typingseshids or {}
-
-	typingseshids[label] = (typingseshids[label] or 0) + 1
-	local sesh = typingseshids[label]
-
-	label.Text = ""
-
-	local skipterms = {
-		"\".\"",
-		"1.0.4",
-		"friends, cosmo",
-		"me, random, random",
-		"!!",
-		"speedrun.com",
-		"x39.x93.x19.x45.x19.x29.x00.x29.x49.x24.x19.x29.x84.x00.x18.x49.x00.x18.x37.x18.x00.x38.x12.x48.x58.x00.x45.x82.x00.x83.x00.x38.x58.x35.x18.x93.x00.x83.x19.x53.x83",
-		"[X, Y, Z]"
-	}
-
-	local puncdelays = {
-		["."] = 0.5,
-		[","] = 0.5,
-		["!"] = 0.5,
-		["?"] = 0.5,
-	}
-
-	spwn(function()
-		local i = 1
-		while i <= #new do
-			if sesh ~= typingseshids[label] then return end
-
-			local matchedterm
-			for _, term in ipairs(skipterms) do
-				if string.sub(new, i, i + #term - 1) == term then
-					matchedterm = term
-					break
-				end
-			end
-
-			if matchedterm then
-				for j = 1, #matchedterm do
-					if sesh ~= typingseshids[label] then return end
-					label.Text = label.Text .. string.sub(matchedterm, j, j)
-					t(0.01)
-				end
-				i += #matchedterm
-			else
-				local currentchar = string.sub(new, i, i)
-				label.Text = label.Text .. currentchar
-				if puncdelays[currentchar] and not forcepausepoppymsgs then
-					t(puncdelays[currentchar])
-				else
-					t(0.01)
-				end
-				i += 1
-			end
-		end
-	end)
-end
-
 local commands = {}
 local commandcats = {
 	["All Commands"] = {}, ["Pinned"] = {}, ["Main"] = {},
@@ -523,7 +459,7 @@ local function initmainsection()
 		local swapbutton = env.essentials.library.makecoolbutton(">>", UDim2.new(0, 42, 0, 28), boxten, UDim2.new(0, 31, 0.5, 27), "info", 21, {bottom = 7})
 
 		local nametag = env.essentials.library.makecooltext(boxten, UDim2.new(0, 60, 0, 20), "Boxten", 15, nil, 1, UDim2.new(0, 92, 0, 15), Enum.TextXAlignment.Left)
-		local saying = env.essentials.library.makecooltext(boxten, UDim2.new(0, 140, 0, 70), "welcome to Boxten Sex GUI. the most over-the-top script ever made for Dandy's World.", 11, Color3.fromRGB(170, 170, 170), 1, UDim2.new(0, 132, 0, 60), Enum.TextXAlignment.Left, Enum.TextYAlignment.Top)
+		env.stuf.boxtenschatbox = env.essentials.library.makecooltext(boxten, UDim2.new(0, 140, 0, 70), "welcome to Boxten Sex GUI. the most over-the-top script ever made for Dandy's World.", 11, Color3.fromRGB(170, 170, 170), 1, UDim2.new(0, 132, 0, 60), Enum.TextXAlignment.Left, Enum.TextYAlignment.Top)
 	end
 
 	-- unlock donor things
@@ -606,7 +542,7 @@ local function initconfigssection()
 		local swapbutton = env.essentials.library.makecoolbutton(">>", UDim2.new(0, 42, 0, 28), shrimpo, UDim2.new(0, 31, 0.5, 27), "info", 21, {bottom = 7})
 
 		local nametag = env.essentials.library.makecooltext(shrimpo, UDim2.new(0, 60, 0, 20), "Shrimpo", 15, nil, 1, UDim2.new(0, 92, 0, 15), Enum.TextXAlignment.Left)
-		local saying = env.essentials.library.makecooltext(shrimpo, UDim2.new(0, 140, 0, 70), "HEY!!! YOU THERE!!! I HATE YOU!!!", 11, Color3.fromRGB(170, 170, 170), 1, UDim2.new(0, 132, 0, 60), Enum.TextXAlignment.Left, Enum.TextYAlignment.Top)
+		env.stuf.shrimposchatbox = env.essentials.library.makecooltext(shrimpo, UDim2.new(0, 140, 0, 70), "HEY!!! YOU THERE!!! I HATE YOU!!!", 11, Color3.fromRGB(170, 170, 170), 1, UDim2.new(0, 132, 0, 60), Enum.TextXAlignment.Left, Enum.TextYAlignment.Top)
 
 		local fileinfo = env.essentials.library.makecoolframe(UDim2.new(0, 209, 0, 76), p, false, false, UDim2.new(0, 109, 1, -42), false, true)
 		env.stuf.fileinfolabel = env.essentials.library.makecooltext(fileinfo, UDim2.new(0, 200, 0, 20), [[
@@ -741,7 +677,7 @@ local function initcommandssection()
 	local swapbutton = env.essentials.library.makecoolbutton(">>", UDim2.new(0, 42, 0, 28), poppy, UDim2.new(0, 31, 0.5, 27), "info", 21, {bottom = 7})
 
 	local nametag = env.essentials.library.makecooltext(poppy, UDim2.new(0, 60, 0, 20), "Poppy", 15, nil, 1, UDim2.new(0, 92, 0, 15), Enum.TextXAlignment.Left)
-	local saying = env.essentials.library.makecooltext(poppy, UDim2.new(0, 140, 0, 70), "Hello! I'm Poppy! It's nice to meet you!", 11, Color3.fromRGB(170, 170, 170), 1, UDim2.new(0, 132, 0, 60), Enum.TextXAlignment.Left, Enum.TextYAlignment.Top)
+	env.stuf.poppyschatbox = env.essentials.library.makecooltext(poppy, UDim2.new(0, 140, 0, 70), "Hello! I'm Poppy! It's nice to meet you!", 11, Color3.fromRGB(170, 170, 170), 1, UDim2.new(0, 132, 0, 60), Enum.TextXAlignment.Left, Enum.TextYAlignment.Top)
 
 	local commandbar = env.essentials.library.makecooltextbox(UDim2.new(0, 216, 0, 32), commandssection, "", 20, "Command Bar", nil, UDim2.new(1, -160, 1, -23))
 	local executebutton = env.essentials.library.makecoolbutton("▶", UDim2.new(0, 32, 0, 32), commandssection, UDim2.new(1, -22, 1, -23), "yes", 20, {bottom = 7})
@@ -751,7 +687,7 @@ local function initcommandssection()
 		if input ~= "" then
 			local success, err = execcmd(input)
 			if not success then
-				taip(saying, "Sorry, I couldn't find a command named '" .. input .. "'.")
+				env.funcs.poppysaid("Sorry, I couldn't find a command named '" .. input .. "'.")
 			end
 		end
 	end)
@@ -764,7 +700,7 @@ local function initcommandssection()
 				if success then
 					commandbar.Text = ""
 				else
-					taip(saying, "Sorry, I couldn't find a command named '" .. input .. "'.")
+					env.funcs.poppysaid("Sorry, I couldn't find a command named '" .. input .. "'.")
 				end
 			end
 		end
@@ -844,7 +780,7 @@ local function initcommandssection()
 
 		cmdBtn.Activated:Connect(function()
 			env.essentials.library.clik()
-			taip(saying, "Executing \"" .. item.title .. "\" " .. item.desc .. "!")
+			env.funcs.poppysaid("Executing \"" .. item.title .. "\" " .. item.desc .. "!")
 			commandbar.Text = item.title
 		end)
 
