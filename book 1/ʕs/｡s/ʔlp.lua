@@ -30,6 +30,7 @@ local plrs = FindFirstChildOfClass(game, "Players")
 
 local getgenv = getgenv() or _G
 local firesignal = (syn and syn.firesignal) or firesignal
+local cloneref = (syn and syn.cloneref) or cloneref
 local queueotp = (syn and syn.queue_on_teleport) or queue_on_teleport or (fluxus and fluxus.queue_on_teleport)
 local hiddenui = (syn and syn.gethui) or gethui() or FindFirstChildOfClass(game, "CoreGui")
 local fireproximityprompt = (syn and syn.fireproximityprompt) or fireproximityprompt
@@ -639,6 +640,18 @@ end
 
 -------------------------------------------------------------------------------------------------------------------------------
 
+Services = setmetatable({}, {
+	__index = function(self, name)
+		local success, cache = pcall(function()
+			return cloneref(game:GetService(name))
+		end)
+		if success then
+			rawset(self, name, cache)
+			return cache
+		end
+	end
+})
+
 local lmao = nil
 
 function antiafk(state)
@@ -653,6 +666,10 @@ function antiafk(state)
 			end
 		else
 			if not lmao then
+				lmao = env.stuf.plr.Idled:Connect(function()
+					Services.VirtualUser:CaptureController()
+					Services.VirtualUser:ClickButton2(Vector2.new())
+				end)
 			end
 		end
 	else
