@@ -89,8 +89,8 @@ env.essentials.debugger.sgui.ResetOnSpawn = false
 env.essentials.debugger.sgui.Parent = hiddenui
 
 env.essentials.debugger.container = Instance.new("Frame")
-env.essentials.debugger.container.Size = UDim2.new(0, 500, 0, 300)
-env.essentials.debugger.container.Position = UDim2.new(1, -510, 1, -10)
+env.essentials.debugger.container.Size = UDim2.new(0, 420, 0, 300)
+env.essentials.debugger.container.Position = UDim2.new(1, -425, 1, -5)
 env.essentials.debugger.container.AnchorPoint = Vector2.new(0, 1)
 env.essentials.debugger.container.BackgroundTransparency = 1
 env.essentials.debugger.container.Parent = env.essentials.debugger.sgui
@@ -128,15 +128,14 @@ local function bottomleft(text, log)
 	debuglog.LayoutOrder = env.essentials.debugger.logcount
 	debuglog.TextTruncate = Enum.TextTruncate.AtEnd
 	debuglog.Parent = env.essentials.debugger.container
-	
+
 	local border = Instance.new("UIStroke")
 	border.Parent = debuglog
 	border.Thickness = 1
 	border.Color = Color3.fromRGB(0, 0, 0)
 
 	task.delay(5, function()
-		ts:Create(debuglog, TweenInfo.new(0.6, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {TextTransparency = 1, BackgroundTransparency = 1}):Play()
-		ts:Create(border, TweenInfo.new(0.6, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Transparency = 1}):Play()
+		local tween = ts:Create(debuglog, TweenInfo.new(0.6, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {TextTransparency = 1, BackgroundTransparency = 1}):Play()
 		d:AddItem(debuglog, 0.6)
 	end)
 end
@@ -706,14 +705,14 @@ do
 	env.stuf.cam = ws.CurrentCamera
 	env.stuf.mouse = getins(env.stuf.plr, "GetMouse")(env.stuf.plr)
 	env.stuf.plrgui = env.stuf.plr:WaitForChild("PlayerGui")
-	
+
 	env.stuf.plrstats = nil
 
 	local function updcharrefs(char)
 		if not char then return end
 		env.stuf.char = char
-		
-		local statsfolder = env.stuf.char:WaitForChild("Stats", 5)
+
+		local statsfolder = env.stuf.char:FindFirstChild("Stats")
 		if statsfolder then
 			env.stuf.plrstats = statsfolder
 		end
@@ -802,12 +801,7 @@ do
 	env.stuf.mainframescale = Instance.new("UIScale")
 	env.stuf.buttonscale = Instance.new("UIScale")
 
-	spwn(function() 
-		if not env.funcs.recursivels then 
-			repeat t() until function() return env.funcs.recursivels end 
-			env.stuf.dialogue = env.funcs.recursivels("book%201/%CA%95u/%CA%94d.lua", true) 
-		end
-	end)
+	spwn(function() env.stuf.dialogue = env.funcs.recursivels("book%201/%CA%95u/%CA%94d.lua", true) end)
 
 	-- donor handling
 	env.stuf.handshaker = {}
@@ -1557,7 +1551,7 @@ do
 	end
 
 	function env.stuf.handshaker.requesthandshake()
-		if (env.stuf.inrun and env.funcs.exists()) or env.stuf.char then
+		if env.funcs.exists() then
 			env.stuf.handshaker.animations.check.AnimationId = fixid(env.stuf.handshaker.id)
 			local animator = env.stuf.hum:FindFirstChildOfClass("Animator")
 
