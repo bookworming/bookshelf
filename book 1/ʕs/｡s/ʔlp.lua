@@ -56,7 +56,7 @@ function gbp()
 	rp.IgnoreWater = true
 
 	local result = ws:Raycast(env.stuf.root.Position, env.stuf.root.CFrame.LookVector * 40, rp)
-	if result and result.Instance and result.Instance:IsA("BasePart") and result.Instance.Name ~= "hello" then
+	if result and result.Instance and result.Instance:IsA("BasePart") and result.Instance.Name ~= "plz dont clip through this plz plz" then
 		return result.Instance
 	end
 	return nil
@@ -67,7 +67,7 @@ function gtp()
 	for _, part in ipairs(env.stuf.char:GetDescendants()) do
 		if part:IsA("BasePart") and part.CanTouch then
 			for _, p in ipairs(part:GetTouchingParts()) do
-				if not p:IsDescendantOf(env.stuf.char) and p.Name ~= "hello" then
+				if not p:IsDescendantOf(env.stuf.char) and p.Name ~= "plz dont clip through this plz plz" then
 					table.insert(touching, p)
 				end
 			end
