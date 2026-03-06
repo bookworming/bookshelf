@@ -713,7 +713,7 @@ do
 		if not char then return end
 		env.stuf.char = char
 		
-		local statsfolder = env.stuf.char:FindFirstChild("Stats")
+		local statsfolder = env.stuf.char:WaitForChild("Stats", 5)
 		if statsfolder then
 			env.stuf.plrstats = statsfolder
 		end
