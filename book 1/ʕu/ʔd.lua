@@ -1720,7 +1720,9 @@ poppy = {
 
 		commandclicked = {
 			wholecommand = {
-				"thequickbrownfoxjumpsoverthelazydog"
+				"Executing \"{command}\" {commanddesc}!",
+				"Running \"{command}\" {commanddesc}!",
+				"The \"{command}\" command {commanddesc}!",
 			},
 
 			includealias = {
@@ -1730,11 +1732,15 @@ poppy = {
 
 		commandexecuted = {
 			empty = {
-				"thequickbrownfoxjumpsoverthelazydog"
+				"You forgot to input a command, silly!",
+				"I don't think \"\" is a command!",
+				"You have to type something in the command bar first!"
 			},
 
 			notfound = {
-				"thequickbrownfoxjumpsoverthelazydog"
+				"I couldn't find \"{input}\" in the list of commands... Try checking your spelling!",
+				"Looks like \"{command}\" isn't a valid command..!",
+				"I don't remember \"{command}\" being in our list of commands!",
 			},
 
 			invalidarguments = {
