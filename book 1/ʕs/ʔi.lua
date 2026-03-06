@@ -547,7 +547,7 @@ do
 
 		-- utility
 		closedcaptions = true,
-		sendmsgsinchat = false
+		sendmsgsinchat = false,
 	}
 end
 
