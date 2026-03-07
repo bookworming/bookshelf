@@ -4,7 +4,7 @@
 ⠀⢰⣿⣿⠀⠀⠀⢻⣿⠀⠀⣿⣿⡆
 ⠀⢸⣿⣿⠀⠀⠀⠀⢻⠀⠀⣿⣿⡇⠀⠀Team Noxious
 ⠀⢸⣿⣿⠀⠀⡀⠀⠈⠀⠀⣿⣿⡇⠀⠀Boxten Sex GUI | Developed by unable
-⠀⢸⣿⣿⠀⠀⣧⠀⠀⠀⠀⣿⣿⡇⠀:: "Automation section"
+⠀⢸⣿⣿⠀⠀⣧⠀⠀⠀⠀⣿⣿⡇⠀⠀:: "Automation section"
 ⠀⠸⣿⣿⠀⠀⣿⣧⠀⠀⠀⣿⣿⠇
 ⠀⠀⠀⠉⠀⠀⣿⣿⣇⠀⠀⠉
 ⠀⠀⠀⠀⠀⠀⠉⠛⠉
@@ -177,7 +177,9 @@ local function handlesc()
 				local garea = goldarea.AbsoluteSize
 
 				if mpos.X >= gpos.X and mpos.X <= (gpos.X + garea.X) + tl then
-					firesignal(menu.Calibrate)
+					firesignal(menu.Calibrate.MouseButton1Down)
+					firesignal(menu.Calibrate.MouseButton1Up)
+					firesignal(menu.Calibrate.MouseButton1Click)
 				end
 			end
 		end
@@ -265,6 +267,9 @@ function handlecm()
 			if not acmalreadypressed then
 				t(0.03)
 				firesignal(container)
+				firesignal(container.MouseButton1Down)
+				firesignal(container.MouseButton1Up)
+				firesignal(container.MouseButton1Click)
 				acmlastpresstime = tick()
 				acmalreadypressed = true
 			end
