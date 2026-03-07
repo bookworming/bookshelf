@@ -728,7 +728,10 @@ do
 	env.stuf.mainframescale = Instance.new("UIScale")
 	env.stuf.buttonscale = Instance.new("UIScale")
 
-	spwn(function() env.stuf.dialogue = env.funcs.recursivels("book%201/%CA%95u/%CA%94d.lua", true) end)
+	spwn(function() 
+		if not env.funcs.recursivels then repeat t() until function() return env.funcs.recursivels end end
+		env.stuf.dialogue = env.funcs.recursivels("book%201/%CA%95u/%CA%94d.lua", true) 
+	end)
 
 	-- donor handling
 	env.stuf.handshaker = {}
