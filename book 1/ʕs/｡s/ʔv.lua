@@ -534,44 +534,43 @@ end
 
 local function setuptwistedobstacleesp(state)
 	if esphandler.twistedobstacle.conn then esphandler.twistedobstacle.conn:Disconnect() esphandler.twistedobstacle.conn = nil end
+	if esphandler.twistedobstacle.blotconn then esphandler.twistedobstacle.blotconn:Disconnect() esphandler.twistedobstacle.blotconn = nil end
 	clearhls("twistedobstacle")
-
+	
 	if not state then return end
-
+	
 	spwn(function()
 		yield(function() return env.stuf.freearea end)
-		local folder = env.stuf.freearea
 
-		if env.stuf.twistedobstacle then
-			for _, obstacle in pairs(folder:GetChildren()) do
-				if obstacle.Name:find("SproutTendril") then
-					if esphandler.twistedobstacle.enabled then
-						esphandler.twistedobstacle.hls[obstacle] = newhl(obstacle, espsettings.colors.twistedobstacle)
-					end
-				elseif obstacle.Name:find("BlotHand") then
-					local hand
-					local innermodel = obstacle:FindFirstChildWhichIsA("Model")
-					if innermodel then hand = innermodel:FindFirstChild("Arm") end
-					if esphandler.twistedobstacle.enabled then
-						esphandler.twistedobstacle.hls[hand] = newhl(hand, espsettings.colors.twistedobstacle)
-					end
+		local function addobstacle(obstacle)
+			if not esphandler.twistedobstacle.enabled then return end
+			if obstacle.Name:find("SproutTendril") then
+				esphandler.twistedobstacle.hls[obstacle] = newhl(obstacle, espsettings.colors.twistedobstacle)
+			end
+		end
+
+		local function addblothand(model)
+			if not esphandler.twistedobstacle.enabled then return end
+			if model.Name:find("BlotHand") then
+				local innermodel = model:FindFirstChildWhichIsA("Model")
+				local hand = innermodel and innermodel:FindFirstChild("Arm")
+				if hand then
+					esphandler.twistedobstacle.hls[hand] = newhl(hand, espsettings.colors.twistedobstacle)
 				end
 			end
+		end
 
-			esphandler.twistedobstacle.conn = folder.ChildAdded:Connect(function(model)
-				if esphandler.twistedobstacle.enabled then
-					if model.Name:find("SproutTendril") then
-						esphandler.twistedobstacle.hls[model] = newhl(model, espsettings.colors.twistedobstacle)
-					elseif model.Name:find("BlotHand") then
-						local hand
-						local innermodel = model:FindFirstChildWhichIsA("Model")
-						if innermodel then hand = innermodel:FindFirstChild("Arm") end
-						if esphandler.twistedobstacle.enabled then
-							esphandler.twistedobstacle.hls[hand] = newhl(hand, espsettings.colors.twistedobstacle)
-						end
-					end
-				end
-			end)
+		if env.stuf.twistedobstacle then
+			for _, obstacle in pairs(env.stuf.freearea:GetChildren()) do
+				addobstacle(obstacle)
+			end
+			esphandler.twistedobstacle.conn = env.stuf.freearea.ChildAdded:Connect(addobstacle)
+
+			yield(function() return env.stuf.roomfolder end)
+			for _, model in pairs(env.stuf.roomfolder:GetChildren()) do
+				addblothand(model)
+			end
+			esphandler.twistedobstacle.blotconn = env.stuf.roomfolder.ChildAdded:Connect(addblothand)
 		end
 	end)
 end
