@@ -414,8 +414,8 @@ local function setupplayeresp(state)
 	end)
 end
 
-local function yield(getter)
-	repeat t() until getter()
+local function yield(this)
+	repeat t() until this()
 end
 
 local function setuptwistedesp(state)
