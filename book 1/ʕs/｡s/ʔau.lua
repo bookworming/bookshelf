@@ -71,6 +71,7 @@ local autoteleporttoelevatorenabled = false
 function getelevatorcframe(ele, nearshop)
 	local placednearshop = ele.CFrame * CFrame.new(-6, -10.5, 0) * CFrame.Angles(0, math.rad(-90), 0)
 	local center = ele.CFrame * CFrame.new(0, -10.5, 0) * CFrame.Angles(0, math.rad(-90), 0)
+	
 	return nearshop and placednearshop or center
 end
 
@@ -122,7 +123,7 @@ local function autoteleporttoelevator(state)
 
 		local condition = autoteleporttoelevatorconditions
 
-		if condition == "Instant" then
+		if condition == "Instant" or not condition then
 			toelevator(nil, "tp")
 
 		elseif condition == "Everyone at elevator" then
