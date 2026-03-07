@@ -4,7 +4,7 @@
 ⠀⢰⣿⣿⠀⠀⠀⢻⣿⠀⠀⣿⣿⡆
 ⠀⢸⣿⣿⠀⠀⠀⠀⢻⠀⠀⣿⣿⡇⠀⠀Team Noxious
 ⠀⢸⣿⣿⠀⠀⡀⠀⠈⠀⠀⣿⣿⡇⠀⠀Boxten Sex GUI | Developed by unable
-⠀⢸⣿⣿⠀⠀⣧⠀⠀⠀⠀⣿⣿⡇⠀:: "Visuals section"
+⠀⢸⣿⣿⠀⠀⣧⠀⠀⠀⠀⣿⣿⡇⠀⠀:: "Visuals section"
 ⠀⠸⣿⣿⠀⠀⣿⣧⠀⠀⠀⣿⣿⠇
 ⠀⠀⠀⠉⠀⠀⣿⣿⣇⠀⠀⠉
 ⠀⠀⠀⠀⠀⠀⠉⠛⠉
