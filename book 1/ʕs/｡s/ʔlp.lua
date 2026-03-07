@@ -694,7 +694,7 @@ end
 -------------------------------------------------------------------------------------------------------------------------------
 
 local function forcequitmachine()
-	local decoding = env.funcs.getstats("player", env.stuf.char, "extracting")
+	local decoding = env.funcs.getstats("player", env.stuf.char).extracting
 	if decoding ~= nil then
 		decoding.Stats.StopInteracting:FireServer("Stop")
 	end
@@ -745,7 +745,7 @@ local pushauraconns = {}
 local function makepushaura(monster)
 	if activepushauras[monster] then return end
 
-	local anchorPart = env.funcs.getstats("twisted", monster, "troot")
+	local anchorPart = env.funcs.getstats("twisted", monster).troot
 	if not anchorPart then return end
 
 	local aura = Instance.new("Part")
@@ -908,7 +908,7 @@ local function gettwisroots()
 
 	if env.stuf.twisteds then
 		for _, monster in ipairs(env.stuf.twisteds:GetChildren()) do
-			local root = table.insert(roots, env.funcs.getstats("twisted", monster, "troot"))
+			local root = table.insert(roots, env.funcs.getstats("twisted", monster).troot)
 			if isvalidpart(root) then
 				table.insert(roots, root)
 			end
@@ -978,7 +978,7 @@ local function antigrab(state)
 		antigrabconn = rst.StoryEvents.Spotted.OnClientEvent:Connect(function()
 			for _, twisted in env.stuf.twisteds do
 				if twisted.Name:find("Goob") or twisted.Name:find("Gigi") or twisted.Name:find("Scraps") then
-					if env.funcs.getstats("twisted", twisted, "chasing") == env.stuf.user then
+					if env.funcs.getstats("twisted", twisted).chasing == env.stuf.user then
 						local now = os.clock()
 						antigrabdb = now
 
@@ -1229,7 +1229,7 @@ function encountertwisteds()
 				elseif not mname:find("razzle") and not mname:find("rodger") then
 					local starttime = tick()
 					while tick() - starttime < 0.3 do
-						if env.funcs.getstats("twisted", monster, "troot") then
+						if env.funcs.getstats("twisted", monster).troot then
 							local foff = (mname:find("dandy") or mname:find("dyle") or mname:find("pebble")) and -28 or -18
 							local targetcf = CFrame.new(
 								monster.HumanoidRootPart.Position - monster.HumanoidRootPart.CFrame.LookVector * foff,
@@ -1683,10 +1683,9 @@ local function machineaura(state)
 		while machineauraenabled do
 			if env.stuf.machines then
 				for _, machine in ipairs(env.stuf.machines:GetChildren()) do
-					local stats = env.funcs.getstats("machine", machine)
-					local possessed = stats[4]
-					local hasprogress = stats[5] ~= 0.1
-					local machinetype = stats[7]
+					local possessed = env.funcs.getstats("machine", machine).possessed
+					local hasprogress = env.funcs.getstats("machine", machine).amount ~= 0.1
+					local machinetype = env.funcs.getstats("machine", machine).machtype
 
 					local conditions = machineauraconditions
 					if #conditions > 0 then
