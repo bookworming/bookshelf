@@ -1,12 +1,13 @@
 --[[---------------------------------------------------------------------------------------------------------------------------
-  __   __     ______     __  __     __     ______     __  __     ______    
- /\ "-.\ \   /\  __ \   /\_\_\_\   /\ \   /\  __ \   /\ \/\ \   /\  ___\   
- \ \ \-.  \  \ \ \/\ \  \/_/\_\/_  \ \ \  \ \ \/\ \  \ \ \_\ \  \ \___  \  
-  \ \_\\"\_\  \ \_____\   /\_\/\_\  \ \_\  \ \_____\  \ \_____\  \/\_____\ 
-   \/_/ \/_/   \/_____/   \/_/\/_/   \/_/   \/_____/   \/_____/   \/_____/
-   
-   Made by Team Noxious -- Boxten Sex GUI
-   
+⠀⠀⠀⠀⠀⠀⣀⣤⣀
+⠀⠀⠀⣀⠀⠀⢹⣿⣿⠀⠀⣀
+⠀⢰⣿⣿⠀⠀⠀⢻⣿⠀⠀⣿⣿⡆
+⠀⢸⣿⣿⠀⠀⠀⠀⢻⠀⠀⣿⣿⡇⠀⠀Team Noxious
+⠀⢸⣿⣿⠀⠀⡀⠀⠈⠀⠀⣿⣿⡇⠀⠀Boxten Sex GUI | Developed by unable
+⠀⢸⣿⣿⠀⠀⣧⠀⠀⠀⠀⣿⣿⡇⠀⠀:: "Loader"
+⠀⠸⣿⣿⠀⠀⣿⣧⠀⠀⠀⣿⣿⠇
+⠀⠀⠀⠉⠀⠀⣿⣿⣇⠀⠀⠉
+⠀⠀⠀⠀⠀⠀⠉⠛⠉
 ---------------------------------------------------------------------------------------------------------------------------]]--
 
 if not game:IsLoaded() then game.Loaded:Wait() end local t = task.wait
@@ -16,8 +17,6 @@ if not game:IsLoaded() then game.Loaded:Wait() end local t = task.wait
    TODO:
    when finally done with the script refactorment or whatever make sure to finalize by reformatting some of the variables in all of the
    combined scripts for optimization (plus its very dirty)
-   
-   dont forget to obfuscate : )
 
 ---------------------------------------------------------------------------------------------------------------------------]]--
 
@@ -29,7 +28,6 @@ local randstring = function() local s = "" for i = 1, math.random(8, 15) do if m
 local getins = getmmfromerr(game, function(a,b) return a[b] end, function(f) local a = Instance.new("Folder") local b = randstring() a.Name = b return f(a, "Name") == b end)
 local FindFirstChildOfClass = getins(game, "FindFirstChildOfClass") 
 
-local plrs = FindFirstChildOfClass(game, "Players")
 local rs = game:GetService("RunService")
 local ls = FindFirstChildOfClass(game, "LogService")
 local uis = FindFirstChildOfClass(game, "UserInputService")
@@ -44,8 +42,6 @@ local isfolder = (syn and syn.isfolder) or isfolder
 local makefolder = (syn and syn.makefolder) or makefolder
 
 local folder = "Bоxten Sеx GUI"
-local mobile = uis.TouchEnabled
-local debugmode = true
 
 -------------------------------------------------------------------------------------------------------------------------------
 
@@ -103,6 +99,8 @@ local function bottomleft(text, log)
 	if not env.essentials.sgui then repeat t() until env.essentials.sgui end
 	if not env.gear.general.debugmode then return end
 
+	text = text:gsub("%s*\n%s*", " ")
+
 	env.essentials.debugger.logcount = env.essentials.debugger.logcount + 1
 	local col = Color3.fromRGB(255, 255, 255)
 	if log then
@@ -133,21 +131,13 @@ local function bottomleft(text, log)
 	border.Color = Color3.fromRGB(0, 0, 0)
 
 	task.delay(5, function()
-		local tween = ts:Create(debuglog, TweenInfo.new(0.6, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {TextTransparency = 1, BackgroundTransparency = 1}):Play()
+		ts:Create(debuglog, TweenInfo.new(0.6, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {TextTransparency = 1, BackgroundTransparency = 1}):Play()
+		ts:Create(border, TweenInfo.new(0.6, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Transparency = 1}):Play()
 		d:AddItem(debuglog, 0.6)
 	end)
 end
 
 spwn(function()
-	for _, entry in ipairs(ls:GetLogHistory()) do
-		local prefix = ({
-			[Enum.MessageType.MessageInfo]    = "info",
-			[Enum.MessageType.MessageWarning] = "warn",
-			[Enum.MessageType.MessageError]   = "err",
-		})[entry.messageType] or ""
-		bottomleft(entry.message, prefix)
-	end
-
 	ls.MessageOut:Connect(function(message, messageType)
 		local prefix = ({
 			[Enum.MessageType.MessageInfo]    = "info",
@@ -222,8 +212,6 @@ local function loadintro()
 		local baseScale = env.gear.general.buttonscale or 1
 		scale.Scale = baseScale
 
-		local hover = TweenInfo.new(0.12, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
-		local press = TweenInfo.new(0.08, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
 		local currenttween
 		local function scaleTo(v, info)
 			if currenttween then currenttween:Cancel() end
@@ -248,7 +236,6 @@ local function loadintro()
 
 		local hover = TweenInfo.new(0.12, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
 		local press = TweenInfo.new(0.08, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
-		local currenttween
 
 		togglebutton.AnchorPoint = Vector2.new(0.5, 0.5)
 		togglebutton.Position = UDim2.new(0.5, 0, 0, 100)
@@ -276,7 +263,7 @@ local function loadintro()
 
 	local js = Instance.new("Frame")
 	js.Parent, js.AnchorPoint, js.BackgroundTransparency = env.essentials.sgui, Vector2.new(0.5, 0.5), 1
-	js.Size, js.Position, js.ZIndex = UDim2.new(1, 1, 2, 0), UDim2.new(0.5, 0, 0.5, -1), 100001
+	js.Size, js.Position, js.ZIndex = UDim2.new(1, 1, 2, 0), UDim2.fromOffset(env.stuf.cam.ViewportSize.X / 2, (env.stuf.cam.ViewportSize.Y / 2) - 56), 100001
 
 	local aspect = Instance.new("UIAspectRatioConstraint")
 	aspect.AspectRatio, aspect.DominantAxis, aspect.Parent = 1.5, Enum.DominantAxis.Height, js
