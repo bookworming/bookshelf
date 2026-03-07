@@ -163,7 +163,7 @@ function tomachine(method)
 			local info = env.funcs.getstats("machine", generator)
 			local pos = generator.PrimaryPart.Position
 
-			if not info.completed and not info.possessed then
+			if not info[3] and not info[4] then
 				local cantgothere = false
 
 				for _, obj in ipairs(env.stuf.currentroom:GetChildren()) do
@@ -189,8 +189,8 @@ function tomachine(method)
 				for _, monster in ipairs(env.stuf.twisteds:GetChildren()) do
 					if monster:IsA("Model") then
 						local twistedinfo = env.funcs.getstats("twisted", monster)
-						local twis = twistedinfo.name
-						local twisroot = twistedinfo.troot
+						local twis = twistedinfo[1]
+						local twisroot = twistedinfo[2]
 
 						if not twisroot then continue end
 
@@ -214,7 +214,7 @@ function tomachine(method)
 				if not cantgothere then
 					table.insert(good, {
 						model = generator,
-						progress = info.amount
+						progress = info[5]
 					})
 				end
 			end
@@ -226,7 +226,7 @@ function tomachine(method)
 			return a.progress > b.progress
 		end)
 
-		env.funcs.moveplr(env.funcs.getstats("machine", good[1].model).pos, method)
+		env.funcs.moveplr(env.funcs.getstats("machine", good[1].model, "pos"), method)
 	else
 		env.funcs.pop("No available generators found!")
 	end
