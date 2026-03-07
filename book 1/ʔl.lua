@@ -69,25 +69,25 @@ env.expectedcompiledscriptversions = {
 -------------------------------------------------------------------------------------------------------------------------------
 
 -- debugger setup
-env.essentials.debugger = {}
-local logcount = 0
+local debugger = {}
+debugger.logcount = 0
 
-env.essentials.debugger.sgui = Instance.new("ScreenGui")
-env.essentials.debugger.sgui.ResetOnSpawn = false
-env.essentials.debugger.sgui.Parent = hiddenui
+debugger.sgui = Instance.new("ScreenGui")
+debugger.sgui.ResetOnSpawn = false
+debugger.sgui.Parent = hiddenui
 
-env.essentials.debugger.container = Instance.new("Frame")
-env.essentials.debugger.container.Size = UDim2.new(0, 420, 0, 300)
-env.essentials.debugger.container.Position = UDim2.new(1, -425, 1, -5)
-env.essentials.debugger.container.AnchorPoint = Vector2.new(0, 1)
-env.essentials.debugger.container.BackgroundTransparency = 1
-env.essentials.debugger.container.Parent = env.essentials.debugger.sgui
+debugger.container = Instance.new("Frame")
+debugger.container.Size = UDim2.new(0, 420, 0, 300)
+debugger.container.Position = UDim2.new(1, -425, 1, -5)
+debugger.container.AnchorPoint = Vector2.new(0, 1)
+debugger.container.BackgroundTransparency = 1
+debugger.container.Parent = debugger.sgui
 
-env.essentials.debugger.containerlayout = Instance.new("UIListLayout")
-env.essentials.debugger.containerlayout.Parent = env.essentials.debugger.container
-env.essentials.debugger.containerlayout.SortOrder = Enum.SortOrder.LayoutOrder
-env.essentials.debugger.containerlayout.VerticalAlignment = Enum.VerticalAlignment.Bottom
-env.essentials.debugger.containerlayout.Padding = UDim.new(0, 1)
+debugger.containerlayout = Instance.new("UIListLayout")
+debugger.containerlayout.Parent = debugger.container
+debugger.containerlayout.SortOrder = Enum.SortOrder.LayoutOrder
+debugger.containerlayout.VerticalAlignment = Enum.VerticalAlignment.Bottom
+debugger.containerlayout.Padding = UDim.new(0, 1)
 
 local tagformats = {
 	{pattern = "^%[Boxten%]: ",  tag = "[Boxten]:",  rgb = "rgb(175, 52, 209)"},
@@ -112,7 +112,7 @@ local function bottomleft(text, log)
 		end
 	end
 
-	logcount = logcount + 1
+	debugger.logcount = debugger.logcount + 1
 	local col = Color3.fromRGB(255, 255, 255)
 	if log then
 		if log == "warn" then 
@@ -133,9 +133,9 @@ local function bottomleft(text, log)
 	debuglog.TextSize = 10
 	debuglog.RichText = true
 	debuglog.Text = text
-	debuglog.LayoutOrder = logcount
+	debuglog.LayoutOrder = debugger.logcount
 	debuglog.TextTruncate = Enum.TextTruncate.AtEnd
-	debuglog.Parent = env.essentials.debugger.container
+	debuglog.Parent = debugger.container
 
 	local border = Instance.new("UIStroke")
 	border.Parent = debuglog
