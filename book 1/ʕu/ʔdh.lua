@@ -212,6 +212,7 @@ local function newdialogue(text, whosaidit, expression)
 
 		local expressionset = name and expressions[name]
 		local image = expressionset and expressionset[expression]
+		print(image or "no")
 
 		if image and image ~= "placeholder" then
 			local iconsize = 25
