@@ -437,6 +437,7 @@ do
 		-- script adjustments
 		ignoreresearchcompleted = true,
 		itemtpposyoffset = -2.5,
+		forcequitwhenteleportingtomach = false,
 
 		-- blacklists
 		encountertwistedblacklist = {},
