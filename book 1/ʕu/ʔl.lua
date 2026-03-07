@@ -198,83 +198,6 @@ function lib.gettextbounds(text, font, size, res)
 	return bounds.X, bounds.Y
 end
 
-function resolvetargets(i)
-	local t = {}
-	if not i or (type(i) == "string" and i:match("^%s*$")) then return {env.stuf.plr} end
-
-	local targets = {}
-
-	if type(i) == "string" then
-		for part in i:gmatch("[^,]+") do
-			local trimmed = part:match("^%s*(.-)%s*$")
-			if trimmed ~= "" then
-				table.insert(targets, trimmed:lower())
-			end
-		end
-
-	elseif type(i) == "table" then
-		for _, part in ipairs(i) do
-			if typeof(part) == "string" then
-				local trimmed = part:match("^%s*(.-)%s*$")
-				if trimmed ~= "" then
-					table.insert(targets, trimmed:lower())
-				end
-			end
-		end
-
-	else
-		return {env.stuf.plr}
-	end
-
-	local added = {}
-	local function add(player)
-		if player and not added[player] then
-			table.insert(t, player)
-			added[player] = true
-		end
-	end
-
-	for _, part in ipairs(targets) do
-		if part == "me" then
-			add(env.stuf.plr)
-
-		elseif part == "random" then
-			local all = plrs:GetPlayers()
-			if #all > 0 then
-				add(all[math.random(1, #all)])
-			end
-
-		elseif part == "others" then
-			for _, otherplr in ipairs(plrs:GetPlayers()) do
-				if otherplr ~= env.stuf.plr then
-					add(otherplr)
-				end
-			end
-
-		elseif part == "all" then
-			for _, otherplr in ipairs(plrs:GetPlayers()) do
-				add(otherplr)
-			end
-
-		elseif part == "nonfriends" then
-			for _, otherplr in ipairs(plrs:GetPlayers()) do
-				if otherplr ~= env.stuf.plr and not env.stuf.plr:IsFriendsWith(otherplr.UserId) then
-					add(otherplr)
-				end
-			end
-
-		elseif part == "friends" then
-			for _, otherplr in ipairs(plrs:GetPlayers()) do
-				if otherplr ~= env.stuf.plr and env.stuf.plr:IsFriendsWith(otherplr.UserId) then
-					add(otherplr)
-				end
-			end
-		end
-	end
-
-	return t
-end
-
 -------------------------------------------------------------------------------------------------------------------------------
 
 -- ui functions
@@ -2233,7 +2156,7 @@ function lib.addinput(parent, title, description, defaulttext, placeholdertext, 
 
 			local currentText = inputbox.Text
 			if not currentText:find(",") then
-				local resolved = resolvetargets(currentText)
+				local resolved = env.funcs.resolvetargets(currentText)
 
 				if #resolved == 1 and resolved[1] ~= env.stuf.plr then
 					local targetPlayer = resolved[1]
@@ -2346,7 +2269,7 @@ function lib.addinputandtoggle(parent, title, description, defaulttext, placehol
 
 			local currentText = inputbox.Text
 			if not currentText:find(",") then
-				local resolved = resolvetargets(currentText)
+				local resolved = env.funcs.resolvetargets(currentText)
 				if #resolved == 1 and resolved[1] ~= env.stuf.plr then
 					local targetPlayer = resolved[1]
 					if targetPlayer.Name:lower():sub(1, #currentText) == currentText:lower() then
@@ -2896,7 +2819,7 @@ function lib.addinputandbutton(parent, title, description, defaulttext, placehol
 
 			local currentText = inputbox.Text
 			if not currentText:find(",") then
-				local resolved = resolvetargets(currentText)
+				local resolved = env.funcs.resolvetargets(currentText)
 				if #resolved == 1 and resolved[1] ~= env.stuf.plr then
 					local targetPlayer = resolved[1]
 					if targetPlayer.Name:lower():sub(1, #currentText) == currentText:lower() then
