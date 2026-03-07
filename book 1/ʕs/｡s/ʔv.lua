@@ -566,11 +566,11 @@ local function setuptwistedobstacleesp(state)
 			end
 			esphandler.twistedobstacle.conn = env.stuf.freearea.ChildAdded:Connect(addobstacle)
 
-			yield(function() return env.stuf.roomfolder end)
-			for _, model in pairs(env.stuf.roomfolder:GetChildren()) do
+			yield(function() return env.stuf.currentroom end)
+			for _, model in pairs(env.stuf.currentroom:GetChildren()) do
 				addblothand(model)
 			end
-			esphandler.twistedobstacle.blotconn = env.stuf.roomfolder.ChildAdded:Connect(addblothand)
+			esphandler.twistedobstacle.blotconn = env.stuf.currentroom.ChildAdded:Connect(addblothand)
 		end
 	end)
 end
