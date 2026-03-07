@@ -436,13 +436,13 @@ function setuppcinfstam()
 
 	table.insert(infinitestaminaconnections, uis.InputBegan:Connect(function(input, gameProcessed)
 		if input.KeyCode == Enum.KeyCode.LeftShift and not gameProcessed then
-			infstamsprinting()
+			env.funcs.infstamsprinting()
 		end
 	end))
 
 	table.insert(infinitestaminaconnections, uis.InputEnded:Connect(function(input)
 		if input.KeyCode == Enum.KeyCode.LeftShift then
-			infstamwalking()
+			env.funcs.infstamwalking()
 		end
 	end))
 end
@@ -464,9 +464,9 @@ function setupmobileinfstam()
 
 	table.insert(infinitestaminaconnections, clonedButton.MouseButton1Click:Connect(function()
 		if infinitestaminasprinttoggled then
-			infstamwalking()
+			env.funcs.infstamwalking()
 		else
-			infstamsprinting()
+			env.funcs.infstamsprinting()
 		end
 	end))
 end
