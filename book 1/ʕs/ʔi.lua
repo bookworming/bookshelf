@@ -979,7 +979,7 @@ do
 		return exists
 	end
 
-	function env.funcs.getstats(type, obj, key)
+	function env.funcs.getstats(type, obj, key) -- gets the target stat of the object
 		if not obj:IsA("Model") then env.funcs.shr("INVALID OBJECT, IDIOT!!!") end
 		local name = obj.Name
 
@@ -1004,12 +1004,6 @@ do
 			end
 
 			result = {floorname, twistedsonfloor, itemsonfloor, hasdialoguetriggers}
-			keymap = {
-				floorname            = 1,
-				twistedsonfloor      = 2,
-				itemsonfloor         = 3,
-				hasdialoguetriggers  = 4,
-			}
 
 		elseif type == "item" then
 			local prompt = obj:FindFirstChild("Prompt")
@@ -1021,10 +1015,6 @@ do
 			end
 
 			result = {act, research}
-			keymap = {
-				act      = 1,
-				research = 2,
-			}
 
 		elseif type == "machine" then
 			local stats = obj:FindFirstChild("Stats")
@@ -1047,15 +1037,6 @@ do
 			end
 
 			result = {pos, active, completed, possessed, amount, required, machtype}
-			keymap = {
-				pos       = 1,
-				active    = 2,
-				completed = 3,
-				possessed = 4,
-				amount    = 5,
-				required  = 6,
-				machtype  = 7,
-			}
 
 		elseif type == "twisted" then
 			local name = obj.Name
@@ -1087,23 +1068,6 @@ do
 			if not tr then research = 0 else research = tr.Value end
 
 			result = {name, troot, alerted, research, hearingrad, intrestrad, hitboxrad, visionrad, intresttime, LoS, hitcooldown, chasing, ischasing, hasability, usingability}
-			keymap = {
-				name         = 1,
-				troot        = 2,
-				alerted      = 3,
-				research     = 4,
-				hearingrad   = 5,
-				intrestrad   = 6,
-				hitboxrad    = 7,
-				visionrad    = 8,
-				intresttime  = 9,
-				LoS          = 10,
-				hitcooldown  = 11,
-				chasing      = 12,
-				ischasing    = 13,
-				hasability   = 14,
-				usingability = 15,
-			}
 
 		elseif type == "player" then
 			local inserver = plrs:FindFirstChild(obj.Name)
@@ -1157,41 +1121,6 @@ do
 			end
 
 			result = {currentstealth, twistedschasing, currenttoon, inserver, ins, dead, left, capsulespickedup, itemspickedup, machinescompleted, ichorearned, twistedsencountered, tapescollected, toonpicked, slot1, slot2, slot3, slot4, trinket1, trinket2, extracting, icon, abilitycooldown, currentabilitycooldown}
-			keymap = {
-				currentstealth        = 1,
-				twistedschasing       = 2,
-				currenttoon           = 3,
-				inserver              = 4,
-				ins                   = 5,
-				dead                  = 6,
-				left                  = 7,
-				capsulespickedup      = 8,
-				itemspickedup         = 9,
-				machinescompleted     = 10,
-				ichorearned           = 11,
-				twistedsencountered   = 12,
-				tapescollected        = 13,
-				toonpicked            = 14,
-				slot1                 = 15,
-				slot2                 = 16,
-				slot3                 = 17,
-				slot4                 = 18,
-				trinket1              = 19,
-				trinket2              = 20,
-				extracting            = 21,
-				icon                  = 22,
-				abilitycooldown       = 23,
-				currentabilitycooldown = 24,
-			}
-
-			if key then
-				local index = keymap and keymap[key]
-				if not index then
-					env.funcs.shr("INVALID KEY \"" .. tostring(key) .. "\" FOR TYPE \"" .. type .. "\"")
-					return nil
-				end
-				return result[index]
-			end
 
 			return result
 		end
