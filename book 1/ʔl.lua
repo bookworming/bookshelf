@@ -89,11 +89,28 @@ env.essentials.debugger.containerlayout.SortOrder = Enum.SortOrder.LayoutOrder
 env.essentials.debugger.containerlayout.VerticalAlignment = Enum.VerticalAlignment.Bottom
 env.essentials.debugger.containerlayout.Padding = UDim.new(0, 1)
 
+local tagformats = {
+	{pattern = "^%[Boxten%]: ",  tag = "[Boxten]:",  rgb = "rgb(175, 52, 209)"},
+	{pattern = "^%[Poppy%]: ",   tag = "[Poppy]:",   rgb = "rgb(112, 234, 255)"},
+	{pattern = "^%[Shrimpo%]: ", tag = "[Shrimpo]:", rgb = "rgb(255, 182, 72)"},
+}
+
 local function bottomleft(text, log)
 	if not env.essentials.sgui then repeat t() until env.essentials.sgui end
 	if not env.gear.general.debugmode then return end
 
 	text = text:gsub("%s*\n%s*", " ")
+
+	for _, entry in ipairs(tagformats) do
+		if text:match(entry.pattern) then
+			local rest = text:gsub(entry.pattern, "")
+			text = string.format(
+				"<font color=\"%s\">%s</font> <font color=\"rgb(255, 255, 255)\">%s</font>",
+				entry.rgb, entry.tag, rest
+			)
+			break
+		end
+	end
 
 	env.essentials.debugger.logcount = env.essentials.debugger.logcount + 1
 	local col = Color3.fromRGB(255, 255, 255)
@@ -114,6 +131,7 @@ local function bottomleft(text, log)
 	debuglog.TextXAlignment = Enum.TextXAlignment.Right
 	debuglog.Font = Enum.Font.FredokaOne
 	debuglog.TextSize = 10
+	debuglog.RichText = true
 	debuglog.Text = text
 	debuglog.LayoutOrder = env.essentials.debugger.logcount
 	debuglog.TextTruncate = Enum.TextTruncate.AtEnd
