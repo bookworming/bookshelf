@@ -1,25 +1,18 @@
 --[[---------------------------------------------------------------------------------------------------------------------------
-  __   __     ______     __  __     __     ______     __  __     ______    
- /\ "-.\ \   /\  __ \   /\_\_\_\   /\ \   /\  __ \   /\ \/\ \   /\  ___\   
- \ \ \-.  \  \ \ \/\ \  \/_/\_\/_  \ \ \  \ \ \/\ \  \ \ \_\ \  \ \___  \  
-  \ \_\\"\_\  \ \_____\   /\_\/\_\  \ \_\  \ \_____\  \ \_____\  \/\_____\ 
-   \/_/ \/_/   \/_____/   \/_/\/_/   \/_/   \/_____/   \/_____/   \/_____/
-   
-   Made by Team Noxious -- Boxten Sex GUI [Automation section]
-   
+⠀⠀⠀⠀⠀⠀⣀⣤⣀
+⠀⠀⠀⣀⠀⠀⢹⣿⣿⠀⠀⣀
+⠀⢰⣿⣿⠀⠀⠀⢻⣿⠀⠀⣿⣿⡆
+⠀⢸⣿⣿⠀⠀⠀⠀⢻⠀⠀⣿⣿⡇⠀⠀Team Noxious
+⠀⢸⣿⣿⠀⠀⡀⠀⠈⠀⠀⣿⣿⡇⠀⠀Boxten Sex GUI | Developed by unable
+⠀⢸⣿⣿⠀⠀⣧⠀⠀⠀⠀⣿⣿⡇⠀:: "Automation section"
+⠀⠸⣿⣿⠀⠀⣿⣧⠀⠀⠀⣿⣿⠇
+⠀⠀⠀⠉⠀⠀⣿⣿⣇⠀⠀⠉
+⠀⠀⠀⠀⠀⠀⠉⠛⠉
 ---------------------------------------------------------------------------------------------------------------------------]]--
 
 local version = 2
 
---[[---------------------------------------------------------------------------------------------------------------------------
-
-   TODO:
-   make an auto distract thing that can be useful for autofarming with alts that makes the player move upward to gather every single twisted and then
-   utilize pathfinding in order to move the twisteds into one enclosed spot
-   
-   havent tested this yet but using the click indicators for skillchecks can also be used to auto calibrate (more optimized?)
-
----------------------------------------------------------------------------------------------------------------------------]]--
+-------------------------------------------------------------------------------------------------------------------------------
 
 -- services & instances
 local t, spwn = task.wait, task.spawn
