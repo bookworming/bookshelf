@@ -1700,12 +1700,7 @@ local function machineaura(state)
 						end
 					end
 
-					for _, v in ipairs(machine:GetDescendants()) do
-						if v:IsA("ProximityPrompt") and v.Enabled then
-							fireproximityprompt(v)
-							break
-						end
-					end
+					fireproximityprompt(machine:FindFirstChild("Prompt"):FindFirstChild("Attachment"):FindFirstChild("ProximityPrompt"))
 				end
 			end
 			t()
