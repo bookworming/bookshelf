@@ -1055,7 +1055,7 @@ do
 			local ischasing = chasing.Value ~= nil
 
 			local hasability = obj:FindFirstChild("Grabbing")
-			local usingability = hasability.Value
+			local usingability = hasability and hasability.Value
 			local alerted = obj:GetAttribute("Alerted")
 
 			local research = rst:FindFirstChild("PlayerData"):FindFirstChild(env.stuf.plrid):FindFirstChild("Research"):FindFirstChild(name).Value
