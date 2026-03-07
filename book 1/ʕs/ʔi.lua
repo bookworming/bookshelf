@@ -934,7 +934,7 @@ do
 
 					local toon = nil
 					if otherplr.Character then
-						toon = env.funcs.getstats("player", otherplr.Character).currenttoon
+						toon = env.funcs.getstats("player", otherplr.Character, "currenttoon")
 					end
 
 					local toonmatch = toon and toon:lower():find(part, 1, true)
@@ -979,9 +979,11 @@ do
 		return exists
 	end
 
-	function env.funcs.getstats(type, obj) -- returns a table full of the target objects stats, can fetch the floor, item, machine, twisted, and another players stats
+	function env.funcs.getstats(type, obj, key)
 		if not obj:IsA("Model") then env.funcs.shr("INVALID OBJECT, IDIOT!!!") end
 		local name = obj.Name
+
+		local result, keymap
 
 		if type == "floor" then
 			local floorname = env.stuf.currentroom.Name
@@ -1001,19 +1003,28 @@ do
 				end
 			end
 
-			return {floorname, twistedsonfloor, itemsonfloor, hasdialoguetriggers}
+			result = {floorname, twistedsonfloor, itemsonfloor, hasdialoguetriggers}
+			keymap = {
+				floorname            = 1,
+				twistedsonfloor      = 2,
+				itemsonfloor         = 3,
+				hasdialoguetriggers  = 4,
+			}
 
 		elseif type == "item" then
 			local prompt = obj:FindFirstChild("Prompt")
 			local act = prompt:FindFirstChildOfClass("ProximityPrompt")
 
+			local research
 			if name == "ResearchCapsule" then 
-				local research = prompt:FindFirstChild("Monster").Value
-
-				return {act, research}
+				research = prompt:FindFirstChild("Monster").Value
 			end
 
-			return {act}
+			result = {act, research}
+			keymap = {
+				act      = 1,
+				research = 2,
+			}
 
 		elseif type == "machine" then
 			local stats = obj:FindFirstChild("Stats")
@@ -1035,7 +1046,16 @@ do
 				machtype = "normal"
 			end
 
-			return {pos, active, completed, possessed, amount, required, machtype}
+			result = {pos, active, completed, possessed, amount, required, machtype}
+			keymap = {
+				pos       = 1,
+				active    = 2,
+				completed = 3,
+				possessed = 4,
+				amount    = 5,
+				required  = 6,
+				machtype  = 7,
+			}
 
 		elseif type == "twisted" then
 			local name = obj.Name
@@ -1063,7 +1083,24 @@ do
 
 			local research = rst:FindFirstChild("PlayerData"):FindFirstChild(env.stuf.plrid):FindFirstChild("Research"):FindFirstChild(name).Value
 
-			return {name, troot, alerted, research, hearingrad, intrestrad, hitboxrad, visionrad, intresttime, LoS, hitcooldown, chasing, ischasing, hasability, usingability}
+			result = {name, troot, alerted, research, hearingrad, intrestrad, hitboxrad, visionrad, intresttime, LoS, hitcooldown, chasing, ischasing, hasability, usingability}
+			keymap = {
+				name         = 1,
+				troot        = 2,
+				alerted      = 3,
+				research     = 4,
+				hearingrad   = 5,
+				intrestrad   = 6,
+				hitboxrad    = 7,
+				visionrad    = 8,
+				intresttime  = 9,
+				LoS          = 10,
+				hitcooldown  = 11,
+				chasing      = 12,
+				ischasing    = 13,
+				hasability   = 14,
+				usingability = 15,
+			}
 
 		elseif type == "player" then
 			local inserver = plrs:FindFirstChild(obj.Name)
@@ -1116,7 +1153,44 @@ do
 				end
 			end
 
-			return {currentstealth, twistedschasing, currenttoon, inserver, ins, dead, left, capsulespickedup, itemspickedup, machinescompleted, ichorearned, twistedsencountered, tapescollected, toonpicked, slot1, slot2, slot3, slot4, trinket1, trinket2, extracting, icon, abilitycooldown, currentabilitycooldown}
+			result = {currentstealth, twistedschasing, currenttoon, inserver, ins, dead, left, capsulespickedup, itemspickedup, machinescompleted, ichorearned, twistedsencountered, tapescollected, toonpicked, slot1, slot2, slot3, slot4, trinket1, trinket2, extracting, icon, abilitycooldown, currentabilitycooldown}
+			keymap = {
+				currentstealth        = 1,
+				twistedschasing       = 2,
+				currenttoon           = 3,
+				inserver              = 4,
+				ins                   = 5,
+				dead                  = 6,
+				left                  = 7,
+				capsulespickedup      = 8,
+				itemspickedup         = 9,
+				machinescompleted     = 10,
+				ichorearned           = 11,
+				twistedsencountered   = 12,
+				tapescollected        = 13,
+				toonpicked            = 14,
+				slot1                 = 15,
+				slot2                 = 16,
+				slot3                 = 17,
+				slot4                 = 18,
+				trinket1              = 19,
+				trinket2              = 20,
+				extracting            = 21,
+				icon                  = 22,
+				abilitycooldown       = 23,
+				currentabilitycooldown = 24,
+			}
+
+			if key then
+				local index = keymap and keymap[key]
+				if not index then
+					env.funcs.shr("INVALID KEY \"" .. tostring(key) .. "\" FOR TYPE \"" .. type .. "\"")
+					return nil
+				end
+				return result[index]
+			end
+
+			return result
 		end
 	end
 
@@ -1138,19 +1212,18 @@ do
 		return stat and gamestats[stat:lower()] or gamestats
 	end
 
-	function env.funcs.useitem(slot, breakifoneused) -- makes the user use an item from the specified slot, if "all" is specified, it uses all the items, but if breakifoneused is true then it stops the recursive slot loop when an item gets used
+	function env.funcs.useitem(slot, breakifoneused)
 		if slot == "all" then
 			for i = 1, 4 do
 				local slotn = "slot" .. i
-
-				local inventory = env.funcs.getstats("player", env.stuf.char)
-				if inventory[slotn] ~= "None" then
-
+				local slotvalue = env.funcs.getstats("player", env.stuf.char, slotn)
+				
+				if slotvalue ~= "None" then
 					rst.Events.ItemEvent:InvokeServer(env.stuf.char, slotn)
-
+					
 					if breakifoneused then
-						local new = env.funcs.getstats("player", env.stuf.char)
-						if new[slotn] == "None" then
+						local newslotvalue = env.funcs.getstats("player", env.stuf.char, slotn)
+						if newslotvalue == "None" then
 							break
 						end
 					end
