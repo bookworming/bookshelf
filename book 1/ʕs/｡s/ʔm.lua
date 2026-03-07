@@ -177,7 +177,7 @@ local section = {
 		discommanddesc = "Shows the toggle button",
 
 		callback = function(state) 
-			togglebutton.Visible = not state
+			env.stuf.togglebutton.Visible = not state
 		end
 	},
 	{ type = "button", title = "Destroy interface", desc = "Destroys the interface.",
