@@ -188,9 +188,9 @@ function tomachine(method)
 
 				for _, monster in ipairs(env.stuf.twisteds:GetChildren()) do
 					if monster:IsA("Model") then
-						local info = env.funcs.getstats("twisted", monster)
-						local twis = info.name
-						local twisroot = info.troot
+						local twistedinfo = env.funcs.getstats("twisted", monster)
+						local twis = twistedinfo.name
+						local twisroot = twistedinfo.troot
 
 						if not twisroot then continue end
 
