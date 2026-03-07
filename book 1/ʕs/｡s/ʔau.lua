@@ -623,20 +623,6 @@ local section = {
 		callback = function(selected) 
 		end 
 	},
-	{ type = "toggle", title = "Force stop extraction when teleporting to machine", desc = "Forcefully quits machine extraction when teleporting to a random generator.",
-		commandcat = "Automation",
-
-		encommands = {"enableautoforcequitmachine"},
-		enaliases = {"eafqm"},
-		encommanddesc = "Enables auto force quit machine",
-
-		discommands = {"disableautoforcequitmachine"},
-		disaliases = {"dafqm"},
-		discommanddesc = "Disables auto force quit machine",
-
-		callback = function(state) 
-		end
-	},
 
 	{ type = "separator", title = "Player" },
 	{ type = "toggle", title = "Auto machine calibration", desc = "Automatically completes skillchecks for regular machines.",
