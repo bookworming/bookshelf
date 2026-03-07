@@ -561,12 +561,12 @@ local function setuptwistedobstacleesp(state)
 		end
 
 		if env.stuf.twistedobstacle then
+			yield(function() return env.stuf.currentroom end)
 			for _, obstacle in pairs(env.stuf.freearea:GetChildren()) do
 				addobstacle(obstacle)
 			end
 			esphandler.twistedobstacle.conn = env.stuf.freearea.ChildAdded:Connect(addobstacle)
 
-			yield(function() return env.stuf.currentroom end)
 			for _, model in pairs(env.stuf.currentroom:GetChildren()) do
 				addblothand(model)
 			end
