@@ -32,11 +32,6 @@ local uis = FindFirstChildOfClass(game, "UserInputService")
 local ts = FindFirstChildOfClass(game, "TweenService")
 local txts = FindFirstChildOfClass(game, "TextService")
 
-local plr = plrs.LocalPlayer
-local cam = workspace.CurrentCamera
-local mouse = plr:GetMouse()
-local user = plr.Name
-
 local getgenv = getgenv() or _G
 local hiddenui = gethui() or game:GetService("CoreGui")
 local writefile = (syn and syn.writefile) or writefile
@@ -70,7 +65,7 @@ function lib.centerui(ui, ins, style, time)
 	if not canrepos then return end
 	canrepos = false
 
-	local size = cam.ViewportSize
+	local size = env.stuf.cam.ViewportSize
 	local t = ins and 0 or (time or 0.5)
 	local e = style and Enum.EasingDirection.Out or Enum.EasingDirection.InOut
 	local s = style or Enum.EasingStyle.Quad
@@ -209,7 +204,7 @@ end
 
 function resolvetargets(i)
 	local t = {}
-	if not i or (type(i) == "string" and i:match("^%s*$")) then return {plr} end
+	if not i or (type(i) == "string" and i:match("^%s*$")) then return {env.stuf.plr} end
 
 	local targets = {}
 
@@ -232,7 +227,7 @@ function resolvetargets(i)
 		end
 
 	else
-		return {plr}
+		return {env.stuf.plr}
 	end
 
 	local added = {}
@@ -245,7 +240,7 @@ function resolvetargets(i)
 
 	for _, part in ipairs(targets) do
 		if part == "me" then
-			add(plr)
+			add(env.stuf.plr)
 
 		elseif part == "random" then
 			local all = plrs:GetPlayers()
@@ -255,7 +250,7 @@ function resolvetargets(i)
 
 		elseif part == "others" then
 			for _, otherplr in ipairs(plrs:GetPlayers()) do
-				if otherplr ~= plr then
+				if otherplr ~= env.stuf.plr then
 					add(otherplr)
 				end
 			end
@@ -267,14 +262,14 @@ function resolvetargets(i)
 
 		elseif part == "nonfriends" then
 			for _, otherplr in ipairs(plrs:GetPlayers()) do
-				if otherplr ~= plr and not plr:IsFriendsWith(otherplr.UserId) then
+				if otherplr ~= env.stuf.plr and not env.stuf.plr:IsFriendsWith(otherplr.UserId) then
 					add(otherplr)
 				end
 			end
 
 		elseif part == "friends" then
 			for _, otherplr in ipairs(plrs:GetPlayers()) do
-				if otherplr ~= plr and plr:IsFriendsWith(otherplr.UserId) then
+				if otherplr ~= env.stuf.plr and env.stuf.plr:IsFriendsWith(otherplr.UserId) then
 					add(otherplr)
 				end
 			end
@@ -1670,8 +1665,8 @@ function lib.addtoggle(parent, title, description, callback, bindable, default, 
 			if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) and opened then
 				local AbsPos, AbsSize = dropdown.AbsolutePosition, dropdown.AbsoluteSize
 
-				if mouse.X < AbsPos.X or mouse.X > AbsPos.X + AbsSize.X
-					or mouse.Y < (AbsPos.Y - 20 - 1) or mouse.Y > AbsPos.Y + AbsSize.Y then
+				if env.stuf.mouse.X < AbsPos.X or env.stuf.mouse.X > AbsPos.X + AbsSize.X
+					or env.stuf.mouse.Y < (AbsPos.Y - 20 - 1) or env.stuf.mouse.Y > AbsPos.Y + AbsSize.Y then
 
 					if not listening then closedd() end
 				end
@@ -1982,8 +1977,8 @@ function lib.addbutton(parent, title, description, callback, bindable, locked, l
 			if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) and opened then
 				local AbsPos, AbsSize = dropdown.AbsolutePosition, dropdown.AbsoluteSize
 
-				if mouse.X < AbsPos.X or mouse.X > AbsPos.X + AbsSize.X
-					or mouse.Y < (AbsPos.Y - 20 - 1) or mouse.Y > AbsPos.Y + AbsSize.Y then
+				if env.stuf.mouse.X < AbsPos.X or env.stuf.mouse.X > AbsPos.X + AbsSize.X
+					or env.stuf.mouse.Y < (AbsPos.Y - 20 - 1) or env.stuf.mouse.Y > AbsPos.Y + AbsSize.Y then
 
 					if not listening then closedd() end
 				end
@@ -2244,7 +2239,7 @@ function lib.addinput(parent, title, description, defaulttext, placeholdertext, 
 			if not currentText:find(",") then
 				local resolved = resolvetargets(currentText)
 
-				if #resolved == 1 and resolved[1] ~= plr then
+				if #resolved == 1 and resolved[1] ~= env.stuf.plr then
 					local targetPlayer = resolved[1]
 					if targetPlayer.Name:lower():sub(1, #currentText) == currentText:lower() then
 						lastSuggestion = targetPlayer.Name
@@ -2356,7 +2351,7 @@ function lib.addinputandtoggle(parent, title, description, defaulttext, placehol
 			local currentText = inputbox.Text
 			if not currentText:find(",") then
 				local resolved = resolvetargets(currentText)
-				if #resolved == 1 and resolved[1] ~= plr then
+				if #resolved == 1 and resolved[1] ~= env.stuf.plr then
 					local targetPlayer = resolved[1]
 					if targetPlayer.Name:lower():sub(1, #currentText) == currentText:lower() then
 						lastSuggestion = targetPlayer.Name
@@ -2791,8 +2786,8 @@ function lib.addinputandtoggle(parent, title, description, defaulttext, placehol
 
 		if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) and opened then
 			local AbsPos, AbsSize = dropdown.AbsolutePosition, dropdown.AbsoluteSize
-			if mouse.X < AbsPos.X or mouse.X > AbsPos.X + AbsSize.X
-				or mouse.Y < (AbsPos.Y - 20 - 1) or mouse.Y > AbsPos.Y + AbsSize.Y then
+			if env.stuf.mouse.X < AbsPos.X or env.stuf.mouse.X > AbsPos.X + AbsSize.X
+				or env.stuf.mouse.Y < (AbsPos.Y - 20 - 1) or env.stuf.mouse.Y > AbsPos.Y + AbsSize.Y then
 				if not listening then closedd() end
 			end
 		end
@@ -2906,7 +2901,7 @@ function lib.addinputandbutton(parent, title, description, defaulttext, placehol
 			local currentText = inputbox.Text
 			if not currentText:find(",") then
 				local resolved = resolvetargets(currentText)
-				if #resolved == 1 and resolved[1] ~= plr then
+				if #resolved == 1 and resolved[1] ~= env.stuf.plr then
 					local targetPlayer = resolved[1]
 					if targetPlayer.Name:lower():sub(1, #currentText) == currentText:lower() then
 						lastSuggestion = targetPlayer.Name
@@ -3137,8 +3132,8 @@ function lib.addinputandbutton(parent, title, description, defaulttext, placehol
 
 		if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) and opened then
 			local AbsPos, AbsSize = dropdown.AbsolutePosition, dropdown.AbsoluteSize
-			if mouse.X < AbsPos.X or mouse.X > AbsPos.X + AbsSize.X
-				or mouse.Y < (AbsPos.Y - 20 - 1) or mouse.Y > AbsPos.Y + AbsSize.Y then
+			if env.stuf.mouse.X < AbsPos.X or env.stuf.mouse.X > AbsPos.X + AbsSize.X
+				or env.stuf.mouse.Y < (AbsPos.Y - 20 - 1) or env.stuf.mouse.Y > AbsPos.Y + AbsSize.Y then
 				if not listening then closedd() end
 			end
 		end
