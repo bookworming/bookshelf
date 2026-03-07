@@ -1001,7 +1001,12 @@ do
 				end
 			end
 
-			return {floorname, twistedsonfloor, itemsonfloor, hasdialoguetriggers}
+			return {
+				floorname = floorname, 
+				twistedsonfloor = twistedsonfloor, 
+				itemsonfloor = itemsonfloor, 
+				hasdialoguetriggers = hasdialoguetriggers
+			}
 
 		elseif type == "item" then
 			local prompt = obj:FindFirstChild("Prompt")
@@ -1012,7 +1017,9 @@ do
 				research = prompt:FindFirstChild("Monster").Value
 			end
 
-			return {act, research}
+			return {
+				act = act, 
+				research = research}
 
 		elseif type == "machine" then
 			local stats = obj:FindFirstChild("Stats")
@@ -1034,7 +1041,15 @@ do
 				machtype = "normal"
 			end
 
-			return {pos, active, completed, possessed, amount, required, machtype}
+			return {
+				pos = pos, 
+				active = active, 
+				completed = completed, 
+				possessed = possessed, 
+				amount = amount, 
+				required = required, 
+				machtype = machtype
+			}
 
 		elseif type == "twisted" then
 			local name = obj.Name
@@ -1065,7 +1080,23 @@ do
 			local tr = research:FindFirstChild(name)
 			if not tr then research = 0 else research = tr.Value end
 
-			return {name, troot, alerted, research, hearingrad, intrestrad, hitboxrad, visionrad, intresttime, LoS, hitcooldown, chasing, ischasing, hasability, usingability}
+			return {
+				name = name, 
+				troot = troot, 
+				alerted = alerted, 
+				research = research, 
+				hearingrad = hearingrad, 
+				intrestrad = intrestrad, 
+				hitboxrad = hitboxrad, 
+				visionrad = visionrad, 
+				intresttime = intresttime, 
+				LoS = LoS, 
+				hitcooldown = hitcooldown,
+				chasing = chasing, 
+				ischasing = ischasing, 
+				hasability = hasability, 
+				usingability = usingability
+			}
 
 		elseif type == "player" then
 			local inserver = plrs:FindFirstChild(obj.Name)
@@ -1118,7 +1149,32 @@ do
 				end
 			end
 
-			return {currentstealth, twistedschasing, currenttoon, inserver, ins, dead, left, capsulespickedup, itemspickedup, machinescompleted, ichorearned, twistedsencountered, tapescollected, toonpicked, slot1, slot2, slot3, slot4, trinket1, trinket2, extracting, icon, abilitycooldown, currentabilitycooldown}
+			return {
+				currentstealth = currentstealth, 
+				twistedschasing = twistedschasing, 
+				currenttoon = currenttoon, 
+				inserver = inserver, 
+				ins = ins, 
+				dead = dead, 
+				left = left, 
+				capsulespickedup = capsulespickedup, 
+				itemspickedup = itemspickedup, 
+				machinescompleted = machinescompleted, 
+				ichorearned = ichorearned, 
+				twistedsencountered = twistedsencountered, 
+				tapescollected = tapescollected, 
+				toonpicked = toonpicked, 
+				slot1 = slot1, 
+				slot2 = slot2, 
+				slot3 = slot3, 
+				slot4 = slot4, 
+				trinket1 = trinket1, 
+				trinket2 = trinket2, 
+				extracting = extracting, 
+				icon = icon, 
+				abilitycooldown = abilitycooldown, 
+				currentabilitycooldown = currentabilitycooldown
+			}
 		end
 	end
 
