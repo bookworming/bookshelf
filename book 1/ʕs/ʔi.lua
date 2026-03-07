@@ -1080,8 +1080,11 @@ do
 			local hasability = obj:FindFirstChild("Grabbing")
 			local usingability = hasability and hasability.Value
 			local alerted = obj:GetAttribute("Alerted")
-
-			local research = rst:FindFirstChild("PlayerData"):FindFirstChild(env.stuf.plrid):FindFirstChild("Research"):FindFirstChild(name).Value
+			
+			local research
+			local research = rst:FindFirstChild("PlayerData"):FindFirstChild(env.stuf.plrid):FindFirstChild("Research")
+			local tr = research:FindFirstChild(name)
+			if not tr then research = 0 else research = tr.Value end
 
 			result = {name, troot, alerted, research, hearingrad, intrestrad, hitboxrad, visionrad, intresttime, LoS, hitcooldown, chasing, ischasing, hasability, usingability}
 			keymap = {
