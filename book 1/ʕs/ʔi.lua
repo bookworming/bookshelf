@@ -1140,9 +1140,9 @@ do
 			local inventoryfull = slot1 ~= "None" and slot2 ~= "None" and slot3 ~= "None" and (slot4 and slot4 ~= "None")
 			local trinket1, trinket2 = fetchtrinket(1), fetchtrinket(2)
 
-			local extracting = obj:FindFirstChild("Decoding")
-			local currentstealth = ins:GetAttribute("Stealth")
-			local twistedschasing = ins:GetAttribute("ChaseCount")
+			local extracting = obj:FindFirstChild("Decoding").Value
+			local currentstealth = ins:GetAttribute("Stealth").Value
+			local twistedschasing = ins:GetAttribute("ChaseCount").Value
 
 			local abilitycooldown, currentabilitycooldown
 
