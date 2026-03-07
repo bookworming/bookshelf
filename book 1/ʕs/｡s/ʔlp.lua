@@ -1008,16 +1008,22 @@ end
 local function pickupallitems()
 	local oldcf = env.stuf.root.CFrame
 	ws.Gravity = 0
+	local doit
 
 	if env.stuf.currentroom then
 		if env.stuf.items and #env.stuf.items:GetChildren() > 0 then
-			for _, item in ipairs(env.stuf.items:GetChildren()) do
-				if item.Name:find("FakeCap") then env.funcs.popup("Twisted Rodger's capsule is on this floor. Are you sure you still want to run this?", "Yes", nil, "Nevermind", function() return end) end
-
-				if item:IsA("Model") then
-					local itemCFrame = item:GetPivot() * CFrame.new(0, env.gear.general.itemtpposyoffset, 0)
-					for _ = 1, 10 do env.funcs.moveplr(itemCFrame, "tp") t() end
-					fireproximityprompt(env.funcs.getstats("item", item).act)
+			if env.stuf.items:FindFirstChild("FakeCapsule") then
+				env.funcs.popup("Twisted Rodger's capsule is on this floor. Are you sure you still want to run this?", "Yes", function() doit = true end, "Nevermind", function() doit = false end)
+			end
+			
+			repeat t() until doit ~= nil
+			if doit then
+				for _, item in ipairs(env.stuf.items:GetChildren()) do
+					if item:IsA("Model") then
+						local itemCFrame = item:GetPivot() * CFrame.new(0, env.gear.general.itemtpposyoffset, 0)
+						for _ = 1, 10 do env.funcs.moveplr(itemCFrame, "tp") t() end
+						fireproximityprompt(env.funcs.getstats("item", item).act)
+					end
 				end
 			end
 		end
@@ -1677,9 +1683,10 @@ local function machineaura(state)
 		while machineauraenabled do
 			if env.stuf.machines then
 				for _, machine in ipairs(env.stuf.machines:GetChildren()) do
-					local possessed = env.funcs.getstats("machine", machine).possessed
-					local hasprogress = env.funcs.getstats("machine", machine).amount ~= 0.1
-					local machinetype = env.funcs.getstats("machine", machine).machtype
+					local machstats = env.funcs.getstats("machine", machine)
+					local possessed = machstats.possessed
+					local hasprogress = machstats.amount ~= 0.1
+					local machinetype = machstats.machtype
 
 					local conditions = machineauraconditions
 					if #conditions > 0 then
