@@ -192,28 +192,34 @@ local function newdialogue(text, whosaidit, expression)
 	local cursorX = 0
 
 	if whosaidit and expression then
-		local iconsize = 25
 		local name =
-			(whosaidit == "box" or whosaidit == "altbox") and "boxten" or
-			whosaidit == "pop" and "poppy" or
-			whosaidit == "shr" and "shrimpo"
+			(whosaidit == "box") and "boxten" or
+			(whosaidit == "altbox") and "altboxten" or
+			(whosaidit == "pop") and "poppy" or
+			(whosaidit == "shr") and "shrimpo"
 
-		local icon = Instance.new("ImageLabel")
-		icon.BackgroundTransparency = 1
-		icon.Size = UDim2.new(0, iconsize, 0, iconsize)
-		icon.Position = UDim2.new(0, cursorX, 0.5, -iconsize / 2)
-		icon.Image = expressions[name][expression]
-		icon.ImageTransparency = 1
-		icon.Parent = holder
-		cursorX += iconsize + 4
+		local expressionset = name and expressions[name]
+		local image = expressionset and expressionset[expression]
 
-		spwn(function()
-			ts:Create(icon, TweenInfo.new(1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), { Rotation = 10 }):Play()
-			t(1) 
-			ts:Create(icon, TweenInfo.new(1, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), { Rotation = 5 }):Play()
-		end)
+		if image and image ~= "placeholder" then
+			local iconsize = 25
+			local icon = Instance.new("ImageLabel")
+			icon.BackgroundTransparency = 1
+			icon.Size = UDim2.new(0, iconsize, 0, iconsize)
+			icon.Position = UDim2.new(0, cursorX, 0.5, -iconsize / 2)
+			icon.Image = image
+			icon.ImageTransparency = 1
+			icon.Parent = holder
+			cursorX += iconsize + 4
 
-		table.insert(tofade, { label = icon, stroke = nil, baseX = icon.Position.X.Offset, iconpresent = true })
+			spwn(function()
+				ts:Create(icon, TweenInfo.new(1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), { Rotation = 10 }):Play()
+				t(1)
+				ts:Create(icon, TweenInfo.new(1, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), { Rotation = 5 }):Play()
+			end)
+
+			table.insert(tofade, { label = icon, stroke = nil, baseX = icon.Position.X.Offset, iconpresent = true })
+		end
 	end
 
 	if nameText ~= "" then
