@@ -70,7 +70,7 @@ env.expectedcompiledscriptversions = {
 
 -- debugger setup
 env.essentials.debugger = {}
-env.essentials.debugger.logcount = 0
+local logcount = 0
 
 env.essentials.debugger.sgui = Instance.new("ScreenGui")
 env.essentials.debugger.sgui.ResetOnSpawn = false
@@ -112,7 +112,7 @@ local function bottomleft(text, log)
 		end
 	end
 
-	env.essentials.debugger.logcount = env.essentials.debugger.logcount + 1
+	logcount = logcount + 1
 	local col = Color3.fromRGB(255, 255, 255)
 	if log then
 		if log == "warn" then 
