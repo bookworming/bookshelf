@@ -1,13 +1,12 @@
 --[[---------------------------------------------------------------------------------------------------------------------------
-⠀⠀⠀⠀⠀⠀⣀⣤⣀
-⠀⠀⠀⣀⠀⠀⢹⣿⣿⠀⠀⣀
-⠀⢰⣿⣿⠀⠀⠀⢻⣿⠀⠀⣿⣿⡆
-⠀⢸⣿⣿⠀⠀⠀⠀⢻⠀⠀⣿⣿⡇⠀⠀Team Noxious
-⠀⢸⣿⣿⠀⠀⡀⠀⠈⠀⠀⣿⣿⡇⠀⠀Boxten Sex GUI | Developed by unable
-⠀⢸⣿⣿⠀⠀⣧⠀⠀⠀⠀⣿⣿⡇⠀⠀:: "Setup"
-⠀⠸⣿⣿⠀⠀⣿⣧⠀⠀⠀⣿⣿⠇
-⠀⠀⠀⠉⠀⠀⣿⣿⣇⠀⠀⠉
-⠀⠀⠀⠀⠀⠀⠉⠛⠉
+  __   __     ______     __  __     __     ______     __  __     ______    
+ /\ "-.\ \   /\  __ \   /\_\_\_\   /\ \   /\  __ \   /\ \/\ \   /\  ___\   
+ \ \ \-.  \  \ \ \/\ \  \/_/\_\/_  \ \ \  \ \ \/\ \  \ \ \_\ \  \ \___  \  
+  \ \_\\"\_\  \ \_____\   /\_\/\_\  \ \_\  \ \_____\  \ \_____\  \/\_____\ 
+   \/_/ \/_/   \/_____/   \/_/\/_/   \/_/   \/_____/   \/_____/   \/_____/
+
+   Made by unable | Boxten Sex GUI (Script setup)
+
 ---------------------------------------------------------------------------------------------------------------------------]]--
 
 -- services & instances
@@ -1058,22 +1057,22 @@ do
 
 			local hearingrad, intrestrad, hitboxrad, visionrad, intresttime, LoS, hitcooldown
 			if chaser then
-				hearingrad = chaser:FindFirstChild("HearingRadius").Value
-				intrestrad = chaser:FindFirstChild("InstantRadius").Value
-				hitboxrad = chaser:FindFirstChild("HearingRadius").Value
-				visionrad = chaser:FindFirstChild("VisionRadius").Value
+				hearingrad = chaser:FindFirstChild("HearingRadius").Value or 0
+				intrestrad = chaser:FindFirstChild("InstantRadius").Value or 0
+				hitboxrad = chaser:FindFirstChild("HearingRadius").Value or 0
+				visionrad = chaser:FindFirstChild("VisionRadius").Value or 0
 
-				intresttime = chaser:FindFirstChild("InterestTime").Value
-				LoS = chaser:FindFirstChild("LineOfSight")
-				hitcooldown = chaser:FindFirstChild("HitCooldown")
+				intresttime = chaser:FindFirstChild("InterestTime").Value or 0
+				LoS = chaser:FindFirstChild("LineOfSight").Value or 0
+				hitcooldown = chaser:FindFirstChild("HitCooldown").Value or 0
 			end
 
 			local chasing = obj:FindFirstChild("ChasingValue")
 			local ischasing = chasing and chasing.Value ~= nil
 
-			local hasability = obj:FindFirstChild("Grabbing")
+			local hasability = obj:FindFirstChild("Grabbing") or nil
 			local usingability = hasability and hasability.Value
-			local alerted = obj:GetAttribute("Alerted")
+			local alerted = obj:GetAttribute("Alerted") or nil
 
 			local research
 			local research = rst:FindFirstChild("PlayerData"):FindFirstChild(env.stuf.plrid):FindFirstChild("Research")
