@@ -160,13 +160,9 @@ function tomachine(method)
 
 	for _, generator in ipairs(env.stuf.machines:GetChildren()) do
 		if not generator.PrimaryPart then continue end
-
-		local ok, info = pcall(env.funcs.getstats, "machine", generator)
-		if not ok or not info then continue end
-
 		local pos = generator.PrimaryPart.Position
 
-		if not info[3] and not info[4] then
+		if not env.funcs.getstats("machine", generator, "completed") and not env.funcs.getstats("machine", generator, "possessed") then
 			local cantgothere = false
 
 			for _, obj in ipairs(env.stuf.currentroom:GetChildren()) do
@@ -177,6 +173,7 @@ function tomachine(method)
 					end
 				end
 			end
+			
 			if cantgothere then continue end
 
 			for _, obj in ipairs(env.stuf.freearea:GetChildren()) do
@@ -187,16 +184,14 @@ function tomachine(method)
 					end
 				end
 			end
+			
 			if cantgothere then continue end
 
 			for _, monster in ipairs(env.stuf.twisteds:GetChildren()) do
 				if not monster:IsA("Model") then continue end
 
-				local mok, twistedinfo = pcall(env.funcs.getstats, "twisted", monster)
-				if not mok or not twistedinfo then continue end
-
-				local twis = twistedinfo[1]
-				local twisroot = twistedinfo[2]
+				local twis = env.funcs.getstats("twisted", monster, "name")
+				local twisroot = env.funcs.getstats("twisted", monster, "troot")
 				if not twisroot then continue end
 
 				local dist = (twisroot.Position - pos).Magnitude
@@ -218,8 +213,8 @@ function tomachine(method)
 			if not cantgothere then
 				table.insert(good, {
 					model    = generator,
-					progress = info[5],
-					tppos    = info[1],
+					progress = env.funcs.getstats("machine", generator, "amount"),
+					tppos    = env.funcs.getstats("machine", generator, "pos"),
 				})
 			end
 		end
