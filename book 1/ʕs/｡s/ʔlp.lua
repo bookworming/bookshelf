@@ -4,11 +4,15 @@
 ⠀⢰⣿⣿⠀⠀⠀⢻⣿⠀⠀⣿⣿⡆
 ⠀⢸⣿⣿⠀⠀⠀⠀⢻⠀⠀⣿⣿⡇⠀⠀Team Noxious
 ⠀⢸⣿⣿⠀⠀⡀⠀⠈⠀⠀⣿⣿⡇⠀⠀Boxten Sex GUI | Developed by unable
-⠀⢸⣿⣿⠀⠀⣧⠀⠀⠀⠀⣿⣿⡇⠀⠀:: "Setup"
+⠀⢸⣿⣿⠀⠀⣧⠀⠀⠀⠀⣿⣿⡇ ⠀:: "Local Player section"
 ⠀⠸⣿⣿⠀⠀⣿⣧⠀⠀⠀⣿⣿⠇
 ⠀⠀⠀⠉⠀⠀⣿⣿⣇⠀⠀⠉
 ⠀⠀⠀⠀⠀⠀⠉⠛⠉
 ---------------------------------------------------------------------------------------------------------------------------]]--
+
+local version = 3
+
+-------------------------------------------------------------------------------------------------------------------------------
 
 -- services & instances
 local t, spwn = task.wait, task.spawn
@@ -18,1498 +22,2391 @@ local randstring = function() local s = "" for i = 1, math.random(8, 15) do if m
 local getins = getmmfromerr(game, function(a,b) return a[b] end, function(f) local a = Instance.new("Folder") local b = randstring() a.Name = b return f(a, "Name") == b end)
 local FindFirstChildOfClass = getins(game, "FindFirstChildOfClass") 
 
--- findfirstchildofclass is faster than getservice according to MyWorld
 local ws = FindFirstChildOfClass(game, "Workspace")
+local uis = FindFirstChildOfClass(game, "UserInputService")
 local rst = FindFirstChildOfClass(game, "ReplicatedStorage")
-local plrs = FindFirstChildOfClass(game, "Players")
 local rs = FindFirstChildOfClass(game, "RunService")
-local txts = FindFirstChildOfClass(game, "TextService")
-local ts = FindFirstChildOfClass(game, "TweenService")
-local pfs = FindFirstChildOfClass(game, "PathfindingService")
-local d = FindFirstChildOfClass(game, "Debris")
-local https = FindFirstChildOfClass(game, "HttpService")
-local contp = FindFirstChildOfClass(game, "ContentProvider")
-local srgui = FindFirstChildOfClass(game, "StarterGui")
-local mps = FindFirstChildOfClass(game, "MarketplaceService")
-local ls = FindFirstChildOfClass(game, "LogService")
+local vim = FindFirstChildOfClass(game, "VirtualInputManager")
+local plrs = FindFirstChildOfClass(game, "Players")
 
-local core = FindFirstChildOfClass(game, "CoreGui")
-local getgenv = (syn and syn.getgenv) or getgenv() or _G
+local getgenv = getgenv() or _G
+local firesignal = (syn and syn.firesignal) or firesignal
+local cloneref = (syn and syn.cloneref) or cloneref
+local queueotp = (syn and syn.queue_on_teleport) or queue_on_teleport or (fluxus and fluxus.queue_on_teleport)
 local hiddenui = (syn and syn.gethui) or gethui() or FindFirstChildOfClass(game, "CoreGui")
-local writefile = (syn and syn.writefile) or writefile
-local readfile = (syn and syn.readfile) or readfile
-local isfile = (syn and syn.isfile) or isfile
-local delfile = (syn and syn.delfile) or delfile
-local listfiles = (syn and syn.listfiles) or listfiles
-local isfolder = (syn and syn.isfolder) or isfolder
-local makefolder = (syn and syn.makefolder) or makefolder
-local identifyexecutor = (syn and syn.identifyexecutor) or identifyexecutor
-local clipboard = setclipboard or toclipboard or set_clipboard or (Clipboard and Clipboard.set)
+local fireproximityprompt = (syn and syn.fireproximityprompt) or fireproximityprompt
+local getconnections = (syn and syn.getconnections) or getconnections
+local blacklistrayfilter = Enum.RaycastFilterType.Blacklist
 
 local folder = "Bоxten Sеx GUI"
 local env = getgenv.BSGUI
+local mobile = uis.TouchEnabled
 
 -------------------------------------------------------------------------------------------------------------------------------
 
--- env setup
-env.essentialsloaded, env.setupcomplete = nil
-env.funcs, env.stuf, env.gear, env.essentials = {}, {}, {}, {}
+noclipconn = nil
+noclipmodparts = {}
+noclipfactiveconn = nil
+noclipping = false
+noclippaused = false
 
-env.essentials.library, env.essentials.data, env.essentials.sgui = nil
-env.essentials.toggles, env.essentials.buttons, env.essentials.elements = {}, {}, {}
+function gbp()
+	local rp = RaycastParams.new()
+	rp.FilterDescendantsInstances = {env.stuf.char}
+	rp.FilterType = blacklistrayfilter
+	rp.IgnoreWater = true
 
-env.scriptinfo, env.filemanager = {}, {}
-
-local function yield(this)
-	repeat t() until this()
+	local result = ws:Raycast(env.stuf.root.Position, env.stuf.root.CFrame.LookVector * 40, rp)
+	if result and result.Instance and result.Instance:IsA("BasePart") and result.Instance.Name ~= "plz dont clip through this plz plz" then
+		return result.Instance
+	end
+	return nil
 end
 
-spwn(function()
-	yield(function() return env.setupcomplete end) env.funcs.pop("Hi!")
-	env.essentials.library = env.funcs.recursivels("book%201/%CA%95u/%CA%94l.lua", true) 
-	env.funcs.box("UI library loaded successfully")
+function gtp()
+	local touching = {}
+	for _, part in ipairs(env.stuf.char:GetDescendants()) do
+		if part:IsA("BasePart") and part.CanTouch then
+			for _, p in ipairs(part:GetTouchingParts()) do
+				if not p:IsDescendantOf(env.stuf.char) and p.Name ~= "plz dont clip through this plz plz" then
+					table.insert(touching, p)
+				end
+			end
+		end
+	end
+	return touching
+end
 
-	env.essentials.data = env.funcs.recursivels("book%201/%CA%95s/%CA%94d.lua", true)
-	env.funcs.box("script data loaded successfully")
+function gsp()
+	local origin = env.stuf.root.Position
+	local direction = Vector3.new(0, -5, 0)
 
-	env.essentialsloaded = true
-end)
+	local rp = RaycastParams.new()
+	rp.FilterDescendantsInstances = {env.stuf.char}
+	rp.FilterType = blacklistrayfilter
+	rp.IgnoreWater = true
+
+	local result = ws:Raycast(origin, direction, rp)
+	if result and result.Instance then
+		return result.Instance
+	end
+	return nil
+end
+
+function rcp()
+	local pr = {}
+
+	for part, data in pairs(noclipmodparts) do
+		if part and part.Parent then
+			local front = gbp()
+			local touching = gtp()
+			local stillTouching = (front == part) or table.find(touching, part)
+
+			if not stillTouching then
+				table.insert(pr, part)
+			end
+		else
+			noclipmodparts[part] = nil 
+		end
+	end
+
+	for _, part in ipairs(pr) do
+		if noclipmodparts[part] then
+			part.CanCollide = noclipmodparts[part].CanCollide
+			noclipmodparts[part] = nil
+		end
+	end
+end
+
+function noclip()
+	if noclipconn then return end
+
+	noclipconn = rs.Heartbeat:Connect(function()
+		if env.stuf.hum and env.stuf.hum.PlatformStand then
+			if not noclippaused then
+				noclippaused = true
+				for part, data in pairs(noclipmodparts) do
+					if part and part.Parent then
+						part.CanCollide = data.CanCollide
+					end
+				end
+				table.clear(noclipmodparts)
+			end
+			return
+		else
+			if noclippaused then
+				noclippaused = false
+			end
+		end
+
+		rcp()
+
+		local standing = gsp()
+		local front = gbp()
+		if front and front.CanCollide and front.Name ~= "hello" and front ~= standing then
+			if not noclipmodparts[front] then
+				noclipmodparts[front] = {
+					CanCollide = front.CanCollide,
+					LastSeen = tick()
+				}
+				front.CanCollide = false
+			else
+				noclipmodparts[front].LastSeen = tick()
+			end
+		end
+
+		local touching = gtp()
+		for _, part in ipairs(touching) do
+			if part:IsA("BasePart") and part.CanCollide and part.Name ~= "é§u}ÙwVµÏË{Z<Ç_ÊFvÅëôÅåG/º?^¹" then
+				if part ~= standing and part.Position.Y > env.stuf.root.Position.Y - 3 then
+					if not noclipmodparts[part] then
+						noclipmodparts[part] = {
+							CanCollide = part.CanCollide,
+							LastSeen = tick()
+						}
+						part.CanCollide = false
+					else
+						noclipmodparts[part].LastSeen = tick()
+					end
+				end
+			end
+		end
+	end)
+end
+
+function stopnoclipping()
+	if noclipconn then noclipconn:Disconnect() noclipconn = nil end
+
+	for part, data in pairs(noclipmodparts) do
+		if part and part.Parent then
+			part.CanCollide = data.CanCollide
+		end
+	end
+
+	table.clear(noclipmodparts)
+end
+
+function ncdc()
+	if not getconnections then return end
+
+	for _, connection in pairs(getconnections(env.stuf.root:GetPropertyChangedSignal("CanCollide"))) do
+		connection:Disconnect() t()
+	end
+
+	for _, connection in pairs(getconnections(env.stuf.root:GetPropertyChangedSignal("CanTouch"))) do
+		connection:Disconnect() t()
+	end
+
+	for _, connection in pairs(getconnections(env.stuf.root:GetPropertyChangedSignal("CanQuery"))) do
+		connection:Disconnect() t()
+	end
+end
+
+savedCollisions = {}
+
+function disableCharacterCollisions(character)
+	savedCollisions = {}
+
+	for _, inst in ipairs(character:GetDescendants()) do
+		if inst:IsA("BasePart") then
+			savedCollisions[inst] = inst.CanCollide
+			inst.CanCollide = false
+		end
+	end
+end
+
+function restoreCharacterCollisions()
+	for part, state in pairs(savedCollisions) do
+		if part and part.Parent then
+			part.CanCollide = state
+		end
+	end
+	savedCollisions = {}
+end
+
+nccalled = false
+
+function noclipbypass(state)
+	noclipping = state
+	if not env.stuf.char then return end
+
+	if state then
+		if env.stuf.inrun then
+			ncdc()
+			if not nccalled then
+				nccalled = true
+				disableCharacterCollisions(env.stuf.char)
+			end
+		else
+			noclipping = true
+			disableCharacterCollisions(env.stuf.char)
+			noclip()
+		end
+	else
+		if env.stuf.inrun then
+			ncdc()
+			restoreCharacterCollisions()
+		else
+			noclipping = false
+			restoreCharacterCollisions()
+			stopnoclipping()
+		end
+		nccalled = false
+	end
+end
+
+function safenoclip(state)
+	noclipping = state
+	if state then
+		noclip()
+	else
+		stopnoclipping()
+	end
+end
 
 -------------------------------------------------------------------------------------------------------------------------------
 
--- script info & file manager
-spwn(function()
-	yield(function() return env.essentialsloaded end)
-	env.scriptinfo.script = {
-		version = env.essentials.data.cl.current.version,
-		subversion = env.essentials.data.cl.current.subversion,
-		lastupdated = env.essentials.data.cl.current.subversion,
-		changelog = env.essentials.data.cl.current.changelog
-	}
+-- the code for this looks abnormally large
+infinitestaminasprinttoggled = false
+infinitestaminaconnections = {}
+infinitestaminaenabled = false
+infinitestaminachangedconnection = nil
+infstamspeedloop = nil
+infstamsprintstatloop = nil
+infstambuttonimageloop = nil
+showactualstamina = false
 
-	-- idk what ill use this for
-	env.scriptinfo.library = {
-		version = env.essentials.library.version
-	}
-end)
+function infstamfetchspeed(mode)
+	if not env.stuf.plrstats then return env.stuf.hum.WalkSpeed end
 
-spwn(function()
-	yield(function() return env.essentialsloaded end)
-	env.filemanager.autoloadfile = folder .. "/Auto-loads.json"
-	env.filemanager.configfolder = folder .. "/Configs"
-	env.filemanager.persistfile = folder .. "/Persistent.json"
+	if mode == "Run" then
+		local base = env.stuf.plrstats:FindFirstChild("RunSpeed")
+		local mod = env.stuf.plrstats:FindFirstChild("RunSpeedModifier")
+		if base and mod then return base.Value * mod.Value end
+	elseif mode == "Walk" then
+		local base = env.stuf.plrstats:FindFirstChild("WalkSpeed")
+		local mod = env.stuf.plrstats:FindFirstChild("SpeedModifier")
+		if base and mod then return base.Value * mod.Value end
+	end
 
-	-- will not get saved
-	env.filemanager.saveblacklisted = {
-		"Config name",
-		"Auto-load lobby config",
-		"Auto-load run config",
-		"Auto-load roleplay config",
+	return env.stuf.hum.WalkSpeed
+end
 
-		"Toggle interface keybind",
-		"Debug mode",
-		"Keep on server switch",
-		"Ignore full Research Twisteds",
+function setsprinting(value)
+	if not env.stuf.plrstats then return false end
 
-		"Mainframe UI scale",
-		"Button UI scale",
+	local sprintStat = env.stuf.plrstats:FindFirstChild("Sprinting")
+	if not sprintStat then
+		return false
+	end
 
-		"Closed captions",
-		"Alternate Boxten personality",
-		"Live Poppy reaction",
-		"Live Shrimpo reaction",
+	sprintStat.Value = value
+	return true
+end
 
-		"Exclude yourself",
-	}
+function updsprintbtnimg(o)
+	local screenGui = env.stuf.plrgui:WaitForChild("ScreenGui")
+	local button = screenGui:FindFirstChild("MobileRun")
 
-	-- remains persistent
-	env.filemanager.persist = {	
-		"Auto-load lobby config",
-		"Auto-load run config",
-		"Auto-load roleplay config",
+	if button then
+		local image1 = "rbxassetid://11866517702" -- walk
+		local image2 = "rbxassetid://11866539249" -- run
 
-		"Toggle interface keybind",
-		"Debug mode",
-		"Keep on server switch",
-		"Ignore full Research Twisteds",
-
-		"Mainframe UI scale",
-		"Button UI scale",
-
-		"Closed captions",
-		"Alternate Boxten personality",
-		"Live Poppy reaction",
-		"Live Shrimpo reaction",
-
-		"Exclude yourself",
-	}
-
-	if not isfolder(folder) then makefolder(folder) end
-	if not isfolder(env.filemanager.configfolder) then makefolder(env.filemanager.configfolder) end
-
-	function env.filemanager.deleteconfig(name)
-		local path = env.filemanager.configfolder .. "/" .. name .. ".json"
-		if isfile(path) then
-			delfile(path)
+		if o then button.Image = image1 return end
+		if infinitestaminasprinttoggled then
+			button.Image = image2
+		else
+			button.Image = image1
 		end
 	end
+end
 
-	function env.filemanager.listconfigs()
-		local configs = env.filemanager.getconfigs()
-		return table.concat(configs, ", ")
-	end
+function startsprintbtnimgloop()
+	if infstambuttonimageloop then return end
 
-	function env.filemanager.getconfigcount()
-		local folderPath = env.filemanager.configfolder
-		if isfolder(folderPath) then
-			local files = listfiles(folderPath)
-			local count = 0
-
-			for _, path in ipairs(files) do
-				if path:sub(-5):lower() == ".json" then
-					count = count + 1
-				end
-			end
-
-			return count
+	infstambuttonimageloop = rs.Heartbeat:Connect(function()
+		if infinitestaminaenabled then
+			updsprintbtnimg()
 		end
-		return 0
-	end
+	end)
+end
 
-	function env.filemanager.autoloadset(placeId, configName)
-		local autoloads = {}
-		if isfile(env.filemanager.autoloadfile) then
-			autoloads = https:JSONDecode(readfile(env.filemanager.autoloadfile))
-		end
+function stopsprintbtnimgloop() 
+	if infstambuttonimageloop then 
+		infstambuttonimageloop:Disconnect() 
+		infstambuttonimageloop = nil 
+	end 
+	updsprintbtnimg(true) 
+end
 
-		autoloads[tostring(placeId)] = configName
-		writefile(env.filemanager.autoloadfile, https:JSONEncode(autoloads))
-	end
+function startsprintingloop()
+	if infstamsprintstatloop then return end
 
-	function env.filemanager.autoload()
-		if isfile(env.filemanager.autoloadfile) then
-			local autoloads = https:JSONDecode(readfile(env.filemanager.autoloadfile))
-			local currentId = tostring(game.PlaceId)
-
-			if autoloads[currentId] then
-				local configToLoad = autoloads[currentId]
-
-				task.delay(1, function()
-					env.filemanager.loadconfig(configToLoad)
-				end)
+	infstamsprintstatloop = rs.Heartbeat:Connect(function()
+		if infinitestaminasprinttoggled then
+			local success = setsprinting(true)
+			if not success then
+				stopsprintingloop()
 			end
 		end
+	end)
+end
+
+function stopsprintingloop() if infstamsprintstatloop then infstamsprintstatloop:Disconnect() infstamsprintstatloop = nil end end
+
+function startinfstamrunspeedloop()
+	if infstamspeedloop then return end
+
+	infstamspeedloop = rs.Heartbeat:Connect(function()
+		if infinitestaminasprinttoggled then
+			env.stuf.hum.WalkSpeed = infstamfetchspeed("Run")
+		end
+	end)
+end
+
+function stopinfstamrunspeedloop() if infstamspeedloop then infstamspeedloop:Disconnect() infstamspeedloop = nil end end
+
+function startupdstaminaloop()
+	if infinitestaminachangedconnection then return end
+
+	local cs = env.stuf.plrstats:FindFirstChild("CurrentStamina")
+	local ms = env.stuf.plrstats:FindFirstChild("Stamina")
+	if cs and ms then
+		infinitestaminachangedconnection = cs.Changed:Connect(function()
+			cs.Value = ms.Value
+		end)
+		cs.Value = ms.Value
+	end
+end
+
+function stopupdstaminaloop() if infinitestaminachangedconnection then infinitestaminachangedconnection:Disconnect() infinitestaminachangedconnection = nil end end
+function infstamfiresprintevent(state) local spr = hiddenui:FindFirstChild("SprintEvent")  or rst.Events:FindFirstChild("SprintEvent") if spr then spr:FireServer(state) end end
+function infstamapplywalkspeed() env.stuf.hum.WalkSpeed = infstamfetchspeed("Walk") end
+function infstamapplyrunspeed() env.stuf.hum.WalkSpeed = infstamfetchspeed("Run") end
+
+function infstamsprinting()
+	infinitestaminasprinttoggled = true
+
+	if infinitestaminaenabled then
+		if showactualstamina then
+			-- inf and showac
+			setsprinting(true)
+			infstamfiresprintevent(true)
+			startsprintingloop()
+			startinfstamrunspeedloop()
+		else
+			-- inf
+			startinfstamrunspeedloop()
+			setsprinting(true)
+			startsprintingloop()
+		end
+	else
+		infstamfiresprintevent(true)
+		setsprinting(true)
+		infstamapplyrunspeed()
+	end
+end
+
+function infstamwalking()
+	infinitestaminasprinttoggled = false
+
+	if infinitestaminaenabled then
+		if showactualstamina then
+			infstamfiresprintevent(false)
+			stopsprintingloop()
+			stopinfstamrunspeedloop()
+			setsprinting(false)
+			infstamapplywalkspeed()
+		else
+			stopinfstamrunspeedloop()
+			setsprinting(false)
+			infstamapplywalkspeed()
+		end
+	else
+		infstamfiresprintevent(false)
+		setsprinting(false)
+		infstamapplywalkspeed()
+	end
+end
+
+function setuppcinfstam()
+	for _, conn in ipairs(infinitestaminaconnections) do
+		if conn.Disconnect then conn:Disconnect() end
+	end
+	table.clear(infinitestaminaconnections)
+
+	table.insert(infinitestaminaconnections, uis.InputBegan:Connect(function(input, gameProcessed)
+		if input.KeyCode == Enum.KeyCode.LeftShift and not gameProcessed then
+			infstamsprinting()
+		end
+	end))
+
+	table.insert(infinitestaminaconnections, uis.InputEnded:Connect(function(input)
+		if input.KeyCode == Enum.KeyCode.LeftShift then
+			infstamwalking()
+		end
+	end))
+end
+
+function setupmobileinfstam()
+	for _, conn in ipairs(infinitestaminaconnections) do
+		if conn.Disconnect then conn:Disconnect() end
+	end
+	table.clear(infinitestaminaconnections)
+
+	local screenGui = env.stuf.plrgui:WaitForChild("ScreenGui")
+	local originalButton = screenGui:FindFirstChild("MobileRun") or screenGui:WaitForChild("MobileRun")
+	local clonedButton = originalButton:Clone()
+	clonedButton.Name = "MobileRun"
+	clonedButton.Parent = screenGui
+	originalButton:Destroy()
+
+	updsprintbtnimg()
+
+	table.insert(infinitestaminaconnections, clonedButton.MouseButton1Click:Connect(function()
+		if infinitestaminasprinttoggled then
+			infstamwalking()
+		else
+			infstamsprinting()
+		end
+	end))
+end
+
+function infstamcleanup()
+	infinitestaminasprinttoggled = false
+
+	stopsprintingloop()
+	stopinfstamrunspeedloop()
+	stopsprintbtnimgloop()
+
+	setsprinting(false)
+	infstamapplywalkspeed()
+
+	for _, conn in ipairs(infinitestaminaconnections) do
+		if conn.Disconnect then conn:Disconnect() end
+	end
+	table.clear(infinitestaminaconnections)
+
+	updsprintbtnimg(true)
+end
+
+function enableinfinitestamina(state)
+	if not env.stuf.inrun then return end
+
+	if state then
+		if infinitestaminaenabled then return end
+		infinitestaminaenabled = true
+
+		if mobile then
+			setupmobileinfstam()
+			startsprintbtnimgloop()
+		else
+			setuppcinfstam()
+		end
+
+		if not showactualstamina then
+			startupdstaminaloop()
+		else
+			stopupdstaminaloop()
+		end
+	else
+		if not infinitestaminaenabled then return end
+		infinitestaminaenabled = false
+
+		infstamcleanup()
+
+		if mobile then
+			setupmobileinfstam()
+		else
+			setuppcinfstam()
+		end
+	end
+end
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+antislownessdebuffenabled = false
+antislownessdebuffenabledconnections = {}
+
+local function fixModifier(value)
+	if not value or typeof(value) ~= "number" then
+		return 1
 	end
 
-	function env.filemanager.save(name, dataTable)
-		local path = name
-		if not name:find(env.filemanager.configfolder) then
-			path = env.filemanager.configfolder .. "/" .. name .. ".json"
+	local iterations = 0
+	local maxIterations = 50
+
+	while value < 1 and iterations < maxIterations do
+		value = value * 1.1
+		iterations += 1
+	end
+
+	while value < 1 and iterations < maxIterations do
+		value = value + 0.05
+		iterations += 1
+	end
+
+	if value < 1 then
+		value = 1
+	end
+
+	return value
+end
+
+function fetchspeedwithoutdebuff(mode)
+	if not env.funcs.exists() then
+		repeat t() until env.funcs.exists()
+	end
+
+	if not env.stuf.plrstats then return env.stuf.hum.WalkSpeed end
+
+	if mode == "Run" then
+		local base = env.stuf.plrstats:FindFirstChild("RunSpeed")
+		local mod  = env.stuf.plrstats:FindFirstChild("RunSpeedModifier")
+
+		if base and mod then
+			local fixedMod = fixModifier(mod.Value)
+			return base * fixedMod
 		end
-		local success, encoded = pcall(function() return https:JSONEncode(dataTable) end)
-		if success then
-			writefile(path, encoded)
+
+	elseif mode == "Walk" then
+		local base = env.stuf.plrstats:FindFirstChild("WalkSpeed")
+		local mod  = env.stuf.plrstats:FindFirstChild("SpeedModifier")
+
+		if base and mod then
+			local fixedMod = fixModifier(mod.Value)
+			return base.Value * fixedMod
 		end
 	end
 
-	function env.filemanager.load(name)
-		local path = name
-		if not name:find(env.filemanager.configfolder) then
-			path = env.filemanager.configfolder .. "/" .. name .. ".json"
+	return env.stuf.hum.WalkSpeed
+end
+
+function antislownessdebuffloop()
+	if not env.funcs.exists() then
+		repeat t() until env.funcs.exists()
+	end
+
+	local sprint = env.stuf.plrstats:FindFirstChild("Sprinting")
+
+	table.insert(antislownessdebuffenabledconnections,
+		sprint.Changed:Connect(function()
+			if sprint.Value then
+				env.stuf.hum.WalkSpeed = fetchspeedwithoutdebuff("Run")
+			else
+				env.stuf.hum.WalkSpeed = fetchspeedwithoutdebuff("Walk")
+			end
+		end)
+	)
+end
+
+function enableantislownessdebuff(state)
+	if state then
+		if antislownessdebuffenabled then return end
+		antislownessdebuffenabled = true
+		antislownessdebuffloop()
+
+	else
+		if not antislownessdebuffenabled then return end
+		antislownessdebuffenabled = false
+
+		for _, conn in ipairs(antislownessdebuffenabledconnections) do
+			if conn.Disconnect then conn:Disconnect() end
 		end
 
-		if isfile(path) then
-			local content = readfile(path)
+		table.clear(antislownessdebuffenabledconnections)
 
-			local success, decoded = pcall(function() 
-				return https:JSONDecode(content)
+		env.stuf.hum = fetchspeedwithoutdebuff("Walk")
+	end
+end
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+local antibanconn = nil
+
+function enableantiban(state)
+	if state then
+		if env.stuf.inlobby then 
+			antibanconn = rst.Events.WarnUser.OnClientEvent:Connect(function()
+				env.stuf.plr:Kick("[Boxten]: you triggered the anticheat. lucky for you, we kicked you in order to avoid you getting banned after the second tick. dont do it again.")
 			end)
-
-			if success then
-				return decoded
-			end
 		end
-		return nil
-	end
-
-	function env.filemanager.getconfigs()
-		local files = listfiles(env.filemanager.configfolder)
-		for i, path in ipairs(files) do
-			local name = path:gsub(env.filemanager.configfolder .. "/", ""):gsub(".json", "")
-
-			name = name:gsub(".*\\", "")
-
-			files[i] = name
-		end
-		return files
-	end
-
-	function env.filemanager.persistsave()
-		local data = {}
-		for _, title in ipairs(env.filemanager.persist) do
-			local element = env.essentials.toggles[title] or env.essentials.elements[title] or env.essentials.buttons[title]
-			if element then
-				if element.type == "toggle" then
-					data[title] = element.enabled
-				elseif element.type == "input" or element.type == "binder" then
-					local target = element.instance or element.elementtitle
-					data[title] = target and target.Text or ""
-				elseif element.type == "slider" then
-					data[title] = tonumber(element.instance and element.instance.Text) or 0
-				end
-			end
-		end
-		writefile(env.filemanager.persistfile, https:JSONEncode(data))
-	end
-
-	function env.filemanager.persistload()
-		if not isfile(env.filemanager.persistfile) then return end
-		local success, data = pcall(function() return https:JSONDecode(readfile(env.filemanager.persistfile)) end)
-		if not success then return end
-
-		for title, value in pairs(data) do
-			local element = env.essentials.elements[title] or env.essentials.toggles[title] or env.essentials.buttons[title]
-			if element and element.setValue then
-				element.setValue(element.type == "slider" and tonumber(value) or value)
-			elseif element and element.updtoggles then
-				element.enabled = value
-				element.updtoggles()
-				if element.callback then task.spawn(element.callback, value) end
-			end
+	else
+		if antibanconn then
+			antibanconn:Disconnect() 
+			antibanconn = nil
 		end
 	end
-
-	function env.filemanager.saveconfig(configName)
-		local dataToSave = {}
-
-		local function getPos(pos)
-			if not pos then return nil end
-			return {pos.X.Scale, pos.X.Offset, pos.Y.Scale, pos.Y.Offset}
-		end
-
-		for id, toggleData in pairs(env.essentials.toggles or {}) do
-			if not toggleData.dirty then continue end
-			if env.filemanager.saveblacklisted and table.find(env.filemanager.saveblacklisted, id) then continue end
-
-			local buttonPos = nil
-			if toggleData.currentButtonData and toggleData.currentButtonData.frame then
-				buttonPos = getPos(toggleData.currentButtonData.frame.Position)
-			elseif toggleData.buttonFrame then
-				buttonPos = getPos(toggleData.buttonFrame.Position)
-			end
-
-			dataToSave[id] = {
-				type = "toggle",
-				enabled = toggleData.enabled,
-				textValue = toggleData.inputbox and toggleData.inputbox.Text or nil,
-				bind = toggleData.currentBind and toggleData.currentBind.Name or nil,
-				buttonPos = buttonPos,
-				hasSeparateButton = toggleData.currentButtonData ~= nil
-			}
-		end
-
-		for id, buttonData in pairs(env.essentials.buttons or {}) do
-			if not buttonData.dirty then continue end
-			if env.filemanager.saveblacklisted and table.find(env.filemanager.saveblacklisted, id) then continue end
-
-			local buttonPos = nil
-			if buttonData.currentButtonData and buttonData.currentButtonData.frame then
-				buttonPos = getPos(buttonData.currentButtonData.frame.Position)
-			end
-
-			dataToSave[id] = {
-				type = "button",
-				bind = buttonData.currentBind and buttonData.currentBind.Name or nil,
-				buttonPos = buttonPos,
-				hasSeparateButton = buttonData.currentButtonData ~= nil
-			}
-		end
-
-		for id, data in pairs(env.essentials.elements or {}) do
-			if not data.dirty then continue end
-			if env.filemanager.saveblacklisted and table.find(env.filemanager.saveblacklisted, id) then continue end
-			if dataToSave[id] then continue end
-
-			local val = ""
-			if data.type == "slider" then
-				val = data.value or 0 
-			elseif data.type == "input" or data.type == "binder" then
-				val = data.instance and data.instance.Text or ""
-			elseif data.type == "dropdown" then
-				local current = data.getValue and data.getValue() or ""
-				val = current
-			end       
-
-			dataToSave[id] = {
-				type = "element",
-				value = val,
-				elementType = data.type
-			}
-		end
-
-		env.filemanager.save(configName, dataToSave)
-		--[[
-		for _, t in pairs({env.essentials.toggles, env.essentials.buttons, env.essentials.elements}) do
-			for _, el in pairs(t or {}) do
-				el.dirty = false
-			end
-		end
-		]]
-	end
-
-	function env.filemanager.loadconfig(configName)
-		local path = env.filemanager.configfolder .. "/" .. configName .. ".json"
-		if not configName or not isfile(path) then return end
-
-		local data = env.filemanager.load(path)
-		if not data or typeof(data) ~= "table" then return end
-
-		for id, savedState in pairs(data) do
-			local element = env.essentials.toggles[id] or env.essentials.buttons[id] or env.essentials.elements[id]
-
-			if element then
-				if savedState.type == "element" and element.setValue then
-					local eType = savedState.elementType
-
-					if eType == "slider" or eType == "input" then
-						spwn(function() element.setValue(savedState.value) end)
-					end
-				end
-
-				if savedState.elementType == "dropdown" or element.type == "dropdown" then
-					if savedState.value ~= nil then
-						spwn(function() element.setValue(savedState.value) end)
-					end
-				end
-
-				if savedState.enabled ~= nil and element.type == "toggle" then
-					element.enabled = savedState.enabled
-
-					if savedState.textValue and element.inputbox then
-						element.inputbox.Text = savedState.textValue
-					end
-
-					if element.updtoggles then spwn(function() element.updtoggles() end) end
-					if element.callback then task.spawn(element.callback, element.enabled) end
-				end
-
-				if savedState.bind and element.elementtitle then
-					local success, keycode = pcall(function() return Enum.KeyCode[savedState.bind] end)
-					if success then
-						element.currentBind = keycode
-						local mappedName = env.essentials.library.mapkey(keycode)
-						element.elementtitle.RichText = true
-						element.elementtitle.Text = (element.title or id) .. " <font color='rgb(71, 190, 255)'>[" .. mappedName .. "]</font>"
-						if element.updateSize then element.updateSize() end
-					end
-				end
-
-				if savedState.hasSeparateButton and element.makeseperatebutton then
-					if not element.currentButtonData then
-						local dest = nil
-						if savedState.buttonPos then
-							local p = savedState.buttonPos
-							dest = UDim2.new(p[1], p[2], p[3], p[4])
-						end
-						element.makeseperatebutton(dest)
-					end
-				end
-			end
-		end
-	end
-
-	-- main screengui
-	env.essentials.sgui = Instance.new("ScreenGui")
-	env.essentials.sgui.Name = folder
-	env.essentials.sgui.ResetOnSpawn = false
-	env.essentials.sgui.Parent = hiddenui
-end)
-
--------------------------------------------------------------------------------------------------------------------------------
-
--- settings & essentials
-do
-	env.gear.general = {
-		-- script settings
-		debugmode = true,
-		defaultkeybind = Enum.KeyCode.N,
-		queueteleport = false,
-
-		-- script adjustments
-		ignoreresearchcompleted = true,
-		itemtpposyoffset = -2.5,
-
-		-- blacklists
-		encountertwistedblacklist = {},
-
-		-- ui settings
-		mainframescale = 1,
-		buttonscale = 1,
-	}
-
-	env.gear.toons = {
-		-- default order
-		order = {
-			main = "Boxten",
-			commands = "Poppy",
-			configs = "Shrimpo"
-		},
-
-		-- toon adjustments
-		nicerboxten = false,
-		livepoppyreaction = false,
-		liveshrimporeaction = false,
-
-		-- utility
-		closedcaptions = true,
-		sendmsgsinchat = false,
-	}
 end
 
 -------------------------------------------------------------------------------------------------------------------------------
 
--- variables, tables & stuff
-do
-	-- intro handling
-	env.stuf.introframes = {
-		"rbxassetid://100574547642033",
-		"rbxassetid://112676149480176",
-		"rbxassetid://128483511908825",
-		"rbxassetid://98526328079081",
-		"rbxassetid://125620778551016",
-		"rbxassetid://121840616986842",
-		"rbxassetid://77486925388731",
-		"rbxassetid://137768803650234",
-		"rbxassetid://138559596051498",
-		"rbxassetid://125881683664938",
-		"rbxassetid://126560495448003",
-		"rbxassetid://128833866484859",
-		"rbxassetid://98939554909162",
-		"rbxassetid://128264696403245",
-		"rbxassetid://79832587316668",
-		"rbxassetid://134447565090058",
-		"rbxassetid://85041188928731",
-		"rbxassetid://104581054761468",
-		"rbxassetid://138081255923085",
-		"rbxassetid://134107814899748",
-		"rbxassetid://113122715441561",
-		"rbxassetid://134270677515326",
-		"rbxassetid://122970007395765",
-		"rbxassetid://73100602199352",
-		"rbxassetid://131853977343701",
-		"rbxassetid://130994581118987",
-		"rbxassetid://100257805271730",
-		"rbxassetid://84219062653907",
-		"rbxassetid://85039535413330",
-		"rbxassetid://104454051555103",
-		"rbxassetid://95591945463588",
-		"rbxassetid://112381580508362",
-		"rbxassetid://94229125660486",
-		"rbxassetid://113611999423711",
-		"rbxassetid://133881320303703",
-		"rbxassetid://77421113211167",
-		"rbxassetid://89036777888865",
-		"rbxassetid://73750550023686",
-		"rbxassetid://138551330795256",
-		"rbxassetid://140596827838823",
-		"rbxassetid://134328852872532",
-		"rbxassetid://126321590854988",
-		"rbxassetid://118215650732396",
-		"rbxassetid://116912873522252",
-		"rbxassetid://138749211750927",
-		"rbxassetid://112410615754720",
-		"rbxassetid://87534921561304",
-		"rbxassetid://94429722030689",
-		"rbxassetid://115973573575650",
-		"rbxassetid://123535768889762",
-		"rbxassetid://113859591165475",
-		"rbxassetid://84719539704691",
-		"rbxassetid://106599766300525",
-		"rbxassetid://138236178832061",
-		"rbxassetid://70662598652772",
-		"rbxassetid://113918880141336",
-		"rbxassetid://136755179377074",
-		"rbxassetid://125174027961199",
-		"rbxassetid://96461321002664",
-		"rbxassetid://83151239852091",
-		"rbxassetid://133688751922108",
-		"rbxassetid://127315833656418",
-		"rbxassetid://80681440397822",
-		"rbxassetid://137361336195838",
-		"rbxassetid://131241222856870",
-		"rbxassetid://105604666874330",
-		"rbxassetid://79318338619271",
-		"rbxassetid://81572171746314",
-		"rbxassetid://75482496976216",
-		"rbxassetid://124623527027974",
-		"rbxassetid://72048038318514",
-		"rbxassetid://99000028633954",
-		"rbxassetid://92926652673018",
-		"rbxassetid://90116252251867",
-		"rbxassetid://90868304789082",
-		"rbxassetid://105758518193158",
-		"rbxassetid://98518150995265",
-		"rbxassetid://94489897468652",
-		"rbxassetid://116637303866377",
-		"rbxassetid://81142282647660",
-		"rbxassetid://112327541806219",
-	}
-
-	local temp = Instance.new("ScreenGui", hiddenui)
-	env.stuf.introholder = Instance.new("Frame")
-	env.stuf.introholder.Size, env.stuf.introholder.BackgroundTransparency = UDim2.fromOffset(1, 1), 1
-	env.stuf.introholder.Parent = temp
-	d:AddItem(temp, 10)
-
-	local assets = {}
-	for _, id in ipairs(env.stuf.introframes) do
-		local img = Instance.new("ImageLabel")
-		img.Size, img.Image, img.Parent = UDim2.fromScale(1, 1), id, env.stuf.introholder
-		img.BackgroundTransparency = 1
-		table.insert(assets, img)
-	end
-
-	local introready = false
-
-	spwn(function() contp:PreloadAsync(assets) introready = true end)
-
-	local started = os.clock()
-
-	repeat t() until introready or (os.clock() - started) >= 5
-
-	-- key mapping
-	env.stuf.keynamemapping = {
-		Backslash = "\\", Slash = "/", Return = "<-",
-
-		LeftBracket = "[", RightBracket = "]",
-		LeftControl = "LC", RightControl = "RC",
-		LeftShift = "LS", RightShift = "RS",
-		LeftAlt = "LA", RightAlt = "RA",
-		LeftMeta = "L@", RightMeta = "R@",
-
-		Space = "Sp", Enter = "En", Tab = "Tb", Backspace = "Bs", CapsLock = "CL",
-		Backquote = "`", Equals = "=", Semicolon = ";", Comma = ",", Period = ".", Minus = "-",
-
-		One = "1", Two = "2", Three = "3", Four = "4", Five = "5",
-		Six = "6", Seven = "7", Eight = "8", Nine = "9", Zero = "0",
-
-		Up = "Up", Down = "Dn", Left = "Lt", Right = "Rt"
-	}
-
-	-- konami code
-	env.stuf.konamicode = {
-		["1"] = "Up", ["2"] = "Up",
-		["3"] = "Down", ["4"] = "Down",
-		["5"] = "Left", ["6"] = "Right",
-		["7"] = "Left", ["8"] = "Right",
-		["9"] = "B", ["10"] = "A",
-		["11"] = "Return",
-	}
-
-	-- player character stuff
-	env.stuf.plr = getins(plrs, "LocalPlayer")
-	env.stuf.backpack = env.stuf.plr:WaitForChild("Backpack")
-	env.stuf.user = getins(env.stuf.plr, "Name")
-	env.stuf.displayname = getins(env.stuf.plr, "DisplayName")
-	env.stuf.plrid = getins(env.stuf.plr, "UserId")
-
-	env.stuf.char = env.stuf.plr.Character or env.stuf.plr.CharacterAdded:Wait()
-	env.stuf.hum = env.stuf.char:WaitForChild("Humanoid")
-	env.stuf.root = env.stuf.char:WaitForChild("HumanoidRootPart")
-
-	env.stuf.cam = ws.CurrentCamera
-	env.stuf.mouse = getins(env.stuf.plr, "GetMouse")(env.stuf.plr)
-	env.stuf.plrgui = env.stuf.plr:WaitForChild("PlayerGui")
-
-	env.stuf.plrstats = nil
-
-	local function updcharrefs(char)
-		if not char then return end
-		env.stuf.char = char
-
-		local statsfolder = env.stuf.char:WaitForChild("Stats", 5)
-		if statsfolder then
-			env.stuf.plrstats = statsfolder
+Services = setmetatable({}, {
+	__index = function(self, name)
+		local success, cache = pcall(function()
+			return cloneref(game:GetService(name))
+		end)
+		if success then
+			rawset(self, name, cache)
+			return cache
 		end
-
-		local hum = char:WaitForChild("Humanoid", 5)
-		if not hum then return end
-		env.stuf.hum = hum
-
-		local root = char:WaitForChild("HumanoidRootPart", 5)
-		if not root then return end
-		env.stuf.root = root
 	end
+})
 
-	if env.stuf.char then updcharrefs(env.stuf.char) end env.stuf.plr.CharacterAdded:Connect(function(char) t() updcharrefs(char) end)
-	ws:GetPropertyChangedSignal("CurrentCamera"):Connect(function() env.stuf.cam = ws.CurrentCamera end)
+local lmao = nil
 
-	-- game
-	env.stuf.placeid = getins(game, "PlaceId")
-	env.stuf.lobby, env.stuf.run, env.stuf.roleplay = 16116270224, 16552821455, 18984416148
-	env.stuf.inlobby, env.stuf.inrun, env.stuf.inrp = env.stuf.placeid == env.stuf.lobby, env.stuf.placeid == env.stuf.run, env.stuf.placeid == env.stuf.roleplay
-
-	env.stuf.gamemap = nil
-	env.stuf.roomfolder, env.stuf.elevator = nil
-	env.stuf.plrfolder = env.stuf.inrun and ws:WaitForChild("InGamePlayers") or ws:WaitForChild("Players")
-
-	env.stuf.refconn, env.stuf.refconn2 = nil
-	env.stuf.gameinfo, env.stuf.currentroom, env.stuf.freearea, env.stuf.twisteds, env.stuf.items, env.stuf.machines, env.stuf.fakeelevator = nil
-	if env.stuf.inrun then
-		spwn(function()
-			yield(function() return env.setupcomplete end)
-			env.stuf.elevator = ws:WaitForChild("Elevators"):WaitForChild("Elevator") env.funcs.box("found \"Elevator\" model")
-			env.stuf.roomfolder = ws:WaitForChild("CurrentRoom") env.funcs.box("found \"CurrentRoom\" folder")
-
-			local updrefsrunning = false
-
-			local function updrefs()
-				if updrefsrunning then return end
-				updrefsrunning = true
-				env.funcs.box("updating references")
-
-				task.delay(0.1, function()
-					updrefsrunning = false
-
-					env.stuf.gameinfo = ws:FindFirstChild("Info")
-					env.stuf.currentroom = env.funcs.getroom()
-
-					if not env.stuf.currentroom then
-						if env.stuf.refconn then env.stuf.refconn:Disconnect() env.stuf.refconn = nil end
-						if env.stuf.refconn2 then env.stuf.refconn2:Disconnect() env.stuf.refconn2 = nil end
-						env.funcs.pop("The room doesn't exist yet!")
-						return
-					end
-
-					if env.stuf.refconn then env.stuf.refconn:Disconnect() env.stuf.refconn = nil end
-					if env.stuf.refconn2 then env.stuf.refconn2:Disconnect() env.stuf.refconn2 = nil end
-
-					env.stuf.freearea = env.stuf.currentroom:WaitForChild("FreeArea")
-					env.stuf.fakeelevator = env.stuf.freearea:WaitForChild("FakeElevator")
-					env.stuf.twisteds = env.stuf.currentroom:WaitForChild("Monsters")
-					env.stuf.items = env.stuf.currentroom:WaitForChild("Items")
-					env.stuf.machines = env.stuf.currentroom:WaitForChild("Generators")
-					env.funcs.box("monitoring current room")
-
-					env.stuf.refconn = env.stuf.currentroom.ChildAdded:Connect(updrefs)
-					env.stuf.refconn2 = env.stuf.currentroom.ChildRemoved:Connect(updrefs)
-
-					task.delay(0.1, function()
-						if not env.stuf.visualssectionloaded then repeat t() until env.stuf.visualssectionloaded end
-						env.funcs.reverifesp(true)
-					end)
+function antiafk(state)
+	if state then
+		if getconnections then
+			for _, connection in pairs(getconnections(env.stuf.plr.Idled)) do
+				if connection["Disable"] then
+					connection["Disable"](connection)
+				elseif connection["Disconnect"] then
+					connection["Disconnect"](connection)
+				end
+			end
+		else
+			if not lmao then
+				lmao = env.stuf.plr.Idled:Connect(function()
+					Services.VirtualUser:CaptureController()
+					Services.VirtualUser:ClickButton2(Vector2.new())
 				end)
 			end
-
-			env.stuf.roomfolder.ChildAdded:Connect(updrefs)
-			env.stuf.roomfolder.ChildRemoved:Connect(updrefs)
-			env.funcs.box("monitoring \"CurrentRoom\" folder")
-			updrefs()
-		end)
-	end
-
-	-- ui
-	env.stuf.mainframe, env.stuf.mainframesections = nil
-	env.stuf.togglebutton, env.stuf.togglebuttondrag = nil
-	env.stuf.popup = nil
-
-	env.stuf.soundholder = hiddenui:FindFirstChild("aud")
-	if not hiddenui:FindFirstChild("aud") then env.stuf.soundholder = Instance.new("Folder") env.stuf.soundholder.Name = "aud" env.stuf.soundholder.Parent = hiddenui end
-
-	env.stuf.buttonscalelistenercount = 0
-	env.stuf.buttonscalelisteners = {}
-	env.stuf.mainframescale = Instance.new("UIScale")
-	env.stuf.buttonscale = Instance.new("UIScale")
-
-	spwn(function() 
-		if not env.funcs.recursivels then repeat t() until function() return env.funcs.recursivels end end
-		env.stuf.dialogue = env.funcs.recursivels("book%201/%CA%95u/%CA%94d.lua", true) 
-	end)
-
-	-- donor handling
-	env.stuf.handshaker = {}
-	env.stuf.handshaker.handshakenclients = {}
-	env.stuf.handshaker.id = "rbxassetid://282574440BSGUI_"
-	env.stuf.handshaker.donorid = "rbxassetid://188242481BSGUI_"
-	env.stuf.handshaker.riddancekey = "rbxassetid://67riddance_chat_"
-	env.stuf.handshaker.detectedRiddance = {}
-	env.stuf.handshaker.cansend = true
-	env.stuf.handshaker.commands = {}
-	env.stuf.handshaker.excludeself = true
-	env.stuf.handshaker.scanningplayers = false
-
-	env.stuf.handshaker.animations = {
-		check = Instance.new("Animation"),
-		donor = Instance.new("Animation")
-	}
-
-	env.stuf.handshaker.tracks = {
-		check = nil,
-		donor = nil
-	}
-
-	spwn(function()
-		if env.stuf.handshaker.scanningplayers then return end
-		if not env.stuf.handshaker.monitor then repeat t() until function() return env.stuf.handshaker.monitor end end
-		for _, plr in ipairs(plrs:GetPlayers()) do env.stuf.handshaker.monitor(plr) end plrs.PlayerAdded:Connect(function(plr) env.stuf.handshaker.monitor(plr) end)
-		env.stuf.handshaker.scanningplayers = true
-	end)
-
-	for _, pass in ipairs({ 1085884381, 1318032362, 1480841694, 1480783676, 1481391576 }) do 
-		spwn(function() 
-			while t() do 
-				local success, result = pcall(function() return mps:UserOwnsGamePassAsync(env.stuf.plrid, pass) end) 
-				if success then 
-					if result then 
-						table.insert(env.essentials.data.autodonors, env.stuf.user) 
-					end 
-					break 
-				end 
-			end 
-		end) 
+		end
+	else
+		if getconnections then
+			for _, connection in pairs(getconnections(env.stuf.plr.Idled)) do
+				if connection["Enable"] then
+					connection["Enable"](connection)
+				elseif connection["Reconnect"] then
+					connection["Reconnect"](connection)
+				end
+			end
+		else
+			if lmao then
+				lmao:Disconnect()
+				lmao = nil
+			end
+		end
 	end
 end
 
 -------------------------------------------------------------------------------------------------------------------------------
 
--- functions
-do
-	-- debugging
-	function env.funcs.getservertime() -- returns the server time
-		return os.date("%H:%M:%S")
+local function forcequitmachine()
+	local decoding = env.funcs.getstats("player", env.stuf.char, "extracting")
+	if decoding ~= nil then
+		decoding.Stats.StopInteracting:FireServer("Stop")
 	end
+	return not env.stuf.plrgui.ScreenGui.Menu.StopGenerator.Visible
+end
 
-	function env.funcs.box(s, force) -- output
-		if env.gear.general.debugmode or force then
-			print("[Boxten]: " .. tostring(s))
+-------------------------------------------------------------------------------------------------------------------------------
+
+local autoforcequitmachineconn
+local function autoforcequitmachine(state)
+	if state then 
+		if not autoforcequitmachineconn then 
+			autoforcequitmachineconn = rst.StoryEvents.Spotted.OnClientEvent:Connect(forcequitmachine) 
+		end
+	else
+		if autoforcequitmachineconn then 
+			autoforcequitmachineconn:Disconnect() 
+			autoforcequitmachineconn = nil 
 		end
 	end
+end
 
-	function env.funcs.pop(s, force) -- warn
-		if env.gear.general.debugmode or force then
-			warn("[Poppy]: " .. tostring(s))
+-------------------------------------------------------------------------------------------------------------------------------
+
+local function fat(state)
+	if state then
+		for _, child in pairs(env.stuf.char:GetDescendants()) do
+			if child.ClassName == "Part" then
+				child.CustomPhysicalProperties = PhysicalProperties.new(100, 0.3, 0.5)
+			end
+		end
+	else 
+		for _, child in pairs(env.stuf.char:GetDescendants()) do
+			if child.ClassName == "Part" then
+				child.CustomPhysicalProperties = PhysicalProperties.new(0.7, 0.3, 0.5)
+			end
 		end
 	end
+end
 
-	function env.funcs.shr(s, force) -- error
-		if env.gear.general.debugmode or force then
-			error("[Shrimpo]: " .. tostring(s))
+-------------------------------------------------------------------------------------------------------------------------------
+
+local pushaurasenabled = false
+local pushaurasize = 20
+local activepushauras = {}
+local pushauraconns = {}
+
+local function makepushaura(monster)
+	if activepushauras[monster] then return end
+
+	local anchorPart = env.funcs.getstats("twisted", monster, "troot")
+	if not anchorPart then return end
+
+	local aura = Instance.new("Part")
+	aura.Anchored = true
+	aura.CanCollide = true
+	aura.Transparency = 0.5
+	aura.Color = Color3.fromRGB(255, 255, 255)
+	aura.CastShadow = false
+	aura.Material = Enum.Material.ForceField
+	aura.Massless = true
+	aura.Size = Vector3.new(pushaurasize, pushaurasize, pushaurasize)
+	aura.Shape = Enum.PartType.Ball
+	aura.CanQuery = false
+	aura.Name = "big fat transparent sphere parented to a twisted"
+
+	local mesh = Instance.new("SpecialMesh")
+	mesh.MeshType = Enum.MeshType.Sphere
+	mesh.Scale = Vector3.new(1, 1, 1)
+	mesh.Parent = aura
+
+	aura.Parent = workspace
+	activepushauras[monster] = {aura = aura, anchor = anchorPart}
+
+	activepushauras[monster].connection = rs.Heartbeat:Connect(function()
+		if not pushaurasenabled or not anchorPart or not anchorPart.Parent then
+			removepushaura(monster)
+			return
 		end
+
+		aura.Position = anchorPart.Position
+		aura.Size = Vector3.new(pushaurasize, pushaurasize, pushaurasize)
+	end)
+end
+
+function removepushaura(monster)
+	local data = activepushauras[monster]
+	if data then
+		if data.connection then 
+			data.connection:Disconnect() 
+		end
+		if data.aura and data.aura.Parent then 
+			data.aura:Destroy() 
+		end
+		activepushauras[monster] = nil
+	end
+end
+
+local function clearpushauralisteners()
+	for _, conn in pairs(pushauraconns) do
+		if conn then conn:Disconnect() end
+	end
+	table.clear(pushauraconns)
+end
+
+local function applypushauras()
+	for monster, _ in pairs(activepushauras) do
+		removepushaura(monster)
 	end
 
-	-- utility
-	function env.funcs.recursivels(link, frompath) -- replaces loadstring, tries to load the link 3 times if unsuccessful
-		local atts = 1
-		local start = os.clock()
+	if not pushaurasenabled then 
+		clearpushauralisteners()
+		return 
+	end
 
-		local success, result = pcall(function()
-			local truelink = link
-			if frompath then truelink = "https://raw.githubusercontent.com/bookworming/bookshelf/refs/heads/main/" .. link end
-			local source = game:HttpGet(truelink)
-			return loadstring(source)()
-		end)
+	if not env.stuf.currentroom then return end
 
-		if success then
-			env.funcs.box(string.format("url loaded in %.3fs", os.clock() - start))
-			return result
-		else
-			env.funcs.pop("URL failed!: " .. result)
-
-			if atts < 3 then
-				t(1)
-				return env.funcs.recursivels(link, atts + 1)
-			else
-				env.funcs.shr("SOMETHING WENT WRONG. TRY AGAIN LATER. (" .. result .. ")")
-				return nil
+	for _, monster in pairs(env.stuf.twisteds:GetChildren()) do
+		if monster:IsA("Model") then
+			local monsterName = monster.Name
+			if not string.find(monsterName, "Connie") and not string.find(monsterName, "Rodger") and not string.find(monsterName, "RazzleDazzle") and not string.find(monsterName, "Blot") then
+				makepushaura(monster)
 			end
 		end
 	end
 
-	function env.funcs.datacheck(class, aim) -- checks whether the target user is in the specified userclass, returns true or false
-		aim = aim or env.stuf.user
-		for _, user in ipairs(class) do if user == aim then return true end end return false
+	clearpushauralisteners()
+
+	pushauraconns["added"] = env.stuf.twisteds.ChildAdded:Connect(function(monster)
+		if pushaurasenabled and monster:IsA("Model") then
+			local monsterName = monster.Name
+			if not string.find(monsterName, "Connie") and not string.find(monsterName, "Rodger") then
+				t(0.2)
+				makepushaura(monster)
+			end
+		end
+	end)
+
+	pushauraconns["removed"] = env.stuf.twisteds.ChildRemoved:Connect(function(monster)
+		removepushaura(monster)
+	end)
+
+	pushauraconns["descendantAdded"] = env.stuf.currentroom.DescendantAdded:Connect(function(obj)
+		if obj.Name == "Monsters" and obj:IsA("Folder") then
+			applypushauras()
+		end
+	end)
+end
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+local dodgetwistedssafedist = 12
+local dodgetwistedsenabled = false
+local dodgetwistedsthread = nil
+
+local function isvalidpart(part)
+	return part and part:IsA("BasePart") and part:IsDescendantOf(ws)
+end
+
+local function getcleardist(origin, direction, maxDist)
+	local params = RaycastParams.new()
+	params.FilterDescendantsInstances = {env.stuf.char}
+	params.FilterType = blacklistrayfilter
+
+	local result = ws:Raycast(origin, direction.Unit * maxDist, params)
+	if result then
+		return (result.Position - origin).Magnitude
+	else
+		return maxDist
 	end
+end
 
-	function env.funcs.identifyexec() -- returns the user's executor
-		local a, b = pcall(identifyexecutor) 
+local function getsafestdirection(fromPos, monsters)
+	local bestDirection = nil
+	local bestScore = -math.huge
+	local wallAvoidDist = 10
 
-		if a and b then 
-			return b 
-		else 
-			return "Unknown" 
-		end 
-	end
+	for angle = 0, 360 - 15, 15 do
+		local dir = CFrame.Angles(0, math.rad(angle), 0).LookVector
+		local clearDist = getcleardist(fromPos, dir, dodgetwistedssafedist)
 
-	function env.funcs.copytoclipboard(txt) -- copies a string to the player's clipboard
-		if clipboard then 
-			clipboard(tostring(txt))
-		end 
-	end
+		local wallPenalty = 0
+		if clearDist < wallAvoidDist then
+			wallPenalty = (wallAvoidDist - clearDist) * 5
+		end
 
-	function env.funcs.setcore(core, state) -- alternative to setcoreguienabled
-		if core == "bag" then
-			srgui:SetCoreGuiEnabled(Enum.CoreGuiType.Backpack, state)
+		local danger = 0
+		for _, m in ipairs(monsters) do
+			if isvalidpart(m) then
+				local toMonster = (m.Position - fromPos)
+				local dot = dir:Dot(toMonster.Unit)
+				if dot > 0 then
+					danger += (dot / toMonster.Magnitude)
+				end
+			end
+		end
 
-		elseif core == "console" then
-			srgui:SetCore("DevConsoleVisible", state)
+		local score = clearDist - (danger * 10) - wallPenalty
+		if score > bestScore then
+			bestScore = score
+			bestDirection = dir
 		end
 	end
 
-	function env.funcs.resolvetargets(i) -- resolves targets
-		local t = {}
-		if not i or (type(i) == "string" and i:match("^%s*$")) then return {env.stuf.plr} end
+	return bestDirection and bestDirection.Unit or nil
+end
 
-		local targets = {}
+local function gettwisroots()
+	local roots = {}
+	if not env.stuf.twisteds then return roots end
 
-		if type(i) == "string" then
-			for part in i:gmatch("[^,]+") do
-				local trimmed = part:match("^%s*(.-)%s*$")
-				if trimmed ~= "" then
-					table.insert(targets, trimmed:lower())
-				end
-			end
-
-		elseif type(i) == "table" then
-			for _, part in ipairs(i) do
-				if typeof(part) == "string" then
-					local trimmed = part:match("^%s*(.-)%s*$")
-					if trimmed ~= "" then
-						table.insert(targets, trimmed:lower())
-					end
-				end
-			end
-
-		else
-			return {env.stuf.plr}
-		end
-
-		local added = {}
-		local function add(player)
-			if player and not added[player] then
-				table.insert(t, player)
-				added[player] = true
+	if env.stuf.twisteds then
+		for _, monster in ipairs(env.stuf.twisteds:GetChildren()) do
+			local root = table.insert(roots, env.funcs.getstats("twisted", monster, "troot"))
+			if isvalidpart(root) then
+				table.insert(roots, root)
 			end
 		end
+	end
+	return roots
+end
 
-		for _, part in ipairs(targets) do
-			if part == "me" then
-				add(env.stuf.plr)
+local function avoidloop()
+	while dodgetwistedsenabled do
+		t()
 
-			elseif part == "random" then
-				local all = plrs:GetPlayers()
-				if #all > 0 then
-					add(all[math.random(1, #all)])
-				end
+		local monsters = gettwisroots()
+		if #monsters == 0 then continue end
 
-			elseif part == "others" then
-				for _, otherplr in ipairs(plrs:GetPlayers()) do
-					if otherplr ~= env.stuf.plr then
-						add(otherplr)
-					end
-				end
+		local danger = false
+		for _, m in ipairs(monsters) do
+			local dist = (m.Position - env.stuf.root.Position).Magnitude
+			if dist < dodgetwistedssafedist then
+				danger = true
+				break
+			end
+		end
 
-			elseif part == "all" then
-				for _, otherplr in ipairs(plrs:GetPlayers()) do
-					add(otherplr)
-				end
+		if danger then
+			local safeDir = getsafestdirection(env.stuf.root.Position, monsters)
+			if safeDir then
+				local newPos = env.stuf.root.Position + Vector3.new(safeDir.X, 0, safeDir.Z) * 12
+				env.stuf.root.CFrame = CFrame.new(newPos, env.stuf.root.CFrame.LookVector + newPos)
+			end
+		end
+	end
+end
 
-			elseif part == "nonfriends" then
-				for _, otherplr in ipairs(plrs:GetPlayers()) do
-					if otherplr ~= env.stuf.plr and not env.stuf.plr:IsFriendsWith(otherplr.UserId) then
-						add(otherplr)
-					end
-				end
+local function avoidtwisteds(state)
+	if state then
+		if dodgetwistedsenabled then return end
+		dodgetwistedsenabled = true
+		dodgetwistedsthread = spwn(avoidloop)
+	else
+		if not dodgetwistedsenabled then return end
+		dodgetwistedsenabled = false
+		dodgetwistedsthread = nil
+	end
+end
 
-			elseif part == "friends" then
-				for _, otherplr in ipairs(plrs:GetPlayers()) do
-					if otherplr ~= env.stuf.plr and env.stuf.plr:IsFriendsWith(otherplr.UserId) then
-						add(otherplr)
-					end
-				end
+-------------------------------------------------------------------------------------------------------------------------------
 
-			else
-				for _, otherplr in ipairs(plrs:GetPlayers()) do
-					local usernamematch = otherplr.Name:lower():find(part, 1, true)
-					local displaymatch = otherplr.DisplayName:lower():find(part, 1, true)
+local function offsettwisteds(x, y, z)
+	rst.Events.GetCharacterPosition.OnClientInvoke = function() 
+		return env.stuf.char:GetPivot().Position + Vector3.new(x, y, z)
+	end
+end
 
-					local toon = nil
-					if otherplr.Character then
-						toon = env.funcs.getstats("player", otherplr.Character, "currenttoon")
-					end
+local function unoffsettwisteds()
+	rst.Events.GetCharacterPosition.OnClientInvoke = function() 
+		return env.stuf.char:GetPivot().Position
+	end
+end
 
-					local toonmatch = toon and toon:lower():find(part, 1, true)
+local antigrabconn
+local antigrabdb = 0
 
-					if usernamematch or displaymatch or toonmatch then
-						add(otherplr)
+local function antigrab(state)
+	if state then
+		if antigrabconn then return end
+		antigrabconn = rst.StoryEvents.Spotted.OnClientEvent:Connect(function()
+			for _, twisted in env.stuf.twisteds do
+				if twisted.Name:find("Goob") or twisted.Name:find("Gigi") or twisted.Name:find("Scraps") then
+					if env.funcs.getstats("twisted", twisted, "chasing") == env.stuf.user then
+						local now = os.clock()
+						antigrabdb = now
+
+						offsettwisteds(0, -3.5, 0)
+
+						task.delay(1, function()
+							if os.clock() - antigrabdb >= 1 then
+								unoffsettwisteds()
+							end
+						end)
+
 						break
 					end
 				end
 			end
-		end
-
-		return t
-	end
-
-	function env.funcs.playsound(id, vol, pitch, timepos, parent) -- plays the target sound
-		local s
-		task.spawn(function()
-			s = Instance.new("Sound")
-			s.SoundId = id
-			s.Volume = vol or 0.5
-			s.TimePosition = timepos or 0
-			s.PlaybackSpeed = pitch or 1
-			s.Parent = parent or env.stuf.soundholder
-			s.Ended:Connect(function() s:Destroy() end)
-			s:Play()
 		end)
-		return s
+	else
+		if antigrabconn then
+			antigrabconn:Disconnect()
+			antigrabconn = nil
+		end
 	end
+end
 
-	-- game
-	function env.funcs.getroom() -- checks if currentroom folder has a parent, returns the folders child or nil
-		if env.stuf.gamemap and env.stuf.gamemap.Parent then return env.stuf.gamemap end
-		env.stuf.gamemap = ws.CurrentRoom:FindFirstChildWhichIsA("Model")
-		if env.stuf.gamemap then return env.stuf.gamemap else env.funcs.pop("Room not found.") return nil end
-	end
+-------------------------------------------------------------------------------------------------------------------------------
 
-	function env.funcs.exists(plr) -- checks if the player exists in the player folder (ingame and not ingame), returns true or false
-		local exists, aim = nil, (plr and plr.Name) or env.stuf.user
-		if not env.stuf.inrun then exists = env.stuf.plrfolder:FindFirstChild(aim) 
-		else exists = env.stuf.plrfolder:FindFirstChild(aim) end
-		return exists
-	end
+local function pickupallitems()
+	local oldcf = env.stuf.root.CFrame
+	ws.Gravity = 0
 
-	function env.funcs.getstats(type, obj, key) -- returns a table full of the target objects stats, can fetch the floor, item, machine, twisted, and another players stats
-		if not obj:IsA("Model") then env.funcs.shr("INVALID OBJECT, IDIOT!!!") end
-		local name = obj.Name
+	if env.stuf.currentroom then
+		if env.stuf.items and #env.stuf.items:GetChildren() > 0 then
+			for _, item in ipairs(env.stuf.items:GetChildren()) do
+				if item.Name:find("FakeCap") then env.funcs.popup("Twisted Rodger's capsule is on this floor. Are you sure you still want to run this?", "Yes", nil, "Nevermind", function() return end) end
 
-		local result, keymap
-
-		if type == "floor" then
-			local floorname = env.stuf.currentroom.Name
-			local hasdialoguetriggers = obj:GetAttribute("HasDialogueTriggers")
-
-			local twistedsonfloor = {}
-			for model in ipairs(env.stuf.twisteds:GetChildren()) do
-				if model:IsA("Model") then
-					table.insert(twistedsonfloor, model)
+				if item:IsA("Model") then
+					local itemCFrame = item:GetPivot() * CFrame.new(0, env.gear.general.itemtpposyoffset, 0)
+					fireproximityprompt(item.Prompt:FindFirstChildOfClass("ProximityPrompt"))
+					for _ = 1, 15 do env.funcs.moveplr(itemCFrame, "tp") t() end
+					fireproximityprompt(item.Prompt:FindFirstChildOfClass("ProximityPrompt"))
 				end
 			end
-
-			local itemsonfloor = {}
-			for model in ipairs(env.stuf.items:GetChildren()) do
-				if model:IsA("Model") then
-					table.insert(itemsonfloor, model)
-				end
-			end
-
-			result = {floorname, twistedsonfloor, itemsonfloor, hasdialoguetriggers}
-
-		elseif type == "item" then
-			local prompt = obj:FindFirstChild("Prompt")
-			local act = prompt:FindFirstChildOfClass("ProximityPrompt")
-
-			local research
-			if name == "ResearchCapsule" then 
-				research = prompt:FindFirstChild("Monster").Value
-			end
-
-			result = {act, research}
-
-		elseif type == "machine" then
-			local stats = obj:FindFirstChild("Stats")
-			local pos = obj:FindFirstChild("TeleportPositions"):FindFirstChild("TeleportPosition").CFrame * CFrame.new(0, 2.3, 0)
-
-			local active = stats:FindFirstChild("ActivePlayer").Value
-			local completed = stats:FindFirstChild("Completed").Value
-			local possessed = stats:FindFirstChild("Connie").Value
-			local amount = stats:FindFirstChild("CurrentAmount").Value
-			local required = stats:FindFirstChild("RequiredAmount").Value
-
-			local machtype = obj:GetAttribute("MinigameType")
-			if machtype == "MovementTreadmill" then 
-				machtype = "treadmill"
-				pos = obj:FindFirstChild("TeleportPositions"):FindFirstChild("TreadmillTeleportPosition").CFrame * CFrame.new(0, 2.3, 0)
-			elseif machtype == "Circle" then 
-				machtype = "circle"
-			else
-				machtype = "normal"
-			end
-
-			result = {pos, active, completed, possessed, amount, required, machtype}
-
-		elseif type == "twisted" then
-			local name = obj.Name
-			local troot = obj:FindFirstChild("HumanoidRootPart") or obj.PrimaryPart or obj:FindFirstChildWhichIsA("BasePart")
-			local chaser = obj:FindFirstChild("Chaser")
-
-			local hearingrad, intrestrad, hitboxrad, visionrad, intresttime, LoS, hitcooldown
-			if chaser then
-				hearingrad = chaser:FindFirstChild("HearingRadius").Value
-				intrestrad = chaser:FindFirstChild("InstantRadius").Value
-				hitboxrad = chaser:FindFirstChild("HearingRadius").Value
-				visionrad = chaser:FindFirstChild("VisionRadius").Value
-
-				intresttime = chaser:FindFirstChild("InterestTime").Value
-				LoS = chaser:FindFirstChild("LineOfSight")
-				hitcooldown = chaser:FindFirstChild("HitCooldown")
-			end
-
-			local chasing = obj:FindFirstChild("ChasingValue")
-			local ischasing = chasing and chasing.Value ~= nil
-
-			local hasability = obj:FindFirstChild("Grabbing")
-			local usingability = hasability and hasability.Value
-			local alerted = obj:GetAttribute("Alerted")
-			
-			local research
-			local research = rst:FindFirstChild("PlayerData"):FindFirstChild(env.stuf.plrid):FindFirstChild("Research")
-			local tr = research:FindFirstChild(name)
-			if not tr then research = 0 else research = tr.Value end
-
-			result = {name, troot, alerted, research, hearingrad, intrestrad, hitboxrad, visionrad, intresttime, LoS, hitcooldown, chasing, ischasing, hasability, usingability}
-
-		elseif type == "player" then
-			local inserver = plrs:FindFirstChild(obj.Name)
-
-			if not inserver then return end
-
-			local ins = inserver and plrs:FindFirstChild(obj.Name)
-			local currenttoon = obj:FindFirstChild("Config"):FindFirstChild("ModuleName").Value
-
-			if not env.stuf.inrun then return {ins, currenttoon} end
-
-			local icon = obj:FindFirstChild("Config"):FindFirstChild("Icon").Texture
-			local runstats = env.stuf.gameinfo:FindFirstChild("PlayerStats"):FindFirstChild(ins.Name)
-
-			local capsulespickedup = runstats:FindFirstChild("Capsules").Value
-			local itemspickedup = runstats:FindFirstChild("Items").Value
-			local machinescompleted = runstats:FindFirstChild("Generators").Value
-			local ichorearned = runstats:FindFirstChild("Ichor").Value
-			local twistedsencountered = runstats:FindFirstChild("Monsters").Value
-			local tapescollected = runstats:FindFirstChild("SurvivalPoints").Value
-			local toonpicked = ins:GetAttribute("SelectedCharacter")
-
-			local dead = inserver and not ws:FindFirstChild("InGamePlayers"):FindFirstChild(ins.Name)
-			local left = inserver == false
-
-			local function fetchitem(slot)
-				local ins = obj:FindFirstChild("Inventory"):FindFirstChild("Slot" .. slot)
-				if slot == 4 then if not ins then return "None" end end
-				return ins.Value
-			end
-
-			local function fetchtrinket(slot)
-				return ins:GetAttribute("EquippedTrinket" .. slot)
-			end
-
-			local slot1, slot2, slot3, slot4 = fetchitem(1), fetchitem(2), fetchitem(3), fetchitem(4)
-			local inventoryfull = slot1 ~= "None" and slot2 ~= "None" and slot3 ~= "None" and (slot4 and slot4 ~= "None")
-			local trinket1, trinket2 = fetchtrinket(1), fetchtrinket(2)
-
-			local extracting = obj:FindFirstChild("Decoding").Value
-			local currentstealth = ins:GetAttribute("Stealth")
-			local twistedschasing = ins:GetAttribute("ChaseCount").Value
-
-			local abilitycooldown, currentabilitycooldown
-
-			for _, ability in pairs(obj:FindFirstChild("Abilities"):GetChildren()) do
-				if ability:FindFirstChild("Cooldown") then
-					abilitycooldown = ability:FindFirstChild("Cooldown").Value
-					currentabilitycooldown = ability:FindFirstChild("CurrentCooldown").Value
-				end
-			end
-
-			result = {currentstealth, twistedschasing, currenttoon, inserver, ins, dead, left, capsulespickedup, itemspickedup, machinescompleted, ichorearned, twistedsencountered, tapescollected, toonpicked, slot1, slot2, slot3, slot4, trinket1, trinket2, extracting, icon, abilitycooldown, currentabilitycooldown}
-
-			return result[key:lower()]
 		end
 	end
 
-	function env.funcs.getgamestat(stat) -- returns the value of the target game stat
-		local gamestats = {
-			gamestarted = env.stuf.gameinfo:FindFirstChild("GameStarted").Value,
-			cardvoting = env.stuf.gameinfo:FindFirstChild("CardVoting").Value,
-			dandyselling = env.stuf.gameinfo:FindFirstChild("DandyStoreOpen").Value,
-			currentfloor = env.stuf.gameinfo:FindFirstChild("Floor").Value,
-			flooractive = env.stuf.gameinfo:FindFirstChild("FloorActive").Value,
-			panicmode = env.stuf.gameinfo:FindFirstChild("Panic").Value,
-			machscompleted = env.stuf.gameinfo:FindFirstChild("GeneratorsCompleted").Value,
-			machsrequired = env.stuf.gameinfo:FindFirstChild("RequiredGenerators").Value,
-			blackout = env.stuf.gameinfo:FindFirstChild("BlackOut").Value,
-			playersalive = env.stuf.gameinfo:FindFirstChild("ActivePlayers").Value,
-			boughtnothingfor = env.stuf.gameinfo:FindFirstChild("DandyTracker"):FindFirstChild("NoBuy").Value
-		}
+	env.funcs.moveplr(oldcf, "tp")
+	oldcf = nil
+	ws.Gravity = 196.2
+end
 
-		return stat and gamestats[stat:lower()] or gamestats
+local function pickupallcapsules()
+	local oldcf = env.stuf.root.CFrame
+	ws.Gravity = 0
+
+	if env.stuf.currentroom then
+		if env.stuf.items and #env.stuf.items:GetChildren() > 0 then
+			for _, item in ipairs(env.stuf.items:GetChildren()) do
+				if item:IsA("Model") and item.Name:find("ResearchCapsule") then
+					local itemCFrame = item:GetPivot() * CFrame.new(0, env.gear.general.itemtpposyoffset, 0)
+					fireproximityprompt(item.Prompt:FindFirstChildOfClass("ProximityPrompt"))
+					for _ = 1, 15 do env.funcs.moveplr(itemCFrame, "tp") t() end
+					fireproximityprompt(item.Prompt:FindFirstChildOfClass("ProximityPrompt"))
+				end
+			end
+		end
 	end
 
-	function env.funcs.useitem(slot, breakifoneused)
-		if slot == "all" then
-			for i = 1, 4 do
-				local slotn = "slot" .. i
-				local slotvalue = env.funcs.getstats("player", env.stuf.char, slotn)
-				
-				if slotvalue ~= "None" then
-					rst.Events.ItemEvent:InvokeServer(env.stuf.char, slotn)
-					
-					if breakifoneused then
-						local newslotvalue = env.funcs.getstats("player", env.stuf.char, slotn)
-						if newslotvalue == "None" then
+	env.funcs.moveplr(oldcf, "tp")
+	oldcf = nil
+	ws.Gravity = 196.2
+end
+
+local function pickupalltapes()
+	local oldcf = env.stuf.root.CFrame
+	ws.Gravity = 0
+
+	if env.stuf.currentroom then
+		if env.stuf.items and #env.stuf.items:GetChildren() > 0 then
+			for _, item in ipairs(env.stuf.items:GetChildren()) do
+				if item:IsA("Model") and item.Name:find("Tape") then
+					local itemCFrame = item:GetPivot() * CFrame.new(0, env.gear.general.itemtpposyoffset, 0)
+					fireproximityprompt(item.Prompt:FindFirstChildOfClass("ProximityPrompt"))
+					for _ = 1, 15 do env.funcs.moveplr(itemCFrame, "tp") t() end
+					fireproximityprompt(item.Prompt:FindFirstChildOfClass("ProximityPrompt"))
+				end
+			end
+		end
+	end
+
+	env.funcs.moveplr(oldcf, "tp")
+	oldcf = nil
+	ws.Gravity = 196.2
+end
+
+local function pickupallheals()
+	local oldcf = env.stuf.root.CFrame
+	ws.Gravity = 0
+
+	if env.stuf.currentroom then
+		if env.stuf.items and #env.stuf.items:GetChildren() > 0 then
+			for _, item in ipairs(env.stuf.items:GetChildren()) do
+				if item:IsA("Model") and item.Name:find("HealthKit") or item.Name:find("Bandage") then
+					local itemCFrame = item:GetPivot() * CFrame.new(0, env.gear.general.itemtpposyoffset, 0)
+					fireproximityprompt(item.Prompt:FindFirstChildOfClass("ProximityPrompt"))
+					for _ = 1, 15 do env.funcs.moveplr(itemCFrame, "tp") t() end
+					fireproximityprompt(item.Prompt:FindFirstChildOfClass("ProximityPrompt"))
+				end
+			end
+		end
+	end
+
+	env.funcs.moveplr(oldcf, "tp")
+	oldcf = nil
+	ws.Gravity = 196.2
+end
+
+local function pickupallextitems()
+	local oldcf = env.stuf.root.CFrame
+	ws.Gravity = 0
+
+	if env.stuf.currentroom then
+		if env.stuf.items and #env.stuf.items:GetChildren() > 0 then
+			for _, item in ipairs(env.stuf.items:GetChildren()) do
+				if item:IsA("Model") and item.Name:find("JumperCable") or item.Name:find("ExtractionSpeedCandy") or item.Name:find("SkillCheckCandy") or item.Name:find("Jawbreaker") then
+					local itemCFrame = item:GetPivot() * CFrame.new(0, env.gear.general.itemtpposyoffset, 0)
+					fireproximityprompt(item.Prompt:FindFirstChildOfClass("ProximityPrompt"))
+					for _ = 1, 15 do env.funcs.moveplr(itemCFrame, "tp") t() end
+					fireproximityprompt(item.Prompt:FindFirstChildOfClass("ProximityPrompt"))
+				end
+			end
+		end	
+	end
+
+	env.funcs.moveplr(oldcf, "tp")
+	oldcf = nil
+	ws.Gravity = 196.2
+end
+
+local function pickupalleventitems()
+	local oldcf = env.stuf.root.CFrame
+	ws.Gravity = 0
+
+	if env.stuf.currentroom then
+		if env.stuf.items and #env.stuf.items:GetChildren() > 0 then
+			for _, item in ipairs(env.stuf.items:GetChildren()) do
+				if item:IsA("Model") and item.Name:find("HolidayCollectibleItem") then
+					local itemCFrame = item:GetPivot() * CFrame.new(0, env.gear.general.itemtpposyoffset, 0)
+					fireproximityprompt(item.Prompt:FindFirstChildOfClass("ProximityPrompt"))
+					for _ = 1, 15 do env.funcs.moveplr(itemCFrame, "tp") t() end
+					fireproximityprompt(item.Prompt:FindFirstChildOfClass("ProximityPrompt"))
+				end
+			end
+		end
+	end
+
+	env.funcs.moveplr(oldcf, "tp")
+	oldcf = nil
+	ws.Gravity = 196.2
+end
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+local function shakesquirmoff()
+	local function tap(dir)
+		rst.Events.TwistedSquirmGrab:FireServer(unpack({"Struggle", dir}))
+	end
+
+	local ui = env.stuf.plrgui.TwistedSquirmEscapeUI
+	if ui.Enabled then
+		while ui.Enabled do
+			tap("left") t()
+			tap("right") t()
+			if not ui.Enabled then break end
+		end
+	end
+end
+
+encounteringtwisteds = false
+
+function encountertwisteds()
+	if encounteringtwisteds then return end
+	encounteringtwisteds = true
+
+	local ogpos = env.stuf.root.CFrame
+	t()
+
+	if env.stuf.currentroom and env.stuf.twisteds then
+		ws.Gravity = 0
+		local visitedrnd = false
+
+		for _, monster in ipairs(env.stuf.twisteds:GetChildren()) do
+			if monster:IsA("Model") and monster:FindFirstChild("HumanoidRootPart") then
+				local mname = monster.Name:lower()
+
+				if mname:find("rodger") then
+					env.funcs.moveplr(monster:GetModelCFrame() + Vector3.new(0, 6, 0), "tp")
+					fireproximityprompt(env.stuf.items:FindFirstChild("FakeCapsule").Prompt:FindFirstChildOfClass("ProximityPrompt"))
+
+				elseif mname:find("razzle") and not visitedrnd then
+					visitedrnd = true
+
+					local infstamwasenabled = infinitestaminaenabled
+					local spr = hiddenui:FindFirstChild("SprintEvent") or rst.Events:WaitForChild("SprintEvent")
+
+					spwn(function()
+						if spr then spr.Parent = rst.Events spr:FireServer(false) end
+					end)
+
+					env.funcs.moveplr(monster:GetModelCFrame() + Vector3.new(0, -4, 0), "tp")
+					ws.Gravity = 196.2
+
+					spr = rst.Events.SprintEvent
+					if spr then spr:FireServer(true) end
+					spwn(function() vim:SendKeyEvent(true, Enum.KeyCode.W, false, uis) end)
+					t(0.5)
+					spwn(function() vim:SendKeyEvent(false, Enum.KeyCode.W, false, uis) end)
+					if spr then spr:FireServer(false) end
+
+					if infstamwasenabled then
+						spwn(function()
+							local spr = rst.Events:FindFirstChild("SprintEvent") or rst.Events:WaitForChild("SprintEvent")
+							if spr then spr:FireServer(false) spr.Parent = hiddenui end
+						end)
+					end
+
+					ws.Gravity = 0
+
+				elseif mname:find("squirm") then
+					local spotted = false
+					local spottedConn = rst.StoryEvents.Spotted.OnClientEvent:Connect(function()
+						spotted = true
+					end)
+
+					env.funcs.moveplr(monster:GetModelCFrame() + Vector3.new(0, -3, 0), "tp")
+
+					local starttime = tick()
+					while tick() - starttime < 3 do
+						if spotted then break end
+						t()
+					end
+
+					spottedConn:Disconnect()
+
+					if not spotted then
+						shakesquirmoff()
+					end
+
+				elseif not mname:find("razzle") and not mname:find("rodger") then
+					local starttime = tick()
+					while tick() - starttime < 0.3 do
+						if env.funcs.getstats("twisted", monster, "troot") then
+							local foff = (mname:find("dandy") or mname:find("dyle") or mname:find("pebble")) and -28 or -18
+							local targetcf = CFrame.new(
+								monster.HumanoidRootPart.Position - monster.HumanoidRootPart.CFrame.LookVector * foff,
+								monster.HumanoidRootPart.Position
+							)
+							env.funcs.moveplr(targetcf, "tp")
+						end
+						t()
+					end
+				end
+			end
+		end
+
+		env.funcs.moveplr(ogpos, "tp")
+		ws.Gravity = 196.2
+	end
+
+	encounteringtwisteds = false
+end
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+local directabilitytarget = ""
+local usingabildirectly = false
+
+local function fireability() rst.Events.AbilityEvent:InvokeServer(env.stuf.char, env.stuf.root.CFrame, false) end
+
+local function fireabilityon(plr, ginger)
+	if ginger then
+		local args = {
+			"HealChannelStarted",
+			plr
+		}
+		for _ = 1, 100 do
+			rst:WaitForChild("Events"):WaitForChild("GingerHealChannel"):FireServer(unpack(args))
+			t()
+		end
+		return
+	end
+
+	local args = {
+		env.stuf.char,
+		plr:FindFirstChild("HumanoidRootPart").CFrame,
+		plr
+	}
+	for _ = 1, 100 do
+		rst:WaitForChild("Events"):WaitForChild("AbilityEvent"):InvokeServer(unpack(args))
+		t()
+	end
+end
+
+local function useabildirect(args)
+	if usingabildirectly then return end 
+	usingabildirectly = true
+	local targets = env.funcs.resolvetargets(args)
+	if not targets or #targets == 0 then return end
+
+	local ogpos = env.stuf.root.CFrame
+
+	local target = targets[1]
+	if not target.Character then return end
+
+	for _ = 1, 20 do env.stuf.root.CFrame = target.Character:FindFirstChild("HumanoidRootPart").CFrame t() end
+	fireability()
+
+	env.stuf.root.CFrame = ogpos
+	usingabildirectly = false
+end
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+local boosting, boostspeed, fadedur, lastboosttime = false, 72, 0.5, -math.huge
+
+local function RUDIEBOOST()
+	if boosting then return end
+	local currenttime = tick()
+	if currenttime < lastboosttime then return end
+
+	local rudie = Instance.new("Animation")
+	rudie.AnimationId = "rbxassetid://82114603220952"
+	local rudietrack = env.stuf.hum:LoadAnimation(rudie)
+
+	boosting, lastboosttime = true, math.huge
+
+	local og = {}
+	for _, child in pairs(env.stuf.char:GetDescendants()) do
+		if child:IsA("Part") then
+			og[child] = child.CustomPhysicalProperties
+			child.CustomPhysicalProperties = PhysicalProperties.new(0.7, 0.3, 0.5)
+		end
+	end
+
+	spwn(function()
+		rudietrack:Play() 
+		if not env.stuf.inlobby then
+			firesignal(rst.Events.RenderObject.OnClientEvent, rst.Parts.RenderModules.RudieBoost, {env.stuf.char})
+		end
+	end)
+
+	spwn(function()
+		local step = 0.02
+		local maindur = 0
+		local tm = 0
+
+		while tm < maindur do
+			local md = env.stuf.hum.MoveDirection
+			local bd = md.Magnitude > 0 and md.Unit or env.stuf.root.CFrame.LookVector
+			env.stuf.root.AssemblyLinearVelocity = bd * boostspeed + Vector3.new(0, env.stuf.root.AssemblyLinearVelocity.Y, 0)
+			t(step)
+			tm += step
+		end
+
+		tm = 0
+		while tm < fadedur do
+			local alpha = tm / fadedur
+			local md = env.stuf.hum.MoveDirection
+			local bd = md.Magnitude > 0 and md.Unit or env.stuf.root.CFrame.LookVector
+			local normalvel = (md.Magnitude > 0) and md.Unit * env.stuf.hum.WalkSpeed or Vector3.new()
+			local boostvel = bd * boostspeed
+			local lerpvel = normalvel:Lerp(boostvel, 1 - alpha)
+			env.stuf.root.AssemblyLinearVelocity = lerpvel + Vector3.new(0, env.stuf.root.AssemblyLinearVelocity.Y, 0)
+			t(step)
+			tm += step
+		end
+
+		for part, properties in pairs(og) do
+			if part.Parent then
+				part.CustomPhysicalProperties = properties
+			end
+		end
+
+		boosting = false
+		lastboosttime = tick()
+	end)
+end
+
+env.stuf.plr.CharacterAdded:Connect(function()
+	boosting = false
+	lastboosttime = -math.huge
+end)
+
+env.stuf.plr.CharacterRemoving:Connect(function()
+	boosting = false
+end)
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+local loopspeedinput = 16
+local loopspeeding = false
+local humanmodifcons = {}
+
+local function setloopspeed(speed)
+	if speed then
+		local function WalkSpeedChange()
+			if env.stuf.hum then
+				env.stuf.hum.WalkSpeed = speed
+			end
+		end
+		WalkSpeedChange()
+		humanmodifcons.wsLoop = (humanmodifcons.wsLoop and humanmodifcons.wsLoop:Disconnect() and false) or env.stuf.hum:GetPropertyChangedSignal("WalkSpeed"):Connect(WalkSpeedChange)
+		humanmodifcons.wsCA = (humanmodifcons.wsCA and humanmodifcons.wsCA:Disconnect() and false) or env.stuf.plr.CharacterAdded:Connect(function()
+			WalkSpeedChange()
+			humanmodifcons.wsLoop = (humanmodifcons.wsLoop and humanmodifcons.wsLoop:Disconnect() and false) or env.stuf.hum:GetPropertyChangedSignal("WalkSpeed"):Connect(WalkSpeedChange)
+		end)
+	end
+end
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+local tpwalking = false
+local tpwalkcurrentspeed = 2
+local tpwalkonextract = false
+local tpwalksession = 0
+
+local function settpwalk(speed)
+	tpwalkcurrentspeed = tonumber(speed)
+	tpwalking = true
+	tpwalksession += 1
+	local currentsession = tpwalksession
+
+	if not env.stuf.hum then return end
+
+	spwn(function()
+		while tpwalking and env.stuf.hum and tpwalksession == currentsession do
+			local delta = rs.Heartbeat:Wait()
+
+			local canMove = true
+			if tpwalkonextract then
+				local decodingValue = env.stuf.char:FindFirstChild("Decoding")
+				if not (decodingValue and decodingValue.Value) then
+					canMove = false
+				end
+			end
+
+			if canMove and env.stuf.hum.MoveDirection.Magnitude > 0 then
+				env.stuf.char:TranslateBy(env.stuf.hum.MoveDirection * tpwalkcurrentspeed * delta * 10)
+			end
+		end
+	end)
+end
+
+local function untpwalk()
+	tpwalking = false
+	tpwalksession += 1
+end
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+noxflying = false
+noxflying2 = false
+noxflyspeed = 1
+noxflycontrol = {F = 0, B = 0, L = 0, R = 0, Q = 0, E = 0}
+noxflyinputbeganconnection, noxflyinputendedconnection, noxflystepconnection = nil, nil, nil
+
+function stopflying()
+	if not noxflying then return end
+
+	noxflying = false
+	ws.Gravity = 196.2
+
+	env.stuf.root.Velocity = Vector3.zero
+
+	if noxflyinputbeganconnection then noxflyinputbeganconnection:Disconnect() end
+	if noxflyinputendedconnection then noxflyinputendedconnection:Disconnect() end
+	if noxflystepconnection then noxflystepconnection:Disconnect() end
+
+	noxflycontrol = {F = 0, B = 0, L = 0, R = 0, Q = 0, E = 0}
+end
+
+function startflying(flySpeed)
+	stopflying()
+	if not noxflying2 then return end
+	if noxflying then return end
+
+	ws.Gravity = 0
+	noxflying = true
+	noxflyspeed = flySpeed or 1
+
+	local ctrl
+	if mobile then
+		ctrl = require(env.stuf.plr:WaitForChild("PlayerScripts"):WaitForChild("PlayerModule"):WaitForChild("ControlModule"))
+	end
+
+	noxflyinputbeganconnection = uis.InputBegan:Connect(function(input, gpe)
+		if gpe then return end
+		local key = input.KeyCode
+		if key == Enum.KeyCode.W then noxflycontrol.F = 1 end
+		if key == Enum.KeyCode.S then noxflycontrol.B = -1 end
+		if key == Enum.KeyCode.A then noxflycontrol.L = -1 end
+		if key == Enum.KeyCode.D then noxflycontrol.R = 1 end
+		if key == Enum.KeyCode.E then noxflycontrol.Q = 1 end
+		if key == Enum.KeyCode.Q then noxflycontrol.E = -1 end
+	end)
+
+	noxflyinputendedconnection = uis.InputEnded:Connect(function(input)
+		local key = input.KeyCode
+		if key == Enum.KeyCode.W then noxflycontrol.F = 0 end
+		if key == Enum.KeyCode.S then noxflycontrol.B = 0 end
+		if key == Enum.KeyCode.A then noxflycontrol.L = 0 end
+		if key == Enum.KeyCode.D then noxflycontrol.R = 0 end
+		if key == Enum.KeyCode.E then noxflycontrol.Q = 0 end
+		if key == Enum.KeyCode.Q then noxflycontrol.E = 0 end
+	end)
+
+	noxflystepconnection = rs.RenderStepped:Connect(function()
+		local camCF = env.stuf.cam.CFrame
+		local direction
+
+		if mobile and ctrl then
+			direction = ctrl:GetMoveVector()
+			local moveVec = (
+				-camCF.LookVector * direction.Z +
+					camCF.RightVector * direction.X +
+					Vector3.new(0, noxflycontrol.Q + noxflycontrol.E, 0)
+			) * noxflyspeed * 50
+
+			env.stuf.root.CFrame = CFrame.new(env.stuf.root.Position, env.stuf.root.Position + Vector3.new(camCF.LookVector.X, 0, camCF.LookVector.Z))
+			env.stuf.root.Velocity = moveVec.Magnitude > 0 and moveVec or Vector3.zero
+
+		else
+			local flatLookVector = Vector3.new(camCF.LookVector.X, 0, camCF.LookVector.Z).Unit
+			local moveVec = (
+				camCF.LookVector * (noxflycontrol.F + noxflycontrol.B) +
+					camCF.RightVector * (noxflycontrol.R + noxflycontrol.L) +
+					Vector3.new(0, noxflycontrol.Q + noxflycontrol.E, 0)
+			) * noxflyspeed * 50
+
+			if flatLookVector.Magnitude > 0 then
+				env.stuf.root.CFrame = CFrame.new(env.stuf.root.Position, env.stuf.root.Position + flatLookVector)
+			end
+
+			env.stuf.root.Velocity = moveVec.Magnitude > 0 and moveVec or Vector3.zero
+		end
+	end)
+end
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+local rejoindeathconn, exitdeathconn, rerundeathconn
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+local itemaurablacklist = {}
+local itemauraenabled = false
+local itemaurathread = nil
+
+local itemnamemap = {
+	["Air Horn"]                 = "AirHorn",
+	["Bandage"]                  = "Bandage",
+	["Bonbon"]                   = "Bonbon",
+	["Bottle o' Pop"]            = "PopBottle",
+	["Box o' Chocolates"]        = "ChocolateBox",
+	["Chocolate"]                = "Chocolate",
+	["Eject Button"]             = "EjectButton",
+	["Extraction Speed Candy"]   = "ExtractionSpeedCandy",
+	["Event Currency"]           = "EventCurrency",
+	["Gumballs"]                 = "Gumballs",
+	["Health Kit"]               = "HealthKit",
+	["Jawbreaker"]               = "Jawbreaker",
+	["Jumper Cable"]             = "JumperCable",
+	["Pop"]                      = "Pop",
+	["Protein Bar"]              = "ProteinBar",
+	["Research Capsule"]         = "ResearchCapsule",
+	["Skill Check Candy"]        = "SkillCheckCandy",
+	["Smoke Bomb"]               = "SmokeBomb",
+	["Speed Candy"]              = "SpeedCandy",
+	["Stealth Candy"]            = "StealthCandy",
+	["Tape"]                     = "Tape",
+}
+
+local function itemaura(state)
+	itemauraenabled = state
+
+	if not state then
+		if itemaurathread then
+			task.cancel(itemaurathread)
+			itemaurathread = nil
+		end
+		return
+	end
+
+	if itemaurathread then return end
+
+	itemaurathread = spwn(function()
+		while itemauraenabled do
+			if env.stuf.currentroom and env.stuf.items then
+				for _, item in pairs(env.stuf.items:GetChildren()) do
+					if not itemaurablacklist[item.Name] then
+						local promptPart = item:FindFirstChild("Prompt")
+						if promptPart then
+							local proximityPrompt = promptPart:FindFirstChildOfClass("ProximityPrompt")
+							if proximityPrompt and proximityPrompt.Enabled then
+								fireproximityprompt(proximityPrompt)
+							end
+						end
+					end
+				end
+			end
+			t()
+		end
+	end)
+end
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+local buyaurablacklist = {}
+local buyauraenabled = false
+local buyaurathread = nil
+
+local buynamemap = {
+	["Air Horn"]               = "AirHorn",
+	["Bandage"]                = "Bandage",
+	["Bonbon"]                 = "Bonbon",
+	["Bottle o' Pop"]          = "PopBottle",
+	["Box o' Chocolates"]      = "ChocolateBox",
+	["Chocolate"]              = "Chocolate",
+	["Eject Button"]           = "EjectButton",
+	["Extraction Speed Candy"] = "ExtractionSpeedCandy",
+	["Gumballs"]               = "Gumballs",
+	["Health Kit"]             = "HealthKit",
+	["Instructions"]           = "Instructions",
+	["Jawbreaker"]             = "Jawbreaker",
+	["Jumper Cable"]           = "JumperCable",
+	["Pop"]                    = "Pop",
+	["Protein Bar"]            = "ProteinBar",
+	["Skill Check Candy"]      = "SkillCheckCandy",
+	["Smoke Bomb"]             = "SmokeBomb",
+	["Speed Candy"]            = "SpeedCandy",
+	["Stealth Candy"]          = "StealthCandy",
+	["Stopwatch"]              = "Stopwatch",
+	["Valve"]                  = "Valve",
+}
+
+local function buyaura(state)
+	buyauraenabled = state
+
+	if not state then
+		if buyaurathread then
+			task.cancel(buyaurathread)
+			buyaurathread = nil
+		end
+		return
+	end
+
+	if buyaurathread then return end
+
+	buyaurathread = spwn(function()
+		while buyauraenabled do
+			local store = env.stuf.elevator:FindFirstChild("DandyStore")
+			if store then
+				for _, slot in ipairs(store:GetChildren()) do
+					if slot.Name:lower():match("^slot") then
+						local itemModel = slot:FindFirstChildWhichIsA("Model")
+						if itemModel and not buyaurablacklist[itemModel.Name] then
+							local promptPart = itemModel:FindFirstChild("Prompt")
+							if promptPart then
+								local prompt = promptPart:FindFirstChildOfClass("ProximityPrompt")
+								if prompt and prompt.Enabled then
+									fireproximityprompt(prompt)
+								end
+							end
+						end
+					end
+				end
+			end
+			t()
+		end
+	end)
+end
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+local machineauraconditions = {}
+local machineauraenabled = false
+local machineaurathread = nil
+
+local function machineaura(state)
+	machineauraenabled = state
+
+	if not state then
+		if machineaurathread then
+			task.cancel(machineaurathread)
+			machineaurathread = nil
+		end
+		return
+	end
+
+	if machineaurathread then return end
+
+	machineaurathread = spwn(function()
+		while machineauraenabled do
+			if env.stuf.machines then
+				for _, machine in ipairs(env.stuf.machines:GetChildren()) do
+					local stats = env.funcs.getstats("machine", machine)
+					local possessed = stats[4]
+					local hasprogress = stats[5] ~= 0.1
+					local machinetype = stats[7]
+
+					local conditions = machineauraconditions
+					if #conditions > 0 then
+						local noprogress    = not table.find(conditions, "No progress")    or not hasprogress
+						local notpossessed  = not table.find(conditions, "Not possessed")  or not possessed
+						local typenormal    = not table.find(conditions, "Normal machine type")    or machinetype == "Normal"
+						local typecircle    = not table.find(conditions, "Circle machine type")    or machinetype == "Circle"
+						local typetreadmill = not table.find(conditions, "Treadmill machine type") or machinetype == "Treadmill"
+
+						if not (noprogress and notpossessed and (typenormal or typecircle or typetreadmill)) then
+							continue
+						end
+					end
+
+					for _, v in ipairs(machine:GetDescendants()) do
+						if v:IsA("ProximityPrompt") and v.Enabled then
+							fireproximityprompt(v)
 							break
 						end
 					end
 				end
 			end
-		else
-			rst.Events.ItemEvent:InvokeServer(env.stuf.char, slot)
-		end
-	end
-
-	function env.funcs.veemoteactive() -- returns the vmotes value if the user has it, true if active, false if inactive
-		local folder = env.stuf.char:FindFirstChild("Trinkets")
-		for _, trinket in ipairs(folder) do
-			if trinket.Value == "VeeRemote" then
-				local active = trinket:FindFirstChild("Active")
-				if active then
-					return active.Value
-				end
-			end
-		end
-	end
-
-	function env.funcs.teleportplr(cf) -- teleports the player to the target cframe
-		ws.Gravity = 0
-		env.stuf.root.AssemblyLinearVelocity = Vector3.zero
-		env.stuf.char:PivotTo(cf)
-		ws.Gravity = 196.2
-	end
-
-	function env.funcs.tpbypass(cf, usebypass) -- teleports the player to the target cframe using a teleport bypass
-		local x = env.stuf.root.Position.X
-		local z = env.stuf.root.Position.Z
-
-		if usebypass then
-			while not env.stuf.plr:GetAttribute("isBeingTeleported") do 
-				local bp = ws.Baseplate
-				local y = bp.Position.Y + (bp.Size.Y / 2) + 2
-
-				env.funcs.teleportplr(CFrame.new(x + math.random(), y + math.random(), z + math.random())) t()
-			end
-		end
-
-		env.funcs.teleportplr(cf)
-		-- t(0.1) for i = 1, 15 do env.funcs.teleportplr(cf) t() end
-	end
-
-	local currenttweenid = 0
-	function env.funcs.tweenplr(cf) -- tweens the player to the target cframe
-		currenttweenid = currenttweenid + 1
-		local id = currenttweenid
-
-		local duration = env.stuf.inrun and (env.stuf.root.Position - cf.Position).Magnitude / (env.stuf.plr:GetAttribute("KM_MAX_PLAYER_SPEED") * 1.25) or 0.7
-		ws.Gravity = 0 
-		env.stuf.root.AssemblyLinearVelocity = Vector3.zero
-
-		local tween = ts:Create(env.stuf.root, TweenInfo.new(duration, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut), {CFrame = cf})
-		tween:Play()
-
-		local completed = false
-		tween.Completed:Connect(function()
-			completed = true
-		end)
-
-		while not completed do
 			t()
-			if currenttweenid ~= id then
-				tween:Cancel()
-				return
-			end
 		end
-
-		ws.Gravity = 196.2
-	end
-
-	local currentpfid = 0
-	function env.funcs.pathfindto(cf, showwps) -- creates a path to the target cframe for the player to walk to, showwps shows the paths waypoints
-		currentpfid = currentpfid + 1
-		local id = currentpfid
-
-		local path = pfs:CreatePath({
-			AgentRadius = 2, 
-			AgentHeight = 6, 
-			AgentCanJump = false,
-			WaypointSpacing = 4
-		})
-
-		local succ, err = pcall(function()
-			path:ComputeAsync(env.stuf.root.Position, cf.Position)
-		end)
-
-		if succ and path.Status == Enum.PathStatus.Success then
-			local waypoints = path:GetWaypoints()
-
-			if showwps then
-				for _, waypoint in ipairs(waypoints) do
-					if currentpfid ~= id then return end 
-
-					local p = Instance.new("Part")
-					p.Size = Vector3.new(0.6, 0.6, 0.6)
-					p.Position = waypoint.Position
-					p.Anchored = true
-					p.CanCollide = false
-					p.Material = Enum.Material.Neon
-					p.Shape = Enum.PartType.Ball
-					p.Color = Color3.new(1, 0, 0)
-					p.Parent = workspace
-					d:AddItem(p, 5)
-				end
-			end
-
-			for i, waypoint in ipairs(waypoints) do
-				if currentpfid ~= id then 
-					return 
-				end
-
-				env.stuf.hum:MoveTo(waypoint.Position)
-
-				local reached = false
-				local timeout = task.delay(2, function()
-					if not reached and currentpfid == id then
-						env.funcs.pop("Player stuck! Re-calculating...")
-						env.stuf.hum:MoveTo(env.stuf.root.Position)
-						env.funcs.pathfindto(cf, showwps)
-					end
-				end)
-
-				reached = env.stuf.hum.MoveToFinished:Wait()
-				task.cancel(timeout)
-
-				if not reached then break end
-			end
-		else
-			if currentpfid == id then
-				env.funcs.pop("Path failed:", err)
-			end
-		end
-	end
-
-	function env.funcs.moveplr(cf, method, spec) -- moves the player to the target cframe using the specified method (spec being the options)
-		if not method then method = "tp" end
-
-		if method == "tp" then
-			env.funcs.tpbypass(cf, spec or false)
-
-		elseif method == "tween" then
-			env.funcs.tweenplr(cf)
-
-		elseif method == "pf" then
-			env.funcs.pathfindto(cf, spec or false)
-		end
-	end
-
-	-- ui
-	function env.funcs.popup(desc, notext, nocallback, yestext, yescallback) -- popup
-		if env.stuf.popup then env.stuf.popup:Destroy() env.stuf.popup = nil end
-
-		env.stuf.popup = env.essentials.library.makecoolframe(UDim2.new(0, 310, 0, 250), env.essentials.sgui, false, true, UDim2.new(0.5, 0, -0.4, 0), nil, nil, nil, 9000)
-		spwn(function() env.essentials.library.centerui(env.stuf.popup, false, Enum.EasingStyle.Back) end)
-
-		env.essentials.library.addcooltab(UDim2.new(0, 200, 0, 40), env.stuf.popup, UDim2.new(0, 120, 0, -12), "Noxious: Boxten Sex GUI")
-		local close = env.essentials.library.addclosebutton(UDim2.new(0, 48, 0, 27), env.stuf.popup, UDim2.new(0.5, 110, 0, 0), "X", 22)
-		close.Activated:Connect(function() env.stuf.popup:Destroy() env.stuf.popup = nil end)
-
-		env.essentials.library.makecooltext(env.stuf.popup, UDim2.new(1, -30, 0, 90), "Hold it!", 20, nil, 2, UDim2.new(0.5, 0, 0.5, -102), nil, nil, nil, 9001)
-
-		local textcontainer = Instance.new("Frame")
-		textcontainer.Size = UDim2.new(0, 274, 0, 92)
-		textcontainer.BorderSizePixel = 0
-		textcontainer.AnchorPoint = Vector2.new(0.5, 0)
-		textcontainer.Position = UDim2.new(0.5, 0, 0, 48)
-		textcontainer.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-		textcontainer.BackgroundTransparency = 0.7
-		textcontainer.ZIndex = 9001
-		textcontainer.Parent = env.stuf.popup
-
-		Instance.new("UICorner", textcontainer).CornerRadius = UDim.new(0, 14)
-
-		local pb = Instance.new("UIStroke")
-		pb.Thickness = 2
-		pb.Color = Color3.fromRGB(0, 0, 0)
-		pb.Transparency = 0.6
-		pb.Parent = textcontainer
-
-		env.essentials.library.makecooltext(textcontainer, UDim2.new(1, 0, 1, 0), desc or "This is a warning.", 14, nil, 2, UDim2.new(0.5, 0, 0.5, 0), Enum.TextXAlignment.Center, Enum.TextYAlignment.Center, nil, 9001)
-
-		local no = env.essentials.library.makecoolbutton(notext or "No", UDim2.new(0, 277, 0, 32), env.stuf.popup, UDim2.new(0.5, 0, 0.5, 45), "yes", 21, nil, 9001)
-		local yes = env.essentials.library.makecoolbutton(yestext or "Yes", UDim2.new(0, 277, 0, 32), env.stuf.popup, UDim2.new(0.5, 0, 0.5, 90), "no", 21, nil, 9001)
-
-		no.Activated:Connect(function()
-			if nocallback then nocallback() end
-			env.stuf.popup:Destroy() env.stuf.popup = nil
-		end)
-
-		yes.Activated:Connect(function()
-			if yescallback then yescallback() end
-			env.stuf.popup:Destroy() env.stuf.popup = nil
-		end)
-	end
-
-	-- donor
-	function env.stuf.handshaker.addcmd(name, func)
-		if env.stuf.handshaker.commands[name] then end
-		env.stuf.handshaker.commands[name] = func
-	end
-
-	function env.stuf.handshaker.isscriptuser(player)
-		if not player then return false end
-
-		if table.find(env.stuf.handshaker.handshakenclients, player.Name) then
-			return true
-		end
-
-		if player == env.stuf.plr then
-			return true
-		end
-
-		return false
-	end
-
-	function env.stuf.handshaker.donorsend(id)
-		if not env.stuf.handshaker.cansend then return end env.stuf.handshaker.cansend = false
-
-		env.stuf.handshaker.animations.donor.AnimationId = env.stuf.handshaker.donorid .. " " .. id
-
-		local animator = env.stuf.hum:FindFirstChildOfClass("Animator")
-
-		if not env.stuf.handshaker.tracks.donor then
-			env.stuf.handshaker.tracks.donor = animator:LoadAnimation(env.stuf.handshaker.animations.donor)
-		end
-
-		if animator and env.stuf.handshaker.tracks.donor then
-			local track = env.stuf.handshaker.tracks.donor
-			track:Play()
-			track:AdjustWeight(0.0001)
-
-			task.delay(0.1, function()
-				track:Stop()
-				env.stuf.handshaker.cansend = true
-			end)
-		end
-	end
-
-	function env.stuf.handshaker.processincoming(player, animId)
-		if animId:sub(1, #env.stuf.handshaker.donorid) == env.stuf.handshaker.donorid then
-			local fullCmdString = animId:sub(#env.stuf.handshaker.donorid + 2)
-
-			local chatMessage = fullCmdString:match("^send%s(.+)")
-			if chatMessage then
-				if table.find(env.stuf.handshaker.handshakenclients, player.Name) then
-					env.funcs.logchat(chatMessage, player.Name)
-				end
-				return
-			end
-
-			local cmd, data = fullCmdString:match("^(%w+)%s?(.*)")
-			if cmd and table.find(env.stuf.handshaker.handshakenclients, player.Name) then
-				local commandFunc = env.stuf.handshaker.commands[cmd:lower()]
-				if commandFunc then
-					spwn(function()
-						commandFunc(player, data)
-					end)
-				end
-			end
-		end
-	end
-
-	local function fixid(id)
-		id = tostring(id)
-		id = id:gsub("http://www%.roblox%.com/asset/%?id=", "rbxassetid://")
-		id = id:gsub("https://www%.roblox%.com/asset/%?id=", "rbxassetid://")
-		if not id:find("rbxassetid://") then
-			id = "rbxassetid://" .. id
-		end
-		return id
-	end
-
-	function env.stuf.handshaker.shakehands(player, animator)
-		animator.AnimationPlayed:Connect(function(track)
-			if not track or not track.Animation then return end
-
-			local animId = fixid(track.Animation.AnimationId)
-
-			if animId == fixid(env.stuf.handshaker.id) and math.abs(track.WeightTarget - 0.001) < 0.001 then
-				if not table.find(env.stuf.handshaker.handshakenclients, player.Name) then
-					table.insert(env.stuf.handshaker.handshakenclients, player.Name)
-					if env.funcs.refreshuserlist() then env.funcs.refreshuserlist() end
-					if player.Name == env.stuf.user then
-						env.funcs.consolelog("Assigned yourself as a script user.")
-					else
-						env.funcs.consolelog("Shook hands with another client!")
-					end
-				end
-				return
-			end
-
-			if animId:find(env.stuf.handshaker.riddancekey) then
-				if not table.find(env.stuf.handshaker.detectedRiddance, player.Name) then
-					table.insert(env.stuf.handshaker.detectedRiddance, player.Name)
-					local extractedText = animId:match("chat_(.+)")
-
-					if extractedText then
-						env.funcs.logchat(extractedText, player.Name, true)
-						env.funcs.consolelog("Riddance Hub user detected!")
-						if env.funcs.refreshuserlist() then env.funcs.refreshuserlist() end
-					end
-				end
-				return
-			end
-
-			env.stuf.handshaker.processincoming(player, animId)
-		end)
-	end
-
-	function env.stuf.handshaker.monitor(player)
-		local function added(char)
-			local hum = char:WaitForChild("Humanoid", 10)
-			local animator = hum and hum:WaitForChild("Animator", 10)
-			if animator then
-				env.stuf.handshaker.shakehands(player, animator)
-			end
-		end
-
-		if player.Character then added(player.Character) end
-		player.CharacterAdded:Connect(added)
-	end
-
-	function env.stuf.handshaker.requesthandshake()
-		if env.funcs.exists() then
-			env.stuf.handshaker.animations.check.AnimationId = fixid(env.stuf.handshaker.id)
-			local animator = env.stuf.hum:FindFirstChildOfClass("Animator")
-
-			if not env.stuf.handshaker.tracks.check then
-				env.stuf.handshaker.tracks.check = animator:LoadAnimation(env.stuf.handshaker.animations.check)
-			end
-
-			if animator and env.stuf.handshaker.tracks.check then
-				local track = env.stuf.handshaker.tracks.check
-				track.Priority = Enum.AnimationPriority.Action
-				track:Play()
-				track:AdjustWeight(0.0001)
-				task.delay(0.2, function()
-					track:Stop()
-					env.funcs.box("sent handshake request")
-				end)
-			end
-		else
-			env.funcs.pop("Character not found, cannot send handshake request.")
-		end
-	end
+	end)
 end
 
 -------------------------------------------------------------------------------------------------------------------------------
 
-env.setupcomplete = true
-env.funcs.box("hello") -- hi!
+local extrawalkspeedunits = 0
+local extrarunspeedunits = 0
+local extraunitconn
+
+local function addextraunits()
+	if not env.stuf.inrun then return end
+
+	if extraunitconn then return end
+	extraunitconn = rs.Heartbeat:Connect(function()
+		if extrawalkspeedunits < 0 and extrarunspeedunits < 0 then 
+			extraunitconn:Disconnect() 
+			extraunitconn = nil 
+		end
+
+		if env.stuf.plrstats:FindFirstChild("Sprinting") then
+			env.stuf.hum.Walkspeed = env.stuf.plrstats:FindFirstChild("RunSpeed") + extrawalkspeedunits
+		else
+			env.stuf.hum.Walkspeed = env.stuf.plrstats:FindFirstChild("Walkspeed") + extrawalkspeedunits
+		end
+	end)
+end
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+local section = {
+	version = version,
+
+	{ type = "separator", title = "Utility" },
+	{ type = "toggle", title = "Noclip", desc = "Gives you the ability to phase through objects.",
+		commandcat = "Local Player",
+
+		encommands = {"noclip"},
+		encommanddesc = "Enables noclipping",
+
+		discommands = {"unnoclip"},
+		disaliases = {"clip"},
+		discommanddesc = "Disables noclipping",
+
+		callback = function(state) 
+			noclipbypass(state)
+		end
+	},
+	{ type = "toggle", title = "Infinite stamina", desc = "Makes it so your stamina doesnt drain.",
+		commandcat = "Local Player",
+
+		encommands = {"enableinfinitestamina"},
+		enaliases = {"infinitestamina", "eis"},
+		encommanddesc = "Enables infinite stamina",
+
+		discommands = {"disableinfinitestamina"},
+		disaliases = {"finitestamina", "dis"},
+		discommanddesc = "Disables infinite stamina",
+
+		callback = function(state) 
+			spwn(function() 
+				if showactualstamina and state then 
+					startupdstaminaloop() 
+				else 
+					stopupdstaminaloop() 
+				end 
+			end)
+			enableinfinitestamina(state)
+		end
+	},
+	{ type = "toggle", title = "Show actual stamina while having infinite stamina", desc = "Shows your actual stamina value while having infinite stamina enabled.",
+		callback = function(state) 
+			showactualstamina = state
+
+			if infinitestaminaenabled then
+				enableinfinitestamina(false)
+				enableinfinitestamina(true)
+			end
+
+			spwn(function() 
+				if state then 
+					stopupdstaminaloop() 
+				else 
+					startupdstaminaloop() 
+				end 
+			end)
+		end
+	},
+	{ type = "toggle", title = "Item aura", desc = "Toggles item aura.",
+		commandcat = "Local Player",
+
+		encommands = {"enableitemaura"},
+		enaliases = {"eia"},
+		encommanddesc = "Enables item aura",
+
+		discommands = {"disableitemaura"},
+		disaliases = {"dia"},
+		discommanddesc = "Disables item aura",
+
+		callback = function(state) 
+			itemaura(state)
+		end
+	},
+	{ type = "dropdown", title = "Item aura blacklist", desc = "Blacklists the selected items from being picked up by the item aura.", 
+		options = {"Air Horn", "Bandage", "Bonbon", "Bottle o' Pop", "Box o' Chocolates", 
+			"Chocolate", "Eject Button", "Extraction Speed Candy", "Event Currency", "Gumballs", 
+			"Health Kit", "Jawbreaker", "Jumper Cable", "Pop", "Protein Bar", "Research Capsule", 
+			"Skill Check Candy", "Smoke Bomb", "Speed Candy", "Stealth Candy", "Tape"},
+		multiselect = true,
+
+		callback = function(selected)
+			itemaurablacklist = {}
+			for _, label in ipairs(selected) do
+				local mapped = itemnamemap[label] or label
+				itemaurablacklist[mapped] = true
+			end
+		end 
+	},
+	{ type = "toggle", title = "Buy aura", desc = "Toggles buy aura.",
+		commandcat = "Local Player",
+
+		encommands = {"enablebuyaura"},
+		enaliases = {"eba"},
+		encommanddesc = "Enables buy aura",
+
+		discommands = {"disablebuyaura"},
+		disaliases = {"dba"},
+		discommanddesc = "Disables buy aura",
+
+		callback = function(state) 
+			buyaura(state)
+		end
+	},
+	{ type = "dropdown", title = "Buy aura blacklist", desc = "Blacklists the selected items from being bought from Dandy's Shop for the buy aura.", 
+		options = {"Air Horn", "Bandage", "Bonbon", "Bottle o' Pop", "Box o' Chocolates", 
+			"Chocolate", "Eject Button", "Extraction Speed Candy", "Gumballs", "Health Kit", 
+			"Instructions", "Jawbreaker", "Jumper Cable", "Pop", "Protein Bar", 
+			"Skill Check Candy", "Smoke Bomb", "Speed Candy", "Stealth Candy", "Stopwatch", 
+			"Valve"},
+		multiselect = true,
+
+		callback = function(selected)
+			buyaurablacklist = {}
+			for _, label in ipairs(selected) do
+				local mapped = buynamemap[label] or label
+				buyaurablacklist[mapped] = true
+			end
+		end
+	},
+	{ type = "toggle", title = "Machine aura", desc = "Toggles machine aura.",
+		commandcat = "Local Player",
+
+		encommands = {"enablemachineaura"},
+		enaliases = {"ema"},
+		encommanddesc = "Enables machine aura",
+
+		discommands = {"disablemachineaura"},
+		disaliases = {"dma"},
+		discommanddesc = "Disables machine aura",
+
+		callback = function(state) 
+		end
+	},
+	{ type = "dropdown", title = "Machine aura condition", desc = "Sets the conditions for the machine aura that the closest machine has to follow.", 
+		options = {"No progress", "Not possessed", "Normal machine type", "Circle machine type", "Treadmill machine type"},
+		default = {"No progress", "Not possessed", "Normal machine type", "Circle machine type", "Treadmill machine type"},
+		multiselect = true,
+
+		callback = function(selected) 
+			machineauraconditions = selected
+		end 
+	},
+	{ type = "toggle", title = "Anti slowness debuff", desc = "Makes you immune to the slowness debuff.",
+		commandcat = "Local Player",
+
+		encommands = {"enableantislownessdebuff"},
+		enaliases = {"easd"},
+		encommanddesc = "Enables anti slowness debuff",
+
+		discommands = {"disableantislownessdebuff"},
+		disaliases = {"dasd"},
+		discommanddesc = "Disables anti slowness debuff",
+
+		callback = function(state)
+			enableantislownessdebuff(state)
+		end
+	},
+	{ type = "toggle", title = "Anti ban", desc = "Applies measures that will prevent you from getting banned. Note that you are still susceptible to getting banned even when having this on.",
+		default = true,
+		commandcat = "Local Player",
+
+		encommands = {"enableantiban"},
+		enaliases = {"eab"},
+		encommanddesc = "Enables anti ban",
+
+		discommands = {"disableantiban"},
+		disaliases = {"dab"},
+		discommanddesc = "Disables anti ban",
+
+		callback = function(state)
+			enableantiban(state)
+		end
+	},
+	{ type = "toggle", title = "Anti AFK", desc = "Prevents you from getting kicked from the game for being idle for too long.",
+		commandcat = "Local Player",
+
+		encommands = {"enableantiafk"},
+		enaliases = {"eaafk"},
+		encommanddesc = "Enables anti AFK",
+
+		discommands = {"disableantiafk"},
+		disaliases = {"daafk"},
+		discommanddesc = "Disables anti AFK",
+
+		callback = function(state)
+			antiafk(state)
+		end
+	},
+	{ type = "button", title = "Force quit machine", desc = "Forcefully quits machine extraction.",
+		commandcat = "Local Player",
+
+		command = "forcequitmachine",
+		aliases = {"fqm"},
+		commanddesc = "Forcefully quits machine extraction",
+
+		callback = function()
+			forcequitmachine()
+		end
+	},
+	{ type = "toggle", title = "Heavier character", desc = "Makes your character less slippery.",
+		commandcat = "Local Player",
+
+		encommands = {"enableheavycharacter"},
+		enaliases = {"ehc"},
+		encommanddesc = "Enables heavier character",
+
+		discommands = {"disableheavycharacter"},
+		disaliases = {"dhc"},
+		discommanddesc = "Disables heavier character",
+
+		callback = function(state)
+			fat(state)
+		end
+	},
+	{ type = "toggle", title = "Twisteds push aura", desc = "Applies a push aura to the Twisteds that push you away when they get close.",
+		commandcat = "Local Player",
+
+		encommands = {"enabletwistedspushaura"},
+		enaliases = {"etpa"},
+		encommanddesc = "Enables Twisteds push aura",
+
+		discommands = {"disabletwistedspushaura"},
+		disaliases = {"dhc"},
+		discommanddesc = "Disables Twisteds push aura",
+
+		callback = function(state)
+			pushaurasenabled = state
+			if state then
+				applypushauras()
+			else
+				for monster, _ in pairs(activepushauras) do
+					removepushaura(monster)
+				end
+			end
+		end
+	},
+	{ type = "slider", title = "Twisteds push aura size", desc = "Adjusts the size of the Twisteds' push aura.", min = 5, max = 80, default = 20, step = 1,
+		callback = function(value)
+			local num = tonumber(value)
+			if num and num > 0 then
+				pushaurasize = num
+				for _, data in pairs(activepushauras) do
+					if data.aura then
+						data.aura.Size = Vector3.new(pushaurasize, pushaurasize, pushaurasize)
+					end
+				end
+			end
+		end
+	},
+	{ type = "toggle", title = "Avoid Twisteds", desc = "Teleports you away from the Twisted if they get too close.",
+		commandcat = "Local Player",
+
+		encommands = {"enableavoidtwisteds"},
+		enaliases = {"eat"},
+		encommanddesc = "Enables avoid Twisteds",
+
+		discommands = {"disableavoidtwisteds"},
+		disaliases = {"dat"},
+		discommanddesc = "Disables avoid Twisteds",
+
+		callback = function(state)
+			avoidtwisteds(state)
+		end
+	},
+	{ type = "slider", title = "Avoid Twisteds distance", desc = "Sets the distance required for the Twisted to reach toward you to teleport away.", min = 3, max = 80, default = 10, step = 1,
+		callback = function(value)
+			dodgetwistedssafedist = value
+		end
+	},
+	{ type = "toggle", title = "Anti grab", desc = "Applies measures that stops Twisteds with grabbing abilities (Such as Goob, Scraps, and Gigi) from grabbing you.",
+		commandcat = "Local Player",
+
+		encommands = {"enableantigrab"},
+		enaliases = {"eag"},
+		encommanddesc = "Enables anti grab",
+
+		discommands = {"disableantigrab"},
+		disaliases = {"dag"},
+		discommanddesc = "Disables anti grab",
+
+		callback = function(state)
+			antigrab(state)
+		end
+	},
+	{ type = "button", title = "Pick up all items", desc = "Picks up all the items on the floor.",
+		commandcat = "Local Player",
+
+		command = "pickupallitems",
+		aliases = {"puai"},
+		commanddesc = "Picks up all the items on the floor",
+
+		callback = function() 
+			pickupallitems()
+		end
+	},
+	{ type = "button", title = "Pick up all Research Capsules", desc = "Picks up all the Research Capsules on the floor.",
+		commandcat = "Local Player",
+
+		command = "pickupallresearchcapsules",
+		aliases = {"puarc"},
+		commanddesc = "Picks up all the Research Capsules on the floor",
+
+		callback = function() 
+			pickupallcapsules()
+		end
+	},
+	{ type = "button", title = "Pick up all Tapes", desc = "Picks up all the tapes on the floor.",
+		commandcat = "Local Player",
+
+		command = "pickupalltapes",
+		aliases = {"puat"},
+		commanddesc = "Picks up all the Tapes on the floor",
+
+		callback = function() 
+			pickupalltapes()
+		end
+	},
+	{ type = "button", title = "Pick up all heals", desc = "Picks up all the heals on the floor.",
+		commandcat = "Local Player",
+
+		command = "pickupallheals",
+		aliases = {"puah"},
+		commanddesc = "Picks up all the heals on the floor",
+
+		callback = function() 
+			pickupallheals()
+		end
+	},
+	{ type = "button", title = "Pick up all etxraction items", desc = "Picks up all the extraction items on the floor.",
+		commandcat = "Local Player",
+
+		command = "pickupallextractionitems",
+		aliases = {"puaei"},
+		commanddesc = "Picks up all the extraction items on the floor",
+
+		callback = function() 
+			pickupallextitems()
+		end
+	},
+	{ type = "button", title = "Pick up all event items", desc = "Picks up all the event items / currency on the floor (Including Research Capsules that are linked to Event Twisteds).",
+		commandcat = "Local Player",
+
+		command = "pickupalleventitems",
+		aliases = {"puaeti"},
+		commanddesc = "Picks up all the event items on the floor",
+
+		callback = function() 
+			pickupalleventitems()
+		end
+	},
+	{ type = "button", title = "Encounter all Twisteds", desc = "Encounters every Twisted on the floor that you haven't encountered yet.",
+		commandcat = "Local Player",
+
+		command = "encounteralltwisteds",
+		aliases = {"eat"},
+		commanddesc = "Encounters all the Twisteds on the floor that haven't spotted you yet",
+
+		callback = function() 
+			encountertwisteds()
+		end
+	},
+	{ type = "toggle", title = "Anti pop-ups", desc = "Blocks Twisted Vee's pop-ups from appearing.",
+		commandcat = "Local Player",
+
+		encommands = {"enableantipopups"},
+		enaliases = {"eapu"},
+		encommanddesc = "Enables anti pop-ups",
+
+		discommands = {"disableantipopups"},
+		disaliases = {"dapu"},
+		discommanddesc = "Disables anti pop-ups",
+
+		callback = function(state)
+			if not env.stuf.inrun then return end
+			if state then
+				local popup = env.stuf.plrgui.ScreenGui:FindFirstChild("PopUp")
+				if popup then popup.Parent = hiddenui end
+			else 
+				local popup = hiddenui:FindFirstChild("PopUp")
+				if popup then popup.Parent = env.stuf.plrgui.ScreenGui end
+			end
+		end
+	},
+	{ type = "toggle", title = "Anti skillcheck", desc = "Blocks the skillcheck UI from appearing.",
+		commandcat = "Local Player",
+
+		encommands = {"enableantiskillchecks"},
+		enaliases = {"easc"},
+		encommanddesc = "Enables anti skill checks",
+
+		discommands = {"disableantiskillchecks"},
+		disaliases = {"dasc"},
+		discommanddesc = "Disables anti skill checks",
+
+		callback = function(state)
+			if not env.stuf.inrun then return end
+			if state then
+				local scf = env.stuf.plrgui.ScreenGui.Menu:FindFirstChild("SkillCheckFrame")
+				if scf then scf.Parent = hiddenui end
+			else 
+				local scf = hiddenui:FindFirstChild("SkillCheckFrame")
+				if scf then scf.Parent = env.stuf.plrgui.ScreenGui.Menu end
+			end
+		end
+	},
+	{ type = "button", title = "Instant death", desc = "Kills you.",
+		commandcat = "Local Player",
+
+		command = "die",
+		commanddesc = "Kills you",
+
+		callback = function() 
+			env.funcs.popup("Running this will kill you instantly. Are you sure you want to run this?", "Yes", function() env.stuf.hum.Health = 0 end, "Nevermind", nil)
+		end
+	},
+
+	{ type = "separator", title = "Ability" },
+	{ type = "input and button", title = "Use ability on player", desc = "Uses your ability on the target player, bypassing some distance checks.", placeholder = "Target",
+		commandcat = "Local Player",
+
+		command = "useabilityon [plr]",
+		aliases = {"useabil [plr]"},
+		commanddesc = "Uses your ability on the target player",
+
+		callback = function(text) 
+			fireabilityon(text)
+		end,
+
+		autofill = true
+	},
+	{ type = "input and button", title = "Teleport to and use ability on player", desc = "Teleports you to the target player and then uses your ability.", placeholder = "Target",
+		commandcat = "Local Player",
+
+		command = "teleportanduseabilityon [plr]",
+		aliases = {"tpanduseabil [plr]"},
+		commanddesc = "Teleports you to the target player and then uses your ability",
+
+		callback = function(text) 
+			useabildirect(text)
+		end,
+
+		autofill = true
+	},
+
+	{ type = "separator", title = "Toon ability replication" },
+	{ type = "button", title = "Rudie boost", desc = "Imitates Rudie's active ability. Boosts your character a few studs.",
+		commandcat = "Local Player",
+
+		command = "rudieboost",
+		aliases = {"boost"},
+		commanddesc = "Boosts your character",
+
+		callback = function()
+			RUDIEBOOST()
+		end
+	},
+	{ type = "toggle", title = "Finn passive ability", desc = "Imitates Finn's passive ability. You gain a 33% movement speed boost for 10 seconds when a machine is completed.",
+		commandcat = "Local Player",
+
+		encommands = {"enablefakefinnpassiveability"},
+		enaliases = {"effpa"},
+		encommanddesc = "Enables fake Finn passive ability",
+
+		discommands = {"disablefakefinnpassiveability"},
+		disaliases = {"dffpa"},
+		discommanddesc = "Disables fake Finn passive ability",
+
+		callback = function(state)
+		end
+	},
+	{ type = "toggle", title = "Sprout passive ability", desc = "Imitates Sprout's passive ability. Heart icons pulse on every Toon alive in a run.",
+		commandcat = "Local Player",
+
+		encommands = {"enablefakesproutpassiveability"},
+		enaliases = {"efspa"},
+		encommanddesc = "Enables fake Sprout passive ability",
+
+		discommands = {"disablefakesproutpassiveability"},
+		disaliases = {"dfspa"},
+		discommanddesc = "Disables fake Sprout passive ability",
+
+		callback = function(state)
+		end
+	},
+
+	{ type = "separator", title = "Character" },
+	{ type = "input and toggle", title = "Loop speed", desc = "Repetitively sets your speed to the inputted value.", placeholder = "Speed",
+		commandcat = "Local Player",
+
+		encommands = {"loopspeed [num]"},
+		enaliases = {"ls [num]"},
+		encommanddesc = "Enables loop speed",
+
+		discommands = {"unloopspeed"},
+		disaliases = {"unls"},
+		discommanddesc = "Disables loop speed",
+
+		callback = function(text, state) 
+			loopspeeding = state
+			if loopspeeding then
+				setloopspeed(text)
+			else
+				humanmodifcons.wsLoop = (humanmodifcons.wsLoop and humanmodifcons.wsLoop:Disconnect() and false) or nil
+				humanmodifcons.wsCA = (humanmodifcons.wsCA and humanmodifcons.wsCA:Disconnect() and false) or nil
+
+				if env.stuf.hum then
+					env.stuf.hum.WalkSpeed = 16
+				end
+			end
+		end
+	},
+	{ type = "input and toggle", title = "Teleport walk", desc = "Toggles teleport walking with the inputted speed.", placeholder = "Speed",
+		commandcat = "Local Player",
+
+		encommands = {"teleportwalk [num]"},
+		enaliases = {"tpwalk [num]"},
+		encommanddesc = "Enables teleport walk",
+
+		discommands = {"unteleportwalk"},
+		disaliases = {"untpwalk"},
+		discommanddesc = "Disables teleport walk",
+
+		callback = function(text, state) 
+			if state then
+				settpwalk(text)
+			else
+				untpwalk()
+			end
+		end
+	},
+	{ type = "toggle", title = "Teleport walk on extract", desc = "Toggles teleport walking only when extracting.",
+		callback = function(state) 
+			tpwalkonextract = state
+		end
+	},
+	{ type = "input and toggle", title = "Fly", desc = "Makes you fly with the inputted speed.", placeholder = "Speed",
+		commandcat = "Local Player",
+
+		encommands = {"fly [num]"},
+		encommanddesc = "Makes you fly",
+
+		discommands = {"unfly"},
+		discommanddesc = "Stop flying",
+
+		callback = function(text, state) 
+			local num = tonumber(text)
+			if num == 0 then num = 1 end
+			if num and num > 0 then
+				noxflyspeed = num
+				stopflying()
+				startflying(noxflyspeed)
+			end
+
+			noxflying2 = state
+			if noxflying2 then
+				startflying(noxflyspeed)
+			else
+				stopflying()
+			end
+		end
+	},
+	{ type = "input", title = "Extra walk speed units", desc = "Adds extra speed to your walk movement speed.", placeholder = "Speed",
+		commandcat = "Local Player",
+
+		command = "addwalkspeed [num]",
+		aliases = {"addws [num]"},
+		commanddesc = "Adds extra speed to your walk movement speed",
+
+		callback = function(text)
+			extrawalkspeedunits = tonumber(text) or 0
+			addextraunits()
+		end
+	},
+	{ type = "input", title = "Extra run speed units", desc = "Adds extra speed to your run movement speed.", placeholder = "Speed",
+		commandcat = "Local Player",
+
+		command = "addrunspeed [num]",
+		aliases = {"addrs [num]"},
+		commanddesc = "Adds extra speed to your run movement speed",
+
+		callback = function(text)
+			extrarunspeedunits = tonumber(text) or 0
+			addextraunits()
+		end
+	},
+
+	{ type = "separator", title = "On death" },
+	{ type = "toggle", title = "Rejoin lobby on death", desc = "Rejoins the lobby upon death.",
+		commandcat = "Local Player",
+
+		encommands = {"enablerejoinlobbyondeath"},
+		enaliases = {"erjlod"},
+		encommanddesc = "Enables rejoin lobby on death",
+
+		discommands = {"disablerejoinlobbyondeath"},
+		disaliases = {"drjlod"},
+		discommanddesc = "Disables rejoin lobby on death",
+
+		callback = function(state) 
+			if state then
+				rejoindeathconn = env.stuf.hum.Died:Connect(function()
+					rst.Events:WaitForChild("Teleport"):FireServer()
+				end)
+			else
+				if rejoindeathconn then
+					rejoindeathconn:Disconnect()
+					rejoindeathconn = nil
+				end
+			end
+		end
+	},
+	{ type = "toggle", title = "Close game on death", desc = "Closes Roblox upon death.",
+		commandcat = "Local Player",
+
+		encommands = {"enableclosegameondeat"},
+		enaliases = {"ecod"},
+		encommanddesc = "Enables close game on death",
+
+		discommands = {"disableclosegameondeat"},
+		disaliases = {"dcod"},
+		discommanddesc = "Disables close game on death",
+
+		callback = function(state) 
+			if state then
+				exitdeathconn = env.stuf.hum.Died:Connect(function()
+					game:Shutdown()
+				end)
+			else
+				if exitdeathconn then
+					exitdeathconn:Disconnect()
+					exitdeathconn = nil
+				end
+			end
+		end
+	},
+	{ type = "toggle", title = "Restart run on death", desc = "Rejoins the lobby and then joins an empty elevator upon death.",
+		commandcat = "Local Player",
+
+		encommands = {"enablerestartrunondeath"},
+		enaliases = {"ecod"},
+		encommanddesc = "Enables restart run on death",
+
+		discommands = {"disablerestartrunondeath"},
+		disaliases = {"dcod"},
+		discommanddesc = "Disables restart run on death",
+
+		callback = function(state) 
+			if state then
+				rerundeathconn = env.stuf.hum.Died:Connect(function()
+					spwn(function()
+						queueotp([[game:GetService("Players").LocalPlayer.CharacterAdded:Connect(function() local function findgate() for _, model in ipairs(workspace["Elevators"]:GetChildren()) do if model:IsA("Model") and model.Name == "Gate" then local gate = model:FindFirstChild("Gate") local partOne = model:FindFirstChild("1") if gate and gate:IsA("BasePart") and partOne and partOne:IsA("BasePart") then return gate end end end return nil end local function gog(lal) local character = game:GetService("Players").LocalPlayer.Character or game:GetService("Players").LocalPlayer.CharacterAdded:Wait() local root = character:WaitForChild("HumanoidRootPart") local savedCFrame = root.CFrame firetouchinterest(root, lal, 0) task.wait() firetouchinterest(root, lal, 1) task.wait() root.CFrame = savedCFrame end local gate = findgate() if gate then gog(gate) end end)]])
+					end)
+					t(0.5)
+					rst.Events:WaitForChild("Teleport"):FireServer()
+				end)
+			else
+				if rerundeathconn then
+					rerundeathconn:Disconnect()
+					rerundeathconn = nil
+				end
+			end
+		end
+	},
+}
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+return section
 
 -------------------------------------------------------------------------------------------------------------------------------
