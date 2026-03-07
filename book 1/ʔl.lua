@@ -133,7 +133,7 @@ local function bottomleft(text, log)
 	debuglog.TextSize = 10
 	debuglog.RichText = true
 	debuglog.Text = text
-	debuglog.LayoutOrder = env.essentials.debugger.logcount
+	debuglog.LayoutOrder = logcount
 	debuglog.TextTruncate = Enum.TextTruncate.AtEnd
 	debuglog.Parent = env.essentials.debugger.container
 
