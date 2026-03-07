@@ -1337,7 +1337,7 @@ do
 		local yes = env.essentials.library.makecoolbutton(yestext or "Yes", UDim2.new(0, 277, 0, 32), env.stuf.popup, UDim2.new(0.5, 0, 0.5, 90), "no", 21, nil, 9001)
 
 		no.Activated:Connect(function()
-			if nocallback then yescallback() end
+			if nocallback then nocallback() end
 			env.stuf.popup:Destroy() env.stuf.popup = nil
 		end)
 
