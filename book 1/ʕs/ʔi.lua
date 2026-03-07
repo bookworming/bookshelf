@@ -934,7 +934,7 @@ do
 
 					local toon = nil
 					if otherplr.Character then
-						toon = env.funcs.getstats("player", otherplr.Character, "currenttoon")
+						toon = env.funcs.getstats("player", otherplr.Character).currenttoon
 					end
 
 					local toonmatch = toon and toon:lower():find(part, 1, true)
@@ -979,10 +979,9 @@ do
 		return exists
 	end
 
-	function env.funcs.getstats(type, obj, key) -- returns a table full of the target objects stats, can fetch the floor, item, machine, twisted, and another players stats
+	function env.funcs.getstats(type, obj) -- returns a table full of the target objects stats, can fetch the floor, item, machine, twisted, and another players stats
 		if not obj:IsA("Model") then env.funcs.shr("INVALID OBJECT, IDIOT!!!") end
 		local name = obj.Name
-		local result = {}
 
 		if type == "floor" then
 			local floorname = env.stuf.currentroom.Name
@@ -1002,7 +1001,7 @@ do
 				end
 			end
 
-			result = {floorname, twistedsonfloor, itemsonfloor, hasdialoguetriggers}
+			return {floorname, twistedsonfloor, itemsonfloor, hasdialoguetriggers}
 
 		elseif type == "item" then
 			local prompt = obj:FindFirstChild("Prompt")
@@ -1013,7 +1012,7 @@ do
 				research = prompt:FindFirstChild("Monster").Value
 			end
 
-			result = {act, research}
+			return {act, research}
 
 		elseif type == "machine" then
 			local stats = obj:FindFirstChild("Stats")
@@ -1035,7 +1034,7 @@ do
 				machtype = "normal"
 			end
 
-			result = {pos, active, completed, possessed, amount, required, machtype}
+			return {pos, active, completed, possessed, amount, required, machtype}
 
 		elseif type == "twisted" then
 			local name = obj.Name
@@ -1060,13 +1059,13 @@ do
 			local hasability = obj:FindFirstChild("Grabbing")
 			local usingability = hasability and hasability.Value
 			local alerted = obj:GetAttribute("Alerted")
-			
+
 			local research
 			local research = rst:FindFirstChild("PlayerData"):FindFirstChild(env.stuf.plrid):FindFirstChild("Research")
 			local tr = research:FindFirstChild(name)
 			if not tr then research = 0 else research = tr.Value end
 
-			result = {name, troot, alerted, research, hearingrad, intrestrad, hitboxrad, visionrad, intresttime, LoS, hitcooldown, chasing, ischasing, hasability, usingability}
+			return {name, troot, alerted, research, hearingrad, intrestrad, hitboxrad, visionrad, intresttime, LoS, hitcooldown, chasing, ischasing, hasability, usingability}
 
 		elseif type == "player" then
 			local inserver = plrs:FindFirstChild(obj.Name)
@@ -1119,10 +1118,8 @@ do
 				end
 			end
 
-			result = {currentstealth, twistedschasing, currenttoon, inserver, ins, dead, left, capsulespickedup, itemspickedup, machinescompleted, ichorearned, twistedsencountered, tapescollected, toonpicked, slot1, slot2, slot3, slot4, trinket1, trinket2, extracting, icon, abilitycooldown, currentabilitycooldown}
+			return {currentstealth, twistedschasing, currenttoon, inserver, ins, dead, left, capsulespickedup, itemspickedup, machinescompleted, ichorearned, twistedsencountered, tapescollected, toonpicked, slot1, slot2, slot3, slot4, trinket1, trinket2, extracting, icon, abilitycooldown, currentabilitycooldown}
 		end
-		
-		return result[key]
 	end
 
 	function env.funcs.getgamestat(stat) -- returns the value of the target game stat
@@ -1146,14 +1143,14 @@ do
 	function env.funcs.useitem(slot, breakifoneused)
 		if slot == "all" then
 			for i = 1, 4 do
-				local slotn = "slot" .. i
-				local slotvalue = env.funcs.getstats("player", env.stuf.char, slotn)
+				local slotn = "Slot" .. i
+				local slotvalue = env.funcs.getstats("player", env.stuf.char)[slotn:lower()]
 				
 				if slotvalue ~= "None" then
 					rst.Events.ItemEvent:InvokeServer(env.stuf.char, slotn)
 					
 					if breakifoneused then
-						local newslotvalue = env.funcs.getstats("player", env.stuf.char, slotn)
+						local newslotvalue = env.funcs.getstats("player", env.stuf.char)[slotn:lower()]
 						if newslotvalue == "None" then
 							break
 						end
