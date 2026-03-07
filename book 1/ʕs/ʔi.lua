@@ -757,6 +757,7 @@ do
 
 	spwn(function()
 		if env.stuf.handshaker.scanningplayers then return end
+		if not env.stuf.handshaker.monitor then repeat t() until function() return env.stuf.handshaker.monitor end end
 		for _, plr in ipairs(plrs:GetPlayers()) do env.stuf.handshaker.monitor(plr) end plrs.PlayerAdded:Connect(function(plr) env.stuf.handshaker.monitor(plr) end)
 		env.stuf.handshaker.scanningplayers = true
 	end)
