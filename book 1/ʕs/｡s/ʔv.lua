@@ -12,16 +12,7 @@
 
 local version = 2
 
---[[---------------------------------------------------------------------------------------------------------------------------
-
-   TODO:
-   try best to avoid adding way too much text for the esps, player esp should use pictographs or icons for the health, inventory, stealth, 
-   twisted chase count, all that stuff, and for the twisted esp, do the same for the triggered / awake indicators, and player chasing indicators, 
-   cooldown, and the ai stats stuff
-   
-   also try to make an option to switch to text esp
-
----------------------------------------------------------------------------------------------------------------------------]]--
+-------------------------------------------------------------------------------------------------------------------------------
 
 -- services & instances
 local t, spwn, inf = task.wait, task.spawn, math.huge
