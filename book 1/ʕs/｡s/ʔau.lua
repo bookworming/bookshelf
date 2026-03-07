@@ -64,9 +64,9 @@ end
 
 -------------------------------------------------------------------------------------------------------------------------------
 
-local autoteleporttoelevatorconditions = {}
+local autoteleporttoelevatorconditions = {"Instant"}
 local autoteleporttoelevatorconn
-local autoteleporttoelevatorenabled = false
+local autoteleportingtoelevator = false
 
 function getelevatorcframe(ele, nearshop)
 	local placednearshop = ele.CFrame * CFrame.new(-6, -10.5, 0) * CFrame.Angles(0, math.rad(-90), 0)
@@ -103,7 +103,7 @@ local function checkeveryoneatelevaor()
 end
 
 local function autoteleporttoelevator(state)
-	autoteleporttoelevatorenabled = state
+	autoteleportingtoelevator = state
 
 	if not state then
 		if autoteleporttoelevatorconn then
@@ -128,7 +128,7 @@ local function autoteleporttoelevator(state)
 
 		elseif condition == "Everyone at elevator" then
 			spwn(function()
-				while autoteleporttoelevatorenabled and panic.Value do
+				while autoteleportingtoelevator and panic.Value do
 					if checkeveryoneatelevaor() then
 						toelevator(nil, "tp")
 						break
@@ -139,7 +139,7 @@ local function autoteleporttoelevator(state)
 
 		elseif condition == "At the last second" then
 			spwn(function()
-				while autoteleporttoelevatorenabled and panic.Value do
+				while autoteleportingtoelevator and panic.Value do
 					if timer and timer.Value <= 1 then
 						toelevator(nil, "tp")
 						break
@@ -480,6 +480,401 @@ end
 
 -------------------------------------------------------------------------------------------------------------------------------
 
+local function yield(this)
+	repeat t() until this()
+end
+
+local autoteleporttomachineconditions = {"Extraction start"}
+local autoteleportingtomachineconn
+local autoteleportingtomachine = false
+local autoteleporttomachineconns = {}
+
+local function autoteleporttomachine(state)
+	autoteleportingtomachine = state
+
+	if not state then
+		for _, conn in ipairs(autoteleporttomachineconns) do
+			conn:Disconnect()
+		end
+		autoteleporttomachineconns = {}
+		if autoteleportingtomachineconn then
+			autoteleportingtomachineconn:Disconnect()
+			autoteleportingtomachineconn = nil
+		end
+		return
+	end
+
+	if autoteleportingtomachineconn then return end
+
+	local conditions = autoteleporttomachineconditions
+
+	local function doteleport()
+		env.funcs.tomachine("tp")
+	end
+
+	if table.find(conditions, "Extraction start") then
+		local conn = env.stuf.char:FindFirstChild("Decoding").Changed:Connect(function(val)
+			if val then doteleport() end
+		end)
+		table.insert(autoteleporttomachineconns, conn)
+	end
+
+	if table.find(conditions, "Extraction end") then
+		local conn = env.stuf.char:FindFirstChild("Decoding").Changed:Connect(function(val)
+			if not val then doteleport() end
+		end)
+		table.insert(autoteleporttomachineconns, conn)
+	end
+
+	if table.find(conditions, "On floor start") then
+		local conn = env.stuf.gameinfo:FindFirstChild("FloorActive").Changed:Connect(function(val)
+			if val then
+				doteleport()
+			end
+		end)
+		table.insert(autoteleporttomachineconns, conn)
+	end
+
+	if table.find(conditions, "Map fully loaded") then
+		local conn = env.stuf.roomfolder.ChildAdded:Connect(function()
+			yield(function() return env.stuf.machines end)
+			yield(function() return #env.stuf.machines:GetChildren() > 1 end)
+			doteleport()
+		end)
+		table.insert(autoteleporttomachineconns, conn)
+	end
+end
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+local autoclosepopupsconn = nil
+
+local function autoclosepopups(state)
+	if state then
+		local a = env.stuf.plrgui:FindFirstChild("ScreenGui")
+		if not autoclosepopupsconn then
+			autoclosepopupsconn = a.ChildAdded:Connect(function()
+				t(math.random(1/15, 1))
+				local popup = a:FindFirstChild("TemporaryPopUp", true)
+				if popup then
+					env.essentials.library.clik()
+					popup:Destroy()
+				end
+			end)
+		end
+	else
+		if autoclosepopupsconn then
+			autoclosepopupsconn:Disconnect() 
+			autoclosepopupsconn = nil
+		end
+	end
+end
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+local autovotebestcardenabled = false
+local autovotebestcardpriority = {
+	"Machine", "Stamina", "ItemRarity", "MonsterPanicReduction", "GlowLight",
+	"AbilityCooldown", "RandomItem", "SurvivalPoint", "Elevator",
+	"DandyDiscount", "PipingTape", "DyleFloor"
+}
+
+local function votebest()
+	local voter = env.stuf.gameinfo.CardVote
+	local event = rst.Events.CardVoteEvent
+
+	local function fire(name)
+		spwn(function()
+			for _, suffix in ipairs({"", "2"}) do
+				local c = voter:FindFirstChild(name .. suffix)
+				if c then event:FireServer(c) end
+			end
+		end)
+	end
+
+	for _, name in ipairs(autovotebestcardpriority) do
+		fire(name)
+	end
+
+	spwn(function()
+		local lowhealth = false
+		for _, p in ipairs(env.stuf.plrs:GetPlayers()) do
+			local h = p.Character and p.Character:FindFirstChildOfClass("Humanoid")
+			if h and h.Health < 2 then lowhealth = true break end
+		end
+		if lowhealth then
+			for _, suffix in ipairs({"", "2"}) do
+				local c = voter:FindFirstChild("Heal" .. suffix)
+				if c then event:FireServer(c) end
+			end
+		end
+	end)
+end
+
+local function monitorcards()
+	local voter = env.stuf.gameinfo.CardVote
+
+	local function tryvote()
+		if not autovotebestcardenabled or alreadyVoted then return end
+		task.delay(1, function()
+			if not autovotebestcardenabled or alreadyVoted then return end
+			if #voter:GetChildren() > 0 then
+				votebest()
+				alreadyVoted = true
+			end
+		end)
+	end
+
+	voter.ChildAdded:Connect(tryvote)
+	voter.ChildRemoved:Connect(function()
+		if #voter:GetChildren() == 0 then alreadyVoted = false end
+	end)
+	if #voter:GetChildren() > 0 then tryvote() end
+end
+
+local function autovotebestcard(state)
+	if not env.stuf.inrun then return end
+	autovotebestcardenabled = state
+	alreadyVoted = false
+	if state then spwn(monitorcards) end
+end
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+local autousingitems = false
+local autouseitemsthread = nil
+local autouseitemsconns = {}
+local autouseitemsbehavior = "Instant"
+local autouseitemsblacklist = {}
+
+local autouseitmsnamemap = {
+	["Air Horn"]               = "AirHorn",
+	["Bandage"]                = "Bandage",
+	["Bonbon"]                 = "Bonbon",
+	["Bottle o' Pop"]          = "PopBottle",
+	["Box o' Chocolates"]      = "ChocolateBox",
+	["Chocolate"]              = "Chocolate",
+	["Eject Button"]           = "EjectButton",
+	["Extraction Speed Candy"] = "ExtractionSpeedCandy",
+	["Gumballs"]               = "Gumballs",
+	["Health Kit"]             = "HealthKit",
+	["Instructions"]           = "Instructions",
+	["Jawbreaker"]             = "Jawbreaker",
+	["Jumper Cable"]           = "JumperCable",
+	["Pop"]                    = "Pop",
+	["Protein Bar"]            = "ProteinBar",
+	["Skill Check Candy"]      = "SkillCheckCandy",
+	["Smoke Bomb"]             = "SmokeBomb",
+	["Speed Candy"]            = "SpeedCandy",
+	["Stealth Candy"]          = "StealthCandy",
+	["Stopwatch"]              = "Stopwatch",
+	["Valve"]                  = "Valve",
+}
+
+local autouseitemcats = {
+	onmachine = {
+		"ExtractionSpeedCandy", "SkillCheckCandy", "Valve", "JumperCable",
+		"StealthCandy", "Jawbreaker", "Gumballs", "Instructions",
+	},
+	heal = {
+		"Bandage", "HealthKit",
+	},
+	speed = {
+		"SpeedCandy", "EjectButton", "Chocolate", "SmokeBomb", "Gumballs",
+	},
+	stamina = {
+		"StaminaCandy", "Pop", "PopBottle", "ProteinBar",
+	}
+}
+
+local function getitemslot(stats, itemname)
+	for i = 1, 4 do
+		if stats["slot" .. i] == itemname then
+			return "Slot" .. i
+		end
+	end
+end
+
+local function tryuseitem(stats)
+	local extracting = stats.extracting
+	local twistedschasing = stats.twistedschasing or 0
+	local health = env.stuf.char:FindFirstChildOfClass("Humanoid").Health
+	local lowhealth = health <= 1
+
+	local priority = {}
+
+	if extracting and not env.funcs.veemoteactive() then
+		for _, item in ipairs(autouseitemcats.onmachine) do table.insert(priority, item) end
+	end
+	if lowhealth then
+		for _, item in ipairs(autouseitemcats.heal) do table.insert(priority, item) end
+	end
+	if twistedschasing > 0 then
+		for _, item in ipairs(autouseitemcats.stamina) do table.insert(priority, item) end
+	end
+
+	for _, itemname in ipairs(priority) do
+		if autouseitemsblacklist[itemname] then continue end
+		if (itemname == "HealthKit" or itemname == "Bandage") and not lowhealth then continue end
+		local slot = getitemslot(stats, itemname)
+		if slot then
+			env.funcs.useitem(slot)
+			return
+		end
+	end
+end
+
+local function onInventoryChanged()
+	if not autousingitems then return end
+	local stats = env.funcs.getstats("player", env.stuf.plr)
+	if not stats then return end
+
+	local behavior = autouseitemsbehavior
+
+	if behavior == "Instant" then
+		tryuseitem(stats)
+
+	elseif behavior == "When necessary" then
+		local extracting = stats.extracting
+		local twistedschasing = (stats.twistedschasing or 0) > 0
+		local lowhealth = env.stuf.char:FindFirstChildOfClass("Humanoid").Health <= 1
+		if extracting or twistedschasing or lowhealth then
+			tryuseitem(stats)
+		end
+
+	elseif behavior == "1 second delay" then
+		task.delay(1, function()
+			if not autousingitems then return end
+			local freshstats = env.funcs.getstats("player", env.stuf.plr)
+			if freshstats then tryuseitem(freshstats) end
+		end)
+	end
+end
+
+local function autouseitems(state)
+	autousingitems = state
+
+	for _, conn in ipairs(autouseitemsconns) do conn:Disconnect() end
+	autouseitemsconns = {}
+
+	if not state then return end
+
+	local inventory = env.stuf.char:FindFirstChild("Inventory")
+	if inventory then
+		for i = 1, 4 do
+			local slot = inventory:FindFirstChild("Slot" .. i)
+			if slot then
+				table.insert(autouseitemsconns, slot.Changed:Connect(onInventoryChanged))
+			end
+		end
+	end
+
+	table.insert(autouseitemsconns, rst.StoryEvents.Spotted.OnClientEvent:Connect(function()
+		if not autousingitems then return end
+		local stats = env.funcs.getstats("player", env.stuf.plr)
+		if not stats then return end
+		for _, itemname in ipairs(autouseitemcats.speed) do
+			if autouseitemsblacklist[itemname] then continue end
+			local slot = getitemslot(stats, itemname)
+			if slot then
+				env.funcs.useitem(slot)
+				return
+			end
+		end
+	end)
+	)
+end
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+local sprinttapdistance = 20
+local sprinttappingenabled = false
+local sprinttappingthread = nil
+local sprinttappingconn = nil
+
+local function sprinttap()
+	if sprinttappingthread then return end
+	sprinttappingthread = spwn(function()
+		local sprintEvent = rst.Events.SprintEvent
+		local sprinting = false
+
+		while sprinttappingenabled and env.funcs.getgamestat("flooractive") and env.stuf.twisteds do
+			local nearestMonster = nil
+			local nearestDist = math.huge
+
+			for _, monster in pairs(env.stuf.twisteds:GetChildren()) do
+				if monster:IsA("Model") and monster:FindFirstChild("HumanoidRootPart") then
+					local dist = (env.funcs.getstats("twisted", monster).troot.Position - env.stuf.root.Position).Magnitude
+					if dist < nearestDist then
+						nearestDist = dist
+						nearestMonster = monster
+					end
+				end
+			end
+
+			if nearestMonster and nearestDist <= sprinttapdistance then
+				if not sprinting then
+					sprinting = true
+					if env.stuf.infinitestaminaenabled then
+						env.funcs.infstamsprinting()
+					else
+						sprintEvent:FireServer(true)
+					end
+				end
+			else
+				if sprinting then
+					sprinting = false
+					if env.stuf.infinitestaminaenabled then
+						env.funcs.infstamwalking()
+					else
+						sprintEvent:FireServer(false)
+					end
+				end
+			end
+
+			t()
+		end
+
+		if sprinting then
+			if env.stuf.infinitestaminaenabled then
+				env.funcs.infstamwalking()
+			else
+				sprintEvent:FireServer(false)
+			end
+		end
+
+		sprinttappingthread = nil
+	end)
+end
+
+local function sprinttapping(state)
+	if state then
+		if not sprinttappingenabled then
+			sprinttappingenabled = true
+			spwn(sprinttap)
+
+			sprinttappingconn = env.stuf.gameinfo.FloorActive.Changed:Connect(function(active)
+				if not sprinttappingenabled then return end
+
+				if active then
+					sprinttap()
+				else
+					if sprinttappingthread then
+						sprinttappingthread = nil
+					end
+				end
+			end)
+		end
+	else
+		if sprinttappingenabled then
+			sprinttappingenabled = false
+			if sprinttappingconn then sprinttappingconn:Disconnect() sprinttappingconn = nil end
+		end
+	end
+end
+
+-------------------------------------------------------------------------------------------------------------------------------
+
 env.stuf.afe = {
 	running = false,
 	priority = {},
@@ -593,7 +988,7 @@ local section = {
 	},
 	{ type = "dropdown", title = "Auto teleport to elevator condition", desc = "Sets the condition that has to be followed before automatically teleporting to the elevator.", 
 		options = {"Instant", "Everyone at elevator", "At the last second"},
-		default = "Instant",
+		default = autoteleporttoelevatorconditions,
 		canbeempty = false,
 
 		callback = function(selected)
@@ -612,15 +1007,17 @@ local section = {
 		discommanddesc = "Disables auto teleport to machine",
 
 		callback = function(state) 
+			autoteleporttomachine(state)
 		end
 	},
 	{ type = "dropdown", title = "Auto teleport to machine condition", desc = "Sets the condition that has to be followed before automatically teleporting to a random machine.", 
-		options = {"Extraction start", "Extraction end", "Player is near", "On floor start", "Map fully loaded"},
-		default = "Extraction start",
+		options = {"Extraction start", "Extraction end", "On floor start", "Map fully loaded"},
+		default = autoteleporttomachineconditions,
 		canbeempty = false,
 		multiselect = true,
 
 		callback = function(selected) 
+			autoteleporttomachineconditions = selected
 		end 
 	},
 
@@ -716,6 +1113,7 @@ local section = {
 		discommanddesc = "Disables auto close pop-ups",
 
 		callback = function(state) 
+			autoclosepopups(state)
 		end
 	},
 	{ type = "toggle", title = "Auto vote best card", desc = "Automatically votes for the best card available when card voting.",
@@ -730,29 +1128,32 @@ local section = {
 		discommanddesc = "Disables auto vote best card",
 
 		callback = function(state) 
+			autovotebestcard(state)
 		end
 	},
 	{ type = "toggle", title = "Auto use items", desc = "Automatically uses your item when available.",
 		commandcat = "Automation",
-
+		
 		encommands = {"enableautouseitems"},
 		enaliases = {"eaui"},
 		encommanddesc = "Enables auto use items",
-
+		
 		discommands = {"disableautouseitems"},
 		disaliases = {"daui"},
 		discommanddesc = "Disables auto use items",
-
-		callback = function(state) 
+		
+		callback = function(state)
+			autouseitems(state)
 		end
 	},
 	{ type = "dropdown", title = "Auto use items behavior", desc = "Determines the way your items will be used automatically.", 
 		options = {"Instant", "When necessary", "1 second delay"},
 		default = "Instant",
 		canbeempty = false,
-
-		callback = function(selected) 
-		end 
+		
+		callback = function(selected)
+			autouseitemsbehavior = selected
+		end
 	},
 	{ type = "dropdown", title = "Auto use items blacklist", desc = "Blacklists the selected items from being used automatically.", 
 		options = {"Air Horn", "Bandage", "Bonbon", "Bottle o' Pop", "Box o' Chocolates", 
@@ -761,9 +1162,14 @@ local section = {
 			"Skill Check Candy", "Smoke Bomb", "Speed Candy", "Stealth Candy", "Stopwatch", 
 			"Valve"},
 		multiselect = true,
-
-		callback = function(selected) 
-		end 
+		
+		callback = function(selected)
+			autouseitemsblacklist = {}
+			for _, label in ipairs(selected) do
+				local mapped = autouseitmsnamemap[label] or label
+				autouseitemsblacklist[mapped] = true
+			end
+		end
 	},
 	{ type = "toggle", title = "Auto sprint", desc = "Automatically sprints when a Twisted comes close.",
 		commandcat = "Automation",
@@ -777,10 +1183,15 @@ local section = {
 		discommanddesc = "Disables auto sprint",
 
 		callback = function(state)
+			sprinttapping(state)
 		end
 	},
 	{ type = "slider", title = "Auto sprint Twisted distance", desc = "Sets the distance required for the Twisted to reach toward you to sprint.", min = 5, max = 30, default = 10, step = 1,
 		callback = function(value)
+			if value and value > 0 then
+				sprinttapdistance = value
+				if sprinttappingenabled then sprinttapping(false) sprinttapping(true) end
+			end
 		end
 	},
 
