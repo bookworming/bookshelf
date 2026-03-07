@@ -785,19 +785,19 @@ do
 
 	function env.funcs.box(s, force) -- output
 		if env.gear.general.debugmode or force then
-			print("[Boxten Sex GUI]: " .. tostring(s))
+			print("[Boxten]: " .. tostring(s))
 		end
 	end
 
 	function env.funcs.pop(s, force) -- warn
 		if env.gear.general.debugmode or force then
-			warn("[Boxten Sex GUI]: " .. tostring(s))
+			warn("[Poppy]: " .. tostring(s))
 		end
 	end
 
 	function env.funcs.shr(s, force) -- error
 		if env.gear.general.debugmode or force then
-			error("[Boxten Sex GUI]: " .. tostring(s))
+			error("[Shrimpo]: " .. tostring(s))
 		end
 	end
 
@@ -1021,7 +1021,7 @@ do
 
 		elseif type == "machine" then
 			local stats = obj:FindFirstChild("Stats")
-			local pos = obj:FindFirstChild("TeleportPosition").CFrame * CFrame.new(0, 2.3, 0)
+			local pos = obj:FindFirstChild("TeleportPosition"):FindFirstChild("TeleportPosition").CFrame * CFrame.new(0, 2.3, 0)
 
 			local active = stats:FindFirstChild("ActivePlayer").Value
 			local completed = stats:FindFirstChild("Completed").Value
@@ -1032,6 +1032,7 @@ do
 			local machtype = obj:GetAttribute("MinigameType")
 			if machtype == "MovementTreadmill" then 
 				machtype = "treadmill"
+				pos = obj:FindFirstChild("TeleportPosition"):FindFirstChild("TreadmillTeleportPosition").CFrame * CFrame.new(0, 2.3, 0)
 			elseif machtype == "Circle" then 
 				machtype = "circle"
 			else
