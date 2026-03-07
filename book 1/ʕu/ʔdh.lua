@@ -172,6 +172,13 @@ layout.Padding = UDim.new(0, 2)
 local dialoguecount = 0
 
 local function newdialogue(text, whosaidit, expression)
+	if type(expression) == "table" then
+		expression = expression[1]
+	end
+	if type(expression) ~= "string" then
+		expression = "neutral"
+	end
+	
 	local nameText = ""
 	text = text or ""
 	expression = expression or "neutral"
