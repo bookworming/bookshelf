@@ -982,8 +982,7 @@ do
 	function env.funcs.getstats(type, obj, key) -- returns a table full of the target objects stats, can fetch the floor, item, machine, twisted, and another players stats
 		if not obj:IsA("Model") then env.funcs.shr("INVALID OBJECT, IDIOT!!!") end
 		local name = obj.Name
-
-		local result, keymap
+		local result = {}
 
 		if type == "floor" then
 			local floorname = env.stuf.currentroom.Name
@@ -1109,7 +1108,7 @@ do
 
 			local extracting = obj:FindFirstChild("Decoding").Value
 			local currentstealth = ins:GetAttribute("Stealth")
-			local twistedschasing = ins:GetAttribute("ChaseCount").Value
+			local twistedschasing = ins:GetAttribute("ChaseCount")
 
 			local abilitycooldown, currentabilitycooldown
 
@@ -1121,9 +1120,9 @@ do
 			end
 
 			result = {currentstealth, twistedschasing, currenttoon, inserver, ins, dead, left, capsulespickedup, itemspickedup, machinescompleted, ichorearned, twistedsencountered, tapescollected, toonpicked, slot1, slot2, slot3, slot4, trinket1, trinket2, extracting, icon, abilitycooldown, currentabilitycooldown}
-
-			return result[key]
 		end
+		
+		return result[key]
 	end
 
 	function env.funcs.getgamestat(stat) -- returns the value of the target game stat
