@@ -631,7 +631,7 @@ do
 		if not char then return end
 		env.stuf.char = char
 
-		local statsfolder = env.stuf.char:FindFirstChild("Stats")
+		local statsfolder = env.stuf.char:WaitForChild("Stats", 5)
 		if statsfolder then
 			env.stuf.plrstats = statsfolder
 		end
@@ -665,30 +665,38 @@ do
 			env.stuf.elevator = ws:WaitForChild("Elevators"):WaitForChild("Elevator") env.funcs.box("found \"Elevator\" model")
 			env.stuf.roomfolder = ws:WaitForChild("CurrentRoom") env.funcs.box("found \"CurrentRoom\" folder")
 
+			local updrefsrunning = false
+
 			local function updrefs()
+				if updrefsrunning then return end
+				updrefsrunning = true
 				env.funcs.box("updating references")
 
 				task.delay(0.1, function()
-					env.stuf.gameinfo = ws:FindFirstChild("Info")
-					env.stuf.currentroom = env.funcs.getroom() 
+					updrefsrunning = false
 
-					if not env.stuf.currentroom then 
+					env.stuf.gameinfo = ws:FindFirstChild("Info")
+					env.stuf.currentroom = env.funcs.getroom()
+
+					if not env.stuf.currentroom then
 						if env.stuf.refconn then env.stuf.refconn:Disconnect() env.stuf.refconn = nil end
 						if env.stuf.refconn2 then env.stuf.refconn2:Disconnect() env.stuf.refconn2 = nil end
 						env.funcs.pop("The room doesn't exist yet!")
-						return 
+						return
 					end
 
-					env.stuf.freearea = env.stuf.currentroom:WaitForChild("FreeArea") env.funcs.box("found \"FreeArea\" folder")
-					env.stuf.fakeelevator = env.stuf.freearea:WaitForChild("FakeElevator") env.funcs.box("found \"FakeElevator\" model")
+					if env.stuf.refconn then env.stuf.refconn:Disconnect() env.stuf.refconn = nil end
+					if env.stuf.refconn2 then env.stuf.refconn2:Disconnect() env.stuf.refconn2 = nil end
 
-					env.stuf.twisteds = env.stuf.currentroom:WaitForChild("Monsters") env.funcs.box("found \"Monsters\" folder")
-					env.stuf.items = env.stuf.currentroom:WaitForChild("Items") env.funcs.box("found \"Items\" folder")
-					env.stuf.machines = env.stuf.currentroom:WaitForChild("Generators") env.funcs.box("found \"Generators\" folder")
+					env.stuf.freearea = env.stuf.currentroom:WaitForChild("FreeArea")
+					env.stuf.fakeelevator = env.stuf.freearea:WaitForChild("FakeElevator")
+					env.stuf.twisteds = env.stuf.currentroom:WaitForChild("Monsters")
+					env.stuf.items = env.stuf.currentroom:WaitForChild("Items")
+					env.stuf.machines = env.stuf.currentroom:WaitForChild("Generators")
+					env.funcs.box("monitoring current room")
 
 					env.stuf.refconn = env.stuf.currentroom.ChildAdded:Connect(updrefs)
 					env.stuf.refconn2 = env.stuf.currentroom.ChildRemoved:Connect(updrefs)
-					env.funcs.box("monitoring current room")
 
 					task.delay(0.1, function()
 						repeat t() until env.stuf.visualssectionloaded
@@ -700,10 +708,7 @@ do
 			env.stuf.roomfolder.ChildAdded:Connect(updrefs)
 			env.stuf.roomfolder.ChildRemoved:Connect(updrefs)
 			env.funcs.box("monitoring \"CurrentRoom\" folder")
-
 			updrefs()
-
-			env.stuf.plrfolder.ChildAdded:Connect(updrefs)
 		end)
 	end
 
