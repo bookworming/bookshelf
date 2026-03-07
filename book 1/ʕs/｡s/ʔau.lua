@@ -695,6 +695,7 @@ local section = {
 		discommanddesc = "Disables instant machine calibration success",
 
 		callback = function(state) 
+			autocalibration2(state)
 		end
 	},
 	{ type = "input and toggle", title = "Auto escape Squirm", desc = "Automatically frees yourself when you get caught by Twisted Squirm with the set struggle delay.", placeholder = "Delay",
