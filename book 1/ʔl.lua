@@ -1,18 +1,25 @@
 --[[---------------------------------------------------------------------------------------------------------------------------
-⠀⠀⠀⠀⠀⠀⣀⣤⣀
-⠀⠀⠀⣀⠀⠀⢹⣿⣿⠀⠀⣀
-⠀⢰⣿⣿⠀⠀⠀⢻⣿⠀⠀⣿⣿⡆
-⠀⢸⣿⣿⠀⠀⠀⠀⢻⠀⠀⣿⣿⡇⠀⠀Team Noxious
-⠀⢸⣿⣿⠀⠀⡀⠀⠈⠀⠀⣿⣿⡇⠀⠀Boxten Sex GUI | Developed by unable
-⠀⢸⣿⣿⠀⠀⣧⠀⠀⠀⠀⣿⣿⡇⠀⠀:: "Loader"
-⠀⠸⣿⣿⠀⠀⣿⣧⠀⠀⠀⣿⣿⠇
-⠀⠀⠀⠉⠀⠀⣿⣿⣇⠀⠀⠉
-⠀⠀⠀⠀⠀⠀⠉⠛⠉
+  __   __     ______     __  __     __     ______     __  __     ______    
+ /\ "-.\ \   /\  __ \   /\_\_\_\   /\ \   /\  __ \   /\ \/\ \   /\  ___\   
+ \ \ \-.  \  \ \ \/\ \  \/_/\_\/_  \ \ \  \ \ \/\ \  \ \ \_\ \  \ \___  \  
+  \ \_\\"\_\  \ \_____\   /\_\/\_\  \ \_\  \ \_____\  \ \_____\  \/\_____\ 
+   \/_/ \/_/   \/_____/   \/_/\/_/   \/_/   \/_____/   \/_____/   \/_____/
+   
+   Made by Team Noxious -- Boxten Sex GUI
+   
 ---------------------------------------------------------------------------------------------------------------------------]]--
 
 if not game:IsLoaded() then game.Loaded:Wait() end local t = task.wait
 
--------------------------------------------------------------------------------------------------------------------------------
+--[[---------------------------------------------------------------------------------------------------------------------------
+
+   TODO:
+   when finally done with the script refactorment or whatever make sure to finalize by reformatting some of the variables in all of the
+   combined scripts for optimization (plus its very dirty)
+   
+   dont forget to obfuscate : )
+
+---------------------------------------------------------------------------------------------------------------------------]]--
 
 -- services & instances
 local t, spwn = task.wait, task.spawn
@@ -525,7 +532,7 @@ local function loadintro()
 
 	task.delay(0.6, function() title:Destroy() subtitle:Destroy() end) t(0.2)
 
-	tween(hi, {1.2, Enum.EasingStyle.Back, Enum.EasingDirection.InOut}, {Position = UDim2.new(0.5, 0, 0, 100)})
+	tween(hi, {1.2, Enum.EasingStyle.Back, Enum.EasingDirection.InOut}, {Position = UDim2.new(0.5, 0, 0, 60)})
 	tween(hi, {1.2, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut}, {Size = UDim2.fromOffset(64, 64)})
 	togglebutton = hi
 	togglebutton.ZIndex = 100000
