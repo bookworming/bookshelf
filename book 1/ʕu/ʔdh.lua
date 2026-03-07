@@ -167,7 +167,6 @@ layout.Parent = container
 layout.SortOrder = Enum.SortOrder.LayoutOrder
 layout.VerticalAlignment = Enum.VerticalAlignment.Bottom
 layout.HorizontalAlignment = Enum.HorizontalAlignment.Center
-layout.Padding = UDim.new(0, 2)
 
 local dialoguecount = 0
 
