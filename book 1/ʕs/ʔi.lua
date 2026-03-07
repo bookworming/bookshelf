@@ -1042,17 +1042,20 @@ do
 			local troot = obj:FindFirstChild("HumanoidRootPart") or obj.PrimaryPart or obj:FindFirstChildWhichIsA("BasePart")
 			local chaser = obj:FindFirstChild("Chaser")
 
-			local hearingrad = chaser:FindFirstChild("HearingRadius").Value
-			local intrestrad = chaser:FindFirstChild("InstantRadius").Value
-			local hitboxrad = chaser:FindFirstChild("HearingRadius").Value
-			local visionrad = chaser:FindFirstChild("VisionRadius").Value
+			local hearingrad, intrestrad, hitboxrad, visionrad, intresttime, LoS, hitcooldown
+			if chaser then
+				hearingrad = chaser:FindFirstChild("HearingRadius").Value
+				intrestrad = chaser:FindFirstChild("InstantRadius").Value
+				hitboxrad = chaser:FindFirstChild("HearingRadius").Value
+				visionrad = chaser:FindFirstChild("VisionRadius").Value
 
-			local intresttime = chaser:FindFirstChild("InterestTime").Value
-			local LoS = chaser:FindFirstChild("LineOfSight")
-			local hitcooldown = chaser:FindFirstChild("HitCooldown")
+				intresttime = chaser:FindFirstChild("InterestTime").Value
+				LoS = chaser:FindFirstChild("LineOfSight")
+				hitcooldown = chaser:FindFirstChild("HitCooldown")
+			end
 
 			local chasing = obj:FindFirstChild("ChasingValue")
-			local ischasing = chasing.Value ~= nil
+			local ischasing = chasing and chasing.Value ~= nil
 
 			local hasability = obj:FindFirstChild("Grabbing")
 			local usingability = hasability and hasability.Value
