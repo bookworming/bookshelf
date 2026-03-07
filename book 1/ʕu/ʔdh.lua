@@ -162,7 +162,17 @@ container.Size = UDim2.new(0, 400, 0, 300)
 container.BackgroundTransparency = 1
 container.Parent = env.essentials.sgui
 
+local layout = Instance.new("UIListLayout")
+layout.Parent = container
+layout.SortOrder = Enum.SortOrder.LayoutOrder
+layout.VerticalAlignment = Enum.VerticalAlignment.Bottom
+layout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+layout.Padding = UDim.new(0, 2)
+
+local dialoguecount = 0
+
 local function newdialogue(text, whosaidit, expression)
+	dialoguecount += 1
 	local nameText = ""
 	text = text or ""
 	local nameColor = Color3.new(1, 1, 1)
@@ -181,10 +191,12 @@ local function newdialogue(text, whosaidit, expression)
 
 	local holder = Instance.new("Frame")
 	holder.BackgroundTransparency = 1
-	holder.Size = UDim2.new(0, 0, 0, 16)
+	holder.Size = UDim2.new(1, 0, 0, 16)
+	holder.AutomaticSize = Enum.AutomaticSize.Y
 	holder.AnchorPoint = Vector2.new(0.5, 1)
-	holder.Position = UDim2.new(0.5, 0, 1, 5)
+	holder.Position = UDim2.new(0.5, 0, 1, 0)
 	holder.ClipsDescendants = false
+	holder.LayoutOrder = dialoguecount
 	holder.Parent = container
 
 	local tofade = {}
