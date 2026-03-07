@@ -154,7 +154,7 @@ end
 
 -------------------------------------------------------------------------------------------------------------------------------
 
-function togenerator(method)
+function tomachine(method)
 	if not env.stuf.machines then return end
 	local good = {}
 
@@ -268,7 +268,7 @@ local section = {
 		commanddesc = "Teleports you to a random machine",
 
 		callback = function() 
-			togenerator("tp")
+			tomachine("tp")
 		end
 	},
 	{ type = "toggle", title = "Teleport tool", desc = "Gives you a teleport tool. Click anywhere while having it equipped to teleport to the clicked position.",
@@ -348,7 +348,7 @@ local section = {
 		commanddesc = "Tweens you to a random machine",
 
 		callback = function() 
-			togenerator("tween")
+			tomachine("tween")
 		end
 	},
 	{ type = "toggle", title = "Tween tool", desc = "Gives you a tween tool. Click anywhere while having it equipped to tween to the clicked position.",
@@ -411,7 +411,7 @@ local section = {
 		commanddesc = "Walks you to a random machine",
 
 		callback = function() 
-			togenerator("pf")
+			tomachine("pf")
 		end
 	},
 	{ type = "toggle", title = "Pathfind tool", desc = "Gives you a Pathfind tool. Click anywhere while having it equipped to walk a path towards the clicked position.",
