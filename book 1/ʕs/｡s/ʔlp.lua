@@ -694,7 +694,7 @@ end
 -------------------------------------------------------------------------------------------------------------------------------
 
 local function forcequitmachine()
-	local decoding = env.funcs.getstats("player", env.stuf.char).extracting
+	local decoding = env.funcs.getstats("player", env.stuf.char, "extracting")
 	if decoding ~= nil then
 		decoding.Stats.StopInteracting:FireServer("Stop")
 	end
@@ -745,7 +745,7 @@ local pushauraconns = {}
 local function makepushaura(monster)
 	if activepushauras[monster] then return end
 
-	local anchorPart = env.funcs.getstats("twisted", monster).troot
+	local anchorPart = env.funcs.getstats("twisted", monster, "troot")
 	if not anchorPart then return end
 
 	local aura = Instance.new("Part")
@@ -908,7 +908,7 @@ local function gettwisroots()
 
 	if env.stuf.twisteds then
 		for _, monster in ipairs(env.stuf.twisteds:GetChildren()) do
-			local root = table.insert(roots, env.funcs.getstats("twisted", monster).troot)
+			local root = table.insert(roots, env.funcs.getstats("twisted", monster, "troot"))
 			if isvalidpart(root) then
 				table.insert(roots, root)
 			end
@@ -978,7 +978,7 @@ local function antigrab(state)
 		antigrabconn = rst.StoryEvents.Spotted.OnClientEvent:Connect(function()
 			for _, twisted in env.stuf.twisteds do
 				if twisted.Name:find("Goob") or twisted.Name:find("Gigi") or twisted.Name:find("Scraps") then
-					if env.funcs.getstats("twisted", twisted).chasing == env.stuf.user then
+					if env.funcs.getstats("twisted", twisted, "chasing") == env.stuf.user then
 						local now = os.clock()
 						antigrabdb = now
 
@@ -1008,12 +1008,12 @@ end
 local function pickupallitems()
 	local oldcf = env.stuf.root.CFrame
 	ws.Gravity = 0
-	
+
 	if env.stuf.currentroom then
 		if env.stuf.items and #env.stuf.items:GetChildren() > 0 then
 			for _, item in ipairs(env.stuf.items:GetChildren()) do
 				if item.Name:find("FakeCap") then env.funcs.popup("Twisted Rodger's capsule is on this floor. Are you sure you still want to run this?", "Yes", nil, "Nevermind", function() return end) end
-				
+
 				if item:IsA("Model") then
 					local itemCFrame = item:GetPivot() * CFrame.new(0, env.gear.general.itemtpposyoffset, 0)
 					fireproximityprompt(item.Prompt:FindFirstChildOfClass("ProximityPrompt"))
@@ -1145,7 +1145,7 @@ local function shakesquirmoff()
 	local function tap(dir)
 		rst.Events.TwistedSquirmGrab:FireServer(unpack({"Struggle", dir}))
 	end
-	
+
 	local ui = env.stuf.plrgui.TwistedSquirmEscapeUI
 	if ui.Enabled then
 		while ui.Enabled do
@@ -1205,7 +1205,7 @@ function encountertwisteds()
 					end
 
 					ws.Gravity = 0
-					
+
 				elseif mname:find("squirm") then
 					local spotted = false
 					local spottedConn = rst.StoryEvents.Spotted.OnClientEvent:Connect(function()
@@ -1229,7 +1229,7 @@ function encountertwisteds()
 				elseif not mname:find("razzle") and not mname:find("rodger") then
 					local starttime = tick()
 					while tick() - starttime < 0.3 do
-						if env.funcs.getstats("twisted", monster).troot then
+						if env.funcs.getstats("twisted", monster, "troot") then
 							local foff = (mname:find("dandy") or mname:find("dyle") or mname:find("pebble")) and -28 or -18
 							local targetcf = CFrame.new(
 								monster.HumanoidRootPart.Position - monster.HumanoidRootPart.CFrame.LookVector * foff,
@@ -1684,9 +1684,9 @@ local function machineaura(state)
 			if env.stuf.machines then
 				for _, machine in ipairs(env.stuf.machines:GetChildren()) do
 					local stats = env.funcs.getstats("machine", machine)
-					local possessed = stats.possessed
-					local hasprogress = stats.amount ~= 0.1
-					local machinetype = stats.machtype
+					local possessed = stats[4]
+					local hasprogress = stats[5] ~= 0.1
+					local machinetype = stats[7]
 
 					local conditions = machineauraconditions
 					if #conditions > 0 then
@@ -1819,7 +1819,7 @@ local section = {
 			"Health Kit", "Jawbreaker", "Jumper Cable", "Pop", "Protein Bar", "Research Capsule", 
 			"Skill Check Candy", "Smoke Bomb", "Speed Candy", "Stealth Candy", "Tape"},
 		multiselect = true,
-		
+
 		callback = function(selected)
 			itemaurablacklist = {}
 			for _, label in ipairs(selected) do
@@ -1850,7 +1850,7 @@ local section = {
 			"Skill Check Candy", "Smoke Bomb", "Speed Candy", "Stealth Candy", "Stopwatch", 
 			"Valve"},
 		multiselect = true,
-		
+
 		callback = function(selected)
 			buyaurablacklist = {}
 			for _, label in ipairs(selected) do
@@ -2292,7 +2292,7 @@ local section = {
 				stopflying()
 				startflying(noxflyspeed)
 			end
-			
+
 			noxflying2 = state
 			if noxflying2 then
 				startflying(noxflyspeed)
