@@ -60,16 +60,14 @@ env.essentials.toggles, env.essentials.buttons, env.essentials.elements = {}, {}
 
 env.scriptinfo, env.filemanager = {}, {}
 
-local function yield(tilcomp)
-	if tilcomp then
-		repeat t() until env.setupcomplete
-	else
-		repeat t() until env.essentialsloaded
+local function yieldfor(this)
+	if not this then
+		repeat t() until function() return this end
 	end
 end
 
 spwn(function()
-	yield(true) env.funcs.pop("Hi!")
+	yieldfor(env.setupcomplete) env.funcs.pop("Hi!")
 	env.essentials.library = env.funcs.recursivels("book%201/%CA%95u/%CA%94l.lua", true) 
 	env.funcs.box("UI library loaded successfully")
 
@@ -83,7 +81,7 @@ end)
 
 -- script info & file manager
 spwn(function()
-	yield()
+	yieldfor(env.essentialsloaded)
 	env.scriptinfo.script = {
 		version = env.essentials.data.cl.current.version,
 		subversion = env.essentials.data.cl.current.subversion,
@@ -98,7 +96,7 @@ spwn(function()
 end)
 
 spwn(function()
-	yield()
+	yieldfor(env.essentialsloaded)
 	env.filemanager.autoloadfile = folder .. "/Auto-loads.json"
 	env.filemanager.configfolder = folder .. "/Configs"
 	env.filemanager.persistfile = folder .. "/Persistent.json"
@@ -661,7 +659,7 @@ do
 	env.stuf.gameinfo, env.stuf.currentroom, env.stuf.freearea, env.stuf.twisteds, env.stuf.items, env.stuf.machines, env.stuf.fakeelevator = nil
 	if env.stuf.inrun then
 		spwn(function()
-			yield(true)
+			yieldfor(env.setupcomplete)
 			env.stuf.elevator = ws:WaitForChild("Elevators"):WaitForChild("Elevator") env.funcs.box("found \"Elevator\" model")
 			env.stuf.roomfolder = ws:WaitForChild("CurrentRoom") env.funcs.box("found \"CurrentRoom\" folder")
 
@@ -699,7 +697,7 @@ do
 					env.stuf.refconn2 = env.stuf.currentroom.ChildRemoved:Connect(updrefs)
 
 					task.delay(0.1, function()
-						repeat t() until env.stuf.visualssectionloaded
+						yieldfor(env.stuf.visualssectionloaded)
 						env.funcs.reverifesp(true)
 					end)
 				end)
@@ -726,7 +724,7 @@ do
 	env.stuf.buttonscale = Instance.new("UIScale")
 
 	spwn(function() 
-		if not env.funcs.recursivels then repeat t() until function() return env.funcs.recursivels end end
+		yieldfor(env.funcs.recursivels)
 		env.stuf.dialogue = env.funcs.recursivels("book%201/%CA%95u/%CA%94d.lua", true) 
 	end)
 
@@ -754,7 +752,7 @@ do
 
 	spwn(function()
 		if env.stuf.handshaker.scanningplayers then return end
-		if not env.stuf.handshaker.monitor then repeat t() until function() return env.stuf.handshaker.monitor end end
+		yieldfor(env.stuf.handshaker.monitor)
 		for _, plr in ipairs(plrs:GetPlayers()) do env.stuf.handshaker.monitor(plr) end plrs.PlayerAdded:Connect(function(plr) env.stuf.handshaker.monitor(plr) end)
 		env.stuf.handshaker.scanningplayers = true
 	end)
