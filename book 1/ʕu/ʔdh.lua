@@ -172,20 +172,32 @@ layout.Padding = UDim.new(0, 2)
 local dialoguecount = 0
 
 local function newdialogue(text, whosaidit, expression)
-	dialoguecount += 1
 	local nameText = ""
 	text = text or ""
+	expression = expression or "neutral"
 	local nameColor = Color3.new(1, 1, 1)
 
+	-- Single shared name resolver
+	local name =
+		(whosaidit == "box") and "boxten" or
+		(whosaidit == "altbox") and "altboxten" or
+		(whosaidit == "pop") and "poppy" or
+		(whosaidit == "shr") and "shrimpo"
+
+	print("newdialogue called | whosaidit: " .. tostring(whosaidit) .. " | name: " .. tostring(name) .. " | expression: " .. tostring(expression))
+
+	if name then
+		local expressionset = expressions[name]
+		print("expressionset: " .. tostring(expressionset) .. " | image: " .. tostring(expressionset and expressionset[expression]))
+	end
+
 	if whosaidit and tagcolors[whosaidit] then
-		local name =
+		nameText = "[" .. (
 			(whosaidit == "box" or whosaidit == "altbox") and "Boxten" or
-			whosaidit == "pop" and "Poppy" or
-			whosaidit == "shr" and "Shrimpo"
-
-		nameText = "[" .. name .. "]: "
+				whosaidit == "pop" and "Poppy" or
+				whosaidit == "shr" and "Shrimpo"
+		) .. "]: "
 		nameColor = tagcolors[whosaidit]
-
 		dialoguenoise()
 	end
 
@@ -203,16 +215,11 @@ local function newdialogue(text, whosaidit, expression)
 	local letters = {}
 	local cursorX = 0
 
-	if whosaidit and expression then
-		local name =
-			(whosaidit == "box") and "boxten" or
-			(whosaidit == "altbox") and "altboxten" or
-			(whosaidit == "pop") and "poppy" or
-			(whosaidit == "shr") and "shrimpo"
-
-		local expressionset = name and expressions[name]
+	if name and expression then
+		local expressionset = expressions[name]
 		local image = expressionset and expressionset[expression]
-		print(image or "no")
+
+		print("icon resolve | name: " .. tostring(name) .. " | expression: " .. tostring(expression) .. " | image: " .. tostring(image))
 
 		if image and image ~= "placeholder" then
 			local iconsize = 25
