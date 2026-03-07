@@ -1016,9 +1016,8 @@ local function pickupallitems()
 
 				if item:IsA("Model") then
 					local itemCFrame = item:GetPivot() * CFrame.new(0, env.gear.general.itemtpposyoffset, 0)
-					fireproximityprompt(item.Prompt:FindFirstChildOfClass("ProximityPrompt"))
-					for _ = 1, 15 do env.funcs.moveplr(itemCFrame, "tp") t() end
-					fireproximityprompt(item.Prompt:FindFirstChildOfClass("ProximityPrompt"))
+					for _ = 1, 5 do env.funcs.moveplr(itemCFrame, "tp") t() end
+					fireproximityprompt(env.funcs.getstats("item", item).act)
 				end
 			end
 		end
@@ -1038,9 +1037,8 @@ local function pickupallcapsules()
 			for _, item in ipairs(env.stuf.items:GetChildren()) do
 				if item:IsA("Model") and item.Name:find("ResearchCapsule") then
 					local itemCFrame = item:GetPivot() * CFrame.new(0, env.gear.general.itemtpposyoffset, 0)
-					fireproximityprompt(item.Prompt:FindFirstChildOfClass("ProximityPrompt"))
-					for _ = 1, 15 do env.funcs.moveplr(itemCFrame, "tp") t() end
-					fireproximityprompt(item.Prompt:FindFirstChildOfClass("ProximityPrompt"))
+					for _ = 1, 5 do env.funcs.moveplr(itemCFrame, "tp") t() end
+					fireproximityprompt(env.funcs.getstats("item", item).act)
 				end
 			end
 		end
@@ -1060,9 +1058,8 @@ local function pickupalltapes()
 			for _, item in ipairs(env.stuf.items:GetChildren()) do
 				if item:IsA("Model") and item.Name:find("Tape") then
 					local itemCFrame = item:GetPivot() * CFrame.new(0, env.gear.general.itemtpposyoffset, 0)
-					fireproximityprompt(item.Prompt:FindFirstChildOfClass("ProximityPrompt"))
-					for _ = 1, 15 do env.funcs.moveplr(itemCFrame, "tp") t() end
-					fireproximityprompt(item.Prompt:FindFirstChildOfClass("ProximityPrompt"))
+					for _ = 1, 5 do env.funcs.moveplr(itemCFrame, "tp") t() end
+					fireproximityprompt(env.funcs.getstats("item", item).act)
 				end
 			end
 		end
@@ -1082,9 +1079,8 @@ local function pickupallheals()
 			for _, item in ipairs(env.stuf.items:GetChildren()) do
 				if item:IsA("Model") and item.Name:find("HealthKit") or item.Name:find("Bandage") then
 					local itemCFrame = item:GetPivot() * CFrame.new(0, env.gear.general.itemtpposyoffset, 0)
-					fireproximityprompt(item.Prompt:FindFirstChildOfClass("ProximityPrompt"))
-					for _ = 1, 15 do env.funcs.moveplr(itemCFrame, "tp") t() end
-					fireproximityprompt(item.Prompt:FindFirstChildOfClass("ProximityPrompt"))
+					for _ = 1, 5 do env.funcs.moveplr(itemCFrame, "tp") t() end
+					fireproximityprompt(env.funcs.getstats("item", item).act)
 				end
 			end
 		end
@@ -1104,9 +1100,8 @@ local function pickupallextitems()
 			for _, item in ipairs(env.stuf.items:GetChildren()) do
 				if item:IsA("Model") and item.Name:find("JumperCable") or item.Name:find("ExtractionSpeedCandy") or item.Name:find("SkillCheckCandy") or item.Name:find("Jawbreaker") then
 					local itemCFrame = item:GetPivot() * CFrame.new(0, env.gear.general.itemtpposyoffset, 0)
-					fireproximityprompt(item.Prompt:FindFirstChildOfClass("ProximityPrompt"))
-					for _ = 1, 15 do env.funcs.moveplr(itemCFrame, "tp") t() end
-					fireproximityprompt(item.Prompt:FindFirstChildOfClass("ProximityPrompt"))
+					for _ = 1, 5 do env.funcs.moveplr(itemCFrame, "tp") t() end
+					fireproximityprompt(env.funcs.getstats("item", item).act)
 				end
 			end
 		end	
@@ -1126,9 +1121,8 @@ local function pickupalleventitems()
 			for _, item in ipairs(env.stuf.items:GetChildren()) do
 				if item:IsA("Model") and item.Name:find("HolidayCollectibleItem") then
 					local itemCFrame = item:GetPivot() * CFrame.new(0, env.gear.general.itemtpposyoffset, 0)
-					fireproximityprompt(item.Prompt:FindFirstChildOfClass("ProximityPrompt"))
-					for _ = 1, 15 do env.funcs.moveplr(itemCFrame, "tp") t() end
-					fireproximityprompt(item.Prompt:FindFirstChildOfClass("ProximityPrompt"))
+					for _ = 1, 5 do env.funcs.moveplr(itemCFrame, "tp") t() end
+					fireproximityprompt(env.funcs.getstats("item", item).act)
 				end
 			end
 		end
