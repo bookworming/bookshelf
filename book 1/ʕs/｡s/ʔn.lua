@@ -162,7 +162,7 @@ function tomachine(method)
 		if not generator.PrimaryPart then continue end
 		local pos = generator.PrimaryPart.Position
 
-		if not env.funcs.getstats("machine", generator, "completed") and not env.funcs.getstats("machine", generator, "possessed") then
+		if not env.funcs.getstats("machine", generator).completed and not env.funcs.getstats("machine", generator).possessed then
 			local cantgothere = false
 
 			for _, obj in ipairs(env.stuf.currentroom:GetChildren()) do
@@ -190,8 +190,8 @@ function tomachine(method)
 			for _, monster in ipairs(env.stuf.twisteds:GetChildren()) do
 				if not monster:IsA("Model") then continue end
 
-				local twis = env.funcs.getstats("twisted", monster, "name")
-				local twisroot = env.funcs.getstats("twisted", monster, "troot")
+				local twis = env.funcs.getstats("twisted", monster).name
+				local twisroot = env.funcs.getstats("twisted", monster).troot
 				if not twisroot then continue end
 
 				local dist = (twisroot.Position - pos).Magnitude
@@ -213,8 +213,8 @@ function tomachine(method)
 			if not cantgothere then
 				table.insert(good, {
 					model = generator,
-					progress = env.funcs.getstats("machine", generator, "amount"),
-					tppos = env.funcs.getstats("machine", generator, "pos"),
+					progress = env.funcs.getstats("machine", generator).amount,
+					tppos = env.funcs.getstats("machine", generator).pos,
 				})
 			end
 		end
