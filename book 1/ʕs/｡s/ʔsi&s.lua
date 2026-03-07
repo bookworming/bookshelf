@@ -4,9 +4,9 @@
  \ \ \-.  \  \ \ \/\ \  \/_/\_\/_  \ \ \  \ \ \/\ \  \ \ \_\ \  \ \___  \  
   \ \_\\"\_\  \ \_____\   /\_\/\_\  \ \_\  \ \_____\  \ \_____\  \/\_____\ 
    \/_/ \/_/   \/_____/   \/_/\/_/   \/_/   \/_____/   \/_____/   \/_____/
-
-   Made by unable | Boxten Sex GUI (Script Settings section, UI Settings section, Changelogs section)
-
+   
+   Made by Team Noxious -- Boxten Sex GUI [Script Information & File sections]
+   
 ---------------------------------------------------------------------------------------------------------------------------]]--
 
 local version = 2
@@ -78,6 +78,12 @@ local sections = {
 		{ type = "slider", title = "Item teleport Y offset", desc = "Sets the Y offset of the target item teleport position (In studs).", min = -5, max = 5, default = -2.5, step = 0.5,
 			callback = function(value)
 				env.gear.general.itemtpposyoffset = value
+			end
+		},
+		{ type = "toggle", title = "Force stop extraction when teleporting to machine", desc = "Forcefully quits machine extraction when teleporting to a random generator.",
+
+			callback = function(state) 
+				env.gear.general.forcequitwhenteleportingtomach = state
 			end
 		},
 
