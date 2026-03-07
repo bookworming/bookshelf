@@ -78,7 +78,7 @@ function lib.centerui(ui, ins, style, time)
 	local tween = ts:Create(
 		ui,
 		TweenInfo.new(t, s, e),
-		{ Position = UDim2.fromOffset(size.X / 2, size.Y / 2) }
+		{ Position = UDim2.fromOffset(size.X / 2, (size.Y / 2) - 56) }
 	)
 
 	tween:Play()
