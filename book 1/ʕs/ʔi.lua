@@ -1021,7 +1021,7 @@ do
 
 		elseif type == "machine" then
 			local stats = obj:FindFirstChild("Stats")
-			local pos = obj:FindFirstChild("TeleportPosition"):FindFirstChild("TeleportPosition").CFrame * CFrame.new(0, 2.3, 0)
+			local pos = obj:FindFirstChild("TeleportPositions"):FindFirstChild("TeleportPosition").CFrame * CFrame.new(0, 2.3, 0)
 
 			local active = stats:FindFirstChild("ActivePlayer").Value
 			local completed = stats:FindFirstChild("Completed").Value
@@ -1032,7 +1032,7 @@ do
 			local machtype = obj:GetAttribute("MinigameType")
 			if machtype == "MovementTreadmill" then 
 				machtype = "treadmill"
-				pos = obj:FindFirstChild("TeleportPosition"):FindFirstChild("TreadmillTeleportPosition").CFrame * CFrame.new(0, 2.3, 0)
+				pos = obj:FindFirstChild("TeleportPositions"):FindFirstChild("TreadmillTeleportPosition").CFrame * CFrame.new(0, 2.3, 0)
 			elseif machtype == "Circle" then 
 				machtype = "circle"
 			else
