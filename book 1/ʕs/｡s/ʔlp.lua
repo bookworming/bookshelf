@@ -268,7 +268,7 @@ end
 -- the code for this looks abnormally large
 infinitestaminasprinttoggled = false
 infinitestaminaconnections = {}
-infinitestaminaenabled = false
+env.stuf.infinitestaminaenabled = false
 infinitestaminachangedconnection = nil
 infstamspeedloop = nil
 infstamsprintstatloop = nil
@@ -324,7 +324,7 @@ function startsprintbtnimgloop()
 	if infstambuttonimageloop then return end
 
 	infstambuttonimageloop = rs.Heartbeat:Connect(function()
-		if infinitestaminaenabled then
+		if env.stuf.infinitestaminaenabled then
 			updsprintbtnimg()
 		end
 	end)
@@ -383,10 +383,10 @@ function infstamfiresprintevent(state) local spr = hiddenui:FindFirstChild("Spri
 function infstamapplywalkspeed() env.stuf.hum.WalkSpeed = infstamfetchspeed("Walk") end
 function infstamapplyrunspeed() env.stuf.hum.WalkSpeed = infstamfetchspeed("Run") end
 
-function infstamsprinting()
+function env.funcs.infstamsprinting()
 	infinitestaminasprinttoggled = true
 
-	if infinitestaminaenabled then
+	if env.stuf.infinitestaminaenabled then
 		if showactualstamina then
 			-- inf and showac
 			setsprinting(true)
@@ -406,10 +406,10 @@ function infstamsprinting()
 	end
 end
 
-function infstamwalking()
+function env.funcs.infstamwalking()
 	infinitestaminasprinttoggled = false
 
-	if infinitestaminaenabled then
+	if env.stuf.infinitestaminaenabled then
 		if showactualstamina then
 			infstamfiresprintevent(false)
 			stopsprintingloop()
@@ -493,8 +493,8 @@ function enableinfinitestamina(state)
 	if not env.stuf.inrun then return end
 
 	if state then
-		if infinitestaminaenabled then return end
-		infinitestaminaenabled = true
+		if env.stuf.infinitestaminaenabled then return end
+		env.stuf.infinitestaminaenabled = true
 
 		if mobile then
 			setupmobileinfstam()
@@ -509,8 +509,8 @@ function enableinfinitestamina(state)
 			stopupdstaminaloop()
 		end
 	else
-		if not infinitestaminaenabled then return end
-		infinitestaminaenabled = false
+		if not env.stuf.infinitestaminaenabled then return end
+		env.stuf.infinitestaminaenabled = false
 
 		infstamcleanup()
 
@@ -1179,7 +1179,7 @@ function encountertwisteds()
 				elseif mname:find("razzle") and not visitedrnd then
 					visitedrnd = true
 
-					local infstamwasenabled = infinitestaminaenabled
+					local infstamwasenabled = env.stuf.infinitestaminaenabled
 					local spr = hiddenui:FindFirstChild("SprintEvent") or rst.Events:WaitForChild("SprintEvent")
 
 					spwn(function()
@@ -1778,7 +1778,7 @@ local section = {
 		callback = function(state) 
 			showactualstamina = state
 
-			if infinitestaminaenabled then
+			if env.stuf.infinitestaminaenabled then
 				enableinfinitestamina(false)
 				enableinfinitestamina(true)
 			end
