@@ -25,7 +25,7 @@ local ws = FindFirstChildOfClass(game, "Workspace")
 local uis = FindFirstChildOfClass(game, "UserInputService")
 local ts = FindFirstChildOfClass(game, "TweenService")
 local rs = FindFirstChildOfClass(game, "RunService")
-local rst = FindFirstChildOfClass(ws, "ReplicatedStorage")
+local rst = FindFirstChildOfClass(game, "ReplicatedStorage")
 local plrs = FindFirstChildOfClass(game, "Players")
 
 local getgenv = getgenv() or _G
