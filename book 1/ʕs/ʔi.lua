@@ -60,16 +60,12 @@ env.essentials.toggles, env.essentials.buttons, env.essentials.elements = {}, {}
 
 env.scriptinfo, env.filemanager = {}, {}
 
-local function yield(tilcomp)
-	if tilcomp then
-		repeat t() until env.setupcomplete
-	else
-		repeat t() until env.essentialsloaded
-	end
+local function yield(this)
+	repeat t() until this()
 end
 
 spwn(function()
-	yield(true) env.funcs.pop("Hi!")
+	yield(function() return env.setupcomplete end) env.funcs.pop("Hi!")
 	env.essentials.library = env.funcs.recursivels("book%201/%CA%95u/%CA%94l.lua", true) 
 	env.funcs.box("UI library loaded successfully")
 
@@ -83,7 +79,7 @@ end)
 
 -- script info & file manager
 spwn(function()
-	yield()
+	yield(function() return env.essentialsloaded end)
 	env.scriptinfo.script = {
 		version = env.essentials.data.cl.current.version,
 		subversion = env.essentials.data.cl.current.subversion,
@@ -98,7 +94,7 @@ spwn(function()
 end)
 
 spwn(function()
-	yield()
+	yield(function() return env.essentialsloaded end)
 	env.filemanager.autoloadfile = folder .. "/Auto-loads.json"
 	env.filemanager.configfolder = folder .. "/Configs"
 	env.filemanager.persistfile = folder .. "/Persistent.json"
@@ -661,7 +657,7 @@ do
 	env.stuf.gameinfo, env.stuf.currentroom, env.stuf.freearea, env.stuf.twisteds, env.stuf.items, env.stuf.machines, env.stuf.fakeelevator = nil
 	if env.stuf.inrun then
 		spwn(function()
-			yield(true)
+			yield(function() return env.setupcomplete end)
 			env.stuf.elevator = ws:WaitForChild("Elevators"):WaitForChild("Elevator") env.funcs.box("found \"Elevator\" model")
 			env.stuf.roomfolder = ws:WaitForChild("CurrentRoom") env.funcs.box("found \"CurrentRoom\" folder")
 
