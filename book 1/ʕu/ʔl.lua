@@ -1428,7 +1428,7 @@ function lib.addtoggle(parent, title, description, callback, bindable, default, 
 		local buttonWidth = isTooHigh and (baseWidth + 40) or baseWidth
 
 		local startPos = UDim2.new(0.5, 0, 0, -100)
-		local targetPos = destination or UDim2.new(0.5, 0, 0, 100)
+		local targetPos = destination or UDim2.new(0.5, 0, 0, 60)
 
 		local buttonFrame, drag = lib.makecoolframe(UDim2.new(0, buttonWidth, 0, 64), env.essentials.sgui, false, true, startPos, nil, nil, true, 90000 + zplus)
 		ts:Create(buttonFrame, TweenInfo.new(1, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Position = targetPos}):Play()
@@ -1789,7 +1789,7 @@ function lib.addbutton(parent, title, description, callback, bindable, locked, l
 		local buttonWidth = isTooHigh and (baseWidth + 40) or baseWidth
 
 		local startPos = UDim2.new(0.5, 0, 0, -100)
-		local targetPos = destination or UDim2.new(0.5, 0, 0, 100)
+		local targetPos = destination or UDim2.new(0.5, 0, 0, 60)
 
 		local buttonFrame, drag = lib.makecoolframe(UDim2.new(0, buttonWidth, 0, 64), env.essentials.sgui, false, true, startPos, nil, nil, true, 90000 + zplus)
 		ts:Create(buttonFrame, TweenInfo.new(1, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Position = targetPos}):Play()
