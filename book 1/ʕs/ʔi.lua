@@ -1108,7 +1108,7 @@ do
 			local trinket1, trinket2 = fetchtrinket(1), fetchtrinket(2)
 
 			local extracting = obj:FindFirstChild("Decoding").Value
-			local currentstealth = ins:GetAttribute("Stealth").Value
+			local currentstealth = ins:GetAttribute("Stealth")
 			local twistedschasing = ins:GetAttribute("ChaseCount").Value
 
 			local abilitycooldown, currentabilitycooldown
@@ -1122,7 +1122,7 @@ do
 
 			result = {currentstealth, twistedschasing, currenttoon, inserver, ins, dead, left, capsulespickedup, itemspickedup, machinescompleted, ichorearned, twistedsencountered, tapescollected, toonpicked, slot1, slot2, slot3, slot4, trinket1, trinket2, extracting, icon, abilitycooldown, currentabilitycooldown}
 
-			return result[key:lower()]
+			return result[key]
 		end
 	end
 
@@ -1141,7 +1141,7 @@ do
 			boughtnothingfor = env.stuf.gameinfo:FindFirstChild("DandyTracker"):FindFirstChild("NoBuy").Value
 		}
 
-		return stat and gamestats[stat:lower()] or gamestats
+		return stat and gamestats[stat] or gamestats
 	end
 
 	function env.funcs.useitem(slot, breakifoneused)
