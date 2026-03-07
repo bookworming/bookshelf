@@ -212,9 +212,9 @@ function tomachine(method)
 
 			if not cantgothere then
 				table.insert(good, {
-					model    = generator,
+					model = generator,
 					progress = env.funcs.getstats("machine", generator, "amount"),
-					tppos    = env.funcs.getstats("machine", generator, "pos"),
+					tppos = env.funcs.getstats("machine", generator, "pos"),
 				})
 			end
 		end
