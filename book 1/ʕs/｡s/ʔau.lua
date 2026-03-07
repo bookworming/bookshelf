@@ -24,11 +24,14 @@ local FindFirstChildOfClass = getins(game, "FindFirstChildOfClass")
 
 local ws = FindFirstChildOfClass(game, "Workspace")
 local uis = FindFirstChildOfClass(game, "UserInputService")
+local ts = FindFirstChildOfClass(game, "TweenService")
 local rs = FindFirstChildOfClass(game, "RunService")
 local rst = FindFirstChildOfClass(ws, "ReplicatedStorage")
 local plrs = FindFirstChildOfClass(game, "Players")
 
 local getgenv = getgenv() or _G
+local firesignal = (syn and syn.firesignal) or firesignal
+local getcallbackvalue = (syn and syn.getcallbackvalue) or getcallbackvalue
 
 local folder = "Bоxten Sеx GUI"
 local env = getgenv.BSGUI
@@ -146,6 +149,325 @@ local function autoteleporttoelevator(state)
 			end)
 		end
 	end)
+end
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+local autocalibrating = false
+
+local function handlesc()
+	local tl = 5
+	local sgui = env.stuf.plrgui:FindFirstChild("ScreenGui")		
+	if not sgui then return end
+
+	local menu = sgui:FindFirstChild("Menu")	
+	if not menu then return end
+
+	local scf = menu:FindFirstChild("SkillCheckFrame")		
+	if not scf then return end
+
+	local function visibledisrupt()
+		if autocalibrating and scf.Visible then
+			local marker = scf:FindFirstChild("Marker")				
+			local goldarea = scf:FindFirstChild("GoldArea")
+
+			if marker and goldarea then
+				local mpos = marker.AbsolutePosition
+				local gpos = goldarea.AbsolutePosition
+				local garea = goldarea.AbsoluteSize
+
+				if mpos.X >= gpos.X and mpos.X <= (gpos.X + garea.X) + tl then
+					firesignal(menu.Calibrate)
+				end
+			end
+		end
+	end
+
+	scf.Changed:Connect(function()
+		if not scf.Visible then visibledisrupt() else visibledisrupt() end
+	end)
+
+	local marker = scf:FindFirstChild("Marker")		
+	local goldarea = scf:FindFirstChild("GoldArea")
+
+	if marker then
+		marker.Changed:Connect(function(property)
+			if property == "AbsolutePosition" then visibledisrupt() end
+		end)
+	end
+
+	if goldarea then
+		goldarea.Changed:Connect(function(property)
+			if property == "AbsolutePosition" or property == "AbsoluteSize" then visibledisrupt() end
+		end)
+	end
+end
+
+function autocalibration(state)
+	if state then
+		spwn(handlesc)
+		autocalibrating = true
+	else
+		autocalibrating = false
+	end
+end
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+-- thank you unable
+autocircleminigame = false
+acmlastpresstime = 0
+acmalreadypressed = false
+
+function handlecm()
+	local function getsize(circle)
+		local size = circle.AbsoluteSize
+		local stroke = circle:FindFirstChildOfClass("UIStroke")
+		local thickness = stroke and stroke.Thickness or 0
+		return math.min(size.X, size.Y) + (thickness * 2)
+	end
+
+	local function checkmatch()
+		if not autocircleminigame then return end
+
+		local gui = env.stuf.plrgui:FindFirstChild("CircleSkillCheckGui")
+		if not gui then
+			acmalreadypressed = false
+			return
+		end
+
+		local skillcheck = gui:FindFirstChild("SkillCheckFrame")
+		if not skillcheck then
+			acmalreadypressed = false
+			return
+		end
+
+		local container = skillcheck:FindFirstChild("Container")
+		if not container then
+			acmalreadypressed = false
+			return
+		end
+
+		local red = container:FindFirstChild("ShrinkingCircle")
+		local gold = container:FindFirstChild("YellowCircle")
+		if not red or not gold then
+			acmalreadypressed = false
+			return
+		end
+
+		local redsize = getsize(red)
+		local goldsize = getsize(gold)
+
+		local diff = math.abs(redsize - goldsize)
+		local threshold = math.max(5, goldsize * 0.05)
+
+		if diff <= threshold then
+			if not acmalreadypressed then
+				t(0.03)
+				firesignal(container)
+				acmlastpresstime = tick()
+				acmalreadypressed = true
+			end
+		else
+			acmalreadypressed = false
+		end
+	end
+
+	env.stuf.plrgui.ChildAdded:Connect(function(child)
+		if child.Name == "CircleSkillCheckGui" then
+			local skillcheck = child:WaitForChild("SkillCheckFrame", 2)
+			local container = skillcheck and skillcheck:WaitForChild("Container", 2)
+			if container then
+				local conn
+				conn = rs.RenderStepped:Connect(function()
+					if not autocircleminigame then
+						conn:Disconnect()
+						return
+					end
+					checkmatch()
+				end)
+			end
+		end
+	end)
+end
+
+function autocirclecalibration(state)
+	if state then
+		if not autocircleminigame then
+			spwn(handlecm)
+			autocircleminigame = true
+		end
+	else
+		autocircleminigame = false
+	end
+end
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+handlingtreadmill = false
+treadmillhandlerverif = false
+ontreadmill = false
+treadmillconn = nil
+
+treadmilllowthresh = 20
+treadmillhighthresh = 100
+
+function handletreadmill()
+	if not env.stuf.plrstats then return end
+	local stamina = env.stuf.plrstats:FindFirstChild("CurrentStamina")
+	if not stamina then return end
+
+	if treadmillconn then treadmillconn:Disconnect() end
+
+	local function checkSprint()
+		if handlingtreadmill and treadmillhandlerverif and ontreadmill then
+			local val = stamina.Value
+			if val > treadmilllowthresh and val < treadmillhighthresh then
+				rst.Events.SprintEvent:FireServer(true)
+			else
+				rst.Events.SprintEvent:FireServer(false)
+			end
+		else
+			rst.Events.SprintEvent:FireServer(false)
+		end
+	end
+
+	treadmillconn = stamina.Changed:Connect(checkSprint)
+	checkSprint()
+end
+
+function treadmillmonitor()
+	spwn(function()
+		while handlingtreadmill do
+			t(0.5)
+
+			if env.funcs.getstats("player", env.stuf.char).extracting and not treadmillhandlerverif then
+				treadmillhandlerverif = true
+				ontreadmill = env.funcs.getstats("machine", env.funcs.getstats("player", env.stuf.char).extracting).machtype == "treadimll"
+				if ontreadmill then
+					handletreadmill()
+				end
+
+			elseif not env.funcs.getstats("player", env.stuf.char).extracting and treadmillhandlerverif then
+				treadmillhandlerverif = false
+				ontreadmill = false
+				if treadmillconn then
+					treadmillconn:Disconnect()
+					treadmillconn = nil
+				end
+				rst.Events.SprintEvent:FireServer(false)
+			end
+		end
+	end)
+end
+
+autotreadmillconn = nil
+autotreadmillenabled = false
+autotreadmillspamming = false
+autotreadmilldelay = 0.1
+
+function spamspace()
+	if autotreadmillspamming then return end
+	autotreadmillspamming = true
+
+	spwn(function()
+		while autotreadmillspamming do
+			t(autotreadmilldelay)
+		end
+		autotreadmillspamming = false
+	end)
+end
+
+function ojnef9023htibweidunfp9q83hfojdsnfv()
+	for _, gui in ipairs(env.stuf.plrgui:GetChildren()) do
+		if gui:IsA("ScreenGui") and gui.Name:find("Tre") then
+			spamspace()
+		end
+	end
+
+	autotreadmillconn = env.stuf.plrgui.ChildAdded:Connect(function(gui)
+		if gui:IsA("ScreenGui") and gui.Name:find("Tre") then
+			spamspace()
+		end
+	end)
+
+	env.stuf.plrgui.ChildRemoved:Connect(function(gui)
+		if gui:IsA("ScreenGui") and gui.Name:find("Tre") then
+			autotreadmillspamming = false
+		end
+	end)
+end
+
+function autotreadmill(state)
+	if state then
+		if autotreadmillenabled then return end
+		handlingtreadmill = true
+		treadmillmonitor()
+		ojnef9023htibweidunfp9q83hfojdsnfv()
+		autotreadmillenabled = true
+	else
+		if autotreadmillconn then
+			autotreadmillconn:Disconnect()
+			autotreadmillconn = nil
+		end
+		autotreadmillenabled = false
+		autotreadmillspamming = false
+		handlingtreadmill = false
+		if treadmillconn then treadmillconn:Disconnect() treadmillconn = nil end
+		rst.Events.SprintEvent:FireServer(false)
+	end
+end
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+local oldskillcheckinvoc
+spwn(function() 
+	if env.stuf.inrun then
+		if getcallbackvalue then 
+			oldskillcheckinvoc = getcallbackvalue(game:GetService("ReplicatedStorage").Events.SkillcheckUpdate, "OnClientInvoke") 
+		else 
+			oldskillcheckinvoc = nil 
+		end 
+	end
+end)
+
+function autocalibration2(state)
+	autocalibration = state
+	if env.stuf.inrun then
+		local hi = rst.Events.SkillcheckUpdate
+		if state then
+			hi.OnClientInvoke = function()
+				spwn(function()
+					local a = env.stuf.plrgui:WaitForChild("ScreenGui")
+					a.Menu.SkillCheckFrame.Visible = false
+					a.Menu.Calibrate.Visible = false
+
+					a.Correct:Stop()
+					a.Correct:Play()
+					a.GoldAreaHit:Stop()
+					a.GoldAreaHit:Play()
+
+					a.Menu.SkillCheckMessage.Text = "Great Job!"
+					a.Menu.SkillCheckMessage.UIGradient.Enabled = false
+					a.Menu.SkillCheckMessage.UIGradientWin.Enabled = true
+					a.Menu.SkillCheckMessage.Visible = true
+					a.Menu.SpaceBarPromptText.Visible = true
+					a.Menu.SkillCheckMessage.TextTransparency = 0
+					a.Menu.SkillCheckMessage.TextStrokeTransparency = 0
+
+					t(1)
+
+					local c = ts:Create(a.Menu.SkillCheckMessage, TweenInfo.new(1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, false), {TextTransparency = 1,TextStrokeTransparency = 1}):Play()
+					c.Completed:Wait()
+					a.Menu.SkillCheckMessage.Visible = false
+				end)
+
+				return "supercomplete"
+			end
+		else
+			hi.OnClientInvoke = oldskillcheckinvoc
+		end
+	end
 end
 
 -------------------------------------------------------------------------------------------------------------------------------
@@ -309,7 +631,7 @@ local section = {
 	},
 
 	{ type = "separator", title = "Player" },
-	{ type = "toggle", title = "Auto machine calibration", desc = "Automatically completes skillchecks.",
+	{ type = "toggle", title = "Auto machine calibration", desc = "Automatically completes skillchecks for regular machines.",
 		commandcat = "Automation",
 
 		encommands = {"enableautocalibration"},
@@ -321,6 +643,39 @@ local section = {
 		discommanddesc = "Disables auto machine calibration",
 
 		callback = function(state) 
+			autocalibration(state)
+		end
+	},
+	{ type = "toggle", title = "Auto circle machine calibration", desc = "Automatically completes skillchecks for circle machines.",
+		commandcat = "Automation",
+
+		encommands = {"enableautocirclecalibration"},
+		enaliases = {"eacc"},
+		encommanddesc = "Enables auto circle machine calibration",
+
+		discommands = {"disableautocirclecalibration"},
+		disaliases = {"dacc"},
+		discommanddesc = "Disables auto circle machine calibration",
+
+		callback = function(state) 
+			autocirclecalibration(state)
+		end
+	},
+	{ type = "input and toggle", title = "Auto treadmill machine calibration", desc = "Automatically completes skillchecks for treadmill machines with the set spam delay.", placeholder = "Delay",
+		commandcat = "Automation",
+
+		encommands = {"enableautotreadmillcalibration"},
+		enaliases = {"eatc"},
+		encommanddesc = "Enables auto treadmill machine calibration",
+
+		discommands = {"disableautotreadmillcalibration"},
+		disaliases = {"datc"},
+		discommanddesc = "Disables auto treadmill machine calibration",
+
+		defaulttext = "0.1",
+		callback = function(text, state) 
+			autotreadmilldelay = text or 0.1
+			autotreadmill(state)
 		end
 	},
 	{ type = "toggle", title = "Instant calibration success", desc = "Automatically completes skillchecks instantly.",
