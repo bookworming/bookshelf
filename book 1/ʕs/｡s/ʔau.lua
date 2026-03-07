@@ -180,6 +180,7 @@ local function handlesc()
 					firesignal(menu.Calibrate.MouseButton1Down)
 					firesignal(menu.Calibrate.MouseButton1Up)
 					firesignal(menu.Calibrate.MouseButton1Click)
+					firesignal(menu.Calibrate.Activated)
 				end
 			end
 		end
@@ -266,10 +267,10 @@ function handlecm()
 		if diff <= threshold then
 			if not acmalreadypressed then
 				t(0.03)
-				firesignal(container)
 				firesignal(container.MouseButton1Down)
 				firesignal(container.MouseButton1Up)
 				firesignal(container.MouseButton1Click)
+				firesignal(container.Activated)
 				acmlastpresstime = tick()
 				acmalreadypressed = true
 			end
@@ -429,7 +430,7 @@ local oldskillcheckinvoc
 spwn(function() 
 	if env.stuf.inrun then
 		if getcallbackvalue then 
-			oldskillcheckinvoc = getcallbackvalue(game:GetService("ReplicatedStorage").Events.SkillcheckUpdate, "OnClientInvoke") 
+			oldskillcheckinvoc = getcallbackvalue(rst.Events.SkillcheckUpdate, "OnClientInvoke") 
 		else 
 			oldskillcheckinvoc = nil 
 		end 
