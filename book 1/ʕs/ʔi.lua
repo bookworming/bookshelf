@@ -979,7 +979,7 @@ do
 		return exists
 	end
 
-	function env.funcs.getstats(type, obj, key) -- gets the target stat of the object
+	function env.funcs.getstats(type, obj, key) -- returns a table full of the target objects stats, can fetch the floor, item, machine, twisted, and another players stats
 		if not obj:IsA("Model") then env.funcs.shr("INVALID OBJECT, IDIOT!!!") end
 		local name = obj.Name
 
@@ -1122,7 +1122,7 @@ do
 
 			result = {currentstealth, twistedschasing, currenttoon, inserver, ins, dead, left, capsulespickedup, itemspickedup, machinescompleted, ichorearned, twistedsencountered, tapescollected, toonpicked, slot1, slot2, slot3, slot4, trinket1, trinket2, extracting, icon, abilitycooldown, currentabilitycooldown}
 
-			return result
+			return result[key:lower()]
 		end
 	end
 
