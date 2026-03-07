@@ -754,7 +754,6 @@ do
 
 	spwn(function()
 		if env.stuf.handshaker.scanningplayers then return end
-		if not env.funcs.exists() then repeat t() until env.funcs.exists() end
 		for _, plr in ipairs(plrs:GetPlayers()) do env.stuf.handshaker.monitor(plr) end plrs.PlayerAdded:Connect(function(plr) env.stuf.handshaker.monitor(plr) end)
 		env.stuf.handshaker.scanningplayers = true
 	end)
@@ -1506,6 +1505,5 @@ end
 
 env.setupcomplete = true
 env.funcs.box("hello") -- hi!
-return version
 
 -------------------------------------------------------------------------------------------------------------------------------
