@@ -60,14 +60,16 @@ env.essentials.toggles, env.essentials.buttons, env.essentials.elements = {}, {}
 
 env.scriptinfo, env.filemanager = {}, {}
 
-local function yieldfor(this)
-	if not this then
-		repeat t() until function() return this end
+local function yield(tilcomp)
+	if tilcomp then
+		repeat t() until env.setupcomplete
+	else
+		repeat t() until env.essentialsloaded
 	end
 end
 
 spwn(function()
-	yieldfor(env.setupcomplete) env.funcs.pop("Hi!")
+	yield(true) env.funcs.pop("Hi!")
 	env.essentials.library = env.funcs.recursivels("book%201/%CA%95u/%CA%94l.lua", true) 
 	env.funcs.box("UI library loaded successfully")
 
@@ -81,7 +83,7 @@ end)
 
 -- script info & file manager
 spwn(function()
-	yieldfor(env.essentialsloaded)
+	yield()
 	env.scriptinfo.script = {
 		version = env.essentials.data.cl.current.version,
 		subversion = env.essentials.data.cl.current.subversion,
@@ -96,7 +98,7 @@ spwn(function()
 end)
 
 spwn(function()
-	yieldfor(env.essentialsloaded)
+	yield()
 	env.filemanager.autoloadfile = folder .. "/Auto-loads.json"
 	env.filemanager.configfolder = folder .. "/Configs"
 	env.filemanager.persistfile = folder .. "/Persistent.json"
@@ -659,7 +661,7 @@ do
 	env.stuf.gameinfo, env.stuf.currentroom, env.stuf.freearea, env.stuf.twisteds, env.stuf.items, env.stuf.machines, env.stuf.fakeelevator = nil
 	if env.stuf.inrun then
 		spwn(function()
-			yieldfor(env.setupcomplete)
+			yield(true)
 			env.stuf.elevator = ws:WaitForChild("Elevators"):WaitForChild("Elevator") env.funcs.box("found \"Elevator\" model")
 			env.stuf.roomfolder = ws:WaitForChild("CurrentRoom") env.funcs.box("found \"CurrentRoom\" folder")
 
@@ -697,7 +699,7 @@ do
 					env.stuf.refconn2 = env.stuf.currentroom.ChildRemoved:Connect(updrefs)
 
 					task.delay(0.1, function()
-						yieldfor(env.stuf.visualssectionloaded)
+						if not env.stuf.visualssectionloaded then repeat t() until env.stuf.visualssectionloaded end
 						env.funcs.reverifesp(true)
 					end)
 				end)
@@ -724,7 +726,7 @@ do
 	env.stuf.buttonscale = Instance.new("UIScale")
 
 	spwn(function() 
-		yieldfor(env.funcs.recursivels)
+		if not env.funcs.recursivels then repeat t() until function() return env.funcs.recursivels end end
 		env.stuf.dialogue = env.funcs.recursivels("book%201/%CA%95u/%CA%94d.lua", true) 
 	end)
 
@@ -752,7 +754,7 @@ do
 
 	spwn(function()
 		if env.stuf.handshaker.scanningplayers then return end
-		yieldfor(env.stuf.handshaker.monitor)
+		if not env.stuf.handshaker.monitor then repeat t() until function() return env.stuf.handshaker.monitor end end
 		for _, plr in ipairs(plrs:GetPlayers()) do env.stuf.handshaker.monitor(plr) end plrs.PlayerAdded:Connect(function(plr) env.stuf.handshaker.monitor(plr) end)
 		env.stuf.handshaker.scanningplayers = true
 	end)
