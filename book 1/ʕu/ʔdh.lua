@@ -303,19 +303,10 @@ local function newdialogue(text, whosaidit, expression)
 	cursorX = textStartX + env.essentials.library.gettextbounds(text, Enum.Font.FredokaOne, textsize)
 	holder.Size = UDim2.new(0, cursorX, 0, 16)
 
-	local shiftAmount = holder.Size.Y.Offset + (padding or 5)
-
-	for _, existingHolder in ipairs(notifications) do
-		local targetPosition = UDim2.new(
-			existingHolder.Position.X.Scale, 
-			existingHolder.Position.X.Offset, 
-			existingHolder.Position.Y.Scale, 
-			existingHolder.Position.Y.Offset - shiftAmount
-		)
-
-		ts:Create(existingHolder, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-			Position = targetPosition
-		}):Play()
+	local newheight = holder.AbsoluteSize.Y + padding
+	for _, existing in ipairs(notifications) do
+		local currenty = existing.Position.Y.Offset
+		tweeny(existing, currenty - newheight)
 	end
 
 	table.insert(notifications, 1, holder)
