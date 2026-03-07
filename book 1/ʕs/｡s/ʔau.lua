@@ -266,10 +266,12 @@ function handlecm()
 		if diff <= threshold then
 			if not acmalreadypressed then
 				t(0.03)
-				firesignal(container.MouseButton1Down)
-				firesignal(container.MouseButton1Up)
-				firesignal(container.MouseButton1Click)
-				firesignal(container.Activated)
+				local menu = env.stuf.plrgui.ScreenGui:FindFirstChild("Menu")
+				
+				firesignal(menu.Calibrate.MouseButton1Down)
+				firesignal(menu.Calibrate.MouseButton1Up)
+				firesignal(menu.Calibrate.MouseButton1Click)
+				firesignal(menu.Calibrate.Activated)
 				acmlastpresstime = tick()
 				acmalreadypressed = true
 			end
