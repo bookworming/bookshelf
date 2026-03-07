@@ -566,7 +566,7 @@ function fetchspeedwithoutdebuff(mode)
 
 		if base and mod then
 			local fixedMod = fixModifier(mod.Value)
-			return base.env.stuf.plrstats * fixedMod
+			return base * fixedMod
 		end
 
 	elseif mode == "Walk" then
