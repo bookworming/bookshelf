@@ -121,11 +121,12 @@ local function autoteleporttoelevator(state)
 
 	autoteleporttoelevatorconn = panic.Changed:Connect(function()
 		if not panic.Value then return end
+		local condition = autoteleporttoelevatorconditions
 
-		if table.find(autoteleporttoelevatorconditions, "Instant") or #autoteleporttoelevatorconditions == 0 or autoteleporttoelevatorconditions == "Instant" then
+		if condition == "Instant" or not condition then
 			toelevator(nil, "tp")
 
-		elseif table.find(autoteleporttoelevatorconditions, "Everyone at elevator") or autoteleporttoelevatorconditions == "Everyone at elevator" then
+		elseif condition == "Everyone at elevator" then
 			spwn(function()
 				while autoteleportingtoelevator and panic.Value do
 					if checkeveryoneatelevaor() then
@@ -136,7 +137,7 @@ local function autoteleporttoelevator(state)
 				end
 			end)
 
-		elseif table.find(autoteleporttoelevatorconditions, "At the last second") or autoteleporttoelevatorconditions == "At the last second" then
+		elseif condition == "At the last second" then
 			spwn(function()
 				while autoteleportingtoelevator and panic.Value do
 					if timer and timer.Value <= 1 then
@@ -1258,7 +1259,8 @@ local section = {
 		options = {"Instant", "Everyone at elevator", "At the last second"},
 		default = autoteleporttoelevatorconditions,
 		canbeempty = false,
-
+		multiselect = false,
+		
 		callback = function(selected)
 			autoteleporttoelevatorconditions = selected
 			if autoteleportingtoelevator then
