@@ -229,8 +229,11 @@ function env.funcs.tomachine(method)
 		env.funcs.moveplr(good[1].tppos, method)
 		
 		if env.stuf.afe.running then
-			t(0.2)
-			fireproximityprompt(env.funcs.getstats("machine", good[1].model).prox)
+			t(0.5)
+			for _ = 1, 3 do
+				fireproximityprompt(env.funcs.getstats("machine", good[1].model).prox)
+				t(1)
+			end
 		end
 	else
 		env.funcs.pop("No available generators found!")
