@@ -1024,6 +1024,11 @@ do
 		elseif type == "machine" then
 			local stats = obj:FindFirstChild("Stats")
 			local pos = obj:FindFirstChild("TeleportPositions"):FindFirstChild("TeleportPosition").CFrame * CFrame.new(0, 2.3, 0)
+			
+			local prox
+			if obj:FindFirstChild("Prompt") then
+				prox = obj.Prompt:FindFirstChildOfClass("ProximityPrompt") or obj.Prompt.Attachment:FindFirstChildOfClass("ProximityPrompt")
+			end
 
 			local active = stats:FindFirstChild("ActivePlayer").Value
 			local completed = stats:FindFirstChild("Completed").Value
@@ -1043,6 +1048,7 @@ do
 
 			return {
 				pos = pos, 
+				prox = prox,
 				active = active, 
 				completed = completed, 
 				possessed = possessed, 
