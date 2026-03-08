@@ -1236,7 +1236,7 @@ do
 	function env.funcs.veemoteactive() -- returns the vmotes value if the user has it, true if active, false if inactive
 		local folder = env.stuf.char:FindFirstChild("Trinkets")
 		if folder then
-			for _, trinket in ipairs(folder) do
+			for _, trinket in ipairs(folder:GetChildren()) do
 				if trinket.Value == "VeeRemote" then
 					local active = trinket:FindFirstChild("Active")
 					if active then
