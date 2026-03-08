@@ -784,6 +784,29 @@ local function autouseitems(state)
 				return
 			end
 		end
+		if autouseitemsbehavior == "Instant" then tryuseitem(stats) end
+	end))
+
+	table.insert(autouseitemsconns, env.stuf.char.Decoding.Changed:Connect(function()
+		if not autousingitems or autouseitemsbehavior ~= "Instant" then return end
+		local stats = env.funcs.getstats("player", env.stuf.char)
+		if stats then tryuseitem(stats) end
+	end))
+
+	table.insert(autouseitemsconns, env.stuf.char.Stats.CurrentStamina.Changed:Connect(function(val)
+		if not autousingitems then return end
+		if val >= 20 then return end
+		local stats = env.funcs.getstats("player", env.stuf.char)
+		if not stats then return end
+		for _, itemname in ipairs(autouseitemcats.stamina) do
+			if autouseitemsblacklist[itemname] then continue end
+			local slot = getitemslot(stats, itemname)
+			if slot then
+				env.funcs.useitem(slot)
+				return
+			end
+		end
+		if autouseitemsbehavior == "Instant" then tryuseitem(stats) end
 	end))
 end
 
@@ -1082,9 +1105,9 @@ end
 env.stuf.afe = {
 	running = false,
 	priority = {},
-	maxitemcap = 2,
-	itemmaxdist = 0,
-	machmaxdist = 0,
+	maxitemcap = 3,
+	itemmaxdist = 5,
+	machmaxdist = 30,
 	preset = {"Default"},
 	actiontrigger = {"Map fully loaded"},
 	actions = {
@@ -1183,17 +1206,17 @@ local section = {
 			env.stuf.afe.priority = selected
 		end 
 	},
-	{ type = "slider", title = "Item capacity limit for autofarm", desc = "Limits the amount of items you can hold in your inventory.", min = 0, max = 4, default = 0, step = 1,
+	{ type = "slider", title = "Item capacity limit for autofarm", desc = "Limits the amount of items you can hold in your inventory.", min = 0, max = 4, default = env.stuf.afe.maxitemcap, step = 1,
 		callback = function(value)
 			env.stuf.afe.maxitemcap = value
 		end
 	},
-	{ type = "slider", title = "Item max distance for autofarm", desc = "Avoids items when a Twisted is within the set distance of the item.", min = 0, max = 100, default = 0, step = 1,
+	{ type = "slider", title = "Item max distance for autofarm", desc = "Avoids items when a Twisted is within the set distance of the item.", min = 0, max = 100, default = env.stuf.afe.itemmaxdist, step = 1,
 		callback = function(value)
 			env.stuf.afe.itemmaxdist = value
 		end
 	},
-	{ type = "slider", title = "Machine max distance for autofarm", desc = "Avoids machines when a Twisted is within the set distance of the machine.", min = 0, max = 100, default = 0, step = 1,
+	{ type = "slider", title = "Machine max distance for autofarm", desc = "Avoids machines when a Twisted is within the set distance of the machine.", min = 0, max = 100, default = env.stuf.afe.machmaxdist, step = 1,
 		callback = function(value)
 			env.stuf.afe.machmaxdist = value
 		end
