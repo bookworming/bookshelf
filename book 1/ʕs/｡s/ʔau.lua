@@ -1121,7 +1121,7 @@ local function autofarm(state)
 				end
 			end)
 		end)
-		table.insert(spottedconn, env.stuf.afe.conns)
+		table.insert(env.stuf.afe.conns, spottedconn)
 	else
 		for _, conn in ipairs(env.stuf.afe.conns) do
 			conn:Disconnect()
