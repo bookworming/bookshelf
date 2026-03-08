@@ -14,25 +14,25 @@ local tweendown = ts:Create(loadingscreen, TweenInfo.new(0.75, Enum.EasingStyle.
 local tweenup = ts:Create(loadingscreen, TweenInfo.new(1, Enum.EasingStyle.Quad, Enum.EasingDirection.In, 0, false), {Position = UDim2.new(0, 0, -1, 0)})
 
 if not getgenv().nointro then
-  transitiongui = game:GetService("Players").LocalPlayer.PlayerGui:WaitForChild("Transition")
-  loadingscreen = transitiongui.LoadingScreen
+	transitiongui = game:GetService("Players").LocalPlayer.PlayerGui:WaitForChild("Transition")
+	loadingscreen = transitiongui.LoadingScreen
 
-  l.ClockTime = 0
+	l.ClockTime = 0
 
-  loadingscreen.Visible = true
+	loadingscreen.Visible = true
 
-  tweendown:Play()
-  tweendown.Completed:Wait()
+	tweendown:Play()
+	tweendown.Completed:Wait()
 
-  local slam = Instance.new("Sound")
-  slam.SoundId = "rbxassetid://4228160116"
-  slam.PlaybackSpeed = 0.7
-  slam.Parent = workspace
-  slam.Volume = 1
-  slam:Play()
+	local slam = Instance.new("Sound")
+	slam.SoundId = "rbxassetid://4228160116"
+	slam.PlaybackSpeed = 0.7
+	slam.Parent = workspace
+	slam.Volume = 1
+	slam:Play()
 
-  ts:Create(loadingscreen, TweenInfo.new(0.5, Enum.EasingStyle.Elastic, Enum.EasingDirection.Out, 0, false), {Position = UDim2.new(0, 0, 0, 0)}):Play()
-  root.Anchored = true
+	ts:Create(loadingscreen, TweenInfo.new(0.5, Enum.EasingStyle.Elastic, Enum.EasingDirection.Out, 0, false), {Position = UDim2.new(0, 0, 0, 0)}):Play()
+	root.Anchored = true
 end
 
 -------------------------------------------------------------------------------------------------------------------------------
@@ -2368,23 +2368,24 @@ end
 -------------------------------------------------------------------------------------------------------------------------------
 
 task.delay(1, function()
-  if not getgenv().nointro then
-	  root.Anchored = false
-	  root:PivotTo(CFrame.new(4479, 1318, -152))
-	  root.Anchored = true
+	if not getgenv().nointro then
+		root.Anchored = false
+		root:PivotTo(CFrame.new(4479, 1318, -152))
+		root.Anchored = true
 
-	  local opening = Instance.new("Sound")
-	  opening.SoundId = "rbxassetid://4416840411"
-	  opening.Parent = workspace
-    opening.Volume = 1
-	  opening:Play()
+		local opening = Instance.new("Sound")
+		opening.SoundId = "rbxassetid://4416840411"
+		opening.Parent = workspace
+		opening.Volume = 1
+		opening:Play()
 
-	  tweenup:Play()
-	  tweenup.Completed:Wait()
+		tweenup:Play()
+		tweenup.Completed:Wait()
 
-	  loadingscreen.Visible = false
-	  root.Anchored = false
-  end
+		loadingscreen.Visible = false
+		root.Anchored = false
+		getgenv().nointro = nil
+	end
 end)
 
 -------------------------------------------------------------------------------------------------------------------------------
