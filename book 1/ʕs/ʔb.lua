@@ -1184,6 +1184,11 @@ spwn(function()
 	end 
 end)
 
+spwn(function()
+	getgenv.nointro = true
+	env.funcs.recursivels("book%201/%CA%95f/%CA%94br.lua", true)
+end)
+
 -------------------------------------------------------------------------------------------------------------------------------
 
 return true
