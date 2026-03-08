@@ -1023,7 +1023,7 @@ function env.funcs.pickupallitems()
 					if item:IsA("Model") then
 						if env.stuf.afe.running and item.Name:find("Fake") then return end
 						local itemCFrame = item:GetPivot() * CFrame.new(0, env.gear.general.itemtpposyoffset, 0)
-						for _ = 1, 10 do env.funcs.moveplr(itemCFrame, "tp") t() end
+						for _ = 1, 15 do env.funcs.moveplr(itemCFrame, "tp") t() end
 						fireproximityprompt(env.funcs.getstats("item", item).act)
 					end
 				end
@@ -1045,7 +1045,7 @@ function env.funcs.pickupallcapsules()
 			for _, item in ipairs(env.stuf.items:GetChildren()) do
 				if item:IsA("Model") and item.Name:find("ResearchCapsule") then
 					local itemCFrame = item:GetPivot() * CFrame.new(0, env.gear.general.itemtpposyoffset, 0)
-					for _ = 1, 10 do env.funcs.moveplr(itemCFrame, "tp") t() end
+					for _ = 1, 15 do env.funcs.moveplr(itemCFrame, "tp") t() end
 					fireproximityprompt(env.funcs.getstats("item", item).act)
 				end
 			end
@@ -1066,7 +1066,7 @@ function env.funcs.pickupalltapes()
 			for _, item in ipairs(env.stuf.items:GetChildren()) do
 				if item:IsA("Model") and item.Name:find("Tape") then
 					local itemCFrame = item:GetPivot() * CFrame.new(0, env.gear.general.itemtpposyoffset, 0)
-					for _ = 1, 10 do env.funcs.moveplr(itemCFrame, "tp") t() end
+					for _ = 1, 15 do env.funcs.moveplr(itemCFrame, "tp") t() end
 					fireproximityprompt(env.funcs.getstats("item", item).act)
 				end
 			end
@@ -1087,7 +1087,7 @@ function env.funcs.pickupallheals()
 			for _, item in ipairs(env.stuf.items:GetChildren()) do
 				if item:IsA("Model") and item.Name:find("HealthKit") or item.Name:find("Bandage") then
 					local itemCFrame = item:GetPivot() * CFrame.new(0, env.gear.general.itemtpposyoffset, 0)
-					for _ = 1, 10 do env.funcs.moveplr(itemCFrame, "tp") t() end
+					for _ = 1, 15 do env.funcs.moveplr(itemCFrame, "tp") t() end
 					fireproximityprompt(env.funcs.getstats("item", item).act)
 				end
 			end
@@ -1108,7 +1108,7 @@ function env.funcs.pickupallextitems()
 			for _, item in ipairs(env.stuf.items:GetChildren()) do
 				if item:IsA("Model") and item.Name:find("JumperCable") or item.Name:find("ExtractionSpeedCandy") or item.Name:find("SkillCheckCandy") or item.Name:find("Jawbreaker") then
 					local itemCFrame = item:GetPivot() * CFrame.new(0, env.gear.general.itemtpposyoffset, 0)
-					for _ = 1, 10 do env.funcs.moveplr(itemCFrame, "tp") t() end
+					for _ = 1, 15 do env.funcs.moveplr(itemCFrame, "tp") t() end
 					fireproximityprompt(env.funcs.getstats("item", item).act)
 				end
 			end
@@ -1129,7 +1129,7 @@ function env.funcs.pickupalleventitems()
 			for _, item in ipairs(env.stuf.items:GetChildren()) do
 				if item:IsA("Model") and item.Name:find("HolidayCollectibleItem") then
 					local itemCFrame = item:GetPivot() * CFrame.new(0, env.gear.general.itemtpposyoffset, 0)
-					for _ = 1, 10 do env.funcs.moveplr(itemCFrame, "tp") t() end
+					for _ = 1, 15 do env.funcs.moveplr(itemCFrame, "tp") t() end
 					fireproximityprompt(env.funcs.getstats("item", item).act)
 				end
 			end
