@@ -439,7 +439,6 @@ spwn(function()
 end)
 
 function autocalibration2(state)
-	autocalibration = state
 	if env.stuf.inrun then
 		local hi = rst.Events.SkillcheckUpdate
 		if state then
@@ -464,8 +463,9 @@ function autocalibration2(state)
 
 					t(1)
 
-					local c = ts:Create(a.Menu.SkillCheckMessage, TweenInfo.new(1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, false), {TextTransparency = 1,TextStrokeTransparency = 1}):Play()
-					c.Completed:Wait()
+					local tween = ts:Create(a.Menu.SkillCheckMessage, TweenInfo.new(1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, false), {TextTransparency = 1,TextStrokeTransparency = 1})
+					tween:Play()
+					tween.Completed:Wait()
 					a.Menu.SkillCheckMessage.Visible = false
 				end)
 
