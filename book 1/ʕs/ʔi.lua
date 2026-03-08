@@ -1196,7 +1196,8 @@ do
 			machsrequired = env.stuf.gameinfo:FindFirstChild("RequiredGenerators").Value,
 			blackout = env.stuf.gameinfo:FindFirstChild("BlackOut").Value,
 			playersalive = env.stuf.gameinfo:FindFirstChild("ActivePlayers").Value,
-			boughtnothingfor = env.stuf.gameinfo:FindFirstChild("DandyTracker"):FindFirstChild("NoBuy").Value
+			boughtnothingfor = env.stuf.gameinfo:FindFirstChild("DandyTracker"):FindFirstChild("NoBuy").Value,
+			message = env.stuf.gameinfo:FindFirstChild("Message").Value
 		}
 
 		return stat and gamestats[stat] or gamestats
