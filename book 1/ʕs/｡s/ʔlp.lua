@@ -1158,9 +1158,11 @@ local function shakesquirmoff()
 	end
 end
 
+-------------------------------------------------------------------------------------------------------------------------------
+
 encounteringtwisteds = false
 
-function encountertwisteds()
+function env.stuf.encountertwisteds()
 	if encounteringtwisteds then return end
 	encounteringtwisteds = true
 
@@ -2029,7 +2031,7 @@ local section = {
 		commanddesc = "Picks up all the items on the floor",
 
 		callback = function() 
-			pickupallitems()
+			env.funcs.pickupallitems()
 		end
 	},
 	{ type = "button", title = "Pick up all Research Capsules", desc = "Picks up all the Research Capsules on the floor.",
@@ -2040,7 +2042,7 @@ local section = {
 		commanddesc = "Picks up all the Research Capsules on the floor",
 
 		callback = function() 
-			pickupallcapsules()
+			env.funcs.pickupallcapsules()
 		end
 	},
 	{ type = "button", title = "Pick up all Tapes", desc = "Picks up all the tapes on the floor.",
@@ -2051,7 +2053,7 @@ local section = {
 		commanddesc = "Picks up all the Tapes on the floor",
 
 		callback = function() 
-			pickupalltapes()
+			env.funcs.pickupalltapes()
 		end
 	},
 	{ type = "button", title = "Pick up all heals", desc = "Picks up all the heals on the floor.",
@@ -2062,7 +2064,7 @@ local section = {
 		commanddesc = "Picks up all the heals on the floor",
 
 		callback = function() 
-			pickupallheals()
+			env.funcs.pickupallheals()
 		end
 	},
 	{ type = "button", title = "Pick up all etxraction items", desc = "Picks up all the extraction items on the floor.",
@@ -2073,7 +2075,7 @@ local section = {
 		commanddesc = "Picks up all the extraction items on the floor",
 
 		callback = function() 
-			pickupallextitems()
+			env.funcs.pickupallextitems()
 		end
 	},
 	{ type = "button", title = "Pick up all event items", desc = "Picks up all the event items / currency on the floor (Including Research Capsules that are linked to Event Twisteds).",
@@ -2084,7 +2086,7 @@ local section = {
 		commanddesc = "Picks up all the event items on the floor",
 
 		callback = function() 
-			pickupalleventitems()
+			env.funcs.pickupalleventitems()
 		end
 	},
 	{ type = "button", title = "Encounter all Twisteds", desc = "Encounters every Twisted on the floor that you haven't encountered yet.",
@@ -2095,7 +2097,7 @@ local section = {
 		commanddesc = "Encounters all the Twisteds on the floor that haven't spotted you yet",
 
 		callback = function() 
-			encountertwisteds()
+			env.funcs.encountertwisteds()
 		end
 	},
 	{ type = "toggle", title = "Anti pop-ups", desc = "Blocks Twisted Vee's pop-ups from appearing.",
