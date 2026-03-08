@@ -60,18 +60,18 @@ function toelevator(spec, method)
 			elseif spec == 1 then
 				env.funcs.moveplr(getelevatorcframe(elevator:FindFirstChild("MonsterBlocker")), method)
 			end
-		end
 
-	elseif env.stuf.inlobby then
-		for _, model in ipairs(elevator:GetChildren()) do
-			if model:IsA("Model") and model.Name == "Gate" then
-				local gate, n = model:FindFirstChild("Gate"), model:FindFirstChild(tostring(spec))
-				if gate and n and gate:IsA("BasePart") and n:IsA("BasePart") then
-					local s = env.stuf.root.CFrame
-					firetouchinterest(env.stuf.root, gate, 0) t()
-					firetouchinterest(env.stuf.root, gate, 1) t()
-					env.stuf.root.CFrame = s
-					return
+		elseif env.stuf.inlobby then
+			for _, model in ipairs(elevator:GetChildren()) do
+				if model:IsA("Model") and model.Name == "Gate" then
+					local gate, n = model:FindFirstChild("Gate"), model:FindFirstChild(tostring(spec))
+					if gate and n and gate:IsA("BasePart") and n:IsA("BasePart") then
+						local s = env.stuf.root.CFrame
+						firetouchinterest(env.stuf.root, gate, 0) t()
+						firetouchinterest(env.stuf.root, gate, 1) t()
+						env.stuf.root.CFrame = s
+						return
+					end
 				end
 			end
 		end
@@ -234,6 +234,9 @@ function env.funcs.tomachine(method)
 		end
 	else
 		env.funcs.pop("No available generators found!")
+		if env.stuf.afe.running then
+			env.funcs.toelevator(2, "tp")
+		end
 	end
 end
 
