@@ -1059,6 +1059,24 @@ local function autoencountertwisteds(state) autoactions.autoencountertwisteds.en
 
 -------------------------------------------------------------------------------------------------------------------------------
 
+local autoforcequitmachineconn
+local function autoforcequitmachine(state)
+	if state then 
+		if not autoforcequitmachineconn then 
+			autoforcequitmachineconn = rst.StoryEvents.Spotted.OnClientEvent:Connect(function()
+				env.funcs.forcequitmachine()
+			end) 
+		end
+	else
+		if autoforcequitmachineconn then 
+			autoforcequitmachineconn:Disconnect() 
+			autoforcequitmachineconn = nil 
+		end
+	end
+end
+
+-------------------------------------------------------------------------------------------------------------------------------
+
 env.stuf.afe = {
 	running = false,
 	priority = {},
@@ -1094,6 +1112,7 @@ local function autofarm(state)
 		env.essentials.library.update("Instant calibration success", true)
 		env.essentials.library.update("Auto escape Squirm", true)
 		env.essentials.library.update("Auto vote best card", true)
+		env.essentials.library.update("Auto vote best card", true)
 
 		env.essentials.library.update("Auto use items", true)
 		env.essentials.library.update("Auto use items behavior", {"When necessary"})
@@ -1120,6 +1139,19 @@ local function autofarm(state)
 			end)
 		end)
 		table.insert(env.stuf.afe.conns, spottedconn)
+		
+		local stoppedextractingconn = env.stuf.char.Decoding.Changed:Connect(function(val)
+			if not val then
+				t(0.5)
+				for _, machine in ipairs(env.stuf.machines:GetChildren()) do
+					for _ = 1, 3 do
+						fireproximityprompt(env.funcs.getstats("machine", machine).prox)
+						t(1)
+					end
+				end
+			end
+		end)
+		table.insert(env.stuf.afe.conns, stoppedextractingconn)
 	else
 		for _, conn in ipairs(env.stuf.afe.conns) do
 			conn:Disconnect()
@@ -1372,6 +1404,21 @@ local section = {
 
 		callback = function(state) 
 			autovotebestcard(state)
+		end
+	},
+	{ type = "toggle", title = "Auto force quit machine", desc = "Force quits machine extraction when a Twisted spots you.",
+		commandcat = "Automation",
+
+		encommands = {"enableautoquitmachine"},
+		enaliases = {"eafcm"},
+		encommanddesc = "Enables auto force quit machine",
+
+		discommands = {"disableautoquitmachine"},
+		disaliases = {"dafcm"},
+		discommanddesc = "Disables auto force quit machine",
+
+		callback = function(state) 
+			autoforcequitmachine(state)
 		end
 	},
 	{ type = "toggle", title = "Auto use items", desc = "Automatically uses your item when available.",
