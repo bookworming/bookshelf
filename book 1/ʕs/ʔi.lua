@@ -1009,8 +1009,8 @@ do
 			}
 
 		elseif type == "item" then
-			local prompt = obj:FindFirstChild("Prompt")
-			local act = prompt and prompt:FindFirstChildOfClass("ProximityPrompt")
+			local prompt = obj:FindFirstChild("Prompt") or nil
+			local act = prompt and prompt:FindFirstChildOfClass("ProximityPrompt") or nil
 
 			local research
 			if name == "ResearchCapsule" then 
