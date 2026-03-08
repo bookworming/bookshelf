@@ -560,7 +560,7 @@ function fetchspeedwithoutdebuff(mode)
 	if not env.stuf.plrstats then return env.stuf.hum.WalkSpeed end
 
 	if mode == "Run" then
-		local base = env.stuf.plrstats:FindFirstChild("RunSpeed")
+		local base = env.stuf.plrstats:FindFirstChild("RunSpeed").Value
 		local mod  = env.stuf.plrstats:FindFirstChild("RunSpeedModifier")
 
 		if base and mod then
@@ -569,7 +569,7 @@ function fetchspeedwithoutdebuff(mode)
 		end
 
 	elseif mode == "Walk" then
-		local base = env.stuf.plrstats:FindFirstChild("WalkSpeed")
+		local base = env.stuf.plrstats:FindFirstChild("WalkSpeed").Value
 		local mod  = env.stuf.plrstats:FindFirstChild("SpeedModifier")
 
 		if base and mod then
