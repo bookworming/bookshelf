@@ -1198,7 +1198,7 @@ end
 
 encounteringtwisteds = false
 
-function env.stuf.encountertwisteds()
+function env.funcs.encountertwisteds()
 	if encounteringtwisteds then return end
 	encounteringtwisteds = true
 
