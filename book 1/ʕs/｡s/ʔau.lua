@@ -1184,6 +1184,7 @@ local function autofarm(state)
 				end
 			end
 
+			env.funcs.box("idling in fake elevator for " .. highestintresttime .. " seconds")
 			t(highestintresttime)
 			tplooppause = false
 		end)
