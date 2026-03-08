@@ -122,10 +122,10 @@ local function autoteleporttoelevator(state)
 	autoteleporttoelevatorconn = panic.Changed:Connect(function()
 		if not panic.Value then return end
 
-		if table.find(autoteleporttoelevatorconditions, "Instant") or #autoteleporttoelevatorconditions == 0 then
+		if table.find(autoteleporttoelevatorconditions, "Instant") or #autoteleporttoelevatorconditions == 0 or autoteleporttoelevatorconditions == "Instant" then
 			toelevator(nil, "tp")
 
-		elseif table.find(autoteleporttoelevatorconditions, "Everyone at elevator") then
+		elseif table.find(autoteleporttoelevatorconditions, "Everyone at elevator") or autoteleporttoelevatorconditions == "Everyone at elevator" then
 			spwn(function()
 				while autoteleportingtoelevator and panic.Value do
 					if checkeveryoneatelevaor() then
@@ -136,7 +136,7 @@ local function autoteleporttoelevator(state)
 				end
 			end)
 
-		elseif table.find(autoteleporttoelevatorconditions, "At the last second") then
+		elseif table.find(autoteleporttoelevatorconditions, "At the last second") or autoteleporttoelevatorconditions == "At the last second" then
 			spwn(function()
 				while autoteleportingtoelevator and panic.Value do
 					if timer and timer.Value <= 1 then
@@ -696,6 +696,8 @@ local function getitemslot(stats, itemname)
 end
 
 local function tryuseitem(stats)
+	t(0.2)
+	
 	local extracting = stats.extracting
 	local twistedschasing = stats.twistedschasing or 0
 	local health = env.stuf.char:FindFirstChildOfClass("Humanoid").Health
@@ -725,7 +727,6 @@ local function tryuseitem(stats)
 end
 
 local function onInventoryChanged()
-	t(0.1)
 	if not autousingitems then return end
 	local stats = env.funcs.getstats("player", env.stuf.char)
 	if not stats then return end
