@@ -229,7 +229,7 @@ function env.funcs.tomachine(method)
 		env.funcs.moveplr(good[1].tppos, method)
 		
 		if env.stuf.afe.running then
-			t(0.1)
+			t(0.2)
 			fireproximityprompt(env.funcs.getstats("machine", good[1].model).prox)
 		end
 	else
