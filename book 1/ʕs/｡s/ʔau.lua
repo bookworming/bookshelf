@@ -537,8 +537,7 @@ local function autoteleporttomachine(state)
 
 	if table.find(conditions, "Map fully loaded") then
 		local conn = env.stuf.roomfolder.ChildAdded:Connect(function()
-			yield(function() return env.stuf.machines end)
-			yield(function() return #env.stuf.machines:GetChildren() > 1 end)
+			yield(function() return env.funcs.getgamestat("message"):find("Doors open") end)
 			yield(function() return not env.stuf.actionqueuerunning end)
 			doteleport()
 		end)
@@ -996,9 +995,9 @@ local function processqueue()
 	env.stuf.actionqueuerunning = true
 	spwn(function()
 		while #actionqueue > 0 do
-			local next = table.remove(actionqueue, 1)
-			next()
-			t()
+			local nextact = table.remove(actionqueue, 1)
+			nextact()
+			t(0.1)
 		end
 		env.stuf.actionqueuerunning = false
 	end)
@@ -1022,8 +1021,7 @@ local function hookaction(action)
 
 	if table.find(performactionstriggers, "Map fully loaded") then
 		table.insert(action.conns, env.stuf.roomfolder.ChildAdded:Connect(function()
-			yield(function() return env.stuf.twisteds end)
-			yield(function() return #env.stuf.twisteds:GetChildren() > 1 end)
+			yield(function() return env.funcs.getgamestat("message"):find("Doors open") end)
 			try()
 		end))
 	end
