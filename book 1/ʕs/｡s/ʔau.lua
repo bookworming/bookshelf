@@ -122,12 +122,10 @@ local function autoteleporttoelevator(state)
 	autoteleporttoelevatorconn = panic.Changed:Connect(function()
 		if not panic.Value then return end
 
-		local condition = autoteleporttoelevatorconditions
-
-		if condition == "Instant" or not condition then
+		if table.find(autoteleporttoelevatorconditions, "Instant") or #autoteleporttoelevatorconditions == 0 then
 			toelevator(nil, "tp")
 
-		elseif condition == "Everyone at elevator" then
+		elseif table.find(autoteleporttoelevatorconditions, "Everyone at elevator") then
 			spwn(function()
 				while autoteleportingtoelevator and panic.Value do
 					if checkeveryoneatelevaor() then
@@ -138,7 +136,7 @@ local function autoteleporttoelevator(state)
 				end
 			end)
 
-		elseif condition == "At the last second" then
+		elseif table.find(autoteleporttoelevatorconditions, "At the last second") then
 			spwn(function()
 				while autoteleportingtoelevator and panic.Value do
 					if timer and timer.Value <= 1 then
@@ -599,7 +597,7 @@ local function votebest()
 
 	spwn(function()
 		local lowhealth = false
-		for _, p in ipairs(env.stuf.plrs:GetPlayers()) do
+		for _, p in ipairs(plrs:GetPlayers()) do
 			local h = p.Character and p.Character:FindFirstChildOfClass("Humanoid")
 			if h and h.Health < 2 then lowhealth = true break end
 		end
