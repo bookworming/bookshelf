@@ -1088,6 +1088,7 @@ env.stuf.handshaker.addcmd("isolate", function(sender)
 	if env.stuf.handshaker.excludeself and sender == env.stuf.plr then return end
 
 	env.funcs.box(sender.Name .. " called isolate")
+	getgenv.nointro = nil
 	env.funcs.recursivels("book%201/%CA%95f/%CA%94br.lua", true)
 end)
 
