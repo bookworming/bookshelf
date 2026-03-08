@@ -1165,13 +1165,6 @@ local function autofarm(state)
 			t(2)
 			env.funcs.tomachine("tp")
 
-			task.delay(2, function()
-				if not env.funcs.getstats("player", env.stuf.char).extracting then
-					t(5)
-					env.funcs.tomachine("tp")
-				end
-			end)
-
 			local highestintresttime = 5
 			if env.stuf.twisteds then
 				for _, twisted in ipairs(env.stuf.twisteds:GetChildren()) do
