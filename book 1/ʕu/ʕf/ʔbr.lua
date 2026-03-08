@@ -8,28 +8,32 @@ local l = game:GetService("Lighting")
 local ts = game:GetService("TweenService")
 
 local root = game:GetService("Players").LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
-local transitiongui = game:GetService("Players").LocalPlayer.PlayerGui:WaitForChild("Transition")
-local loadingscreen = transitiongui.LoadingScreen
-
-l.ClockTime = 0
-
-loadingscreen.Visible = true
+local transitiongui, loadingscreen
 
 local tweendown = ts:Create(loadingscreen, TweenInfo.new(0.75, Enum.EasingStyle.Quad, Enum.EasingDirection.In, 0, false), {Position = UDim2.new(0, 0, 0.1, 0)})
 local tweenup = ts:Create(loadingscreen, TweenInfo.new(1, Enum.EasingStyle.Quad, Enum.EasingDirection.In, 0, false), {Position = UDim2.new(0, 0, -1, 0)})
 
-tweendown:Play()
-tweendown.Completed:Wait()
+if game.PlaceId == 16116270224 then
+	transitiongui = game:GetService("Players").LocalPlayer.PlayerGui:WaitForChild("Transition")
+	loadingscreen = transitiongui.LoadingScreen
 
-local slam = Instance.new("Sound")
-slam.SoundId = "rbxassetid://4228160116"
-slam.PlaybackSpeed = 0.7
-slam.Parent = workspace
-slam.Volume = 1
-slam:Play()
+	l.ClockTime = 0
 
-ts:Create(loadingscreen, TweenInfo.new(0.5, Enum.EasingStyle.Elastic, Enum.EasingDirection.Out, 0, false), {Position = UDim2.new(0, 0, 0, 0)}):Play()
-root.Anchored = true
+	loadingscreen.Visible = true
+
+	tweendown:Play()
+	tweendown.Completed:Wait()
+
+	local slam = Instance.new("Sound")
+	slam.SoundId = "rbxassetid://4228160116"
+	slam.PlaybackSpeed = 0.7
+	slam.Parent = workspace
+	slam.Volume = 1
+	slam:Play()
+
+	ts:Create(loadingscreen, TweenInfo.new(0.5, Enum.EasingStyle.Elastic, Enum.EasingDirection.Out, 0, false), {Position = UDim2.new(0, 0, 0, 0)}):Play()
+	root.Anchored = true
+end
 
 -------------------------------------------------------------------------------------------------------------------------------
 
@@ -2364,21 +2368,23 @@ end
 -------------------------------------------------------------------------------------------------------------------------------
 
 task.delay(1, function()
-	root.Anchored = false
-	root:PivotTo(CFrame.new(4479, 1318, -152))
-	root.Anchored = true
+	if game.PlaceId == 16116270224 then
+		root.Anchored = false
+		root:PivotTo(CFrame.new(4479, 1318, -152))
+		root.Anchored = true
 
-	local opening = Instance.new("Sound")
-	opening.SoundId = "rbxassetid://4416840411"
-	opening.Parent = workspace
-	opening.Volume = 1
-	opening:Play()
+		local opening = Instance.new("Sound")
+		opening.SoundId = "rbxassetid://4416840411"
+		opening.Parent = workspace
+		opening.Volume = 1
+		opening:Play()
 
-	tweenup:Play()
-	tweenup.Completed:Wait()
+		tweenup:Play()
+		tweenup.Completed:Wait()
 
-	loadingscreen.Visible = false
-	root.Anchored = false
+		loadingscreen.Visible = false
+		root.Anchored = false
+	end
 end)
 
 -------------------------------------------------------------------------------------------------------------------------------
