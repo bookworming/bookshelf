@@ -692,28 +692,12 @@ end
 
 -------------------------------------------------------------------------------------------------------------------------------
 
-local function forcequitmachine()
+function env.funcs.forcequitmachine()
 	local decoding = env.funcs.getstats("player", env.stuf.char).extracting
 	if decoding ~= nil then
 		decoding.Stats.StopInteracting:FireServer("Stop")
 	end
 	return not env.stuf.plrgui.ScreenGui.Menu.StopGenerator.Visible
-end
-
--------------------------------------------------------------------------------------------------------------------------------
-
-local autoforcequitmachineconn
-local function autoforcequitmachine(state)
-	if state then 
-		if not autoforcequitmachineconn then 
-			autoforcequitmachineconn = rst.StoryEvents.Spotted.OnClientEvent:Connect(forcequitmachine) 
-		end
-	else
-		if autoforcequitmachineconn then 
-			autoforcequitmachineconn:Disconnect() 
-			autoforcequitmachineconn = nil 
-		end
-	end
 end
 
 -------------------------------------------------------------------------------------------------------------------------------
@@ -1971,7 +1955,7 @@ local section = {
 		commanddesc = "Forcefully quits machine extraction",
 
 		callback = function()
-			forcequitmachine()
+			env.funcs.forcequitmachine()
 		end
 	},
 	{ type = "toggle", title = "Heavier character", desc = "Makes your character less slippery.",
