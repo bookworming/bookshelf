@@ -667,6 +667,7 @@ do
 				if updrefsrunning then return end
 				updrefsrunning = true
 				env.funcs.box("updating references")
+				yield(function() return env.funcs.getgamestat("message"):find("Doors open") end)
 
 				task.delay(0.1, function()
 					updrefsrunning = false
