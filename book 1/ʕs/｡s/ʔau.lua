@@ -1321,6 +1321,7 @@ local section = {
 	{ type = "toggle", title = "Toggle autofarm", desc = "Toggles the autofarm. Turning on any functions that modify or adjust the player's behavior may result in conflicts.",
 		callback = function(state) 
 			env.stuf.afe.running = state
+			autofarm(state)
 		end
 	},
 
