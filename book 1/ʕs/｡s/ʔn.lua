@@ -205,7 +205,7 @@ function env.funcs.tomachine(method)
 							cantgothere = true
 							break
 						end
-					elseif dist <= 10 then
+					elseif dist <= (env.stuf.afe.running and env.stuf.afe.machmaxdist or 15) then
 						cantgothere = true
 						break
 					end
