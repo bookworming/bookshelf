@@ -981,13 +981,13 @@ local actionqueue = {}
 env.stuf.actionqueuerunning = false
 
 local autoactions = {
-	autopickupallitems     = { enabled = false, conns = {}, func = function() env.funcs.pickupallitems() end },
-	autopickupallcapsules  = { enabled = false, conns = {}, func = function() env.funcs.pickupallcapsules() end },
-	autopickupalltapes     = { enabled = false, conns = {}, func = function() env.funcs.pickupalltapes() end },
-	autopickupallheals     = { enabled = false, conns = {}, func = function() env.funcs.pickupallheals() end },
-	autopickupallextitems  = { enabled = false, conns = {}, func = function() env.funcs.pickupallextitems() end },
-	autopickupalleventitems= { enabled = false, conns = {}, func = function() env.funcs.pickupalleventitems() end },
-	autoencountertwisteds  = { enabled = false, conns = {}, func = function() env.funcs.encountertwisteds() end },
+	autopickupallitems = { enabled = false, conns = {}, func = function() env.funcs.pickupallitems() end },
+	autopickupallcapsules = { enabled = false, conns = {}, func = function() env.funcs.pickupallcapsules() end },
+	autopickupalltapes = { enabled = false, conns = {}, func = function() env.funcs.pickupalltapes() end },
+	autopickupallheals = { enabled = false, conns = {}, func = function() env.funcs.pickupallheals() end },
+	autopickupallextitems = { enabled = false, conns = {}, func = function() env.funcs.pickupallextitems() end },
+	autopickupalleventitems = { enabled = false, conns = {}, func = function() env.funcs.pickupalleventitems() end },
+	autoencountertwisteds = { enabled = false, conns = {}, func = function() env.funcs.encountertwisteds() end },
 }
 
 local function processqueue()
@@ -1049,13 +1049,13 @@ local function maketoggles()
 end
 maketoggles()
 
-local function autopickupallitems(state)     autoactions.autopickupallitems.enabled = state     hookaction(autoactions.autopickupallitems) end
-local function autopickupallcapsules(state)  autoactions.autopickupallcapsules.enabled = state  hookaction(autoactions.autopickupallcapsules) end
-local function autopickupalltapes(state)     autoactions.autopickupalltapes.enabled = state     hookaction(autoactions.autopickupalltapes) end
-local function autopickupallheals(state)     autoactions.autopickupallheals.enabled = state     hookaction(autoactions.autopickupallheals) end
-local function autopickupallextitems(state)  autoactions.autopickupallextitems.enabled = state  hookaction(autoactions.autopickupallextitems) end
-local function autopickupalleventitems(state)autoactions.autopickupalleventitems.enabled = state hookaction(autoactions.autopickupalleventitems) end
-local function autoencountertwisteds(state)  autoactions.autoencountertwisteds.enabled = state  hookaction(autoactions.autoencountertwisteds) end
+local function autopickupallitems(state) autoactions.autopickupallitems.enabled = state hookaction(autoactions.autopickupallitems) end
+local function autopickupallcapsules(state)autoactions.autopickupallcapsules.enabled = state hookaction(autoactions.autopickupallcapsules) end
+local function autopickupalltapes(state)autoactions.autopickupalltapes.enabled = state hookaction(autoactions.autopickupalltapes) end
+local function autopickupallheals(state) autoactions.autopickupallheals.enabled = state hookaction(autoactions.autopickupallheals) end
+local function autopickupallextitems(state) autoactions.autopickupallextitems.enabled = state hookaction(autoactions.autopickupallextitems) end
+local function autopickupalleventitems(state) autoactions.autopickupalleventitems.enabled = state hookaction(autoactions.autopickupalleventitems) end
+local function autoencountertwisteds(state) autoactions.autoencountertwisteds.enabled = state hookaction(autoactions.autoencountertwisteds) end
 
 -------------------------------------------------------------------------------------------------------------------------------
 
