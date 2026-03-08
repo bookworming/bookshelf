@@ -727,7 +727,7 @@ end
 
 local function onInventoryChanged()
 	if not autousingitems then return end
-	local stats = env.funcs.getstats("player", env.stuf.plr)
+	local stats = env.funcs.getstats("player", env.stuf.char)
 	if not stats then return end
 
 	local behavior = autouseitemsbehavior
@@ -746,7 +746,7 @@ local function onInventoryChanged()
 	elseif behavior == "1 second delay" then
 		task.delay(1, function()
 			if not autousingitems then return end
-			local freshstats = env.funcs.getstats("player", env.stuf.plr)
+			local freshstats = env.funcs.getstats("player", env.stuf.char)
 			if freshstats then tryuseitem(freshstats) end
 		end)
 	end
@@ -772,7 +772,7 @@ local function autouseitems(state)
 
 	table.insert(autouseitemsconns, rst.StoryEvents.Spotted.OnClientEvent:Connect(function()
 		if not autousingitems then return end
-		local stats = env.funcs.getstats("player", env.stuf.plr)
+		local stats = env.funcs.getstats("player", env.stuf.char)
 		if not stats then return end
 		for _, itemname in ipairs(autouseitemcats.speed) do
 			if autouseitemsblacklist[itemname] then continue end
