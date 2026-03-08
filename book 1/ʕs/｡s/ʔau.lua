@@ -1150,7 +1150,7 @@ local function autofarm(state)
 
 		env.stuf.afe.tploopthread = spwn(function()
 			while env.stuf.afe.running do
-				if not tplooppause then
+				if not tplooppause or env.stuf.actionqueuerunning then
 					env.funcs.tomachine("tp")
 				end
 				t(3)
@@ -1160,16 +1160,31 @@ local function autofarm(state)
 		local spottedconn = rst.StoryEvents.Spotted.OnClientEvent:Connect(function()
 			if env.stuf.actionqueuerunning then return end
 			tplooppause = true
+
 			toelevator(true, "tp")
 			t(2)
 			env.funcs.tomachine("tp")
+
 			task.delay(2, function()
 				if not env.funcs.getstats("player", env.stuf.char).extracting then
 					t(5)
 					env.funcs.tomachine("tp")
 				end
 			end)
-			t(3)
+
+			local highestintresttime = 5
+			if env.stuf.twisteds then
+				for _, twisted in ipairs(env.stuf.twisteds:GetChildren()) do
+					if twisted:IsA("Model") then
+						local stats = env.funcs.getstats("twisted", twisted)
+						if stats and stats.intresttime and stats.intresttime > highestintresttime then
+							highestintresttime = stats.intresttime
+						end
+					end
+				end
+			end
+
+			t(highestintresttime)
 			tplooppause = false
 		end)
 		table.insert(env.stuf.afe.conns, spottedconn)
