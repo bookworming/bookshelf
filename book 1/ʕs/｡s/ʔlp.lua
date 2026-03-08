@@ -1004,7 +1004,7 @@ end
 
 -------------------------------------------------------------------------------------------------------------------------------
 
-local function pickupallitems()
+function env.funcs.pickupallitems()
 	local oldcf = env.stuf.root.CFrame
 	ws.Gravity = 0
 	local doit
@@ -1012,13 +1012,16 @@ local function pickupallitems()
 	if env.stuf.currentroom then
 		if env.stuf.items and #env.stuf.items:GetChildren() > 0 then
 			if env.stuf.items:FindFirstChild("FakeCapsule") then
-				env.funcs.popup("Twisted Rodger's capsule is on this floor. Are you sure you still want to run this?", "Yes", function() doit = true end, "Nevermind", function() doit = false end)
+				if not env.stuf.afe.running then
+					env.funcs.popup("Twisted Rodger's capsule is on this floor. Are you sure you still want to run this?", "Yes", function() doit = true end, "Nevermind", function() doit = false end)
+				end
 			end
-			
+
 			repeat t() until doit ~= nil
 			if doit then
 				for _, item in ipairs(env.stuf.items:GetChildren()) do
 					if item:IsA("Model") then
+						if env.stuf.afe.running and item.Name:find("Fake") then return end
 						local itemCFrame = item:GetPivot() * CFrame.new(0, env.gear.general.itemtpposyoffset, 0)
 						for _ = 1, 10 do env.funcs.moveplr(itemCFrame, "tp") t() end
 						fireproximityprompt(env.funcs.getstats("item", item).act)
@@ -1033,7 +1036,7 @@ local function pickupallitems()
 	ws.Gravity = 196.2
 end
 
-local function pickupallcapsules()
+function env.funcs.pickupallcapsules()
 	local oldcf = env.stuf.root.CFrame
 	ws.Gravity = 0
 
@@ -1054,7 +1057,7 @@ local function pickupallcapsules()
 	ws.Gravity = 196.2
 end
 
-local function pickupalltapes()
+function env.funcs.pickupalltapes()
 	local oldcf = env.stuf.root.CFrame
 	ws.Gravity = 0
 
@@ -1075,7 +1078,7 @@ local function pickupalltapes()
 	ws.Gravity = 196.2
 end
 
-local function pickupallheals()
+function env.funcs.pickupallheals()
 	local oldcf = env.stuf.root.CFrame
 	ws.Gravity = 0
 
@@ -1096,7 +1099,7 @@ local function pickupallheals()
 	ws.Gravity = 196.2
 end
 
-local function pickupallextitems()
+function env.funcs.pickupallextitems()
 	local oldcf = env.stuf.root.CFrame
 	ws.Gravity = 0
 
@@ -1117,7 +1120,7 @@ local function pickupallextitems()
 	ws.Gravity = 196.2
 end
 
-local function pickupalleventitems()
+function env.funcs.pickupalleventitems()
 	local oldcf = env.stuf.root.CFrame
 	ws.Gravity = 0
 
