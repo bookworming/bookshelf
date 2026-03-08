@@ -658,8 +658,8 @@ do
 	if env.stuf.inrun then
 		spwn(function()
 			yield(function() return env.setupcomplete end)
-			env.stuf.elevator = ws:WaitForChild("Elevators"):WaitForChild("Elevator") env.funcs.box("found \"Elevator\" model")
-			env.stuf.roomfolder = ws:WaitForChild("CurrentRoom") env.funcs.box("found \"CurrentRoom\" folder")
+			env.stuf.elevator = ws:WaitForChild("Elevators"):WaitForChild("Elevator") env.funcs.box("found elevator model")
+			env.stuf.roomfolder = ws:WaitForChild("CurrentRoom") env.funcs.box("found room model")
 
 			local updrefsrunning = false
 
@@ -703,7 +703,7 @@ do
 
 			env.stuf.roomfolder.ChildAdded:Connect(updrefs)
 			env.stuf.roomfolder.ChildRemoved:Connect(updrefs)
-			env.funcs.box("monitoring \"CurrentRoom\" folder")
+			env.funcs.box("monitoring room folder")
 			updrefs()
 		end)
 	end
@@ -1235,13 +1235,17 @@ do
 
 	function env.funcs.veemoteactive() -- returns the vmotes value if the user has it, true if active, false if inactive
 		local folder = env.stuf.char:FindFirstChild("Trinkets")
-		for _, trinket in ipairs(folder) do
-			if trinket.Value == "VeeRemote" then
-				local active = trinket:FindFirstChild("Active")
-				if active then
-					return active.Value
+		if folder then
+			for _, trinket in ipairs(folder) do
+				if trinket.Value == "VeeRemote" then
+					local active = trinket:FindFirstChild("Active")
+					if active then
+						return active.Value
+					end
 				end
 			end
+		else
+			env.funcs.pop("Trinkets folder not found!")
 		end
 	end
 
