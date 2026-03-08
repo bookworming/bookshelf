@@ -1014,7 +1014,7 @@ do
 
 			local research
 			if name == "ResearchCapsule" then 
-				research = prompt:FindFirstChild("Monster").Value
+				research = prompt and prompt:FindFirstChild("Monster").Value or 0
 			end
 
 			return {
