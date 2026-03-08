@@ -975,6 +975,282 @@ end
 
 -------------------------------------------------------------------------------------------------------------------------------
 
+local autopickupallitemsenabled = false
+local autopickupallitemsconns = {}
+local performactionstriggers = {"Map fully loaded"}
+
+local function autopickupallitems(state)
+	autopickupallitemsenabled = state
+
+	for _, conn in ipairs(autopickupallitemsconns) do conn:Disconnect() end
+	autopickupallitemsconns = {}
+
+	if not state then return end
+
+	local function trypickup()
+		if not autopickupallitemsenabled then return end
+		env.funcs.pickupallitems()
+	end
+
+	if table.find(performactionstriggers, "Map fully loaded") then
+		local conn = env.stuf.roomfolder.ChildAdded:Connect(function()
+			yield(function() return env.stuf.twisteds end)
+			yield(function() return #env.stuf.twisteds:GetChildren() > 1 end)
+			trypickup()
+		end)
+		table.insert(autopickupallitemsconns, conn)
+	end
+
+	if table.find(performactionstriggers, "On floor start") then
+		local conn = env.stuf.gameinfo.FloorActive.Changed:Connect(function(val)
+			if val then trypickup() end
+		end)
+		table.insert(autopickupallitemsconns, conn)
+	end
+
+	if table.find(performactionstriggers, "On panic mode") then
+		table.insert(autopickupallitemsconns, env.stuf.gameinfo.Panic.Changed:Connect(function(val)
+			if val then trypickup() end
+		end))
+	end
+end
+
+local autopickupallcapsulesenabled = false
+local autopickupallcapsulesconns = {}
+
+local function autopickupallcapsules(state)
+	autopickupallcapsulesenabled = state
+
+	for _, conn in ipairs(autopickupallcapsulesconns) do conn:Disconnect() end
+	autopickupallcapsulesconns = {}
+
+	if not state then return end
+
+	local function trypickup()
+		if not autopickupallcapsulesenabled then return end
+		env.funcs.pickupallcapsules()
+	end
+
+	if table.find(performactionstriggers, "Map fully loaded") then
+		local conn = env.stuf.roomfolder.ChildAdded:Connect(function()
+			yield(function() return env.stuf.twisteds end)
+			yield(function() return #env.stuf.twisteds:GetChildren() > 1 end)
+			trypickup()
+		end)
+		table.insert(autopickupallcapsulesconns, conn)
+	end
+
+	if table.find(performactionstriggers, "On floor start") then
+		local conn = env.stuf.gameinfo.FloorActive.Changed:Connect(function(val)
+			if val then trypickup() end
+		end)
+		table.insert(autopickupallcapsulesconns, conn)
+	end
+
+	if table.find(performactionstriggers, "On panic mode") then
+		table.insert(autopickupallcapsulesconns, env.stuf.gameinfo.Panic.Changed:Connect(function(val)
+			if val then trypickup() end
+		end))
+	end
+end
+
+local autopickupalltapesenabled = false
+local autopickupalltapesconns = {}
+
+local function autopickupalltapes(state)
+	autopickupalltapesenabled = state
+
+	for _, conn in ipairs(autopickupalltapesconns) do conn:Disconnect() end
+	autopickupalltapesconns = {}
+
+	if not state then return end
+
+	local function trypickup()
+		if not autopickupalltapesenabled then return end
+		env.funcs.pickupalltapes()
+	end
+
+	if table.find(performactionstriggers, "Map fully loaded") then
+		local conn = env.stuf.roomfolder.ChildAdded:Connect(function()
+			yield(function() return env.stuf.twisteds end)
+			yield(function() return #env.stuf.twisteds:GetChildren() > 1 end)
+			trypickup()
+		end)
+		table.insert(autopickupalltapesconns, conn)
+	end
+
+	if table.find(performactionstriggers, "On floor start") then
+		local conn = env.stuf.gameinfo.FloorActive.Changed:Connect(function(val)
+			if val then trypickup() end
+		end)
+		table.insert(autopickupalltapesconns, conn)
+	end
+
+	if table.find(performactionstriggers, "On panic mode") then
+		table.insert(autopickupalltapesconns, env.stuf.gameinfo.Panic.Changed:Connect(function(val)
+			if val then trypickup() end
+		end))
+	end
+end
+
+local autopickupallhealsenabled = false
+local autopickupallhealsconns = {}
+
+local function autopickupallheals(state)
+	autopickupallhealsenabled = state
+
+	for _, conn in ipairs(autopickupallhealsconns) do conn:Disconnect() end
+	autopickupallhealsconns = {}
+
+	if not state then return end
+
+	local function trypickup()
+		if not autopickupallhealsenabled then return end
+		env.funcs.pickupallheals()
+	end
+
+	if table.find(performactionstriggers, "Map fully loaded") then
+		local conn = env.stuf.roomfolder.ChildAdded:Connect(function()
+			yield(function() return env.stuf.twisteds end)
+			yield(function() return #env.stuf.twisteds:GetChildren() > 1 end)
+			trypickup()
+		end)
+		table.insert(autopickupallhealsconns, conn)
+	end
+
+	if table.find(performactionstriggers, "On floor start") then
+		local conn = env.stuf.gameinfo.FloorActive.Changed:Connect(function(val)
+			if val then trypickup() end
+		end)
+		table.insert(autopickupallhealsconns, conn)
+	end
+
+	if table.find(performactionstriggers, "On panic mode") then
+		table.insert(autopickupallhealsconns, env.stuf.gameinfo.Panic.Changed:Connect(function(val)
+			if val then trypickup() end
+		end))
+	end
+end
+
+local autopickupallextitemsenabled = false
+local autopickupallextitemsconns = {}
+
+local function autopickupallextitems(state)
+	autopickupallextitemsenabled = state
+
+	for _, conn in ipairs(autopickupallextitemsconns) do conn:Disconnect() end
+	autopickupallextitemsconns = {}
+
+	if not state then return end
+
+	local function trypickup()
+		if not autopickupallextitemsenabled then return end
+		env.funcs.pickupallextitems()
+	end
+
+	if table.find(performactionstriggers, "Map fully loaded") then
+		local conn = env.stuf.roomfolder.ChildAdded:Connect(function()
+			yield(function() return env.stuf.twisteds end)
+			yield(function() return #env.stuf.twisteds:GetChildren() > 1 end)
+			trypickup()
+		end)
+		table.insert(autopickupallextitemsconns, conn)
+	end
+
+	if table.find(performactionstriggers, "On floor start") then
+		local conn = env.stuf.gameinfo.FloorActive.Changed:Connect(function(val)
+			if val then trypickup() end
+		end)
+		table.insert(autopickupallextitemsconns, conn)
+	end
+
+	if table.find(performactionstriggers, "On panic mode") then
+		table.insert(autopickupallextitemsconns, env.stuf.gameinfo.Panic.Changed:Connect(function(val)
+			if val then trypickup() end
+		end))
+	end
+end
+
+local autopickupalleventitemsenabled = false
+local autopickupalleventitemsconns = {}
+
+local function autopickupalleventitems(state)
+	autopickupalleventitemsenabled = state
+
+	for _, conn in ipairs(autopickupalleventitemsconns) do conn:Disconnect() end
+	autopickupalleventitemsconns = {}
+
+	if not state then return end
+
+	local function trypickup()
+		if not autopickupalleventitemsenabled then return end
+		env.funcs.pickupalleventitems()
+	end
+
+	if table.find(performactionstriggers, "Map fully loaded") then
+		local conn = env.stuf.roomfolder.ChildAdded:Connect(function()
+			yield(function() return env.stuf.twisteds end)
+			yield(function() return #env.stuf.twisteds:GetChildren() > 1 end)
+			trypickup()
+		end)
+		table.insert(autopickupalleventitemsconns, conn)
+	end
+
+	if table.find(performactionstriggers, "On floor start") then
+		local conn = env.stuf.gameinfo.FloorActive.Changed:Connect(function(val)
+			if val then trypickup() end
+		end)
+		table.insert(autopickupalleventitemsconns, conn)
+	end
+
+	if table.find(performactionstriggers, "On panic mode") then
+		table.insert(autopickupalleventitemsconns, env.stuf.gameinfo.Panic.Changed:Connect(function(val)
+			if val then trypickup() end
+		end))
+	end
+end
+
+local autoencountertwistedsnabled = false
+local autoencountertwistedsconns = {}
+
+local function autoencountertwisteds(state)
+	autoencountertwistedsnabled = state
+
+	for _, conn in ipairs(autoencountertwistedsconns) do conn:Disconnect() end
+	autoencountertwistedsconns = {}
+
+	if not state then return end
+
+	local function tryencounter()
+		if not autoencountertwistedsnabled then return end
+		env.stuf.encountertwisteds()
+	end
+
+	if table.find(performactionstriggers, "Map fully loaded") then
+		local conn = env.stuf.roomfolder.ChildAdded:Connect(function()
+			yield(function() return env.stuf.twisteds end)
+			yield(function() return #env.stuf.twisteds:GetChildren() > 1 end)
+			tryencounter()
+		end)
+		table.insert(autoencountertwistedsconns, conn)
+	end
+
+	if table.find(performactionstriggers, "On floor start") then
+		local conn = env.stuf.gameinfo.FloorActive.Changed:Connect(function(val)
+			if val then tryencounter() end
+		end)
+		table.insert(autoencountertwistedsconns, conn)
+	end
+
+	if table.find(performactionstriggers, "On panic mode") then
+		table.insert(autoencountertwistedsconns, env.stuf.gameinfo.Panic.Changed:Connect(function(val)
+			if val then tryencounter() end
+		end))
+	end
+end
+
+-------------------------------------------------------------------------------------------------------------------------------
+
 env.stuf.afe = {
 	running = false,
 	priority = {},
@@ -1001,8 +1277,25 @@ local function autofarm(state)
 	if state then
 		env.essentials.library.update("Auto teleport to elevator", true)
 		env.essentials.library.update("Auto teleport to elevator condition", {"Instant"})
+		
 		env.essentials.library.update("Auto teleport to machine", true)
 		env.essentials.library.update("Auto teleport to machine condition", {"Extraction end", "Map fully loaded"})
+		
+		env.essentials.library.update("Instant calibration success", true)
+		env.essentials.library.update("Auto escape Squirm", true)
+		env.essentials.library.update("Auto vote best card", true)
+		
+		env.essentials.library.update("Auto use items", true)
+		env.essentials.library.update("Auto use items behavior", {"When necessary"})
+		
+		env.essentials.library.update("Auto pick up all Research Capsules", true)
+		env.essentials.library.update("Auto pick up all Tapes", true)
+		env.essentials.library.update("Auto pick up all heals", true)
+		env.essentials.library.update("Auto pick up all extraction items", true)
+		env.essentials.library.update("Auto encounter Twisteds", true)
+		env.essentials.library.update("Perform actions trigger", env.stuf.afe.actiontrigger)
+		t(0.1)
+		env.funcs.tomachine("tp")
 	else
 		
 	end
@@ -1080,6 +1373,7 @@ local section = {
 
 		callback = function(selected) 
 			env.stuf.afe.actions = selected
+			performactionstriggers = selected
 		end 
 	},
 
@@ -1450,6 +1744,14 @@ local section = {
 		multiselect = true,
 
 		callback = function(selected) 
+			performactionstriggers = selected
+			if autopickupallitemsenabled then autopickupallitems(false) autopickupallitems(true) end
+			if autopickupallcapsulesenabled then autopickupallcapsules(false) autopickupallcapsules(true) end
+			if autopickupalltapesenabled then autopickupalltapes(false) autopickupalltapes(true) end
+			if autopickupallhealsenabled then autopickupallheals(false) autopickupallheals(true) end
+			if autopickupallextitemsenabled then autopickupallextitems(false) autopickupallextitems(true) end
+			if autopickupalleventitemsenabled then autopickupalleventitems(false) autopickupalleventitems(true) end
+			if autoencountertwistedsnabled then autoencountertwisteds(false) autoencountertwisteds(true) end
 		end 
 	},
 	{ type = "toggle", title = "Auto pick up all items", desc = "Automatically picks up every item on the floor.",
@@ -1464,20 +1766,7 @@ local section = {
 		discommanddesc = "Disables auto pick up all items",
 
 		callback = function(state)
-		end
-	},
-	{ type = "toggle", title = "Auto pick up all event items", desc = "Automatically picks up every event item / currency on the floor.",
-		commandcat = "Automation",
-
-		encommands = {"enableautopickupalleventitems"},
-		enaliases = {"eapuaei"},
-		encommanddesc = "Enables auto pick up all event items",
-
-		discommands = {"disableautopickupalleventitems"},
-		disaliases = {"dapuaei"},
-		discommanddesc = "Disables auto pick up all event items",
-
-		callback = function(state)
+			autopickupallitems(state)
 		end
 	},
 	{ type = "toggle", title = "Auto pick up all Research Capsules", desc = "Automatically picks up every Research Capsule on the floor.",
@@ -1491,6 +1780,7 @@ local section = {
 		disaliases = {"dapuac"},
 		discommanddesc = "Disables auto pick up all Research Capsules",
 		callback = function(state)
+			autopickupallcapsules(state)
 		end
 	},
 	{ type = "toggle", title = "Auto pick up all Tapes", desc = "Automatically picks up every Tape on the floor.",
@@ -1505,6 +1795,7 @@ local section = {
 		discommanddesc = "Disables auto pick up all Tapes",
 
 		callback = function(state)
+			autopickupalltapes(state)
 		end
 	},
 	{ type = "toggle", title = "Auto pick up all heals", desc = "Automatically picks up all the heals on the floor.",
@@ -1519,6 +1810,7 @@ local section = {
 		discommanddesc = "Disables auto pick up all heals",
 
 		callback = function(state)
+			autopickupallheals(state)
 		end
 	},
 	{ type = "toggle", title = "Auto pick up all extraction items", desc = "Automatically picks up every extraction item on the floor.",
@@ -1533,6 +1825,22 @@ local section = {
 		discommanddesc = "Disables auto pick up all extraction items",
 
 		callback = function(state)
+			autopickupallextitems(state)
+		end
+	},
+	{ type = "toggle", title = "Auto pick up all event items", desc = "Automatically picks up every event item / currency on the floor.",
+		commandcat = "Automation",
+
+		encommands = {"enableautopickupalleventitems"},
+		enaliases = {"eapuaei"},
+		encommanddesc = "Enables auto pick up all event items",
+
+		discommands = {"disableautopickupalleventitems"},
+		disaliases = {"dapuaei"},
+		discommanddesc = "Disables auto pick up all event items",
+
+		callback = function(state)
+			autopickupalleventitems(state)
 		end
 	},
 	{ type = "toggle", title = "Auto encounter Twisteds", desc = "Automatically encounters every Twisted in the floor.",
@@ -1547,6 +1855,7 @@ local section = {
 		discommanddesc = "Disables auto encounter Twisteds",
 
 		callback = function(state)
+			autoencountertwisteds(state)
 		end
 	},
 
