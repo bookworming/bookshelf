@@ -29,6 +29,7 @@ local rst = FindFirstChildOfClass(game, "ReplicatedStorage")
 local plrs = FindFirstChildOfClass(game, "Players")
 
 local getgenv = getgenv() or _G
+local fireproximityprompt = (syn and syn.fireproximityprompt) or fireproximityprompt
 local firesignal = (syn and syn.firesignal) or firesignal
 local getcallbackvalue = (syn and syn.getcallbackvalue) or getcallbackvalue
 
@@ -875,6 +876,107 @@ end
 
 -------------------------------------------------------------------------------------------------------------------------------
 
+local bassieboneenabled = false
+local bassiebonedelay = 0.5
+local bassieboneconn = nil
+
+local function fireprompts()
+	t()
+	for _, item in env.stuf.items do
+		fireproximityprompt(item.Prompt:FindFirstChildOfClass("ProximityPrompt"))
+	end
+end
+
+local function bassiebone(looped)
+	local function bas()
+		local one = {
+			env.stuf.char,
+			CFrame.new(-98.01789, 145.92488, 137.47554, -0.91248, 0, 0.40912, 0, 1, 0, -0.40912, 0, -0.91248),
+			false
+		}
+		rst.Events.AbilityEvent:InvokeServer(unpack(one))
+
+		local two = {
+			env.stuf.char,
+			env.stuf.char.Inventory:WaitForChild("Slot1")
+		}
+		rst.Events.ItemEvent:InvokeServer(unpack(two))
+
+		if looped then t(bassiebonedelay) end
+	end
+
+	if looped then
+		while bassieboneenabled do bas() end
+	else
+		bas()
+	end
+end
+
+local function autobassiebone(state)
+	if state then
+		if bassieboneconn then bassieboneconn:Disconnect() end
+		yield(function() return env.stuf.items end)
+
+		bassieboneconn = env.stuf.items.ChildAdded:Connect(fireprompts)
+
+		bassieboneenabled = true
+		spwn(function() bassiebone(true) end)
+	else
+		bassieboneenabled = false
+
+		if bassieboneconn then
+			bassieboneconn:Disconnect()
+			bassieboneconn = nil
+		end
+	end
+end
+
+local function dobassieboneonce()
+	if bassieboneconn then return end
+	bassieboneconn = env.stuf.items.ChildAdded:Connect(fireprompts)
+end
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+local autouseabilityconn = nil
+local autouseabilityconditions = {"When cooldown ends"}
+
+local function fireability() 
+	rst.Events.AbilityEvent:InvokeServer(env.stuf.char, CFrame.new(-740, 99, 100, 1, 0, 0, 0, 1, 0, 0, 0, 1), false) 
+end
+
+local function enableautouseability()
+	if autouseabilityconn then return end
+
+	local abilfolder = env.stuf.char:FindFirstChild("Abilities")
+	local abilcd
+
+	if abilfolder then
+		for _, ability in pairs(abilfolder:GetChildren()) do
+			if ability:FindFirstChild("Cooldown") then
+				abilcd = ability.Cooldown
+			end
+		end
+	end
+
+	if abilcd then
+		autouseabilityconn = abilcd.Changed:Connect(function(v)
+			if v == 0 then
+				fireability()
+			end
+		end)
+	end
+end
+
+local function disableautouseability()
+	if autouseabilityconn then
+		autouseabilityconn:Disconnect()
+		autouseabilityconn = nil
+	end
+end
+
+-------------------------------------------------------------------------------------------------------------------------------
+
 env.stuf.afe = {
 	running = false,
 	priority = {},
@@ -1208,14 +1310,17 @@ local section = {
 		discommanddesc = "Disables auto Bassie Bone",
 
 		callback = function(state)
+			autobassiebone(state)
 		end
 	},
 	{ type = "slider", title = "Auto Bassie Bone delay", desc = "Sets the delay for the auto Bassie Bone (In milliseconds).", min = 5, max = 500, default = 30, step = 5,
 		callback = function(value)
+			bassiebonedelay = value
 		end
 	},
 	{ type = "button", title = "Manual Bassie Bone", desc = "Uses Bassie's ability to drop an item, and then picks it back up.",
 		callback = function()
+			dobassieboneonce()
 		end
 	},
 	{ type = "toggle", title = "Auto use ability", desc = "Automatically uses your ability.",
@@ -1234,7 +1339,7 @@ local section = {
 	},
 	{ type = "dropdown", title = "Auto use ability condition", desc = "Sets the conditions that need to be met in order to automatically use your ability.", 
 		options = {"When cooldown ends", "Everyone near elevator", "Near a Twisted", "Near a player", "Near an extracting player", "All Twisteds gathered", "Player near Twisted"},
-		default = "When cooldown ends",
+		default = autouseabilityconditions,
 		canbeempty = false,
 		multiselect = true,
 
