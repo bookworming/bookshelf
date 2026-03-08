@@ -1227,7 +1227,7 @@ do
 		else
 			local args = {
 				env.stuf.char,
-				game:GetService("Players").LocalPlayer.Character:WaitForChild("Inventory"):WaitForChild("Slot" .. slot)
+				env.stuf.char:WaitForChild("Inventory"):WaitForChild("Slot" .. slot)
 			}
 			rst.Events.ItemEvent:InvokeServer(unpack(args))
 		end
