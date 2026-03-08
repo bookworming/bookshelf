@@ -1725,9 +1725,9 @@ local function addextraunits()
 		end
 
 		if env.stuf.plrstats:FindFirstChild("Sprinting") then
-			env.stuf.hum.Walkspeed = env.stuf.plrstats:FindFirstChild("RunSpeed") + extrawalkspeedunits
+			env.stuf.hum.Walkspeed = env.stuf.plrstats:FindFirstChild("RunSpeed").Value + extrawalkspeedunits
 		else
-			env.stuf.hum.Walkspeed = env.stuf.plrstats:FindFirstChild("Walkspeed") + extrawalkspeedunits
+			env.stuf.hum.Walkspeed = env.stuf.plrstats:FindFirstChild("Walkspeed").Value + extrawalkspeedunits
 		end
 	end)
 end
