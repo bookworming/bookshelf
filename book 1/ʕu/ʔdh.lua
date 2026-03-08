@@ -70,15 +70,15 @@ local expressions = {
 
 	-- SC-003 poppy
 	poppy = {
-		neutral = "rbxassetid://74561869633563", -- / very generic smile
-		ticked = "rbxassetid://106064710379998", -- / holding baaaaack
+		neutral = "rbxassetid://124782910093157", -- / very generic smile
+		ticked = "rbxassetid://127374870229993", -- / holding baaaaack
 		annoyed = "rbxassetid://", -- / i think this is only gonna be used in convos between her and shrimpo lol
-		disgusted = "rbxassetid://134990933795270", -- / shocked (worried) / kind of like a "ouch, you okay there?" type thing
+		disgusted = "rbxassetid://87335406126397", -- / shocked (worried) / kind of like a "ouch, you okay there?" type thing
 		proud = "rbxassetid://", -- / ecstatic / overconfident
-		nervous = "rbxassetid://96496189427666", -- / worried (confusion)
-		sad = "rbxassetid://120357752673122", -- / kinda like worried but more sadder?? idk
-		happy = "rbxassetid://85470713595617", -- / fucking overjoyed
-		shoutingmad = "rbxassetid://116439611895973", -- / tense like SC-004 boxten
+		nervous = "rbxassetid://80527935522340", -- / worried (confusion)
+		sad = "rbxassetid://98027191388873", -- / kinda like worried but more sadder?? idk
+		happy = "rbxassetid://121996295770179", -- / fucking overjoyed
+		shoutingmad = "rbxassetid://", -- / tense like SC-004 boxten
 		shoutinghappy = "rbxassetid://", -- / decibel battle
 	},
 
