@@ -42,84 +42,60 @@ local sgui = env.essentials.sgui
 local expressions = {
 	-- BSGUI boxten
 	boxten = {
-		neutral = "rbxassetid://122111994185494", -- / uninterested / resting
-		ticked = "rbxassetid://119698259738476", -- / disgusted / shocked (disgusted)
-		annoyed = "rbxassetid://87876871905320", -- / pissed
-		disgusted = "rbxassetid://117471778623435", -- / holding back
-		proud = "rbxassetid://121200224630300", -- / overconfident / somewhat ragebaitish / sarcastic?
-		nervous = "placeholder", -- / unreadable / apathetic / somewhat uninterested
-		sad = "placeholder", -- / sarcastic, a bit of a "boo hoo" type thing
-		happy = "placeholder", -- / unreadable / slightly happy. the smile is still there.
+		neutral = "rbxassetid://84035803228594", -- / normal talk
+		ticked = "rbxassetid://131112088037326", -- / disgusted / shocked (disgusted)
+		annoyed = "rbxassetid://", -- / rolling eyes??? idk
+		disgusted = "rbxassetid://100379292747697", -- / mortified
+		proud = "rbxassetid://110590218929017", -- / overconfident / somewhat ragebaitish / sarcastic?
+		nervous = "rbxassetid://70812761644079", -- / unreadable / apathetic / somewhat uninterested
+		sad = "rbxassetid://122856772877478", -- / confusion
+		happy = "rbxassetid://", -- / unreadable / slightly happy. the smile is still there.
 		shoutingmad = "rbxassetid://138041333635868", -- / rage / mega mega fucking fuming
-		shoutinghappy = "placeholder", -- / laughing / call or insult
+		shoutinghappy = "rbxassetid://", -- / laughing / call or insult
 	},
 
 	-- SC-004 boxten
 	altboxten = {
-		neutral = "rbxassetid://104366477729543", -- / sad / nervous looking / resting
-		ticked = "rbxassetid://95507962845165", -- / shocked (disgusted) / bit of the "SSSHHHH... OOOHH..." you say while trying to suppress the pain of your toe after stubbing it 
-		annoyed = "placeholder", -- / uninterested / sad
-		disgusted = "placeholder", -- / holding back / still sad lol
-		proud = "rbxassetid://108675658414571", -- / happy / ^_^ type thing
-		nervous = "rbxassetid://123129368409117", -- / come on. do i need to explain?
-		sad = "placeholder", -- / looking down (emotionally and literally)
-		happy = "rbxassetid://104366477729543", -- / happy (nervosity)
-		shoutingmad = "rbxassetid://120792697294977", -- / tense
-		shoutinghappy = "placeholder", -- / ^ᗜ^
+		neutral = "rbxassetid://79190540090719", -- / normal talk
+		ticked = "rbxassetid://", -- / shocked (disgusted) / bit of the "SSSHHHH... OOOHH..." you say while trying to suppress the pain of your toe after stubbing it 
+		annoyed = "rbxassetid://126613834159859", -- / uninterested / sad
+		disgusted = "rbxassetid://97328849985318", -- / holding back / still sad lol
+		proud = "rbxassetid://103507071110207", -- / happy / ^_^ type thing
+		nervous = "rbxassetid://123641174141673", -- / come on. do i need to explain?
+		sad = "rbxassetid://95798485739088", -- / looking down (emotionally and literally)
+		happy = "rbxassetid://70780977669750", -- / happy (nervosity)
+		shoutingmad = "rbxassetid://132284961811206", -- / tense
+		shoutinghappy = "rbxassetid://", -- / ^ᗜ^
 	},
 
 	-- SC-003 poppy
 	poppy = {
-		neutral = "rbxassetid://104725304950571", -- / very generic smile
-		ticked = "rbxassetid://71699034161008", -- / shocked (worried) / kind of like a "ouch, you okay there?" type thing
-		annoyed = "placeholder", -- / i think this is only gonna be used in convos between her and shrimpo lol
-		disgusted = "placeholder", -- / holding baaaaack
-		proud = "placeholder", -- / ecstatic / overconfident
-		nervous = "rbxassetid://106522771451375", -- / worried
-		sad = "placeholder", -- / kinda like worried but more sadder?? idk
-		happy = "rbxassetid://104725304950571", -- / fucking overjoyed
-		shoutingmad = "placeholder", -- / tense like SC-004 boxten
-		shoutinghappy = "placeholder", -- / decibel battle
+		neutral = "rbxassetid://74561869633563", -- / very generic smile
+		ticked = "rbxassetid://106064710379998", -- / holding baaaaack
+		annoyed = "rbxassetid://", -- / i think this is only gonna be used in convos between her and shrimpo lol
+		disgusted = "rbxassetid://134990933795270", -- / shocked (worried) / kind of like a "ouch, you okay there?" type thing
+		proud = "rbxassetid://", -- / ecstatic / overconfident
+		nervous = "rbxassetid://96496189427666", -- / worried (confusion)
+		sad = "rbxassetid://120357752673122", -- / kinda like worried but more sadder?? idk
+		happy = "rbxassetid://85470713595617", -- / fucking overjoyed
+		shoutingmad = "rbxassetid://116439611895973", -- / tense like SC-004 boxten
+		shoutinghappy = "rbxassetid://", -- / decibel battle
 	},
 
 	-- SC-001 shrimpo
 	shrimpo = {
-		neutral = "rbxassetid://98476525830185", -- / smiling
-		ticked = "rbxassetid://71382889666653", -- / shocked (annoyed)
-		annoyed = "rbxassetid://105837335646604", -- / do your best "UGHHH" look and then envision it
-		disgusted = "placeholder", -- / "EEEWWWW!!!"
-		proud = "rbxassetid://87338047321463", -- / overproud / overconfident
-		nervous = "placeholder", -- / probably gonna get used when BSGUI boxten tells him to kiss him out of nowhere
-		sad = "placeholder", -- / sarcastic obviously this bitch is always angry
-		happy = "placeholder", -- / overconfident and crossing their arms
-		shoutingmad = "rbxassetid://71382889666653", -- / drunk dad yelling at their son
-		shoutinghappy = "placeholder", -- / when the ragebait is successful
+		neutral = "rbxassetid://132615768165979", -- / mad
+		ticked = "rbxassetid://136295442081209", -- / shocked (annoyed) / confusion
+		annoyed = "rbxassetid://132565367392897", -- / do your best "UGHHH" look and then envision it
+		disgusted = "rbxassetid://76413297258367", -- / "EEEWWWW!!!"
+		proud = "rbxassetid://128941780226837", -- / overproud / overconfident
+		nervous = "rbxassetid://", -- / probably gonna get used when BSGUI boxten tells him to kiss him out of nowhere
+		sad = "rbxassetid://123909254092968", -- / scoffing
+		happy = "rbxassetid://100670480476033", -- / overconfident and crossing their arms
+		shoutingmad = "rbxassetid://77502274576295", -- / like always
+		shoutinghappy = "rbxassetid://", -- / when the ragebait is successful
 	}
 }
-
---[[---------------------------------------------------------------------------------------------------------------------------
-
-   the & is used to determine whether the word behind it should use "'s" or "s", or transforms "a" to an "an" depending on the word in front of it
-
-   {player} = indicates the player, will appear as their selected Toon's name
-   {twisted} = indicates the Twisted, will appear as "Twisted [name]"
-   {item} = indicates the item
-   {direction} = indicates the direction of an object, will show up as "to the [direction]" or "further [direction]"
-   {machinesleft} = indicates the amount of machines left to complete
-   {health} = indicates the user's current health
-   {heal} = like {item}, but just indicates a bandage or a health kit on the floor or in the user's inventory
-   {time} = indicates the time it took for the last floor to end, will appear in the "00m00s" format
-   {randitem} = picks out a random item from one of the three slots for sale in Dandy's Shop
-   {item1, 2, 3} = indicates the target slot of the item being sold in Dandy's Shop
-
-   {prefix} = indicates the command prefix
-   {command} = indicates the command
-   {commanddesc} = indicates the command's description
-   {randalias} = picks a random alias of the command if it has one
-   {input} = indicates the command bar's current input
-
-   {configname} = indicates the inputted text in the config name field
-   {totalconfigs} = indicates the total number of configs saved
 
 ---------------------------------------------------------------------------------------------------------------------------]]--
 
@@ -176,7 +152,7 @@ local function newdialogue(text, whosaidit, expression)
 	if type(expression) ~= "string" then
 		expression = "neutral"
 	end
-	
+
 	local nameText = ""
 	text = text or ""
 	expression = expression or "neutral"
