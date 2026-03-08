@@ -1150,7 +1150,7 @@ local function autofarm(state)
 
 		env.stuf.afe.tploopthread = spwn(function()
 			while env.stuf.afe.running do
-				if not tplooppause or env.stuf.actionqueuerunning then
+				if not tplooppause or env.stuf.actionqueuerunning or env.funcs.getgamestat("panicmode") then
 					env.funcs.tomachine("tp")
 				end
 				t(3)
