@@ -238,7 +238,7 @@ function env.funcs.tomachine(method)
 	else
 		env.funcs.pop("No available generators found!")
 		if env.stuf.afe.running then
-			env.funcs.toelevator(2, "tp")
+			toelevator(2, "tp")
 		end
 	end
 end
