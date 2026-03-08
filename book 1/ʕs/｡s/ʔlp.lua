@@ -975,7 +975,7 @@ local function antigrab(state)
 	if state then
 		if antigrabconn then return end
 		antigrabconn = rst.StoryEvents.Spotted.OnClientEvent:Connect(function()
-			for _, twisted in env.stuf.twisteds do
+			for _, twisted in ipairs(env.stuf.twisteds:GetChildren()) do
 				if twisted.Name:find("Goob") or twisted.Name:find("Gigi") or twisted.Name:find("Scraps") then
 					if env.funcs.getstats("twisted", twisted).chasing == env.stuf.user then
 						local now = os.clock()
