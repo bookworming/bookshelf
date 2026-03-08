@@ -880,7 +880,7 @@ local bassieboneconn = nil
 
 local function fireprompts()
 	t()
-	for _, item in env.stuf.items do
+	for _, item in ipairs(env.stuf.items:GetChildren()) do
 		fireproximityprompt(item.Prompt:FindFirstChildOfClass("ProximityPrompt"))
 	end
 end
