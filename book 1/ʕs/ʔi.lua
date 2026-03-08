@@ -1203,7 +1203,11 @@ do
 				local slotvalue = env.funcs.getstats("player", env.stuf.char)[slotn:lower()]
 				
 				if slotvalue ~= "None" then
-					rst.Events.ItemEvent:InvokeServer(env.stuf.char, slotn)
+					local args = {
+						env.stuf.char,
+						game:GetService("Players").LocalPlayer.Character:WaitForChild("Inventory"):WaitForChild(slotn)
+					}
+					rst.Events.ItemEvent:InvokeServer(unpack(args))
 					
 					if breakifoneused then
 						local newslotvalue = env.funcs.getstats("player", env.stuf.char)[slotn:lower()]
@@ -1214,7 +1218,11 @@ do
 				end
 			end
 		else
-			rst.Events.ItemEvent:InvokeServer(env.stuf.char, slot)
+			local args = {
+				env.stuf.char,
+				game:GetService("Players").LocalPlayer.Character:WaitForChild("Inventory"):WaitForChild("Slot" .. slot)
+			}
+			rst.Events.ItemEvent:InvokeServer(unpack(args))
 		end
 	end
 
