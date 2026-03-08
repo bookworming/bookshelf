@@ -1109,7 +1109,7 @@ local function autofarm(state)
 
 		local spottedconn = rst.StoryEvents.Spotted.OnClientEvent:Connect(function()
 			if env.stuf.actionqueuerunning then return end
-			env.funcs.toelevator(2, "tp") t(2)
+			toelevator(true, "tp") t(2)
 			env.funcs.tomachine("tp")
 
 			task.delay(2, function()
