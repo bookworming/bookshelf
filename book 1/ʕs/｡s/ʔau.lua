@@ -1268,7 +1268,9 @@ env.stuf.afe = {
 		"Auto pick up all extraction items", 
 		"Auto encounter Twisteds",
 		"Auto buy items"
-	}
+	},
+	
+	conns = {}
 }
 
 local function autofarm(state)
@@ -1296,6 +1298,15 @@ local function autofarm(state)
 		env.essentials.library.update("Perform actions trigger", env.stuf.afe.actiontrigger)
 		t(0.1)
 		env.funcs.tomachine("tp")
+		
+		local conn = rst.StoryEvents.Spotted.OnClientEvent:Connect(function()
+			task.delay(2, function()
+				if not env.funcs.getstats("player", env.stuf.char).extracting then
+					t(5)
+					env.funcs.tomachine("tp")
+				end
+			end)
+		end)
 	else
 		
 	end
