@@ -204,7 +204,7 @@ function env.funcs.tomachine(method)
 							cantgothere = true
 							break
 						end
-					elseif dist <= 50 then
+					elseif dist <= 10 then
 						cantgothere = true
 						break
 					end
