@@ -1281,7 +1281,7 @@ local function autofarm(state)
 		env.essentials.library.update("Auto teleport to elevator condition", {"Instant"})
 		
 		env.essentials.library.update("Auto teleport to machine", true)
-		env.essentials.library.update("Auto teleport to machine condition", {"Extraction end", "Map fully loaded"})
+		env.essentials.library.update("Auto teleport to machine condition", {"Extraction start", "Map fully loaded"})
 		
 		env.essentials.library.update("Instant calibration success", true)
 		env.essentials.library.update("Auto escape Squirm", true)
@@ -1300,6 +1300,8 @@ local function autofarm(state)
 		env.funcs.tomachine("tp")
 		
 		local conn = rst.StoryEvents.Spotted.OnClientEvent:Connect(function()
+			env.funcs.tomachine("tp")
+			
 			task.delay(2, function()
 				if not env.funcs.getstats("player", env.stuf.char).extracting then
 					t(5)
