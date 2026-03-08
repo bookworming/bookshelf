@@ -29,6 +29,7 @@ local rs = FindFirstChildOfClass(game, "RunService")
 local plrs = FindFirstChildOfClass(game, "Players")
 
 local firetouchinterest = (syn and syn.firetouchinterest) or firetouchinterest
+local fireproximityprompt = (syn and syn.fireproximityprompt) or fireproximityprompt
 local getgenv = getgenv() or _G
 local req = (syn and syn.request) or (http and http.request) or request
 local clipboard = setclipboard or toclipboard or set_clipboard or (Clipboard and Clipboard.set)
