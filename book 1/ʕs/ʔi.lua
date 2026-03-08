@@ -1540,7 +1540,9 @@ do
 			local animator = env.stuf.hum:FindFirstChildOfClass("Animator")
 
 			if not env.stuf.handshaker.tracks.check then
-				env.stuf.handshaker.tracks.check = animator:LoadAnimation(env.stuf.handshaker.animations.check)
+				if animator then
+					env.stuf.handshaker.tracks.check = animator:LoadAnimation(env.stuf.handshaker.animations.check)
+				end
 			end
 
 			if animator and env.stuf.handshaker.tracks.check then
