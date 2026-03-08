@@ -689,7 +689,7 @@ local autouseitemcats = {
 local function getitemslot(stats, itemname)
 	for i = 1, 4 do
 		if stats["slot" .. i] == itemname then
-			return "Slot" .. i
+			return i
 		end
 	end
 end
@@ -781,8 +781,7 @@ local function autouseitems(state)
 				return
 			end
 		end
-	end)
-	)
+	end))
 end
 
 -------------------------------------------------------------------------------------------------------------------------------
@@ -982,8 +981,8 @@ env.stuf.afe = {
 	maxitemcap = 2,
 	itemmaxdist = 0,
 	machmaxdist = 0,
-	preset = "Default",
-	actiontrigger = "Map fully loaded",
+	preset = {"Default"},
+	actiontrigger = {"Map fully loaded"},
 	actions = {
 		"Auto pick up all items", 
 		"Auto pick up all event items", 
@@ -995,6 +994,19 @@ env.stuf.afe = {
 		"Auto buy items"
 	}
 }
+
+local function autofarm(state)
+	env.stuf.afe.running = state
+	
+	if state then
+		env.essentials.library.update("Auto teleport to elevator", true)
+		env.essentials.library.update("Auto teleport to elevator condition", {"Instant"})
+		env.essentials.library.update("Auto teleport to machine", true)
+		env.essentials.library.update("Auto teleport to machine condition", {"Extraction end", "Map fully loaded"})
+	else
+		
+	end
+end
 
 -------------------------------------------------------------------------------------------------------------------------------
 
