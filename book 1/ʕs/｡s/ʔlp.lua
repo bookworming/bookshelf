@@ -25,7 +25,7 @@ local ws = FindFirstChildOfClass(game, "Workspace")
 local uis = FindFirstChildOfClass(game, "UserInputService")
 local rst = FindFirstChildOfClass(game, "ReplicatedStorage")
 local rs = FindFirstChildOfClass(game, "RunService")
-local vim = FindFirstChildOfClass(game, "VirtualInputManager")
+local vim = game:GetService("VirtualInputManager") -- cant use findfirstchildofclass for this one
 local plrs = FindFirstChildOfClass(game, "Players")
 
 local getgenv = getgenv() or _G
