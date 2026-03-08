@@ -1700,7 +1700,7 @@ local function machineaura(state)
 						end
 					end
 
-					fireproximityprompt(machine:FindFirstChild("Prompt"):FindFirstChild("Attachment"):FindFirstChild("ProximityPrompt"))
+					fireproximityprompt(machstats.prox)
 				end
 			end
 			t()
