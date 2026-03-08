@@ -10,15 +10,13 @@ local ts = game:GetService("TweenService")
 local root = game:GetService("Players").LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
 local transitiongui, loadingscreen
 
-local tweendown = ts:Create(loadingscreen, TweenInfo.new(0.75, Enum.EasingStyle.Quad, Enum.EasingDirection.In, 0, false), {Position = UDim2.new(0, 0, 0.1, 0)})
-local tweenup = ts:Create(loadingscreen, TweenInfo.new(1, Enum.EasingStyle.Quad, Enum.EasingDirection.In, 0, false), {Position = UDim2.new(0, 0, -1, 0)})
-
 if not getgenv().nointro then
+	local tweendown = ts:Create(loadingscreen, TweenInfo.new(0.75, Enum.EasingStyle.Quad, Enum.EasingDirection.In, 0, false), {Position = UDim2.new(0, 0, 0.1, 0)})
+	
 	transitiongui = game:GetService("Players").LocalPlayer.PlayerGui:WaitForChild("Transition")
 	loadingscreen = transitiongui.LoadingScreen
 
 	l.ClockTime = 0
-
 	loadingscreen.Visible = true
 
 	tweendown:Play()
@@ -2369,6 +2367,8 @@ end
 
 task.delay(1, function()
 	if not getgenv().nointro then
+		local tweenup = ts:Create(loadingscreen, TweenInfo.new(1, Enum.EasingStyle.Quad, Enum.EasingDirection.In, 0, false), {Position = UDim2.new(0, 0, -1, 0)})
+	
 		root.Anchored = false
 		root:PivotTo(CFrame.new(4479, 1318, -152))
 		root.Anchored = true
