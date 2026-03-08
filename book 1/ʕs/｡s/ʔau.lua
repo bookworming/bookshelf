@@ -1093,6 +1093,10 @@ local section = {
 
 		callback = function(selected)
 			autoteleporttoelevatorconditions = selected
+			if autoteleportingtoelevator then
+				autoteleporttoelevator(false)
+				autoteleporttoelevator(true)
+			end
 		end
 	},
 	{ type = "toggle", title = "Auto teleport to machine", desc = "Automatically teleports you to a random machine.",
@@ -1118,6 +1122,10 @@ local section = {
 
 		callback = function(selected) 
 			autoteleporttomachineconditions = selected
+			if autoteleportingtomachine then
+				autoteleporttomachine(false)
+				autoteleporttomachine(true)
+			end
 		end 
 	},
 
@@ -1253,6 +1261,10 @@ local section = {
 		
 		callback = function(selected)
 			autouseitemsbehavior = selected
+			if autousingitems then
+				autouseitems(false)
+				autouseitems(true)
+			end
 		end
 	},
 	{ type = "dropdown", title = "Auto use items blacklist", desc = "Blacklists the selected items from being used automatically.", 
@@ -1314,6 +1326,10 @@ local section = {
 	{ type = "slider", title = "Auto Bassie Bone delay", desc = "Sets the delay for the auto Bassie Bone (In milliseconds).", min = 5, max = 500, default = 30, step = 5,
 		callback = function(value)
 			bassiebonedelay = value
+			if bassieboneenabled then
+				autobassiebone(false)
+				autobassiebone(true)
+			end
 		end
 	},
 	{ type = "button", title = "Manual Bassie Bone", desc = "Uses Bassie's ability to drop an item, and then picks it back up.",
