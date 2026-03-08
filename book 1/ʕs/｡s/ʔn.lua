@@ -230,7 +230,7 @@ function env.funcs.tomachine(method)
 		
 		if env.stuf.afe.running then
 			t(0.1)
-			fireproximityprompt(env.funcs.getstats("machine", good[1]).prox)
+			fireproximityprompt(env.funcs.getstats("machine", good[1].model).prox)
 		end
 	else
 		env.funcs.pop("No available generators found!")
