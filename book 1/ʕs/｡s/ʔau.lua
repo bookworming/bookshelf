@@ -1121,7 +1121,8 @@ env.stuf.afe = {
 		"Auto buy items"
 	},
 
-	conns = {}
+	conns = {},
+	tploopthread = nil
 }
 
 local function autofarm(state)
@@ -1130,18 +1131,13 @@ local function autofarm(state)
 	if state then
 		env.essentials.library.update("Auto teleport to elevator", true)
 		env.essentials.library.update("Auto teleport to elevator condition", {"Instant"})
-
 		env.essentials.library.update("Auto teleport to machine", true)
 		env.essentials.library.update("Auto teleport to machine condition", {"Extraction start", "Map fully loaded"})
-
 		env.essentials.library.update("Instant calibration success", true)
 		env.essentials.library.update("Auto escape Squirm", true)
 		env.essentials.library.update("Auto vote best card", true)
-		env.essentials.library.update("Auto vote best card", true)
-
 		env.essentials.library.update("Auto use items", true)
 		env.essentials.library.update("Auto use items behavior", {"When necessary"})
-
 		env.essentials.library.update("Auto pick up all Research Capsules", true)
 		env.essentials.library.update("Auto pick up all Tapes", true)
 		env.essentials.library.update("Auto pick up all heals", true)
@@ -1149,22 +1145,35 @@ local function autofarm(state)
 		env.essentials.library.update("Auto encounter Twisteds", true)
 		env.essentials.library.update("Perform actions trigger", env.stuf.afe.actiontrigger)
 		t(0.1)
-		env.funcs.tomachine("tp")
+
+		local tplooppause = false
+
+		env.stuf.afe.tploopthread = spwn(function()
+			while env.stuf.afe.running do
+				if not tplooppause then
+					env.funcs.tomachine("tp")
+				end
+				t(3)
+			end
+		end)
 
 		local spottedconn = rst.StoryEvents.Spotted.OnClientEvent:Connect(function()
 			if env.stuf.actionqueuerunning then return end
-			toelevator(true, "tp") t(2)
+			tplooppause = true
+			toelevator(true, "tp")
+			t(2)
 			env.funcs.tomachine("tp")
-
 			task.delay(2, function()
 				if not env.funcs.getstats("player", env.stuf.char).extracting then
 					t(5)
 					env.funcs.tomachine("tp")
 				end
 			end)
+			t(3)
+			tplooppause = false
 		end)
 		table.insert(env.stuf.afe.conns, spottedconn)
-		
+
 		local stoppedextractingconn = env.stuf.char.Decoding.Changed:Connect(function(val)
 			if not val then
 				t(0.5)
@@ -1177,11 +1186,16 @@ local function autofarm(state)
 			end
 		end)
 		table.insert(env.stuf.afe.conns, stoppedextractingconn)
+
 	else
+		if env.stuf.afe.tploopthread then
+			task.cancel(env.stuf.afe.tploopthread)
+			env.stuf.afe.tploopthread = nil
+		end
 		for _, conn in ipairs(env.stuf.afe.conns) do
 			conn:Disconnect()
-			conn = nil
 		end
+		env.stuf.afe.conns = {}
 	end
 end
 
