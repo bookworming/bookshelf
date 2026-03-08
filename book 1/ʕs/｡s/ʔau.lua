@@ -724,6 +724,7 @@ local function tryuseitem(stats)
 end
 
 local function onInventoryChanged()
+	t(0.1)
 	if not autousingitems then return end
 	local stats = env.funcs.getstats("player", env.stuf.char)
 	if not stats then return end
