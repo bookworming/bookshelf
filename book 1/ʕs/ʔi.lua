@@ -1009,7 +1009,7 @@ do
 			}
 
 		elseif type == "item" then
-			local prompt = obj:WaitForChild("Prompt")
+			local prompt = obj:FindFirstChild("Prompt")
 			local act = prompt and prompt:FindFirstChildOfClass("ProximityPrompt")
 
 			local research
