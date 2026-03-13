@@ -43,11 +43,7 @@ return {
 		"Vee", 
 		"Yatta"
 	},
-	unoptimized = { 
-		"Brightney",
-		"Goob", 
-		"Scraps",
-	},
+	unoptimized = {},
 	animations = {
 		Astro = {
 			old_idle = "rbxassetid://17477484184",
