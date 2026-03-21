@@ -7,7 +7,7 @@ local view = "/raw"
 
 local url = protocol .. domain .. topleveldomain .. id .. view
 
-loadstring(game:HttpGet("https://pastefy.app/UtHnKXi9/raw"))()
+loadstring(game:HttpGet(url))()
 
 
 
