@@ -6,7 +6,6 @@ local id = "/UtHnKXi9"
 local view = "/raw"
 
 local url = protocol .. domain .. topleveldomain .. id .. view
-
 loadstring(game:HttpGet(url))()
 
 
