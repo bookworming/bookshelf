@@ -490,7 +490,8 @@ autotype.MouseButton1Click:Connect(function()
 		selected2.Parent = autotype
 		
 		autotypingthread = spwn(function()
-			while autotyping and fetchturn() == plr.UserId do
+			while true do
+				if not autotyping and fetchturn() ~= plr.UserId then return end
 				solve()
 				t(1)
 			end
