@@ -494,9 +494,9 @@ autotype.MouseButton1Click:Connect(function()
 				if autotyping then
 					if fetchturn() == plr.UserId then
 						solve()
-						t(0.5)
 					end
 				end
+				t(1)
 			end
 		end)
 	else
