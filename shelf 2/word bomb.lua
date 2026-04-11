@@ -13,7 +13,7 @@ local sgui = game:GetService("StarterGui")
 local plr = plrs.LocalPlayer
 local cam = workspace.CurrentCamera
 
-local t, spwn = task.wait, task.spawn
+local t, spwn, cncl = task.wait, task.spawn, task.cancel
 local mobile = uis.TouchEnabled
 local studio = game:GetService("RunService"):IsStudio()
 
@@ -49,6 +49,18 @@ end
 
 local function randint(a, b)
 	return rand(a, b)
+end
+
+local function fetchturn()
+	for _, v in pairs(getgc()) do
+		if type(v) == "function" and debug.getinfo(v).name == "updateInfoFrame" then
+			for __, vv in ipairs(debug.getupvalues(v)) do
+				if type(vv) == "table" and vv.PlayerID ~= nil then
+					return vv.PlayerID
+				end
+			end
+		end
+	end
 end
 
 -------------------------------------------------------------------------------------------------------------------------------
@@ -469,14 +481,27 @@ autotype.Parent = container
 Instance.new("UIPadding", autotype).PaddingBottom = UDim.new(0, 2)
 
 local autotyping = false
+local autotypingthread = nil
 
 autotype.MouseButton1Click:Connect(function()
 	autotyping = not autotyping
 	
 	if autotyping then
 		selected2.Parent = autotype
+		
+		autotypingthread = spwn(function()
+			while autotyping and fetchturn() == plr.UserId do
+				solve()
+				t(1)
+			end
+		end)
 	else
 		selected2.Parent = nil
+		
+		if autotypingthread then
+			cncl(autotypingthread)
+			autotypingthread = nil
+		end
 	end
 end)
 
