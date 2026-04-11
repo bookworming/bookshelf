@@ -493,7 +493,7 @@ autotype.MouseButton1Click:Connect(function()
 			while true do
 				if not autotyping and fetchturn() ~= plr.UserId then return end
 				solve()
-				t(1)
+				t(0.5)
 			end
 		end)
 	else
