@@ -4,21 +4,29 @@ if not game:IsLoaded() then game.Loaded:Wait() end
 
 -------------------------------------------------------------------------------------------------------------------------------
 
-local plr = game:GetService("Players")
+local plrs = game:GetService("Players")
+local uis = game:GetService("UserInputService")
+local ts = game:GetService("TweenService")
+local sgui = game:GetService("StarterGui")
 local rs = game:GetService("RunService")
-local lp = plr.LocalPlayer
+
+local plr = plrs.LocalPlayer
 local cam = workspace.CurrentCamera
-local ui = game:GetService("UserInputService")
-local mob = ui.TouchEnabled
-local test = false
+
+local mobile = uis.TouchEnabled
+
+local blacklistrayfilter = Enum.RaycastFilterType.Blacklist
+local targetui = (studio and plr.PlayerGui) or gethui() or game:GetService("CoreGui")
 
 -------------------------------------------------------------------------------------------------------------------------------
 
-local sg = Instance.new("ScreenGui")
-sg.ResetOnSpawn = false
-sg.Parent = gethui() or game:GetService("CoreGui")
-if sg.Parent:FindFirstChild("Stupid Rushed Script") then sg.Parent:FindFirstChild("Stupid Rushed Script"):Destroy() end
-sg.Name = "Stupid Rushed Script"
+local exists = targetui:FindFirstChild("arsenal")
+if exists then exists:Destroy() end 
+
+local gui = Instance.new("ScreenGui")
+gui.Name = "arsenal"
+gui.ResetOnSpawn = false
+gui.Parent = targetui
 
 -------------------------------------------------------------------------------------------------------------------------------
 
@@ -30,10 +38,10 @@ local function mcirc()
 
 	circ = Instance.new("Frame")
 	circ.AnchorPoint = Vector2.new(0.5, 0.5)
-	circ.Size = mob and UDim2.new(0, 221, 0, 221) or UDim2.new(0, 421, 0, 421)
+	circ.Size = mobile and UDim2.new(0, 221, 0, 221) or UDim2.new(0, 421, 0, 421)
 	circ.BackgroundTransparency = 1
 	circ.ZIndex = 10
-	circ.Parent = sg
+	circ.Parent = targetui
 
 	local cs = circ.AbsoluteSize
 
@@ -78,7 +86,7 @@ local hon = false
 local tc = true
 
 local function gettgt()
-	local c = lp.Character
+	local c = plr.Character
 	if not c or not c:FindFirstChild("HumanoidRootPart") then 
 		lt = nil
 		return nil 
@@ -93,8 +101,8 @@ local function gettgt()
 		local rd = tp.Position - ro
 
 		local rp = RaycastParams.new()
-		rp.FilterDescendantsInstances = {lp.Character, cam, ch}
-		rp.FilterType = Enum.RaycastFilterType.Blacklist
+		rp.FilterDescendantsInstances = {plr.Character, cam, ch}
+		rp.FilterType = blacklistrayfilter
 		rp.IgnoreWater = true
 
 		local rr = workspace:Raycast(ro, rd, rp)
@@ -109,7 +117,7 @@ local function gettgt()
 					if remainDist > 1 then
 						local newOrigin = rr.Position + (rd.Unit * 0.05)
 						local newDir = tp.Position - newOrigin
-						rp.FilterDescendantsInstances = {lp.Character, cam, ch, hitPart}
+						rp.FilterDescendantsInstances = {plr.Character, cam, ch, hitPart}
 						local rr2 = workspace:Raycast(newOrigin, newDir, rp)
 						if rr2 then
 							local hp2 = rr2.Instance
@@ -151,17 +159,17 @@ local function gettgt()
 	local cd = math.huge
 
 	for _, p in ipairs(plr:GetPlayers()) do
-		if p == lp then continue end
+		if p == plr then continue end
 
 		local ch = p.Character
 		if not ch then continue end
 
 		local h = ch:FindFirstChildOfClass("Humanoid")
 		local hrp = ch:FindFirstChild("HumanoidRootPart") or ch:FindFirstChild("UpperTorso")
-		local hd = ch:FindFirstChild("Head")
+		local hd = ch:FindFirstChild("HumanoidRootPart")
 
 		if not h or h.Health <= 0 or not hrp then continue end
-		if tc and p.Team and p.Team == lp.Team then continue end
+		if tc and p.Team and p.Team == plr.Team then continue end
 		if ch:FindFirstChildOfClass("ForceField") then continue end
 
 		local d = (hrp.Position - mp).Magnitude
@@ -224,7 +232,7 @@ local et = {}
 local ee = false
 
 local function mbox(p)
-	if p == lp then return end
+	if p == plr then return end
 
 	local c = p.Character
 	if not c then return end
@@ -237,7 +245,7 @@ local function mbox(p)
 	sg.ResetOnSpawn = false
 	sg.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 	sg.IgnoreGuiInset = true
-	sg.Parent = gethui() or game:GetService("CoreGui")
+	sg.Parent = targetui
 
 	local bf = Instance.new("Frame")
 	bf.BackgroundTransparency = 1
@@ -273,7 +281,7 @@ local function resp(p)
 end
 
 local function uesp(p)
-	if not ee or p == lp then return end
+	if not ee or p == plr then return end
 
 	local d = et[p]
 	if not d then return end
@@ -338,7 +346,7 @@ end
 
 local function ue()
 	for _, p in ipairs(plr:GetPlayers()) do
-		if p ~= lp then
+		if p ~= plr then
 			if ee then
 				if not et[p] then
 					mbox(p)
@@ -359,14 +367,14 @@ local function tes(s)
 		end
 	else
 		for _, p in ipairs(plr:GetPlayers()) do
-			if p ~= lp and p.Character then
+			if p ~= plr and p.Character then
 				mbox(p)
 			end
 		end
 	end
 end
 
-plr.PlayerAdded:Connect(function(p)
+plrs.PlayerAdded:Connect(function(p)
 	p.CharacterAdded:Connect(function()
 		if ee then
 			mbox(p)
@@ -374,162 +382,195 @@ plr.PlayerAdded:Connect(function(p)
 	end)
 end)
 
-plr.PlayerRemoving:Connect(resp)
+plrs.PlayerRemoving:Connect(resp)
 rs.RenderStepped:Connect(ue)
 
 -------------------------------------------------------------------------------------------------------------------------------
 
-local ts
+local mainframe = Instance.new("Frame")
+mainframe.Size = UDim2.new(0, 200, 0, 98)
+mainframe.AnchorPoint = Vector2.new(0.5, 0.5)
+mainframe.Position = UDim2.new(0.5, 0, -1, 0)
+mainframe.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+mainframe.BackgroundTransparency = 1
+mainframe.BorderSizePixel = 0
+mainframe.Draggable = true
+mainframe.Active = true
+mainframe.Parent = gui
 
-local function ptst()
-	local a = "https://files.catbox.moe/jt5t6y.mp3"
-	local b = "Bomber (Slowed).mp3"
-	local c, fd = pcall(readfile, b)
-
-	if not c then
-		local ac = game:HttpGet(a)
-		writefile(b, ac)
-	end
-
-	if not ts then
-		ts = Instance.new("Sound")
-		ts.SoundId = getcustomasset(b)
-		ts.Volume = 1
-		ts.Parent = workspace
-		ts:Play()
-		ts.Looped = true
-	end
-end
-
-function stst()
-	if ts then ts:Destroy() ts = nil end
-end
+ts:Create(mainframe, TweenInfo.new(0.6, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {Position = UDim2.fromOffset(cam.ViewportSize.X / 2, cam.ViewportSize.Y / 2 - 71)}):Play()
 
 -------------------------------------------------------------------------------------------------------------------------------
 
-function clk() 
-	task.spawn(function()
-		local s = Instance.new("Sound") 
-		s.SoundId = "rbxassetid://87152549167464"
-		s.Parent = workspace
-		s.Volume = 1.2 
-		s.TimePosition = 0.1 
-		s:Play() 
-	end)
-end
+local container = Instance.new("Frame")
+container.Size = UDim2.new(1, 0, 1, -34)
+container.Position = UDim2.new(0, 0, 0, 0)
+container.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+container.BackgroundTransparency = 0.6
+container.BorderSizePixel = 0
+container.Parent = mainframe
 
-local function rp(ui, r, c, tr, tc)
-	local bw = 90
-	local bh = 55
-	local sp = 10
+local title = Instance.new("TextLabel")
+title.Size = UDim2.new(1, 0, 1, -18)
+title.BackgroundTransparency = 1
+title.Text = "SRS: arsenal"
+title.Font = Enum.Font.SourceSansBold
+title.TextSize = 18
+title.TextColor3 = Color3.fromRGB(255, 255, 255)
+title.TextXAlignment = Enum.TextXAlignment.Center
+title.TextYAlignment = Enum.TextYAlignment.Center
+title.Parent = container
 
-	local tw = (bw * tc) + (sp * (tc - 1))
-	local th = (bh * tr) + (sp * (tr - 1))
-
-	local sw, sh = cam.ViewportSize.X, cam.ViewportSize.Y
-	local sx = (sw - tw) / 2
-	local sy = (sh - th) / 2 - 56
-
-	local x = sx + (c - 1) * (bw + sp)
-	local y = sy + (r - 1) * (bh + sp)
-
-	ui.Position = UDim2.new(0, x, 0, y)
-end
-
-local function mtg(kb, k, t, is, cb, r, c, tr, tc)
-	local tg = is or false
-
-	local btn = Instance.new("TextButton")
-	btn.Size = UDim2.new(0, 90, 0, 55)
-	btn.TextStrokeTransparency = 1
-	rp(btn, r, c, tr, tc)
-	btn.BackgroundTransparency = 0.3
-	btn.TextColor3 = Color3.fromRGB(255, 255, 255)
-	btn.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-	btn.Font = Enum.Font.Code
-	btn.BorderSizePixel = 0
-	btn.TextSize = 13
-	btn.TextXAlignment = Enum.TextXAlignment.Center
-	btn.TextYAlignment = Enum.TextYAlignment.Center
-	btn.Active = true
-	btn.Draggable = true
-	btn.TextWrapped = true
-	btn.Text = t
-	btn.Parent = sg
-
-	local strk = Instance.new("UIStroke")
-	strk.Thickness = 1
-	strk.Color = Color3.new(1, 1, 1)
-	strk.Parent = btn
-	strk.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-
-	local function uv()
-		if tg then
-			btn.TextColor3 = Color3.fromRGB(0, 255, 0)
-			strk.Color = Color3.fromRGB(0, 255, 0)
-		else
-			btn.TextColor3 = Color3.fromRGB(255, 255, 255)
-			strk.Color = Color3.fromRGB(255, 255, 255)
-		end
-	end
-
-	uv()
-
-	local function tbtn()
-		clk()
-		tg = not tg
-		uv()
-		if cb then cb(tg) end
-	end
-
-	btn.MouseButton1Click:Connect(tbtn)
-
-	if kb and k then
-		game["UserInputService"].InputBegan:Connect(function(i, gp)
-			if gp then return end
-			if i.UserInputType == Enum.UserInputType.Keyboard and i.KeyCode == Enum.KeyCode[k] then
-				tbtn()
-			end
-		end)
-	end
-
-	return btn
-end
+local desc = Instance.new("TextLabel")
+desc.Size = UDim2.new(1, 0, 1, 17)
+desc.Text = "made by ksu"
+desc.TextColor3 = Color3.fromRGB(255, 255, 255)
+desc.TextSize = 14
+desc.Font = Enum.Font.SourceSans
+desc.BackgroundTransparency = 1
+desc.BorderSizePixel = 0
+desc.TextXAlignment = Enum.TextXAlignment.Center
+desc.TextYAlignment = Enum.TextYAlignment.Center
+desc.Parent = container
 
 -------------------------------------------------------------------------------------------------------------------------------
 
-local btns = {
-	{kb = false, k = nil, typ = "tg", t = "Toggle Aim Circle", cb = function(s) if s then mcirc() else rcirc() end end},
-	{kb = true, k = "R", typ = "tg", t = "Toggle Camlock [R]", cb = function(s) tcl(s) end},
-	{kb = false, k = nil, typ = "tg", t = "Toggle ESP", cb = function(s) tes(s) end},
-	{kb = false, k = nil, typ = "tg", t = "Toggle No Team Check", cb = function(s) tc = not s end},
-}
+local selected = Instance.new("UIStroke")
+selected.Color = Color3.fromRGB(102, 141, 226)
+selected.Thickness = 5
+selected.BorderOffset = UDim.new(0, -5)
+selected.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+selected.LineJoinMode = Enum.LineJoinMode.Miter
 
-if test == true then
-	table.insert(btns, {kb = true, k = nil, typ = "tg", t = "Toggle Test", cb = function(s) if s then ptst() else stst() end end})
-end
+local selected2 = Instance.new("UIStroke")
+selected2.Color = Color3.fromRGB(102, 141, 226)
+selected2.Thickness = 5
+selected2.BorderOffset = UDim.new(0, -5)
+selected2.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+selected2.LineJoinMode = Enum.LineJoinMode.Miter
+
+local aimcircletgl = Instance.new("TextButton")
+aimcircletgl.Size = UDim2.new(0.5, -1, 0, 32)
+aimcircletgl.Position = UDim2.new(0, 0, 1, 2)
+aimcircletgl.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+aimcircletgl.BorderSizePixel = 0
+aimcircletgl.BackgroundTransparency = 0.6
+aimcircletgl.Text = "aim circle"
+aimcircletgl.Font = Enum.Font.SourceSansBold
+aimcircletgl.TextSize = 18
+aimcircletgl.TextColor3 = Color3.fromRGB(255, 255, 255)
+aimcircletgl.TextYAlignment = Enum.TextYAlignment.Center
+aimcircletgl.Parent = container
+Instance.new("UIPadding", aimcircletgl).PaddingBottom = UDim.new(0, 2)
+
+local aimcircletoggled = false
+
+aimcircletgl.MouseButton1Click:Connect(function()
+	selected.Parent = aimcircletgl
+	aimcircletoggled = not aimcircletoggled
+	
+	if aimcircletoggled then mcirc() else rcirc() end
+	
+	if not aimcircletoggled then
+		selected.Parent = nil
+	end
+end)
+
+local camlocktgl = Instance.new("TextButton")
+camlocktgl.Size = UDim2.new(0.5, -1, 0, 32)
+camlocktgl.Position = UDim2.new(0.5, 1, 1, 2)
+camlocktgl.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+camlocktgl.BorderSizePixel = 0
+camlocktgl.BackgroundTransparency = 0.6
+camlocktgl.Text = "camlock [R]"
+camlocktgl.Font = Enum.Font.SourceSansBold
+camlocktgl.TextSize = 18
+camlocktgl.TextColor3 = Color3.fromRGB(255, 255, 255)
+camlocktgl.TextYAlignment = Enum.TextYAlignment.Center
+camlocktgl.Parent = container
+Instance.new("UIPadding", camlocktgl).PaddingBottom = UDim.new(0, 2)
+
+local camlocktoggled = false
+
+camlocktgl.MouseButton1Click:Connect(function()
+	selected2.Parent = camlocktgl
+	camlocktoggled = not camlocktoggled
+	
+	tcl(camlocktoggled)
+	
+	if not camlocktoggled then
+		selected2.Parent = nil
+	end
+end)
 
 -------------------------------------------------------------------------------------------------------------------------------
 
-local mc = 5
-local mbpc = 8
-local tb = #btns
+local selected3 = Instance.new("UIStroke")
+selected3.Color = Color3.fromRGB(102, 141, 226)
+selected3.Thickness = 5
+selected3.BorderOffset = UDim.new(0, -5)
+selected3.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+selected3.LineJoinMode = Enum.LineJoinMode.Miter
 
-local cols = math.min(mbpc, math.ceil(tb / mc))
-local rows = math.ceil(tb / cols)
+local selected4 = Instance.new("UIStroke")
+selected4.Color = Color3.fromRGB(102, 141, 226)
+selected4.Thickness = 5
+selected4.BorderOffset = UDim.new(0, -5)
+selected4.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+selected4.LineJoinMode = Enum.LineJoinMode.Miter
 
-local bi = 1
-for col = 1, cols do
-	for row = 1, rows do
-		if bi > tb then break end
+local esptgl = Instance.new("TextButton")
+esptgl.Size = UDim2.new(0.5, -1, 0, 32)
+esptgl.Position = UDim2.new(0, 0, 1, 36)
+esptgl.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+esptgl.BorderSizePixel = 0
+esptgl.BackgroundTransparency = 0.6
+esptgl.Text = "esp"
+esptgl.Font = Enum.Font.SourceSansBold
+esptgl.TextSize = 18
+esptgl.TextColor3 = Color3.fromRGB(255, 255, 255)
+esptgl.TextYAlignment = Enum.TextYAlignment.Center
+esptgl.Parent = container
+Instance.new("UIPadding", esptgl).PaddingBottom = UDim.new(0, 2)
 
-		local bd = btns[bi]
-		if bd.typ == "tg" then
-			mtg(bd.kb, bd.k, bd.t, false, bd.cb, row, col, rows, cols)
-		end
+local esptoggled = false
 
-		bi = bi + 1
+esptgl.MouseButton1Click:Connect(function()
+	selected3.Parent = esptgl
+	esptoggled = not esptoggled
+	
+	tes(esptoggled)
+	
+	if not esptoggled then
+		selected3.Parent = nil
 	end
-end
+end)
+
+local noteamchecktgl = Instance.new("TextButton")
+noteamchecktgl.Size = UDim2.new(0.5, -1, 0, 32)
+noteamchecktgl.Position = UDim2.new(0.5, 1, 1, 36)
+noteamchecktgl.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+noteamchecktgl.BorderSizePixel = 0
+noteamchecktgl.BackgroundTransparency = 0.6
+noteamchecktgl.Text = "no team check"
+noteamchecktgl.Font = Enum.Font.SourceSansBold
+noteamchecktgl.TextSize = 18
+noteamchecktgl.TextColor3 = Color3.fromRGB(255, 255, 255)
+noteamchecktgl.TextYAlignment = Enum.TextYAlignment.Center
+noteamchecktgl.Parent = container
+Instance.new("UIPadding", noteamchecktgl).PaddingBottom = UDim.new(0, 2)
+
+local noteamchecktoggled = false
+
+noteamchecktgl.MouseButton1Click:Connect(function()
+	selected4.Parent = noteamchecktgl
+	noteamchecktoggled = not noteamchecktoggled
+	
+	tc = not noteamchecktoggled
+	
+	if not noteamchecktoggled then
+		selected4.Parent = nil
+	end
+end)
 
 -------------------------------------------------------------------------------------------------------------------------------
