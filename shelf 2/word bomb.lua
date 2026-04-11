@@ -242,17 +242,17 @@ local function bursttype(word)
 			speedmultiplier = 1 - (progress * 0.45)
 		end
 
-		local burst = randint(2, 3)
+		local burst = randint(3, 5)
 		for _ = 1, burst do
 			if i > len or cancelled then break end
 
 			presskey(word:sub(i, i))
-			t(randfloat(0.03, 0.05) * speedmultiplier)
+			t(randfloat(0.01, 0.03) * speedmultiplier)
 			i = i + 1
 		end
 
 		if i <= len and not cancelled then
-			t(randfloat(0.2, 0.28) * speedmultiplier)
+			t(randfloat(0.1, 0.18) * speedmultiplier)
 		end
 	end
 end
@@ -292,7 +292,7 @@ local function regtype(word)
 			end
 		else
 			presskey(char)
-			t(randfloat(0.05, 0.08) * speedmultiplier)
+			t(randfloat(0.02, 0.06) * speedmultiplier)
 			i = i + 1
 		end
 	end
