@@ -158,7 +158,7 @@ local function gettgt()
 	local bt = nil
 	local cd = math.huge
 
-	for _, p in ipairs(plr:GetPlayers()) do
+	for _, p in ipairs(plrs:GetPlayers()) do
 		if p == plr then continue end
 
 		local ch = p.Character
@@ -345,7 +345,7 @@ local function uesp(p)
 end
 
 local function ue()
-	for _, p in ipairs(plr:GetPlayers()) do
+	for _, p in ipairs(plrs:GetPlayers()) do
 		if p ~= plr then
 			if ee then
 				if not et[p] then
@@ -366,7 +366,7 @@ local function tes(s)
 			resp(p)
 		end
 	else
-		for _, p in ipairs(plr:GetPlayers()) do
+		for _, p in ipairs(plrs:GetPlayers()) do
 			if p ~= plr and p.Character then
 				mbox(p)
 			end
