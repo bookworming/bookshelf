@@ -214,22 +214,22 @@ launchrocket.MouseButton1Click:Connect(function()
 	end 
 end)
 
-local weathermachine = Instance.new("TextButton")
-weathermachine.Size = UDim2.new(0.5, -1, 0, 32)
-weathermachine.Position = UDim2.new(0.5, 1, 1, 36)
-weathermachine.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-weathermachine.BorderSizePixel = 0
-weathermachine.BackgroundTransparency = 0.6
-weathermachine.Text = "weather machine"
-weathermachine.Font = Enum.Font.SourceSansBold
-weathermachine.TextSize = 18
-weathermachine.TextColor3 = Color3.fromRGB(255, 255, 255)
-weathermachine.TextYAlignment = Enum.TextYAlignment.Center
-weathermachine.Parent = container
-Instance.new("UIPadding", weathermachine).PaddingBottom = UDim.new(0, 2)
+local nullfire = Instance.new("TextButton")
+nullfire.Size = UDim2.new(0.5, -1, 0, 32)
+nullfire.Position = UDim2.new(0.5, 1, 1, 36)
+nullfire.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+nullfire.BorderSizePixel = 0
+nullfire.BackgroundTransparency = 0.6
+nullfire.Text = "nullfire"
+nullfire.Font = Enum.Font.SourceSansBold
+nullfire.TextSize = 18
+nullfire.TextColor3 = Color3.fromRGB(255, 255, 255)
+nullfire.TextYAlignment = Enum.TextYAlignment.Center
+nullfire.Parent = container
+Instance.new("UIPadding", nullfire).PaddingBottom = UDim.new(0, 2)
 
-weathermachine.MouseButton1Click:Connect(function()
-	fireclickdetector(workspace.WeatherMachine.Button.ClickDetector)
+nullfire.MouseButton1Click:Connect(function()
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/InfernusScripts/Fire-Hub/main/Loader"))()
 end)
 
 -------------------------------------------------------------------------------------------------------------------------------
