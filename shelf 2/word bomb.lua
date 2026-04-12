@@ -33,13 +33,15 @@ gui.Parent = targetui
 
 -------------------------------------------------------------------------------------------------------------------------------
 
-local function press(button)
+local function press(keyorbutton)
 	if mobile then
-		firesignal(button.MouseButton1Down) t()
-		firesignal(button.MouseButton1Up)
+		firesignal(keyorbutton.MouseButton1Down) t()
+		firesignal(keyorbutton.MouseButton1Up)
 	else
-		vim:SendKeyEvent(true, Enum.KeyCode.Return, false, game) t()
-		vim:SendKeyEvent(false, Enum.KeyCode.Return, false, game)
+		local keycode = Enum.KeyCode[keyorbutton:upper()]
+		if not keycode then return end
+		vim:SendKeyEvent(true, keycode, false, game) t()
+		vim:SendKeyEvent(false, keycode, false, game)
 	end
 end
 
@@ -196,8 +198,20 @@ end
 -------------------------------------------------------------------------------------------------------------------------------
 
 local function presskey(char)
+	if not mobile then
+		local keyname = char:upper()
+		if char == "-" then keyname = "Minus" end
+		local keycode = Enum.KeyCode[keyname]
+		if keycode then
+			vim:SendKeyEvent(true, keycode, false, game) t()
+			vim:SendKeyEvent(false, keycode, false, game)
+		end
+		
+		return
+	end
+
 	local keyboard = plr.PlayerGui.MobileUI.PhoneContainer.BottomBoard.AlphaBoard.Letters
-	local symbolboard  = plr.PlayerGui.MobileUI.PhoneContainer.BottomBoard.SymbolBoard.Symbols1
+	local symbolboard = plr.PlayerGui.MobileUI.PhoneContainer.BottomBoard.SymbolBoard.Symbols1
 	local key = keyboard:FindFirstChild(char:upper()) or symbolboard:FindFirstChild(char)
 
 	if key then
@@ -206,14 +220,24 @@ local function presskey(char)
 end
 
 local function backspace()
+	if not mobile then
+		vim:SendKeyEvent(true, Enum.KeyCode.Backspace, false, game) t()
+		vim:SendKeyEvent(false, Enum.KeyCode.Backspace, false, game)
+		return
+	end
+	
 	local backspacebtn = plr.PlayerGui.MobileUI.PhoneContainer.BottomBoard.StaticBoard.Backspace
-
 	press(backspacebtn)
 end
 
 local function enter()
-	local enterbtn  = plr.PlayerGui.MobileUI.PhoneContainer.BottomBoard.StaticBoard.Enter
-
+	if not mobile then
+		vim:SendKeyEvent(true, Enum.KeyCode.Return, false, game) t()
+		vim:SendKeyEvent(false, Enum.KeyCode.Return, false, game)
+		return
+	end
+	
+	local enterbtn = plr.PlayerGui.MobileUI.PhoneContainer.BottomBoard.StaticBoard.Enter
 	press(enterbtn)
 end
 
