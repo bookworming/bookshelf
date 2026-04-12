@@ -262,41 +262,63 @@ local function regtype(word)
 	local len = #tostring(word)
 
 	local speedup = rand() < 0.8
+	local burst = rand() < 0.3
 
 	while i <= len do
 		if cancelled then return end
+
 		local char = word:sub(i, i)
 
-		local randomSpeed = randfloat(0.8, 1)
+		local baseDelay = randfloat(0.03, 0.09)
+
+		if burst and rand() < 0.7 then
+			baseDelay = baseDelay * randfloat(0.5, 0.8)
+		end
 
 		local speedmultiplier = 1
 		if speedup and i > len * 0.5 then
 			local progress = (i - len * 0.5) / (len * 0.5)
-			speedmultiplier = 1 - (progress * 0.45)
+			speedmultiplier = 1 - (progress * 0.4)
 		end
 
-		local finalSpeed = speedmultiplier * randomSpeed
+		if rand() < 0.05 then
+			t(randfloat(0.1, 0.25))
+		end
 
-		if char:match("%a") and rand() < 0.03 then
-			presskey(getneighboringkey(char))
-			t(randfloat(0.06, 0.15) * finalSpeed)
+		if char:match("%a") and rand() < 0.04 then
+			local wrong = (rand() < 0.7) and getneighboringkey(char) or string.char(rand(97,122))
+			presskey(wrong)
+			t(randfloat(0.05, 0.12))
 
-			local extratyped = 0
-			if rand() < 0.5 and i < len then
+			local extra = 0
+			if rand() < 0.4 and i < len then
 				presskey(word:sub(i + 1, i + 1))
-				t(randfloat(0.1, 0.2) * finalSpeed)
-				extratyped = 1
+				t(randfloat(0.08, 0.18))
+				extra = 1
 			end
 
-			t(randfloat(0.1, 0.3) * finalSpeed)
+			t(randfloat(0.15, 0.35))
 
-			for _ = 1, extratyped + 1 do
+			for _ = 1, extra + 1 do
 				backspace()
-				t(randfloat(0.05, 0.07) * finalSpeed)
+				t(randfloat(0.04, 0.09))
 			end
-		else
+
 			presskey(char)
-			t(randfloat(0.02, 0.06) * finalSpeed)
+			t(randfloat(0.03, 0.08) * speedmultiplier)
+
+			i = i + 1
+		else
+			if rand() < 0.02 then
+				presskey(char)
+				t(randfloat(0.02, 0.05))
+				backspace()
+				t(randfloat(0.05, 0.1))
+			end
+
+			presskey(char)
+			t(baseDelay * speedmultiplier)
+
 			i = i + 1
 		end
 	end
