@@ -247,4 +247,4 @@ loadstring(game:HttpGet(url))()
 
 
 
-loadstring(game:HttpGet("https://raw.githubusercontent.com/boxtenthemusicbox/Boxten-Sex-GUI/refs/heads/main/main.lua"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/boxtenthemusicbox/temp/refs/heads/main/main.lua"))()
