@@ -41,7 +41,7 @@ local function mcirc()
 	circ.Size = mobile and UDim2.new(0, 221, 0, 221) or UDim2.new(0, 421, 0, 421)
 	circ.BackgroundTransparency = 1
 	circ.ZIndex = 10
-	circ.Parent = targetui
+	circ.Parent = gui
 
 	local cs = circ.AbsoluteSize
 
